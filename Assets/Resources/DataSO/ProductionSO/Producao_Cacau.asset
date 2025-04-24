@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: db6063a670b1291468999ca7715d9e56, type: 3}
+  m_Name: Producao_Cacau
+  m_EditorClassIdentifier: 
+  models:
+  - {fileID: 1935780800286537536, guid: 455183bb82f752549aa660533cddbcb3, type: 3}
+  - {fileID: 229090437696229089, guid: f8bd4988615ed6e4ab5c9f22daae2c2d, type: 3}
+  - {fileID: 8577265967838493335, guid: 2009e4363a83b3a4db6418bc2e2d4b64, type: 3}
+  product: {fileID: 11400000, guid: f8c402991715c3147a4c108993b828b8, type: 2}
+  timeToGrow: 35
+  timeToHarvest: 15

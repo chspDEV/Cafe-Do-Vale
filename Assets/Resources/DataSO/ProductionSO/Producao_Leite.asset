@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: db6063a670b1291468999ca7715d9e56, type: 3}
+  m_Name: Producao_Leite
+  m_EditorClassIdentifier: 
+  models:
+  - {fileID: 7784234654982477164, guid: ee4a296f481f51943a77d7a9966194d6, type: 3}
+  product: {fileID: 11400000, guid: 60650c2deda852545b18238811400605, type: 2}
+  timeToGrow: 20
+  timeToHarvest: 10

@@ -1,0 +1,1 @@
+C:\Jogos Programando\TCP4\Library\Bee\Android\Prj\IL2CPP\Gradle\unityLibrary\build\intermediates\cxx\RelWithDebInfo\3l32v4g1\obj\arm64-v8a

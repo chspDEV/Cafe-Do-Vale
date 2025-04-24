@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 14b25347fc6246e4a96380bc8a5f5fae, type: 3}
+  m_Name: Latte
+  m_EditorClassIdentifier: 
+  productName: Latte
+  quality: 0
+  productID: 1
+  model: {fileID: 7397341027057396301, guid: 236d1308a8fd663428f008a3caa11a45, type: 3}
+  productImage: {fileID: 21300000, guid: 32385195c8c33b343ac874077f6fbcc5, type: 3}
+  requiredIngredients:
+  - {fileID: 11400000, guid: ad5d708b28f03f74386f9ed6df8eb4db, type: 2}
+  - {fileID: 11400000, guid: 60650c2deda852545b18238811400605, type: 2}
+  - {fileID: 11400000, guid: 60650c2deda852545b18238811400605, type: 2}
+  preparationTime: 1

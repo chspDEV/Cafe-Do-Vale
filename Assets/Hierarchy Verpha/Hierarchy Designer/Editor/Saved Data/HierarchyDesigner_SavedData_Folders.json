@@ -1,0 +1,112 @@
+{
+    "items": [
+        {
+            "Name": "Cameras",
+            "TextColor": {
+                "r": 1.0,
+                "g": 1.0,
+                "b": 1.0,
+                "a": 1.0
+            },
+            "FontSize": 12,
+            "FontStyle": 0,
+            "ImageColor": {
+                "r": 1.0,
+                "g": 0.6912661790847778,
+                "b": 0.0,
+                "a": 1.0
+            },
+            "ImageType": 0
+        },
+        {
+            "Name": "Post Processing",
+            "TextColor": {
+                "r": 1.0,
+                "g": 1.0,
+                "b": 1.0,
+                "a": 1.0
+            },
+            "FontSize": 12,
+            "FontStyle": 0,
+            "ImageColor": {
+                "r": 1.0,
+                "g": 0.6901960968971252,
+                "b": 0.0,
+                "a": 1.0
+            },
+            "ImageType": 0
+        },
+        {
+            "Name": "Entities",
+            "TextColor": {
+                "r": 1.0,
+                "g": 1.0,
+                "b": 1.0,
+                "a": 1.0
+            },
+            "FontSize": 12,
+            "FontStyle": 0,
+            "ImageColor": {
+                "r": 1.0,
+                "g": 0.6901960968971252,
+                "b": 0.0,
+                "a": 1.0
+            },
+            "ImageType": 0
+        },
+        {
+            "Name": "Enviroments",
+            "TextColor": {
+                "r": 1.0,
+                "g": 1.0,
+                "b": 1.0,
+                "a": 1.0
+            },
+            "FontSize": 12,
+            "FontStyle": 0,
+            "ImageColor": {
+                "r": 1.0,
+                "g": 0.6901960968971252,
+                "b": 0.0,
+                "a": 1.0
+            },
+            "ImageType": 0
+        },
+        {
+            "Name": "UXUI",
+            "TextColor": {
+                "r": 1.0,
+                "g": 1.0,
+                "b": 1.0,
+                "a": 1.0
+            },
+            "FontSize": 12,
+            "FontStyle": 0,
+            "ImageColor": {
+                "r": 1.0,
+                "g": 0.6901960968971252,
+                "b": 0.0,
+                "a": 1.0
+            },
+            "ImageType": 0
+        },
+        {
+            "Name": "Manager",
+            "TextColor": {
+                "r": 1.0,
+                "g": 1.0,
+                "b": 1.0,
+                "a": 1.0
+            },
+            "FontSize": 12,
+            "FontStyle": 0,
+            "ImageColor": {
+                "r": 1.0,
+                "g": 0.6901960968971252,
+                "b": 0.0,
+                "a": 1.0
+            },
+            "ImageType": 0
+        }
+    ]
+}
