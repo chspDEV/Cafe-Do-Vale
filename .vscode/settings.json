@@ -56,5 +56,5 @@
         "temp/": true,
         "Temp/": true
     },
-    "dotnet.defaultSolution": "TCP4.sln"
+    "dotnet.defaultSolution": "TCP-V.sln"
 }

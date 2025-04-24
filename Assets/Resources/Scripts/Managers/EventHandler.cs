@@ -1,6 +1,5 @@
 ﻿using ComponentUtils.ComponentUtils.Scripts;
 using System.Collections;
-using Tcp4.Resources.Scripts.Systems.DayNightCycle;
 using UnityEngine;
 using Tcp4.Assets.Resources.Scripts;
 
@@ -55,12 +54,27 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
             LeftJoystick.OnMove                     += (input) => stepSound.SetMovementInput(input);
             RightJoystick.OnMove                    += (input) => stepSound.SetMovementInput(input);
 
+            timeManager.OnTimeChanged += HandleTimeChange;
+            timeManager.OnDayNightChanged += HandleDayNightChange;
+        }
+
+        void HandleTimeChange(float hour)
+        {
+            // Atualizar UI de hora
+            uiManager.UpdateClock(hour);
+        }
+
+        void HandleDayNightChange(bool isDay)
+        {
+            // Executar transições de dia/noite
+            if(isDay) StartCoroutine(SunriseTransition());
+            else StartCoroutine(SunsetTransition());
         }
 
         public void RestartDay()
         {
-            GameAssets.Instance.player.transform.position = GameAssets.Instance.safePoint.position;
-            Instantiate(GameAssets.Instance.pfNovoDia, uiManager.hudCanvas.transform);
+            //GameAssets.Instance.player.transform.position = GameAssets.Instance.safePoint.position;
+            //Instantiate(GameAssets.Instance.pfNovoDia, uiManager.hudCanvas.transform);
         }
 
 

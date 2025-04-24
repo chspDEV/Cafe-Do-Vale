@@ -929,7 +929,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 87715699}
-  - component: {fileID: 87715698}
   m_Layer: 0
   m_Name: TimeManager
   m_TagString: Untagged
@@ -937,53 +936,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &87715698
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 87715697}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8da7b8b954594230b63a5cc0147d85df, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  timeText: {fileID: 1674009512}
-  timeSettings: {fileID: 11400000, guid: cdd55392ca4fef54d80e0435269a3e2d, type: 2}
-  isBrazilianFormat: 1
-  sun: {fileID: 1147769942}
-  moon: {fileID: 932738790}
-  lightIntensityCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 2
-      outSlope: 2
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    - serializedVersion: 3
-      time: 1
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  maxSunIntensity: 10
-  maxMoonIntensity: 5
-  dayAmbientLight: {r: 1, g: 0.92785794, b: 0.6933962, a: 1}
-  nightAmbientLight: {r: 0.4575472, g: 0.6226413, b: 1, a: 1}
-  volume: {fileID: 713432889}
-  skyboxMaterial: {fileID: 2100000, guid: 361326bab73d2044395e294b6ab62614, type: 2}
 --- !u!4 &87715699
 Transform:
   m_ObjectHideFlags: 0
@@ -15619,7 +15571,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   clientManager: {fileID: 1551439379}
   uiManager: {fileID: 111883944}
-  timeManager: {fileID: 87715698}
+  timeManager: {fileID: 0}
   storageManager: {fileID: 1046031226}
   shopManager: {fileID: 1077733032}
   creationManager: {fileID: 1946841493}
