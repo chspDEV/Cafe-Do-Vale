@@ -6,6 +6,7 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
 {
     public class TimeManager : Singleton<TimeManager>
     {
+    /*
         [TitleGroup("Configurações de Tempo")]
         [PropertyRange(1, 100), Tooltip("Multiplicador de velocidade do tempo")]
         [SerializeField] private float timeMultiplier = 1f;
@@ -147,5 +148,6 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
         }
     
 
+    */
     }
 }

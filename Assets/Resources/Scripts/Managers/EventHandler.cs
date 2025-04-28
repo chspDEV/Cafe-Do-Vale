@@ -7,6 +7,7 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
 {
     public class EventHandler : Singleton<EventHandler>
     {
+    /*
         public ClientManager clientManager;
         public UIManager uiManager;
         public TimeManager timeManager;
@@ -77,6 +78,6 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
             //Instantiate(GameAssets.Instance.pfNovoDia, uiManager.hudCanvas.transform);
         }
 
-
+        */
     }
 }

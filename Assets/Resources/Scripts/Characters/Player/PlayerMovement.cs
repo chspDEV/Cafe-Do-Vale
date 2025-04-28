@@ -6,104 +6,51 @@ namespace Tcp4
     [RequireComponent(typeof(Rigidbody))]
     public class PlayerMovement : MonoBehaviour
     {
-        [Header("Movement")]
-        [SerializeField] private float moveSpeed = 5f;
-        [SerializeField] private float runMultiplier = 1.5f;
+        [SerializeField] private float moveSpeed;
+        [SerializeField] private float rotationSpeed;
         [SerializeField] private Transform modelTransform;
-
-        [Header("Inputs")]
-        [SerializeField] private InputActionAsset inputActions;
-        private InputActionMap playerActionMap;
-        private InputAction moveAction;
-        private InputAction runAction;
-        private InputAction interactAction;
-
         private Rigidbody rb;
-        private Vector2 moveInput;
-        private bool isRunning;
-
-        [Header("Visual configs")]
-        [SerializeField] private float rotationSpeed = 10f;
-        private StepSound stepSound;
+        private Vector2 movement;
         private Animator animator;
 
-        private void Awake()
+        void Awake()
         {
             rb = GetComponent<Rigidbody>();
-            stepSound = GetComponent<StepSound>();
-
-
-            // Input setup
-            playerActionMap = inputActions.FindActionMap("Player");
-            moveAction = playerActionMap.FindAction("Movement");
-            runAction = playerActionMap.FindAction("Running");
-            interactAction = playerActionMap.FindAction("Interaction");
-
-            // Animator
             animator = GetComponentInChildren<Animator>();
-
-            // Callbacks
-            moveAction.performed += ctx => moveInput = ctx.ReadValue<Vector2>();
-            moveAction.performed += ctx => stepSound.SetMovementInput(moveInput);
-            moveAction.canceled += ctx => moveInput = Vector2.zero;
-            moveAction.canceled += ctx => stepSound.SetMovementInput(Vector2.zero);
-
-            moveAction.performed += ctx => isRunning = true;
-            moveAction.canceled += ctx => isRunning = false;
-
-            interactAction.performed += OnInteract;
-
-
         }
 
-        private void Update()
+        public void SetMovement(InputAction.CallbackContext value)
         {
-            // Atualizar parâmetros do Animator
-            float speed = moveInput.magnitude * (isRunning ? runMultiplier : 1f);
-            animator.SetFloat("Speed", speed);
-            animator.SetBool("IsRunning", isRunning);
-
-            HandleRotation();
-            Debug.Log(Gamepad.current);
-        }
-
-        private void FixedUpdate()
-        {
-            // Calcular velocidade
-            Vector3 movement = new Vector3(moveInput.x, 0f, moveInput.y).normalized * moveSpeed;
-            rb.linearVelocity = movement;
-        }
-
-        private void OnInteract(InputAction.CallbackContext context)
-        {
-            // logica de interacao
-            Debug.Log("Interagiu!");
+            movement = value.ReadValue<Vector2>();
         }
 
         private void HandleRotation()
         {
-            if (moveInput != Vector2.zero)
+            if (movement != Vector2.zero)
             {
-                Vector3 movementDirection = new Vector3(moveInput.x, 0, moveInput.y);
+                Vector3 movementDirection = new Vector3(movement.x, 0, movement.y);
                 Quaternion targetRotation = Quaternion.LookRotation(movementDirection);
                 modelTransform.rotation = Quaternion.Slerp(modelTransform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
             }
         }
 
-        private void OnEnable()
+        private void HandleAnimation()
         {
-            playerActionMap.Enable();
-            moveAction.Enable();
-            runAction.Enable();
-            interactAction.Enable();
+            var _speed = movement.magnitude;
+            var _isRunning = _speed > 0.1f;
+            animator.SetFloat("Speed", _speed);
+            animator.SetBool("IsRunning", _isRunning);
         }
 
-        private void OnDisable()
+        void Update()
         {
-            moveAction.Disable();
-            runAction.Disable();
-            interactAction.Disable();
-            playerActionMap.Disable();
+            HandleRotation();
+            HandleAnimation();
+        }
+
+        void FixedUpdate()
+        {
+            rb.linearVelocity = new Vector3(movement.x, 0, movement.y) * moveSpeed * Time.fixedDeltaTime;
         }
     }
 }

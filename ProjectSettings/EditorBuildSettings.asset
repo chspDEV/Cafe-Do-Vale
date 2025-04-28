@@ -15,5 +15,5 @@ EditorBuildSettings:
     path: Assets/Scenes/DevelopmentScene [Jeni].unity
     guid: a65d006751261e444a0d50562edf21f6
   m_configObjects:
-    com.unity.input.settings.actions: {fileID: -944628639613478452, guid: d5c6926fede7d1c40acd8ff957076c47, type: 3}
+    com.unity.input.settings.actions: {fileID: -944628639613478452, guid: fc35702bb9a6fdb4c9019f0fab4087f0, type: 3}
   m_UseUCBPForAssetBundles: 0
