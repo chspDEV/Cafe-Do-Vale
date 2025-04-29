@@ -18660,6 +18660,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   interactionRange: 3
+  gizmoColor: {r: 0, g: 1, b: 1, a: 1}
+  hitColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
+  sphereRadius: 0.3
 --- !u!64 &1221297766
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -52653,7 +52656,7 @@ GameObject:
   - component: {fileID: 6587322854599177827}
   m_Layer: 0
   m_Name: Personagem_v1
-  m_TagString: Untagged
+  m_TagString: PlayerModel
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
