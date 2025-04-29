@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using Tcp4.Assets.Resources.Scripts.UI;
 using UnityEngine;
 
 namespace Tcp4.Assets.Resources.Scripts.Systems.Areas
@@ -27,11 +26,7 @@ namespace Tcp4.Assets.Resources.Scripts.Systems.Areas
 
         private void Start()
         {
-            var ui = UIManager.Instance;
-            var obj = Instantiate(ui.pfImageToFill, ui.worldCanvas.gameObject.transform);
-            timeImage = obj.GetComponent<ImageToFill>();
-            ui.PlaceInWorld(pointToSpawn, timeImage.GetRectTransform());
-            timeImage.SetupMaxTime(refinementTime);
+            timeImage = UIManager.Instance.PlaceFillImage(pointToSpawn);
         }
 
         private void Update()

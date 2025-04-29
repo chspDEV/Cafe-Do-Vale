@@ -1,7 +1,6 @@
 using System.Collections;
 using Tcp4;
 using Tcp4.Assets.Resources.Scripts.Managers;
-using Tcp4.Assets.Resources.Scripts.UI;
 using UnityEngine;
 public class BuyUpgradeCups : MonoBehaviour, IUpgradable
 {
@@ -20,10 +19,7 @@ public class BuyUpgradeCups : MonoBehaviour, IUpgradable
 
         void Start()
         {
-            var ui = UIManager.Instance;
-            var obj = Instantiate(ui.pfImageToFill, ui.worldCanvas.gameObject.transform);
-            priceImage = obj.GetComponent<ImageToFill>();
-            ui.PlaceInWorld(pointToImage, priceImage.GetRectTransform());
+            priceImage = UIManager.Instance.PlaceFillImage(pointToImage);
             priceImage.ChangeSprite(GameAssets.Instance.Money);
             priceImage.SetupMaxTime(price);
             priceImage.UpdateFill(stackedMoney);

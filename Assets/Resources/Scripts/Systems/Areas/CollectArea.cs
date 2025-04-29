@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using Tcp4.Assets.Resources.Scripts.Managers;
-using Tcp4.Assets.Resources.Scripts.UI;
 using UnityEngine;
 
 namespace Tcp4
@@ -33,10 +32,7 @@ namespace Tcp4
         {
             hasChoosedProduction = false;
             ProductionManager.Instance.OnChooseProduction += SelectProduction;
-            var ui = UIManager.Instance;
-            var obj = Instantiate(ui.pfImageToFill, ui.worldCanvas.gameObject.transform);
-            timeImage = obj.GetComponent<ImageToFill>();
-            ui.PlaceInWorld(pointToSpawn, timeImage.GetRectTransform());
+            timeImage = UIManager.Instance.PlaceFillImage(pointToSpawn);
         }
 
         private void InitializeObjectPools()

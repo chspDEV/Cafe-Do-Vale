@@ -28,6 +28,7 @@ namespace Tcp4
 
         [Header("Prefabs")]
         public GameObject pfImageToFill;
+        public GameObject pfImage;
         public GameObject pfSlotStorage;
         public GameObject pfSlotCreation, pfSlotCreationIngredient;
         public GameObject pfClientNotification;
@@ -273,7 +274,7 @@ namespace Tcp4
             SoundManager.PlaySound(SoundType.feedback);
         }
 
-        public void PlaceInWorld(Transform worldObject, RectTransform uiElement, bool isWorldCanvas = true)
+        private void PlaceInWorld(Transform worldObject, RectTransform uiElement, bool isWorldCanvas = true)
         {
             if (!isWorldCanvas)
             {
@@ -291,6 +292,22 @@ namespace Tcp4
             {
                 uiElement.position = worldObject.position + new Vector3(0f, 2f, 0f);
             }
+        }
+
+        public ImageToFill PlaceFillImage(Transform pointToSpawn)
+        {   
+            var obj = Instantiate(pfImageToFill, worldCanvas.gameObject.transform);
+            var imageFill = obj.GetComponent<ImageToFill>();
+            PlaceInWorld(pointToSpawn, imageFill.GetRectTransform());
+            return imageFill;
+        }
+
+        public Image PlaceImage(Transform pointToSpawn)
+        {   
+            var obj = Instantiate(pfImage, worldCanvas.gameObject.transform);
+            var image = obj.GetComponent<Image>();
+            PlaceInWorld(pointToSpawn, image.rectTransform);
+            return image;
         }
 
         #endregion
