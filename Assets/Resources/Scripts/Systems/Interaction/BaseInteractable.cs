@@ -8,13 +8,28 @@ public abstract class BaseInteractable : MonoBehaviour, IInteractable
     [SerializeField] protected Vector3 uiOffset = new Vector3(0, 1.5f, 0);
     [SerializeField] protected Sprite interactionSprite;
 
-    [Header("Animation Settings")]
+    [Header("Scale Animation")]
+    [Tooltip("Escala inicial antes da animação")]
+    [SerializeField] private Vector3 initialScale = Vector3.zero;
+
+    [Tooltip("Escala alvo após o crescimento")]
+    [SerializeField] private Vector3 targetScale = Vector3.one;
+
+    [Space]
+    [Tooltip("Duração da animação de crescimento")]
     [SerializeField] private float growDuration = 0.3f;
-    [SerializeField] private float bounceIntensity = 0.1f;
+
+    [Header("Bounce Animation")]
+    [Tooltip("Escala mínima durante o bounce (relativo ao targetScale)")]
+    [SerializeField] private float bounceScaleMin = 0.9f;
+
+    [Tooltip("Escala máxima durante o bounce (relativo ao targetScale)")]
+    [SerializeField] private float bounceScaleMax = 1.1f;
+
+    [Tooltip("Velocidade da animação de bounce")]
     [SerializeField] private float bounceSpeed = 5f;
 
     protected Image interactionIndicator;
-    private Vector3 initialScale;
     private float animationProgress;
     private bool isGrowing;
     private bool isBouncing;
@@ -24,8 +39,7 @@ public abstract class BaseInteractable : MonoBehaviour, IInteractable
     {
         CreateInteractionIndicator();
         InitializeBillboard();
-        initialScale = interactionIndicator.transform.localScale;
-        interactionIndicator.transform.localScale = Vector3.zero;
+        ApplyInitialScale();
     }
 
     private void CreateInteractionIndicator()
@@ -48,10 +62,14 @@ public abstract class BaseInteractable : MonoBehaviour, IInteractable
             {
                 billboard.positionOffset = uiOffset;
             }
-            else
-            {
-                Debug.LogWarning("Billboard component não encontrado no indicador de interação!");
-            }
+        }
+    }
+
+    private void ApplyInitialScale()
+    {
+        if (interactionIndicator != null)
+        {
+            interactionIndicator.transform.localScale = initialScale;
         }
     }
 
@@ -78,8 +96,8 @@ public abstract class BaseInteractable : MonoBehaviour, IInteractable
     {
         animationProgress += Time.deltaTime / growDuration;
         interactionIndicator.transform.localScale = Vector3.Lerp(
-            Vector3.zero,
             initialScale,
+            targetScale,
             animationProgress
         );
 
@@ -94,8 +112,12 @@ public abstract class BaseInteractable : MonoBehaviour, IInteractable
     private void UpdateBounceAnimation()
     {
         animationProgress += Time.deltaTime * bounceSpeed;
-        float scaleFactor = 1 + Mathf.Sin(animationProgress) * bounceIntensity;
-        interactionIndicator.transform.localScale = initialScale * scaleFactor;
+
+        // Oscilação suave entre as escalas mínima e máxima
+        float t = (Mathf.Sin(animationProgress) + 1f) / 2f; // Normalizado para 0-1
+        float currentScale = Mathf.Lerp(bounceScaleMin, bounceScaleMax, t);
+
+        interactionIndicator.transform.localScale = targetScale * currentScale;
     }
 
     public virtual void OnFocus()
@@ -105,7 +127,7 @@ public abstract class BaseInteractable : MonoBehaviour, IInteractable
         if (interactionIndicator != null)
         {
             interactionIndicator.enabled = true;
-            interactionIndicator.transform.localScale = Vector3.zero;
+            interactionIndicator.transform.localScale = initialScale;
             isGrowing = true;
             isBouncing = false;
             animationProgress = 0f;
@@ -124,7 +146,7 @@ public abstract class BaseInteractable : MonoBehaviour, IInteractable
         if (interactionIndicator != null)
         {
             interactionIndicator.enabled = false;
-            interactionIndicator.transform.localScale = Vector3.zero;
+            interactionIndicator.transform.localScale = initialScale;
         }
     }
 
