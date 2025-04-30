@@ -16191,7 +16191,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ebaf5ff81425b04fa8ab62af468866d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  interactionSprite: {fileID: 21300000, guid: cb23968ffb8ff7e4abc3066b3c934f68, type: 3}
+  uiOffset: {x: 0, y: 0, z: 0}
+  interactionSprite: {fileID: 21300000, guid: ea9161683ffa0e9488c395e2b2bbad54, type: 3}
+  growDuration: 0.3
+  bounceIntensity: 0.1
+  bounceSpeed: 5
 --- !u!64 &990050825
 MeshCollider:
   m_ObjectHideFlags: 0
