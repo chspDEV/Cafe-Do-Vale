@@ -6,28 +6,25 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
 {
     public class TimeManager : Singleton<TimeManager>
     {
-    /*
         [TitleGroup("Configurações de Tempo")]
-        [PropertyRange(1, 100), Tooltip("Multiplicador de velocidade do tempo")]
+        [PropertyRange(1, 100)]
         [SerializeField] private float timeMultiplier = 1f;
 
         [TitleGroup("Horário Comercial")]
-        [PropertyRange(0, 24), SuffixLabel("horas", true)]
+        [PropertyRange(0, 24)]
         [SerializeField] private float startHour = 9f;
 
-        [PropertyRange(0, 24), SuffixLabel("horas", true)]
+        [PropertyRange(0, 24)]
         [SerializeField] private float closeHour = 18f;
 
         [TitleGroup("Iluminação Diurna")]
-        [Required("Selecione a luz direcional principal")]
+        [Required]
         [SerializeField] private Light directionalLight;
 
         [Title("Gradiente de Cores")]
-        [ColorUsage(true, true), PreviewField(60)]
         [SerializeField] private Gradient lightColor;
 
         [Title("Intensidade da Luz")]
-        [HorizontalGroup("LightSettings"), PreviewField(60)]
         [SerializeField] private AnimationCurve lightIntensity;
 
         [TitleGroup("Efeitos de Neblina")]
@@ -52,8 +49,18 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
         [FoldoutGroup("Eventos")]
         public event Action OnCloseCoffeeShop;
 
+        [TitleGroup("Temperatura de Cor")]
+        [ColorUsage(true, true)]
+        [SerializeField] private Color nightColor = Color.blue;
+
+        [ColorUsage(true, true)]
+        [SerializeField] private Color dayColor = new Color(1f, 0.6f, 0.4f);
+
         [ShowInInspector, ReadOnly, ProgressBar(0, 24)]
         public float CurrentHour { get; private set; }
+
+        private DateTime currentTime;
+        private bool isDay;
 
         [Button("Validar Referência de Luz")]
         private void ValidateLightReference()
@@ -70,6 +77,7 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
             base.Awake();
             currentTime = DateTime.Now.Date + TimeSpan.FromHours(startHour);
             CurrentHour = startHour;
+            isDay = CurrentHour >= startHour && CurrentHour < closeHour;
         }
 
         private void Update()
@@ -80,24 +88,21 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
 
         private void UpdateTime()
         {
-            // Atualiza o tempo do jogo
             CurrentHour += Time.deltaTime * timeMultiplier / 3600;
-            
-            if(CurrentHour >= 24)
+
+            if (CurrentHour >= 24)
             {
                 CurrentHour -= 24;
             }
 
-            // Dispara eventos de hora em hora
             OnTimeChanged?.Invoke(CurrentHour);
 
-            // Verifica abertura/fechamento
-            if(Mathf.FloorToInt(CurrentHour) == (int)startHour && !isDay)
+            if (Mathf.FloorToInt(CurrentHour) == (int)startHour && !isDay)
             {
                 OnOpenCoffeeShop?.Invoke();
                 isDay = true;
             }
-            else if(Mathf.FloorToInt(CurrentHour) == (int)closeHour && isDay)
+            else if (Mathf.FloorToInt(CurrentHour) == (int)closeHour && isDay)
             {
                 OnCloseCoffeeShop?.Invoke();
                 isDay = false;
@@ -106,33 +111,28 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
 
         private void UpdateLighting()
         {
-            if(directionalLight == null) return;
+            if (directionalLight == null) return;
 
-            // Calcula a porcentagem do ciclo dia/noite
             float timePercent = CurrentHour / 24f;
-            
-            // Atualiza rotação da luz
+
             float sunRotation = Mathf.Lerp(-90, 270, timePercent);
             directionalLight.transform.rotation = Quaternion.Euler(sunRotation, -150f, 0);
 
-            // Atualiza cor e intensidade
             directionalLight.color = lightColor.Evaluate(timePercent);
             directionalLight.intensity = lightIntensity.Evaluate(timePercent);
 
-            // Atualiza neblina
             RenderSettings.fogDensity = Mathf.Lerp(nightFogRange.y, dayFogRange.x, timePercent);
-            
-            // Atualiza pós-processamento
+
             UpdatePostProcessing(timePercent);
         }
 
         private void UpdatePostProcessing(float timePercent)
         {
-            // Ajusta exposição e temperatura de cor
-            if(PostProcessManager.instance != null)
+            if (PostProcessManager.Instance != null)
             {
-                PostProcessManager.instance.SetExposure(Mathf.Lerp(0.3f, 1.2f, timePercent));
-                PostProcessManager.instance.SetTemperature(Mathf.Lerp(70f, 20f, timePercent));
+                Color temperatureColor = Color.Lerp(nightColor, dayColor, timePercent);
+                PostProcessManager.Instance.SetTemperature(temperatureColor);
+                PostProcessManager.Instance.SetExposure(Mathf.Lerp(0.3f, 1.2f, timePercent));
             }
         }
 
@@ -146,8 +146,5 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
             TimeSpan time = TimeSpan.FromHours(CurrentHour);
             return time.ToString("hh':'mm");
         }
-    
-
-    */
     }
 }

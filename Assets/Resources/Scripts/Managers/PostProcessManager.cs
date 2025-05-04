@@ -5,25 +5,19 @@ using UnityEngine.Rendering.Universal;
 
 public class PostProcessManager : Singleton<PostProcessManager>
 {
-/*
     [Title("Configurações de Pós-Processamento")]
     [Required, AssetsOnly]
     [InlineEditor(InlineEditorObjectFieldModes.Foldout)]
-    public Volume volume; // Usando Volume do URP
+    public Volume volume;
 
     [ShowInInspector, ReadOnly]
     private ColorAdjustments colorAdjustments;
 
     void Start()
     {
-        // Método CORRETO para obter o componente no URP
-        if (volume.profile.TryGet(out colorAdjustments))
+        if (volume != null && volume.profile != null)
         {
-            Debug.Log("ColorAdjustments encontrado!");
-        }
-        else
-        {
-            Debug.LogError("Adicione ColorAdjustments ao Volume!");
+            volume.profile.TryGet(out colorAdjustments);
         }
     }
 
@@ -33,16 +27,15 @@ public class PostProcessManager : Singleton<PostProcessManager>
             colorAdjustments.postExposure.value = value;
     }
 
-    public void SetTemperature(float value)
+    public void SetTemperature(Color temperatureColor)
     {
         if (colorAdjustments != null)
-            colorAdjustments.temperature.value = value;
+            colorAdjustments.colorFilter.value = temperatureColor;
     }
 
     [Button("Buscar Volume Automático")]
     private void FindVolume()
     {
-        // Corrigido para buscar o Volume do URP
         volume = FindObjectOfType<Volume>();
     }
 
@@ -50,8 +43,7 @@ public class PostProcessManager : Singleton<PostProcessManager>
     [Button("Resetar Exposição")]
     public void ResetExposure()
     {
-        if (colorAdjustments != null) 
+        if (colorAdjustments != null)
             colorAdjustments.postExposure.value = 0f;
     }
-    */
 }
