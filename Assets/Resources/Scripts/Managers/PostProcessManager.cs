@@ -34,6 +34,7 @@ public class PostProcessManager : Singleton<PostProcessManager>
     }
 
     [Button("Buscar Volume Automático")]
+    [System.Obsolete]
     private void FindVolume()
     {
         volume = FindObjectOfType<Volume>();

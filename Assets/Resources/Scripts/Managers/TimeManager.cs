@@ -7,7 +7,7 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
     public class TimeManager : Singleton<TimeManager>
     {
         [TitleGroup("Configurações de Tempo")]
-        [PropertyRange(1, 100)]
+        [PropertyRange(1, 500)]
         [SerializeField] private float timeMultiplier = 1f;
 
         [TitleGroup("Horário Comercial")]
@@ -59,10 +59,14 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
         [ShowInInspector, ReadOnly, ProgressBar(0, 24)]
         public float CurrentHour { get; private set; }
 
-        private DateTime currentTime;
+        [ShowInInspector, ReadOnly]
+        public string CurrentDate => GetFormattedDate();
+
+        private DateTime gameDate;
         private bool isDay;
 
         [Button("Validar Referência de Luz")]
+        [Obsolete]
         private void ValidateLightReference()
         {
             if (directionalLight == null)
@@ -75,7 +79,7 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
         protected override void Awake()
         {
             base.Awake();
-            currentTime = DateTime.Now.Date + TimeSpan.FromHours(startHour);
+            gameDate = new DateTime(2024, 1, 1);
             CurrentHour = startHour;
             isDay = CurrentHour >= startHour && CurrentHour < closeHour;
         }
@@ -88,11 +92,12 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
 
         private void UpdateTime()
         {
-            CurrentHour += Time.deltaTime * timeMultiplier / 3600;
+            CurrentHour += Time.deltaTime * (timeMultiplier * 10) / 3600;
 
             if (CurrentHour >= 24)
             {
                 CurrentHour -= 24;
+                gameDate = gameDate.AddDays(1);
             }
 
             OnTimeChanged?.Invoke(CurrentHour);
@@ -109,6 +114,17 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
             }
         }
 
+        public string GetFormattedDate()
+        {
+            return gameDate.ToString("dd/MM/yyyy");
+        }
+
+        public string GetFullDateTime()
+        {
+            return $"{GetFormattedDate()} {GetFormattedTime(CurrentHour)}";
+        }
+
+        // Restante dos métodos permanecem inalterados
         private void UpdateLighting()
         {
             if (directionalLight == null) return;
@@ -134,6 +150,10 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
                 PostProcessManager.Instance.SetTemperature(temperatureColor);
                 PostProcessManager.Instance.SetExposure(Mathf.Lerp(0.3f, 1.2f, timePercent));
             }
+            else
+            {
+                Debug.LogError("PostProcessManager nao encontrado!");
+            }
         }
 
         public void SetTimeSpeed(float multiplier)
@@ -141,9 +161,9 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
             timeMultiplier = multiplier;
         }
 
-        public string GetFormattedTime()
+        public string GetFormattedTime(float hour)
         {
-            TimeSpan time = TimeSpan.FromHours(CurrentHour);
+            TimeSpan time = TimeSpan.FromHours(hour);
             return time.ToString("hh':'mm");
         }
     }

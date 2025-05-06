@@ -7,7 +7,7 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
 {
     public class EventHandler : Singleton<EventHandler>
     {
-    /*
+    
         public ClientManager clientManager;
         public UIManager uiManager;
         public TimeManager timeManager;
@@ -17,8 +17,8 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
 
         public CreationManager creationManager;
 
-        public UIVirtualJoystick LeftJoystick;
-        public UIVirtualJoystick RightJoystick;
+        //public UIVirtualJoystick LeftJoystick;
+        //public UIVirtualJoystick RightJoystick;
         
 
         private void Start()
@@ -30,11 +30,9 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
         {
             yield return new WaitForSeconds(1f);
             timeManager.OnOpenCoffeeShop            += uiManager.OpenShopNotification;
-            timeManager.OnOpenCoffeeShop            += shopManager.AbrirPorta;
             timeManager.OnOpenCoffeeShop            += clientManager.StartSpawnClients;
 
             timeManager.OnCloseCoffeeShop           += uiManager.CloseShopNotification;
-            timeManager.OnCloseCoffeeShop           += shopManager.FecharPorta;
             timeManager.OnCloseCoffeeShop           += clientManager.StopSpawnClients;
             timeManager.OnCloseCoffeeShop           += RestartDay;
 
@@ -50,13 +48,13 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
             shopManager.OnChangeStar                += uiManager.UpdateStars;
             shopManager.OnChangeStar                += shopManager.CheckUpgradeStar;
 
-            StepSound stepSound = GameAssets.Instance.player.GetComponent<StepSound>();
+            //StepSound stepSound = GameAssets.Instance.player.GetComponent<StepSound>();
 
-            LeftJoystick.OnMove                     += (input) => stepSound.SetMovementInput(input);
-            RightJoystick.OnMove                    += (input) => stepSound.SetMovementInput(input);
+            //LeftJoystick.OnMove                     += (input) => stepSound.SetMovementInput(input);
+            //RightJoystick.OnMove                    += (input) => stepSound.SetMovementInput(input);
 
             timeManager.OnTimeChanged += HandleTimeChange;
-            timeManager.OnDayNightChanged += HandleDayNightChange;
+            //timeManager.OnDayNightChanged += HandleDayNightChange;
         }
 
         void HandleTimeChange(float hour)
@@ -68,8 +66,8 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
         void HandleDayNightChange(bool isDay)
         {
             // Executar transições de dia/noite
-            if(isDay) StartCoroutine(SunriseTransition());
-            else StartCoroutine(SunsetTransition());
+            //if(isDay) StartCoroutine(SunriseTransition());
+            //else StartCoroutine(SunsetTransition());
         }
 
         public void RestartDay()
@@ -77,7 +75,5 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
             //GameAssets.Instance.player.transform.position = GameAssets.Instance.safePoint.position;
             //Instantiate(GameAssets.Instance.pfNovoDia, uiManager.hudCanvas.transform);
         }
-
-        */
     }
 }

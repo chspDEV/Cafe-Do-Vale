@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using ComponentUtils.ComponentUtils.Scripts;
+using Sirenix.OdinInspector;
 using Tcp4.Assets.Resources.Scripts.Managers;
 using Tcp4.Assets.Resources.Scripts.Systems.Clients;
 using Tcp4.Assets.Resources.Scripts.Systems.Collect_Cook;
@@ -14,48 +15,49 @@ namespace Tcp4
     {
         #region UI Elements
 
-        [Header("Menus")]
-        [SerializeField] private GameObject productionMenu;
-        [SerializeField] private GameObject storageMenu;
-        [SerializeField] private GameObject creationMenu;
-		[SerializeField] private GameObject configMenu;
+        [TabGroup("Menus")]
+        [TabGroup("Menus")] [SerializeField] private GameObject productionMenu;
+        [TabGroup("Menus")] [SerializeField] private GameObject storageMenu;
+        [TabGroup("Menus")] [SerializeField] private GameObject creationMenu;
+        [TabGroup("Menus")] [SerializeField] private GameObject configMenu;
 
-        [Header("Sprites")]
-        public Sprite sprProductionWait;
-        public Sprite sprRefinamentWait;
-        public Sprite ready;
-        public Sprite transparent;
+        [TabGroup("Sprites")]
+        [TabGroup("Sprites")] public Sprite sprProductionWait;
+        [TabGroup("Sprites")] public Sprite sprRefinamentWait;
+        [TabGroup("Sprites")] public Sprite ready;
+        [TabGroup("Sprites")] public Sprite transparent;
 
-        [Header("Prefabs")]
-        public GameObject pfImageToFill;
-        public GameObject pfImage;
-        public GameObject pfSlotStorage;
-        public GameObject pfSlotCreation, pfSlotCreationIngredient;
-        public GameObject pfClientNotification;
-        public GameObject pfProductionCard;
+        [TabGroup("Prefabs")]
+        [TabGroup("Prefabs")] public GameObject pfImageToFill;
+        [TabGroup("Prefabs")] public GameObject pfImage;
+        [TabGroup("Prefabs")] public GameObject pfSlotStorage;
+        [TabGroup("Prefabs")] public GameObject pfSlotCreation, pfSlotCreationIngredient;
+        [TabGroup("Prefabs")] public GameObject pfClientNotification;
+        [TabGroup("Prefabs")] public GameObject pfProductionCard;
 
-        [Header("UI Containers")]
-        public Transform storageSlotHolder;
-        public Transform productionSlotHolder;
-        public Transform creationSlotHolder, ingredientSlotHolder;
-        public Transform notificationHolder;
-        public Canvas hudCanvas;
-        public Canvas worldCanvas;
+        [TabGroup("UI Containers")]
+        [TabGroup("UI Containers")] public Transform storageSlotHolder;
+        [TabGroup("UI Containers")] public Transform productionSlotHolder;
+        [TabGroup("UI Containers")] public Transform creationSlotHolder, ingredientSlotHolder;
+        [TabGroup("UI Containers")] public Transform notificationHolder;
+        [TabGroup("UI Containers")] public Canvas hudCanvas;
+        [TabGroup("UI Containers")] public Canvas worldCanvas;
 
-        [Header("UI Animations")]
-        public AnimationExecute money;
-        public AnimationExecute stars;
+        [TabGroup("UI Animations")]
+        [TabGroup("UI Animations")] public AnimationExecute money;
+        [TabGroup("UI Animations")] public AnimationExecute stars;
 
         #endregion
 
         #region UI Text & Images
 
-        [Header("UI Text")]
-        public TextMeshProUGUI moneyText;
-        public TextMeshProUGUI nameStorage;
-        public TextMeshProUGUI amountStorage;
+        [TabGroup("UI Text")]
+        [TabGroup("UI Text")] public TextMeshProUGUI moneyText;
+        [TabGroup("UI Text")] public TextMeshProUGUI nameStorage;
+        [TabGroup("UI Text")] public TextMeshProUGUI amountStorage;
+        [TabGroup("UI Text")] public TextMeshProUGUI timeText;
 
-        [Header("UI Images")]
+        [TabGroup("UI Images")]
         public Image starImage;
 
         #endregion
@@ -63,7 +65,7 @@ namespace Tcp4
         #region Storage Management
 
         private List<GameObject> StorageSlotInstances = new();
-        
+
         public void ControlStorageMenu(bool isActive) => storageMenu.SetActive(isActive);
 
         public void CleanStorageSlots()
@@ -96,9 +98,6 @@ namespace Tcp4
                 go.GetComponent<DataSlot>().Setup(storage.item.productImage, 1);
             }
         }
-
-        
-
 
         #endregion
 
@@ -134,11 +133,7 @@ namespace Tcp4
         public void UpdateCreationView()
         {
             Inventory playerInventory = StorageManager.Instance.playerInventory;
-            if (playerInventory == null) 
-            {
-                Debug.Log($"{playerInventory} é nulo!");
-                return;
-            }
+            if (playerInventory == null) return;
 
             CleanCreationSlots();
 
@@ -150,22 +145,16 @@ namespace Tcp4
                 s.myProduct = _;
                 go.GetComponent<DataSlot>().Setup(s.myProduct.productImage, 1);
             }
-
         }
 
         public void UpdateIngredientsView()
         {
             List<BaseProduct> ingredients = CreationManager.Instance.Ingredients;
-            if (ingredients == null) 
-            {
-                Debug.Log($"{ingredients} é nulo!");
-                return;
-            }
-            
+            if (ingredients == null) return;
 
             CleanIngredientsSlots();
 
-            foreach(var _ in ingredients)
+            foreach (var _ in ingredients)
             {
                 GameObject go = Instantiate(pfSlotCreationIngredient, ingredientSlotHolder);
                 IngredientsSlotInstances.Add(go);
@@ -173,43 +162,36 @@ namespace Tcp4
                 s.myProduct = _;
                 go.GetComponent<DataSlot>().Setup(s.myProduct.productImage, s.myProduct.productName);
             }
-
         }
 
-        
         #endregion
-        
+
         #region Production Management
         private List<GameObject> productionCardInstances = new();
         public List<GameObject> GetCardInstances() => productionCardInstances;
         public void CreateNewProductionCard(Production p)
         {
-            if (p == null)
-            {
-                Debug.LogError("Tentativa de criar um cartão de produção com um Production nulo!");
-                return;
-            }
+            if (p == null) return;
 
             GameObject go = Instantiate(pfProductionCard, productionSlotHolder);
             ProductionCard card = go.GetComponent<ProductionCard>();
 
             if (card == null)
             {
-                Debug.LogError("O prefab da ProductionCard não contém o componente ProductionCard!");
                 Destroy(go);
                 return;
             }
 
             card.myProduction = p;
             card.ConfigureVisuals();
-            
+
             go.name = $"PRODUCAO: {p.product.productName}";
             productionCardInstances.Add(go);
         }
 
         public void ClearProductionCards()
         {
-            foreach(var v in productionCardInstances)
+            foreach (var v in productionCardInstances)
             {
                 Destroy(v);
             }
@@ -237,7 +219,7 @@ namespace Tcp4
 
         public void UpdateMoney()
         {
-            moneyText.text = "$"+ShopManager.Instance.GetMoney().ToString();
+            moneyText.text = "$" + ShopManager.Instance.GetMoney().ToString();
             money.ExecuteAnimation("pop");
         }
 
@@ -295,7 +277,7 @@ namespace Tcp4
         }
 
         public ImageToFill PlaceFillImage(Transform pointToSpawn)
-        {   
+        {
             var obj = Instantiate(pfImageToFill, worldCanvas.gameObject.transform);
             var imageFill = obj.GetComponent<ImageToFill>();
             PlaceInWorld(pointToSpawn, imageFill.GetRectTransform());
@@ -303,13 +285,21 @@ namespace Tcp4
         }
 
         public Image PlaceImage(Transform pointToSpawn)
-        {   
+        {
             var obj = Instantiate(pfImage, worldCanvas.gameObject.transform);
             var image = obj.GetComponent<Image>();
             PlaceInWorld(pointToSpawn, image.rectTransform);
             return image;
         }
 
+        #endregion
+
+        #region Time Management
+        public void UpdateClock(float hour)
+        {
+            string _formatedHour = TimeManager.Instance.GetFormattedTime(hour);
+            timeText.text = _formatedHour;
+        }
         #endregion
     }
 }

@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 7848556456145759964}
   - component: {fileID: 2852784136163848089}
   - component: {fileID: 1284722932134531099}
-  - component: {fileID: -1846181288199824469}
+  - component: {fileID: 7244955229080320079}
   m_Layer: 0
   m_Name: pfArvoreP1
   m_TagString: Props
@@ -88,8 +88,8 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &-1846181288199824469
-MeshCollider:
+--- !u!136 &7244955229080320079
+CapsuleCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -106,7 +106,8 @@ MeshCollider:
   m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: -1243541716516704933, guid: ff20b596cea33714b9edf92221596947, type: 3}
+  serializedVersion: 2
+  m_Radius: 1
+  m_Height: 8
+  m_Direction: 1
+  m_Center: {x: 0, y: 3, z: 0}
