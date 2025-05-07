@@ -35,7 +35,7 @@ public abstract class BaseInteractable : MonoBehaviour, IInteractable
     private bool isBouncing;
     private bool isFocused;
 
-    protected virtual void Start()
+    public virtual void Start()
     {
         CreateInteractionIndicator();
         InitializeBillboard();
@@ -73,7 +73,7 @@ public abstract class BaseInteractable : MonoBehaviour, IInteractable
         }
     }
 
-    private void Update()
+    public virtual void Update()
     {
         if (!isFocused || interactionIndicator == null) return;
 
@@ -124,7 +124,7 @@ public abstract class BaseInteractable : MonoBehaviour, IInteractable
     {
         isFocused = true;
 
-        if (interactionIndicator != null)
+        if (interactionIndicator != null && interactionIndicator.enabled == false)
         {
             interactionIndicator.enabled = true;
             interactionIndicator.transform.localScale = initialScale;
@@ -143,7 +143,7 @@ public abstract class BaseInteractable : MonoBehaviour, IInteractable
     {
         isFocused = false;
 
-        if (interactionIndicator != null)
+        if (interactionIndicator != null && interactionIndicator.enabled == true)
         {
             interactionIndicator.enabled = false;
             interactionIndicator.transform.localScale = initialScale;

@@ -6,6 +6,5 @@ namespace Tcp4
 {
     public class DebugInteractable : BaseInteractable
     {
-       
     }
 }

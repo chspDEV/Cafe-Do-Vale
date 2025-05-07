@@ -2,10 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using Tcp4.Assets.Resources.Scripts.Managers;
 using UnityEngine;
+using static Codice.Client.Common.EventTracking.TrackFeatureUseEvent.Features.DesktopGUI.Filters;
 
 namespace Tcp4
 {
-    public class CollectArea : MonoBehaviour
+    public class CollectArea : BaseInteractable
     {
         [Header("Setup")]
         [SerializeField] private Production production;
@@ -28,11 +29,33 @@ namespace Tcp4
         private bool hasChoosedProduction;
         private const string PlayerTag = "Player";
 
-        private void Start()
+        public override void Start()
         {
+            base.Start();
             hasChoosedProduction = false;
             ProductionManager.Instance.OnChooseProduction += SelectProduction;
             timeImage = UIManager.Instance.PlaceFillImage(pointToSpawn);
+        }
+
+     
+
+    
+        public override void OnInteract()
+        {
+            
+            playerInventory = GameAssets.Instance.player.GetComponent<Inventory>();
+            if (playerInventory == null) { Debug.Log("Inventario do Jogador nulo!"); return; }
+           
+
+            if (!hasChoosedProduction)
+            {
+                StartCoroutine(OpenProductionCoroutine());
+            }
+            else
+            {
+                HarvestProduct();
+            }
+            
         }
 
         private void InitializeObjectPools()
@@ -42,10 +65,11 @@ namespace Tcp4
             SoundManager.PlaySound(SoundType.plantando, 0.5f);
         }
 
-        private void Update()
+        public override void Update()
         {
+            base.Update();
+
             SpritesLogic();
-            //UpdateCurrentTime();
         }
 
         private void UpdateCurrentTime()
@@ -75,21 +99,6 @@ namespace Tcp4
             }
         }
 
-        private void OnTriggerEnter(Collider other)
-        {
-            if (other.CompareTag(PlayerTag))
-            {
-                playerInventory = other.GetComponent<Inventory>();
-                if (!hasChoosedProduction)
-                {
-                    StartCoroutine(OpenProductionCoroutine());
-                }
-                else
-                {
-                    HarvestProduct();
-                }
-            }
-        }
 
         IEnumerator OpenProductionCoroutine()
         {
@@ -99,15 +108,22 @@ namespace Tcp4
             OpenProductionMenu();
         }
 
+        private void OnTriggerStay(Collider other)
+        {
+            if (other.CompareTag(PlayerTag))
+            {
+                OnFocus();
+            }
+        }
+
         private void OnTriggerExit(Collider other)
         {
             if (other.CompareTag(PlayerTag))
             {
-                //StopAllCoroutines();
-                CloseProductionMenu();
-                playerInventory = null;
+                OnLostFocus();
             }
         }
+        
 
         private void OpenProductionMenu()
         {
@@ -189,6 +205,7 @@ namespace Tcp4
             isAbleToGive = true;
         }
 
+       
         private void HarvestProduct()
         {
             if (isAbleToGive && isGrown && playerInventory != null && playerInventory.CanStorage())
