@@ -15460,8 +15460,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ebaf5ff81425b04fa8ab62af468866d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isInteractable: 1
   uiOffset: {x: 0, y: 0, z: 0}
   interactionSprite: {fileID: 21300000, guid: ea9161683ffa0e9488c395e2b2bbad54, type: 3}
+  interactionCollider: {fileID: 0}
+  useTrigger: 0
   initialScale: {x: 0, y: 0, z: 0}
   targetScale: {x: 2, y: 1, z: 1}
   growDuration: 0.3
@@ -17825,10 +17828,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c37ccf9bfe9cd3049a2e7d16fdf93382, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  interactionRange: 3
+  interactionRange: 1.25
+  interactableLayers:
+    serializedVersion: 2
+    m_Bits: 2048
+  interactionOffset: {x: 0, y: 1, z: 0}
   gizmoColor: {r: 0, g: 1, b: 1, a: 1}
-  hitColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
-  sphereRadius: 0.3
+  sphereColor: {r: 0, g: 1, b: 0, a: 0.1}
+  sphereRadius: 0.4
 --- !u!1 &1230940344
 GameObject:
   m_ObjectHideFlags: 0
@@ -23606,7 +23613,7 @@ Camera:
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 1023
+    m_Bits: 3071
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -39801,7 +39808,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5387840811978670725}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: pointSpawnModel
   m_TagString: Untagged
   m_Icon: {fileID: -5442936267250999957, guid: 0000000000000000d000000000000000, type: 0}
@@ -39817,7 +39824,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5387840812164606640}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: pointSpawnModel
   m_TagString: Untagged
   m_Icon: {fileID: -5442936267250999957, guid: 0000000000000000d000000000000000, type: 0}
@@ -39833,7 +39840,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5387840812791619286}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: pointSpawnModel
   m_TagString: Untagged
   m_Icon: {fileID: -5442936267250999957, guid: 0000000000000000d000000000000000, type: 0}
@@ -39849,7 +39856,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5387840812722919132}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: pointSpawnModel
   m_TagString: Untagged
   m_Icon: {fileID: -5442936267250999957, guid: 0000000000000000d000000000000000, type: 0}
@@ -48803,7 +48810,7 @@ GameObject:
   - component: {fileID: 5512943526658015939}
   - component: {fileID: 2642410254964584734}
   - component: {fileID: 5517440816546703654}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: pfCollectArea (2)
   m_TagString: CollectArea
   m_Icon: {fileID: 0}
@@ -48823,7 +48830,7 @@ GameObject:
   - component: {fileID: 5512943526457232073}
   - component: {fileID: 2642410255039543572}
   - component: {fileID: 5517440816755876140}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: pfCollectArea (1)
   m_TagString: CollectArea
   m_Icon: {fileID: 0}
@@ -48843,7 +48850,7 @@ GameObject:
   - component: {fileID: 5512943526932979344}
   - component: {fileID: 2642410253095791949}
   - component: {fileID: 5517440817345426805}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: pfCollectArea (3)
   m_TagString: CollectArea
   m_Icon: {fileID: 0}
@@ -48863,7 +48870,7 @@ GameObject:
   - component: {fileID: 5512943527083521701}
   - component: {fileID: 2642410253481985400}
   - component: {fileID: 5517440817161461056}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: pfCollectArea
   m_TagString: CollectArea
   m_Icon: {fileID: 0}
@@ -51697,8 +51704,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cefee3f0a737e3b428b047bbab3af736, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isInteractable: 1
   uiOffset: {x: 0, y: 0, z: 0}
   interactionSprite: {fileID: 21300000, guid: ea9161683ffa0e9488c395e2b2bbad54, type: 3}
+  interactionCollider: {fileID: 0}
+  useTrigger: 0
   initialScale: {x: 0, y: 0, z: 0}
   targetScale: {x: 1.5, y: 1, z: 1}
   growDuration: 0.3
@@ -51708,7 +51718,7 @@ MonoBehaviour:
   production: {fileID: 0}
   timeToGive: 0.5
   amount: 1
-  timeToOpenInterface: 1
+  timeToOpenInterface: 0
   pointToSpawn: {fileID: 5387840812791619286}
   currentModel: {fileID: 0}
 --- !u!114 &5517440816755876140
@@ -51723,8 +51733,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cefee3f0a737e3b428b047bbab3af736, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isInteractable: 1
   uiOffset: {x: 0, y: 0, z: 0}
   interactionSprite: {fileID: 21300000, guid: ea9161683ffa0e9488c395e2b2bbad54, type: 3}
+  interactionCollider: {fileID: 0}
+  useTrigger: 0
   initialScale: {x: 0, y: 0, z: 0}
   targetScale: {x: 1.5, y: 1, z: 1}
   growDuration: 0.3
@@ -51734,7 +51747,7 @@ MonoBehaviour:
   production: {fileID: 0}
   timeToGive: 0.5
   amount: 1
-  timeToOpenInterface: 1
+  timeToOpenInterface: 0
   pointToSpawn: {fileID: 5387840812722919132}
   currentModel: {fileID: 0}
 --- !u!114 &5517440817161461056
@@ -51749,8 +51762,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cefee3f0a737e3b428b047bbab3af736, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isInteractable: 1
   uiOffset: {x: 0, y: 0, z: 0}
   interactionSprite: {fileID: 21300000, guid: ea9161683ffa0e9488c395e2b2bbad54, type: 3}
+  interactionCollider: {fileID: 0}
+  useTrigger: 0
   initialScale: {x: 0, y: 0, z: 0}
   targetScale: {x: 1.5, y: 1, z: 1}
   growDuration: 0.3
@@ -51760,7 +51776,7 @@ MonoBehaviour:
   production: {fileID: 0}
   timeToGive: 0.5
   amount: 1
-  timeToOpenInterface: 1
+  timeToOpenInterface: 0
   pointToSpawn: {fileID: 5387840812164606640}
   currentModel: {fileID: 0}
 --- !u!114 &5517440817345426805
@@ -51775,8 +51791,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cefee3f0a737e3b428b047bbab3af736, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isInteractable: 1
   uiOffset: {x: 0, y: 0, z: 0}
   interactionSprite: {fileID: 21300000, guid: ea9161683ffa0e9488c395e2b2bbad54, type: 3}
+  interactionCollider: {fileID: 0}
+  useTrigger: 0
   initialScale: {x: 0, y: 0, z: 0}
   targetScale: {x: 1.5, y: 1, z: 1}
   growDuration: 0.3
@@ -51786,7 +51805,7 @@ MonoBehaviour:
   production: {fileID: 0}
   timeToGive: 0.5
   amount: 1
-  timeToOpenInterface: 1
+  timeToOpenInterface: 0
   pointToSpawn: {fileID: 5387840811978670725}
   currentModel: {fileID: 0}
 --- !u!1 &5519021075743649364
@@ -55535,7 +55554,7 @@ GameObject:
   - component: {fileID: 8981565637646256925}
   - component: {fileID: 103834252727435957}
   - component: {fileID: 1951046281725548938}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: "pfArea_de_intera\xE7\xE3o_comprado"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -55554,7 +55573,7 @@ GameObject:
   - component: {fileID: 8981565637444420375}
   - component: {fileID: 103834252791909055}
   - component: {fileID: 1951046281931608448}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: "pfArea_de_intera\xE7\xE3o_comprado"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -55573,7 +55592,7 @@ GameObject:
   - component: {fileID: 8981565636297496398}
   - component: {fileID: 103834251392900838}
   - component: {fileID: 1951046283058054617}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: "pfArea_de_intera\xE7\xE3o_comprado"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -55592,7 +55611,7 @@ GameObject:
   - component: {fileID: 8981565635878535035}
   - component: {fileID: 103834251278022355}
   - component: {fileID: 1951046283447676396}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: "pfArea_de_intera\xE7\xE3o_comprado"
   m_TagString: Untagged
   m_Icon: {fileID: 0}

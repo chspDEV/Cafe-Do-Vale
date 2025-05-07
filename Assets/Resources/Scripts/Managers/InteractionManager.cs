@@ -1,5 +1,6 @@
 using UnityEngine;
 using Sirenix.OdinInspector;
+using System.Linq;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -8,31 +9,38 @@ using UnityEditor;
 public class InteractionManager : Singleton<InteractionManager>
 {
     [Header("Configurações")]
-    [SerializeField, Range(1, 10)] 
-    private float interactionRange = 3f;
+    [SerializeField, Range(1, 10)] private float interactionRange = 3f;
+    [SerializeField] private LayerMask interactableLayers;
+    [SerializeField] private Vector3 interactionOffset = new Vector3(0f, 1f, 0f);
 
     [Header("Debug (Odin)")]
-    [ShowInInspector, ReadOnly] 
+    [ShowInInspector, ReadOnly]
     private IInteractable currentInteractable;
 
     [Header("Gizmos Settings")]
     [SerializeField] private Color gizmoColor = Color.cyan;
-    [SerializeField] private Color hitColor = Color.yellow;
+    [SerializeField] private Color sphereColor = new Color(0, 1, 0, 0.1f);
     [SerializeField, Range(0.1f, 0.5f)] private float sphereRadius = 0.3f;
 
-    private Transform playerTransform; 
+    private Transform playerTransform;
+    
 
     private void Start()
     {
+        FindPlayer();
+    }
+
+    private void FindPlayer()
+    {
         GameObject player = GameObject.FindWithTag("PlayerModel");
-        
+
         if (player != null)
         {
             playerTransform = player.transform;
         }
         else
         {
-            Debug.LogError("Jogador não encontrado! Certifique-se de que existe um objeto com a tag 'Player' na cena.");
+            Debug.LogError("Jogador não encontrado! Certifique-se de que existe um objeto com a tag 'PlayerModel' na cena.");
         }
     }
 
@@ -43,17 +51,52 @@ public class InteractionManager : Singleton<InteractionManager>
         CheckForInteractables();
     }
 
+    public void ForceCheckInteractables()
+    {
+        CheckForInteractables();
+    }
+
     private void CheckForInteractables()
     {
-        Ray ray = new Ray(playerTransform.position + new Vector3(0f,1f,0f), playerTransform.forward);
-        bool hitSomething = Physics.Raycast(ray, out RaycastHit hit, interactionRange);
+        Vector3 origin = playerTransform.position + interactionOffset;
 
-        if (hitSomething && hit.collider.TryGetComponent(out IInteractable interactable))
+        // usando OverlapSphereNonAlloc para melhor performance
+        Collider[] hitColliders = new Collider[10];
+        int numColliders = Physics.OverlapSphereNonAlloc(
+            origin,
+            interactionRange,
+            hitColliders,
+            interactableLayers,
+            QueryTriggerInteraction.Collide 
+        );
+
+        IInteractable nearestInteractable = null;
+        float closestDistance = Mathf.Infinity;
+
+        for (int i = 0; i < numColliders; i++)
         {
-            if (interactable != currentInteractable)
+            Collider collider = hitColliders[i];
+            if (collider.TryGetComponent(out IInteractable interactable))
+            {
+                Vector3 closestPoint = collider.ClosestPoint(origin);
+                float distance = Vector3.Distance(origin, closestPoint);
+
+                if (distance <= interactionRange &&
+                   distance < closestDistance &&
+                   interactable.IsInteractable())
+                {
+                    closestDistance = distance;
+                    nearestInteractable = interactable;
+                }
+            }
+        }
+
+        if (nearestInteractable != null)
+        {
+            if (nearestInteractable != currentInteractable)
             {
                 currentInteractable?.OnLostFocus();
-                currentInteractable = interactable;
+                currentInteractable = nearestInteractable;
                 currentInteractable.OnFocus();
             }
         }
@@ -67,7 +110,7 @@ public class InteractionManager : Singleton<InteractionManager>
     [Button("Interagir (Debug)"), HideInEditorMode]
     public void TryInteract()
     {
-        if (playerTransform == null) return; 
+        if (playerTransform == null) return;
         currentInteractable?.OnInteract();
     }
 
@@ -76,32 +119,24 @@ public class InteractionManager : Singleton<InteractionManager>
     {
         if (!enabled) return;
 
-        // Tenta encontrar o jogador na cena se não estiver em Play Mode
-        Transform gizmoTransform = Application.isPlaying ? 
-            playerTransform : 
-            GameObject.FindWithTag("Player")?.transform;
+        Transform gizmoTransform = Application.isPlaying ?
+            playerTransform :
+            GameObject.FindWithTag("PlayerModel")?.transform;
 
         if (gizmoTransform == null) return;
 
-        // Configura as posições e direção
-        Vector3 start = gizmoTransform.position  + new Vector3(0f,1f,0f);
-        Vector3 direction = gizmoTransform.forward;
-        float maxDistance = interactionRange;
+        Vector3 origin = gizmoTransform.position + interactionOffset;
 
-        // Desenha a linha principal
+        // Desenha a esfera de interação
+        Gizmos.color = sphereColor;
+        Gizmos.DrawSphere(origin, interactionRange);
+
+        // Desenha a esfera de interação (wireframe)
         Gizmos.color = gizmoColor;
-        Gizmos.DrawRay(start, direction * maxDistance);
+        Gizmos.DrawWireSphere(origin, interactionRange);
 
-        // Verica colisão apenas para o Gizmo
-        if (Physics.Raycast(start, direction, out RaycastHit hit, maxDistance))
-        {
-            Gizmos.color = hitColor;
-            Gizmos.DrawSphere(hit.point, sphereRadius);
-        }
-
-        // Desenha uma esfera no final do alcance
-        Gizmos.color = gizmoColor;
-        Gizmos.DrawWireSphere(start + direction * maxDistance, sphereRadius);
+        // Desenha o ponto de origem
+        Gizmos.DrawSphere(origin, sphereRadius);
     }
 #endif
 }

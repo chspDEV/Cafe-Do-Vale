@@ -45,7 +45,8 @@ namespace Tcp4
             
             playerInventory = GameAssets.Instance.player.GetComponent<Inventory>();
             if (playerInventory == null) { Debug.Log("Inventario do Jogador nulo!"); return; }
-           
+
+            Debug.Log("interagiiiiiiiiiiiiiii");
 
             if (!hasChoosedProduction)
             {
@@ -58,6 +59,20 @@ namespace Tcp4
             
         }
 
+        public override void OnFocus()
+        {
+            if (!isGrown && hasChoosedProduction) return;
+            base.OnFocus();
+        }
+
+        public override void OnLostFocus()
+        {
+            base.OnLostFocus();
+
+            CloseProductionMenu();
+            playerInventory = null;
+        }
+
         private void InitializeObjectPools()
         {
             objectPools = new ObjectPool(pointToSpawn);
@@ -68,7 +83,6 @@ namespace Tcp4
         public override void Update()
         {
             base.Update();
-
             SpritesLogic();
         }
 
@@ -106,22 +120,6 @@ namespace Tcp4
 
             if(playerInventory != null)
             OpenProductionMenu();
-        }
-
-        private void OnTriggerStay(Collider other)
-        {
-            if (other.CompareTag(PlayerTag))
-            {
-                OnFocus();
-            }
-        }
-
-        private void OnTriggerExit(Collider other)
-        {
-            if (other.CompareTag(PlayerTag))
-            {
-                OnLostFocus();
-            }
         }
         
 
@@ -166,7 +164,7 @@ namespace Tcp4
 
         private IEnumerator GrowthCycle()
         {
-
+            OnLostFocus();
             var models = production.models;
             var timeToGrow = production.timeToGrow;
             int modelIndex = 0;

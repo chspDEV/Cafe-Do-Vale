@@ -4,9 +4,16 @@ using Tcp4;
 
 public abstract class BaseInteractable : MonoBehaviour, IInteractable
 {
+    [Header("Interactable Settings")]
+    [SerializeField] private bool isInteractable = true;
+
     [Header("UI Settings")]
     [SerializeField] protected Vector3 uiOffset = new Vector3(0, 1.5f, 0);
     [SerializeField] protected Sprite interactionSprite;
+
+    [Header("Collider Settings")]
+    [SerializeField] private Collider interactionCollider;
+    [SerializeField] private bool useTrigger = false;
 
     [Header("Scale Animation")]
     [Tooltip("Escala inicial antes da animação")]
@@ -42,6 +49,65 @@ public abstract class BaseInteractable : MonoBehaviour, IInteractable
         ApplyInitialScale();
     }
 
+    #region Interface Implementation
+    public bool IsInteractable() => isInteractable;
+
+    public virtual void OnFocus()
+    {
+        if (!IsInteractable()) return;
+
+        isFocused = true;
+        EnableUI();
+    }
+
+    public virtual void OnInteract()
+    {
+        if (!IsInteractable()) return;
+        Debug.Log($"Interagiu com {name}");
+    }
+
+    public virtual void OnLostFocus()
+    {
+        isFocused = false;
+        DisableUI();
+    }
+    #endregion
+
+    #region Interaction Control
+    public void EnableInteraction()
+    {
+        isInteractable = true;
+        EnableUI();
+    }
+
+    public void DisableInteraction()
+    {
+        isInteractable = false;
+        DisableUI();
+        OnLostFocus();
+    }
+    #endregion
+
+    #region UI Management
+    private void EnableUI()
+    {
+        if (interactionIndicator == null) return;
+
+        interactionIndicator.enabled = true;
+        interactionIndicator.transform.localScale = initialScale;
+        isGrowing = true;
+        isBouncing = false;
+        animationProgress = 0f;
+    }
+
+    private void DisableUI()
+    {
+        if (interactionIndicator == null) return;
+
+        interactionIndicator.enabled = false;
+        interactionIndicator.transform.localScale = initialScale;
+    }
+
     private void CreateInteractionIndicator()
     {
         interactionIndicator = UIManager.Instance.PlaceImage(transform);
@@ -72,7 +138,9 @@ public abstract class BaseInteractable : MonoBehaviour, IInteractable
             interactionIndicator.transform.localScale = initialScale;
         }
     }
+    #endregion
 
+    #region Animation
     public virtual void Update()
     {
         if (!isFocused || interactionIndicator == null) return;
@@ -113,48 +181,34 @@ public abstract class BaseInteractable : MonoBehaviour, IInteractable
     {
         animationProgress += Time.deltaTime * bounceSpeed;
 
-        // Oscilação suave entre as escalas mínima e máxima
-        float t = (Mathf.Sin(animationProgress) + 1f) / 2f; // Normalizado para 0-1
+        float t = (Mathf.Sin(animationProgress) + 1f) / 2f; 
         float currentScale = Mathf.Lerp(bounceScaleMin, bounceScaleMax, t);
 
         interactionIndicator.transform.localScale = targetScale * currentScale;
     }
-
-    public virtual void OnFocus()
-    {
-        isFocused = true;
-
-        if (interactionIndicator != null && interactionIndicator.enabled == false)
-        {
-            interactionIndicator.enabled = true;
-            interactionIndicator.transform.localScale = initialScale;
-            isGrowing = true;
-            isBouncing = false;
-            animationProgress = 0f;
-        }
-    }
-
-    public virtual void OnInteract()
-    {
-        Debug.Log($"Interagiu com {name}");
-    }
-
-    public virtual void OnLostFocus()
-    {
-        isFocused = false;
-
-        if (interactionIndicator != null && interactionIndicator.enabled == true)
-        {
-            interactionIndicator.enabled = false;
-            interactionIndicator.transform.localScale = initialScale;
-        }
-    }
+    #endregion
 
     private void OnDestroy()
     {
         if (interactionIndicator != null)
         {
             Destroy(interactionIndicator.gameObject);
+        }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (useTrigger && other.CompareTag("Player"))
+        {
+            InteractionManager.Instance.ForceCheckInteractables();
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (useTrigger && other.CompareTag("Player"))
+        {
+            InteractionManager.Instance.ForceCheckInteractables();
         }
     }
 }

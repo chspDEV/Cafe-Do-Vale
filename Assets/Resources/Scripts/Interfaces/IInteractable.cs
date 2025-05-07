@@ -6,6 +6,7 @@ public interface IInteractable
 {
     void OnFocus();
     void OnInteract();
-    void OnLostFocus(); 
+    void OnLostFocus();
+    bool IsInteractable();
 }
 
