@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using Tcp4.Assets.Resources.Scripts.Managers;
 using UnityEngine;
-using static Codice.Client.Common.EventTracking.TrackFeatureUseEvent.Features.DesktopGUI.Filters;
 
 namespace Tcp4
 {
