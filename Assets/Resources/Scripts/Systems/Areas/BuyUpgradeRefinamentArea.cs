@@ -16,7 +16,7 @@ namespace Tcp4.Assets.Resources.Scripts.Systems.Areas
         [SerializeField] int decreaseValue = 1;
         [SerializeField] bool canUpgrade = true;
         [SerializeField] Transform pointToImage;
-        [SerializeField] List<RefinamentArea> refinamentAreas;
+        [SerializeField] List<RefinementArea> refinamentAreas;
 
         [SerializeField] int upgrades = 0;
         [SerializeField] int maxUpgrades = 5;
@@ -72,9 +72,9 @@ namespace Tcp4.Assets.Resources.Scripts.Systems.Areas
             canUpgrade = false;
             upgrades++;
 
-            foreach (RefinamentArea r in refinamentAreas)
+            foreach (RefinementArea r in refinamentAreas)
             {
-                r.DecreaseRefinementTime(decreaseValueToRefinament);
+                r.DecreaseRefinamentTime(decreaseValueToRefinament);
             }
 
             IncreasePrice();

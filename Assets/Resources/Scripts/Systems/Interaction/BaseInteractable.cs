@@ -1,47 +1,87 @@
 using UnityEngine;
 using UnityEngine.UI;
 using Tcp4;
+using Sirenix.OdinInspector;
 
 public abstract class BaseInteractable : MonoBehaviour, IInteractable
 {
-    [Header("Interactable Settings")]
+    [TabGroup("Configurações", "Interagível")]
+    [LabelText("Habilitado")]
     [SerializeField] private bool isInteractable = true;
 
-    [Header("UI Settings")]
+    [TabGroup("Configurações", "Visual")]
+    [BoxGroup("Configurações/Visual/UI", ShowLabel = false)]
+    [LabelText("Offset UI")]
     [SerializeField] protected Vector3 uiOffset = new Vector3(0, 1.5f, 0);
+
+    [BoxGroup("Configurações/Visual/UI")]
+    [LabelText("Sprite de Interação")]
+    [PreviewField(50)]
     [SerializeField] protected Sprite interactionSprite;
 
-    [Header("Collider Settings")]
+    [TabGroup("Configurações", "Física")]
+    [BoxGroup("Configurações/Física/Colisor")]
+    [LabelText("Colisor de Interação")]
     [SerializeField] private Collider interactionCollider;
+
+    [BoxGroup("Configurações/Física/Colisor")]
+    [LabelText("Usar Trigger")]
     [SerializeField] private bool useTrigger = false;
 
-    [Header("Scale Animation")]
-    [Tooltip("Escala inicial antes da animação")]
+    [TabGroup("Animação", "Escala")]
+    [BoxGroup("Animação/Escala/Configs")]
+    [LabelText("Escala Inicial")]
+    [Tooltip("Tamanho inicial antes da animação")]
     [SerializeField] private Vector3 initialScale = Vector3.zero;
 
-    [Tooltip("Escala alvo após o crescimento")]
+    [BoxGroup("Animação/Escala/Configs")]
+    [LabelText("Escala Alvo")]
+    [Tooltip("Tamanho final após a animação")]
     [SerializeField] private Vector3 targetScale = Vector3.one;
 
-    [Space]
-    [Tooltip("Duração da animação de crescimento")]
+    [BoxGroup("Animação/Escala/Configs")]
+    [LabelText("Duração")]
+    [Tooltip("Tempo para completar a animação")]
+    [MinValue(0.1)]
     [SerializeField] private float growDuration = 0.3f;
 
-    [Header("Bounce Animation")]
-    [Tooltip("Escala mínima durante o bounce (relativo ao targetScale)")]
+    [TabGroup("Animação", "Bounce")]
+    [BoxGroup("Animação/Bounce/Configs")]
+    [LabelText("Escala Mínima")]
+    [Tooltip("Menor tamanho durante o efeito")]
+    [MinValue(0.1)]
     [SerializeField] private float bounceScaleMin = 0.9f;
 
-    [Tooltip("Escala máxima durante o bounce (relativo ao targetScale)")]
+    [BoxGroup("Animação/Bounce/Configs")]
+    [LabelText("Escala Máxima")]
+    [Tooltip("Maior tamanho durante o efeito")]
+    [MinValue(0.1)]
     [SerializeField] private float bounceScaleMax = 1.1f;
 
-    [Tooltip("Velocidade da animação de bounce")]
+    [BoxGroup("Animação/Bounce/Configs")]
+    [LabelText("Velocidade")]
+    [Tooltip("Rapidez do efeito de bounce")]
+    [MinValue(0.1)]
     [SerializeField] private float bounceSpeed = 5f;
 
-    protected Image interactionIndicator;
+    [BoxGroup("Animação/Estado")]
+    [ShowInInspector, ReadOnly]
     private float animationProgress;
+
+    [BoxGroup("Animação/Estado")]
+    [ShowInInspector, ReadOnly]
     private bool isGrowing;
+
+    [BoxGroup("Animação/Estado")]
+    [ShowInInspector, ReadOnly]
     private bool isBouncing;
+
+    [BoxGroup("Animação/Estado")]
+    [ShowInInspector, ReadOnly]
     private bool isFocused;
 
+    [BoxGroup("Referências")]
+    [SerializeField] protected Image interactionIndicator;
     public virtual void Start()
     {
         CreateInteractionIndicator();

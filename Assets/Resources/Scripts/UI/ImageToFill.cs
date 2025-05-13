@@ -42,6 +42,11 @@ public class ImageToFill : MonoBehaviour
         return rect;
     }
 
+    public void SetFillMethod(Image.FillMethod method)
+    { 
+        image.fillMethod = method;
+    }
+
     public void SetupSettings()
     {
         if (image == null) return;

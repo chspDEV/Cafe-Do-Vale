@@ -1,4 +1,5 @@
 ﻿using ComponentUtils.ComponentUtils.Scripts;
+using Sirenix.OdinInspector;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,6 +9,13 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
 {
     public class GameAssets : Singleton<GameAssets>
     {
+        [TabGroup("Sprites")] public Sprite sprError;
+        [TabGroup("Sprites")] public Sprite sprProductionWait;
+        [TabGroup("Sprites")] public Sprite sprRefinamentWait;
+        [TabGroup("Sprites")] public Sprite sprSpoilingWarning;
+        [TabGroup("Sprites")] public Sprite ready;
+        [TabGroup("Sprites")] public Sprite transparent;
+
         public List<Sprite> clientSprites;
         public List<string> clientNames;
 

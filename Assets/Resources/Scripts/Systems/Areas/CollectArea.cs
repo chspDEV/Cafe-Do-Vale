@@ -98,17 +98,17 @@ namespace Tcp4
         {
             if (production == null)
             {
-                timeImage.ChangeSprite(UIManager.Instance.transparent);
+                timeImage.ChangeSprite(GameAssets.Instance.transparent);
                 return;
             }
 
             if (!isAbleToGive && currentTime < production.timeToGrow)
             {
-                timeImage.ChangeSprite(UIManager.Instance.sprProductionWait);
+                timeImage.ChangeSprite(GameAssets.Instance.sprProductionWait);
             }
             else if (isAbleToGive)
             {
-                timeImage.ChangeSprite(UIManager.Instance.ready);
+                timeImage.ChangeSprite(GameAssets.Instance.ready);
             }
         }
 

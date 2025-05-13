@@ -21,12 +21,6 @@ namespace Tcp4
         [TabGroup("Menus")] [SerializeField] private GameObject creationMenu;
         [TabGroup("Menus")] [SerializeField] private GameObject configMenu;
 
-        [TabGroup("Sprites")]
-        [TabGroup("Sprites")] public Sprite sprProductionWait;
-        [TabGroup("Sprites")] public Sprite sprRefinamentWait;
-        [TabGroup("Sprites")] public Sprite ready;
-        [TabGroup("Sprites")] public Sprite transparent;
-
         [TabGroup("Prefabs")]
         [TabGroup("Prefabs")] public GameObject pfImageToFill;
         [TabGroup("Prefabs")] public GameObject pfImage;
