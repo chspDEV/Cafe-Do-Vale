@@ -1,28 +1,23 @@
 using Tcp4;
 using UnityEngine;
 
-public class CreationArea: MonoBehaviour
+public class CreationArea : BaseInteractable
 {
-    private void OnTriggerEnter(Collider other)
+    public override void OnInteract()
     {
-        if(other.CompareTag("Player"))
-        {
-            UIManager.Instance.UpdateCreationView();
-            ControlMenu(true);
-        }
+        base.OnInteract();
+        UIManager.Instance.UpdateCreationView();
+        ControlMenu(true);
     }
 
-    private void OnTriggerExit(Collider other)
+    public override void OnLostFocus()
     {
-        if(other.CompareTag("Player"))
-        {
-            ControlMenu(false);
-        }
+        base.OnLostFocus();
+        ControlMenu(false);
     }
 
     public void ControlMenu(bool isActive)
     {
         UIManager.Instance.ControlCreationMenu(isActive);
     }
-
 }

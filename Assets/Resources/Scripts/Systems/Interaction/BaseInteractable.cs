@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Tcp4;
 using Sirenix.OdinInspector;
+using Tcp4.Assets.Resources.Scripts.Managers;
 
 public abstract class BaseInteractable : MonoBehaviour, IInteractable
 {
@@ -92,6 +93,11 @@ public abstract class BaseInteractable : MonoBehaviour, IInteractable
         CreateInteractionIndicator();
         InitializeBillboard();
         ApplyInitialScale();
+
+        var _ = GameAssets.Instance.sprInteraction;
+
+        if(_ != null)
+            interactionSprite = GameAssets.Instance.sprInteraction;
     }
 
     #region Interface Implementation

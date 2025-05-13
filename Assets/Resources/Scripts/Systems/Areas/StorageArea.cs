@@ -1,50 +1,46 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
 namespace Tcp4.Assets.Resources.Scripts.Systems.Collect_Cook
 {
-    public class StorageArea : MonoBehaviour
+    public class StorageArea : BaseInteractable
     {
         public Inventory inventory;
         public BaseProduct item;
 
-        [SerializeField] private float interfaceDelay; 
+        [SerializeField] private float interfaceDelay;
 
         private bool isInterfaceOpen;
 
-        private void Start()
+        public override void Start()
         {
+            base.Start();
             inventory = GetComponent<Inventory>();
             inventory.UpdateLimit(400);
             isInterfaceOpen = false;
         }
 
-        public void OnTriggerEnter(Collider other)
+        public override void OnLostFocus()
         {
-            if (other.CompareTag("Player"))
-            {
-                if (!isInterfaceOpen)
-                {
-                    StartCoroutine(OpenInterfaceAfterDelay());
-                }
-            }
+            base.OnLostFocus();
+            StopAllCoroutines();
+            CloseInterface();
+            StorageManager.Instance.ClearSlots();
         }
 
-        public void OnTriggerExit(Collider other)
+        public override void OnInteract()
         {
-            if (other.CompareTag("Player"))
+            base.OnInteract();
+
+            if (!isInterfaceOpen)
             {
-                StopAllCoroutines();
-                CloseInterface();
-                StorageManager.Instance.ClearSlots();
+                StartCoroutine(OpenInterfaceAfterDelay());
             }
         }
 
         private IEnumerator OpenInterfaceAfterDelay()
         {
-        
             StorageManager.Instance.SetupCurrentStorage(this);
 
             yield return new WaitForSeconds(interfaceDelay);
@@ -61,6 +57,5 @@ namespace Tcp4.Assets.Resources.Scripts.Systems.Collect_Cook
             UIManager.Instance.ControlStorageMenu(false);
             isInterfaceOpen = false;
         }
-
     }
 }

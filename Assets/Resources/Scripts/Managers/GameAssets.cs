@@ -9,12 +9,21 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
 {
     public class GameAssets : Singleton<GameAssets>
     {
-        [TabGroup("Sprites")] public Sprite sprError;
-        [TabGroup("Sprites")] public Sprite sprProductionWait;
-        [TabGroup("Sprites")] public Sprite sprRefinamentWait;
-        [TabGroup("Sprites")] public Sprite sprSpoilingWarning;
-        [TabGroup("Sprites")] public Sprite ready;
-        [TabGroup("Sprites")] public Sprite transparent;
+        [TabGroup("Refinamento")] public Sprite sprError;
+        [TabGroup("Refinamento")] public Sprite sprProductionWait;
+        [TabGroup("Refinamento")] public Sprite sprRefinamentWait;
+        [TabGroup("Refinamento")] public Sprite sprSpoilingWarning;
+
+        [TabGroup("Gerais")] [HideInInspector] public Sprite sprInteraction;
+        [TabGroup("Gerais")] public Sprite ready;
+        [TabGroup("Gerais")] public Sprite transparent;
+
+        [TabGroup("Interacao")]
+        [SerializeField] private Sprite inputXBOX;
+        [TabGroup("Interacao")]
+        [SerializeField] private Sprite inputPLAYSTATION;
+        [TabGroup("Interacao")]
+        [SerializeField] private Sprite inputPC;
 
         public List<Sprite> clientSprites;
         public List<string> clientNames;
@@ -27,6 +36,8 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
         public void Start()
         {
             player = GameObject.FindGameObjectWithTag("Player");
+
+            sprInteraction = inputPLAYSTATION == null ? inputPC : inputPLAYSTATION;
         }
         public static string GenerateID(int tamanho)
         {

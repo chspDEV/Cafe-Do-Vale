@@ -24,12 +24,12 @@ namespace Tcp4
         public void SetupCurrentStorage(StorageArea newStorage)
         {
             currentStorage = newStorage;
-            OnChangeStorage.Invoke();
+            OnChangeStorage?.Invoke();
         }
 
         public void ClearSlots()
         {
-            OnCleanStorage.Invoke();
+            OnCleanStorage?.Invoke();
         }
         public StorageArea GetStorageArea()
         {
@@ -57,7 +57,7 @@ namespace Tcp4
                 storageInventory.AddProduct(currentStorage.item, 1);
             }
 
-            OnChangeStorage.Invoke();
+            OnChangeStorage?.Invoke();
         }
 
         public void GetItems()
@@ -74,7 +74,7 @@ namespace Tcp4
                 storageInventory.RemoveProduct(currentStorage.item, 1);
             }
 
-            OnChangeStorage.Invoke();
+            OnChangeStorage?.Invoke();
         }
 
     }
