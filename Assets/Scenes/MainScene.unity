@@ -16010,6 +16010,7 @@ Transform:
   - {fileID: 1379563260}
   - {fileID: 1984761856}
   - {fileID: 1449942485}
+  - {fileID: 1099840751}
   m_Father: {fileID: 798196787}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &514837480
@@ -29208,7 +29209,7 @@ Transform:
   m_GameObject: {fileID: 943021851}
   serializedVersion: 2
   m_LocalRotation: {x: 0.46174863, y: 0, z: 0, w: 0.8870109}
-  m_LocalPosition: {x: -3.7081985, y: 9.33, z: -38.3}
+  m_LocalPosition: {x: -44.1082, y: 9.33, z: -4.2}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -33227,6 +33228,51 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 2039
   checkRadius: 1
+--- !u!1 &1099840750
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1099840751}
+  - component: {fileID: 1099840752}
+  m_Layer: 0
+  m_Name: SeedManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1099840751
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1099840750}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 514837479}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1099840752
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1099840750}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 23556a871041b484c80875492ee1742a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  allSeeds: []
 --- !u!1001 &1102887975
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -35123,7 +35169,7 @@ Transform:
   m_GameObject: {fileID: 1156479958}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 39.5, y: 0.33, z: -32.3}
+  m_LocalPosition: {x: -0.9, y: 0.33, z: 1.8}
   m_LocalScale: {x: 1.3, y: 1.3, z: 1.3}
   m_ConstrainProportionsScale: 1
   m_Children:
@@ -55289,7 +55335,7 @@ Transform:
   m_GameObject: {fileID: 1795542089}
   serializedVersion: 2
   m_LocalRotation: {x: 0.46174863, y: 0, z: 0, w: 0.8870109}
-  m_LocalPosition: {x: -3.7081985, y: 9.33, z: -38.3}
+  m_LocalPosition: {x: -44.1082, y: 9.33, z: -4.2}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -59184,6 +59230,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 77aa70fa988114f44922d77669d688ad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  money: 0
   stars: 0
   cupLevel: 0
   cupPrefabs:
@@ -59192,10 +59239,6 @@ MonoBehaviour:
   - {fileID: 828628952653485657, guid: 0e55602d41e5d1948b0677603e4e437e, type: 3}
   point: {fileID: 651195501}
   cupHolder: {fileID: 511438163}
-  money: 0
-  porta: {fileID: 0}
-  menu:
-  - {fileID: 11400000, guid: 27c8ecdb80ae6e24aa65e947be778fca, type: 2}
 --- !u!1 &1936944492
 GameObject:
   m_ObjectHideFlags: 0

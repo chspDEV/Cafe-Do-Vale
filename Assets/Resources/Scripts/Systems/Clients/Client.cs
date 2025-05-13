@@ -53,14 +53,14 @@ namespace Tcp4.Assets.Resources.Scripts.Systems.Clients
         public void Delivered()
         {
             ShopManager.Instance.IncreaseMoney(10); 
-            ShopManager.Instance.IncreaseStar(10f + stars);
+            ShopManager.Instance.AddStars(10f + stars);
             ClientManager.Instance.DeleteSpecificClient(this);
             Destroy(this.gameObject);
         }
 
         public void NotDelivered()
         {
-            ShopManager.Instance.DecreaseStar(0.5f + stars);
+            ShopManager.Instance.AddStars(-0.5f - stars);
             ClientManager.Instance.DeleteSpecificClient(this);
             Destroy(this.gameObject);
         }
@@ -68,14 +68,15 @@ namespace Tcp4.Assets.Resources.Scripts.Systems.Clients
         public void ChooseDrink()
         {
             //Decidindo o pedido que eu quero!
-            var rand = Random.Range(0, ShopManager.Instance.GetMenu().Count);
+            var currentMenu = UnlockManager.Instance.GetCurrentMenu();
+            var rand = Random.Range(0, currentMenu.Count);
 
-            Drink _drink = ShopManager.Instance.GetMenu()[rand];
+            Drink _drink = currentMenu[rand];
 
             if(_drink == null) 
             {
                 //Se nao achou pega um expresso de cria mesmo
-                _drink = ShopManager.Instance.GetMenu()[0];
+                _drink = currentMenu[0];
             }
 
             wantedProduct = _drink;

@@ -45,7 +45,7 @@ namespace Tcp4.Assets.Resources.Scripts.Systems.Areas
             
 
             stackedMoney += decreaseValue;
-            ShopManager.Instance.DecreaseMoney(decreaseValue);
+            ShopManager.Instance.TrySpendMoney(decreaseValue);
 
             OnChangePrice();
 

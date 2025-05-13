@@ -1,0 +1,106 @@
+﻿using System;
+using UnityEngine;
+using ComponentUtils.ComponentUtils.Scripts;
+using System.Collections;
+using System.Collections.Generic;
+
+namespace Tcp4.Assets.Resources.Scripts.Managers
+{
+    public class ShopManager : Singleton<ShopManager>
+    {
+        // Sistema de Moeda
+        [SerializeField] private int money = 0;
+        public event Action OnChangeMoney;
+
+        // Sistema de Reputação
+        [SerializeField] private float stars = 0f;
+        public event Action OnChangeStar;
+        private readonly float MaxStar = 1000f;
+
+        public int cupLevel = 1;
+
+        // Referências
+        [SerializeField] private List<GameObject> cupPrefabs = new();
+        public Transform point;
+        public Transform cupHolder;
+
+        #region Sistema de Moeda
+        public void IncreaseMoney(int value)
+        {
+            money += value;
+            OnChangeMoney?.Invoke();
+        }
+
+        public bool TrySpendMoney(int value)
+        {
+            if (money >= value)
+            {
+                money -= value;
+                OnChangeMoney?.Invoke();
+                return true;
+            }
+            Debug.Log("Dinheiro insuficiente!");
+            return false;
+        }
+
+        public int GetMoney() => money;
+        #endregion
+
+        #region Sistema de Reputação
+        public void AddStars(float value)
+        {
+            stars = Mathf.Clamp(stars + value, 0, MaxStar);
+            OnChangeStar?.Invoke();
+        }
+
+        public float GetStars() => stars;
+        public float GetMaxStars() => MaxStar;
+        #endregion
+
+        #region Sistema de Copos
+        public void SpawnCup(Drink d)
+        {
+            if (!UnlockManager.Instance.CurrentMenu.Contains(d))
+            {
+                Debug.LogWarning("Tentativa de preparar drink não desbloqueado!");
+                return;
+            }
+
+            // Restante do código original
+            int currentCupLevel = UnlockManager.Instance.GetCurrentReputationLevel();
+            GameObject go = Instantiate(cupPrefabs[currentCupLevel], cupHolder);
+            Cup cup = go.GetComponent<Cup>();
+            cup.myDrink = d;
+            cup.point = this.point;
+            SoundManager.PlaySound(SoundType.concluido, 0.6f);
+        }
+        #endregion
+
+        #region Initialization
+        void Start()
+        {
+            StartCoroutine(InitialSetup());
+        }
+
+        IEnumerator InitialSetup()
+        {
+            yield return new WaitForSeconds(.3f);
+            OnChangeMoney?.Invoke();
+            OnChangeStar?.Invoke();
+        }
+        #endregion
+
+        #region Cheats (Opcional)
+        void Update()
+        {
+#if UNITY_EDITOR
+            if (Input.GetKeyDown(KeyCode.Tab))
+            {
+                IncreaseMoney(1000);
+                AddStars(200);
+            }
+#endif
+        }
+        #endregion
+    }
+}

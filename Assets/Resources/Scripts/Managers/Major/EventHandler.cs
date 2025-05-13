@@ -46,7 +46,6 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
 
             shopManager.OnChangeMoney               += uiManager.UpdateMoney;
             shopManager.OnChangeStar                += uiManager.UpdateStars;
-            shopManager.OnChangeStar                += shopManager.CheckUpgradeStar;
 
             //StepSound stepSound = GameAssets.Instance.player.GetComponent<StepSound>();
 

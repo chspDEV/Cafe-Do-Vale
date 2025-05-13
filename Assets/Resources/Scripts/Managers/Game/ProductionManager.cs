@@ -24,6 +24,11 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
 
         public Production GetNewProduction() => productionToSet;
 
+        public bool HasProduction(Production p)
+        { 
+            return productions.Contains(p);
+        }
+
         public void Clean()
         {
             productionToSet = null;

@@ -1,18 +1,25 @@
 using System.Collections;
-using Tcp4;
+using System.Collections.Generic;
 using Tcp4.Assets.Resources.Scripts.Managers;
 using UnityEngine;
-public class BuyUpgradeCups : MonoBehaviour, IUpgradable
+
+namespace Tcp4.Assets.Resources.Scripts.Systems.Areas
 {
-    [SerializeField] private ImageToFill priceImage;
+    public class BuyUpgradeRefinamentArea : MonoBehaviour, IUpgradable
+    {
+        [SerializeField] private ImageToFill priceImage;
         [SerializeField] float stackedMoney = 0f;
         [SerializeField] float price = 50f;
         [SerializeField] float priceMultiplier = 1.5f;
+
+        [SerializeField] float decreaseValueToRefinament = 0.5f;
         [SerializeField] int decreaseValue = 1;
         [SerializeField] bool canUpgrade = true;
         [SerializeField] Transform pointToImage;
+        [SerializeField] List<RefinementArea> refinamentAreas;
+
         [SerializeField] int upgrades = 0;
-        [SerializeField] int maxUpgrades = 2;
+        [SerializeField] int maxUpgrades = 5;
 
         private float cooldownToBuyAgain = 5f;
 
@@ -47,7 +54,7 @@ public class BuyUpgradeCups : MonoBehaviour, IUpgradable
             
 
             stackedMoney += decreaseValue;
-            ShopManager.Instance.DecreaseMoney(decreaseValue);
+            ShopManager.Instance.TrySpendMoney(decreaseValue);
 
             OnChangePrice();
 
@@ -64,8 +71,11 @@ public class BuyUpgradeCups : MonoBehaviour, IUpgradable
 
             canUpgrade = false;
             upgrades++;
-            
-            ShopManager.Instance.IncreaseCupLevel();
+
+            foreach (RefinementArea r in refinamentAreas)
+            {
+                r.DecreaseRefinamentTime(decreaseValueToRefinament);
+            }
 
             IncreasePrice();
             OnChangePrice();
@@ -82,4 +92,5 @@ public class BuyUpgradeCups : MonoBehaviour, IUpgradable
 
             canUpgrade = true;
         }
+    }
 }
