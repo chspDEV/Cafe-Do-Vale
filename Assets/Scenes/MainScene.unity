@@ -16787,11 +16787,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isInteractable: 1
   uiOffset: {x: 0, y: 0, z: 0}
-  interactionSprite: {fileID: 21300000, guid: ea9161683ffa0e9488c395e2b2bbad54, type: 3}
+  interactionSprite: {fileID: 21300000, guid: ad23f7b8f570849419a6b8c3ac225614, type: 3}
   interactionCollider: {fileID: 0}
   useTrigger: 0
   initialScale: {x: 0, y: 0, z: 0}
-  targetScale: {x: 1.5, y: 1, z: 1}
+  targetScale: {x: 1, y: 1, z: 1}
   growDuration: 0.3
   bounceScaleMin: 0.9
   bounceScaleMax: 1.1
@@ -19015,11 +19015,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isInteractable: 1
   uiOffset: {x: 0, y: 0, z: 0}
-  interactionSprite: {fileID: 21300000, guid: ea9161683ffa0e9488c395e2b2bbad54, type: 3}
+  interactionSprite: {fileID: 21300000, guid: ad23f7b8f570849419a6b8c3ac225614, type: 3}
   interactionCollider: {fileID: 0}
   useTrigger: 0
   initialScale: {x: 0, y: 0, z: 0}
-  targetScale: {x: 1.5, y: 1, z: 1}
+  targetScale: {x: 1, y: 1, z: 1}
   growDuration: 0.3
   bounceScaleMin: 0.9
   bounceScaleMax: 1.1
@@ -24374,11 +24374,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isInteractable: 1
   uiOffset: {x: 0, y: 0, z: 0}
-  interactionSprite: {fileID: 21300000, guid: ea9161683ffa0e9488c395e2b2bbad54, type: 3}
+  interactionSprite: {fileID: 21300000, guid: ad23f7b8f570849419a6b8c3ac225614, type: 3}
   interactionCollider: {fileID: 0}
   useTrigger: 0
   initialScale: {x: 0, y: 0, z: 0}
-  targetScale: {x: 1.5, y: 1, z: 1}
+  targetScale: {x: 1, y: 1, z: 1}
   growDuration: 0.3
   bounceScaleMin: 0.9
   bounceScaleMax: 1.1
@@ -53932,7 +53932,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isInteractable: 1
   uiOffset: {x: 0, y: 0, z: 0}
-  interactionSprite: {fileID: 21300000, guid: ea9161683ffa0e9488c395e2b2bbad54, type: 3}
+  interactionSprite: {fileID: 21300000, guid: ad23f7b8f570849419a6b8c3ac225614, type: 3}
   interactionCollider: {fileID: 1774899723}
   useTrigger: 0
   initialScale: {x: 0, y: 0, z: 0}
@@ -61295,11 +61295,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isInteractable: 1
   uiOffset: {x: 0, y: 0, z: 0}
-  interactionSprite: {fileID: 21300000, guid: ea9161683ffa0e9488c395e2b2bbad54, type: 3}
+  interactionSprite: {fileID: 21300000, guid: ad23f7b8f570849419a6b8c3ac225614, type: 3}
   interactionCollider: {fileID: 0}
   useTrigger: 0
   initialScale: {x: 0, y: 0, z: 0}
-  targetScale: {x: 1.5, y: 1, z: 1}
+  targetScale: {x: 1, y: 1, z: 1}
   growDuration: 0.3
   bounceScaleMin: 0.9
   bounceScaleMax: 1.1
@@ -65202,12 +65202,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isInteractable: 1
   uiOffset: {x: 0, y: 0, z: 0}
-  interactionSprite: {fileID: 21300000, guid: ea9161683ffa0e9488c395e2b2bbad54, type: 3}
+  interactionSprite: {fileID: 21300000, guid: ad23f7b8f570849419a6b8c3ac225614, type: 3}
   interactionCollider: {fileID: 1864756103594551470}
   useTrigger: 0
   initialScale: {x: 0, y: 0, z: 0}
-  targetScale: {x: 2, y: 1, z: 1}
-  growDuration: 0.1
+  targetScale: {x: 1, y: 1, z: 1}
+  growDuration: 0.3
   bounceScaleMin: 0.85
   bounceScaleMax: 1.15
   bounceSpeed: 3

@@ -6,7 +6,7 @@ TextureImporter:
   serializedVersion: 13
   mipmaps:
     mipMapMode: 0
-    enableMipMap: 1
+    enableMipMap: 0
     sRGBTexture: 1
     linearTexture: 0
     fadeOut: 0
@@ -37,13 +37,13 @@ TextureImporter:
     filterMode: 1
     aniso: 1
     mipBias: 0
-    wrapU: 0
-    wrapV: 0
+    wrapU: 1
+    wrapV: 1
     wrapW: 0
-  nPOTScale: 1
+  nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 0
+  spriteMode: 2
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
@@ -52,9 +52,9 @@ TextureImporter:
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
-  alphaIsTransparency: 0
+  alphaIsTransparency: 1
   spriteTessellationDetail: -1
-  textureType: 0
+  textureType: 8
   textureShape: 1
   singleChannelComponent: 0
   flipbookRows: 1
@@ -121,12 +121,650 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
-    sprites: []
+    sprites:
+    - serializedVersion: 2
+      name: "ui_Bot\xF5esPS-sprite-sheet_v1_0"
+      rect:
+        serializedVersion: 2
+        x: 9
+        y: 1605
+        width: 514
+        height: 514
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 598ec896432d3d2498f9f7d6ffd6f095
+      internalID: 1183415607
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "ui_Bot\xF5esPS-sprite-sheet_v1_1"
+      rect:
+        serializedVersion: 2
+        x: 541
+        y: 1681
+        width: 514
+        height: 362
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4a543ee0bdf707c41beae4b510f2ec13
+      internalID: -1223513909
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "ui_Bot\xF5esPS-sprite-sheet_v1_2"
+      rect:
+        serializedVersion: 2
+        x: 1073
+        y: 1682
+        width: 514
+        height: 360
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7953dd15f6233ad45ac0ad8517fd0403
+      internalID: 1204834668
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "ui_Bot\xF5esPS-sprite-sheet_v1_3"
+      rect:
+        serializedVersion: 2
+        x: 1605
+        y: 1605
+        width: 514
+        height: 514
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 333d34626b6c97848ba498694407cbcd
+      internalID: 326895573
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "ui_Bot\xF5esPS-sprite-sheet_v1_4"
+      rect:
+        serializedVersion: 2
+        x: 9
+        y: 1073
+        width: 514
+        height: 514
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fa8d45a18415a874ea58ce21f595ed23
+      internalID: -945144878
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "ui_Bot\xF5esPS-sprite-sheet_v1_5"
+      rect:
+        serializedVersion: 2
+        x: 541
+        y: 1149
+        width: 514
+        height: 362
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a0d259524333b0c4babc3fad3a98180b
+      internalID: 666486962
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "ui_Bot\xF5esPS-sprite-sheet_v1_6"
+      rect:
+        serializedVersion: 2
+        x: 1073
+        y: 1150
+        width: 513
+        height: 360
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c15a489c068f5bc4c9d344aac1f7f747
+      internalID: -349949924
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "ui_Bot\xF5esPS-sprite-sheet_v1_7"
+      rect:
+        serializedVersion: 2
+        x: 1605
+        y: 1234
+        width: 230
+        height: 191
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6493ed85c18d6fc46a6df3f92e7a6fea
+      internalID: 572616382
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "ui_Bot\xF5esPS-sprite-sheet_v1_8"
+      rect:
+        serializedVersion: 2
+        x: 1766
+        y: 1357
+        width: 192
+        height: 230
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ca24531c394947e43887b135499c7393
+      internalID: 1104698740
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "ui_Bot\xF5esPS-sprite-sheet_v1_9"
+      rect:
+        serializedVersion: 2
+        x: 1889
+        y: 1235
+        width: 230
+        height: 191
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2b8b1be9e17bed54daa9e4933657bc35
+      internalID: 104968054
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "ui_Bot\xF5esPS-sprite-sheet_v1_10"
+      rect:
+        serializedVersion: 2
+        x: 1768
+        y: 1073
+        width: 191
+        height: 230
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 261384370636f12458f6b67aba461021
+      internalID: -1892990912
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "ui_Bot\xF5esPS-sprite-sheet_v1_11"
+      rect:
+        serializedVersion: 2
+        x: 9
+        y: 702
+        width: 230
+        height: 191
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 35e866588f410be45975a1d9c2cc4240
+      internalID: 533718322
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "ui_Bot\xF5esPS-sprite-sheet_v1_12"
+      rect:
+        serializedVersion: 2
+        x: 170
+        y: 825
+        width: 192
+        height: 230
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e9f2055124d84d449be4ab47bc2ee81c
+      internalID: 1064223522
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "ui_Bot\xF5esPS-sprite-sheet_v1_13"
+      rect:
+        serializedVersion: 2
+        x: 293
+        y: 703
+        width: 230
+        height: 191
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1fc5e27f485d7194995de122117d120b
+      internalID: -1810330403
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "ui_Bot\xF5esPS-sprite-sheet_v1_14"
+      rect:
+        serializedVersion: 2
+        x: 541
+        y: 702
+        width: 230
+        height: 191
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7e81608f123e92844ba28ace11e0b76d
+      internalID: -1551884865
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "ui_Bot\xF5esPS-sprite-sheet_v1_15"
+      rect:
+        serializedVersion: 2
+        x: 702
+        y: 825
+        width: 192
+        height: 230
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8aacdaeee439fd340b09cce930491681
+      internalID: 16694949
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "ui_Bot\xF5esPS-sprite-sheet_v1_16"
+      rect:
+        serializedVersion: 2
+        x: 825
+        y: 703
+        width: 230
+        height: 191
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: aa823429d7608254e92587645ee785fd
+      internalID: -1407410804
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "ui_Bot\xF5esPS-sprite-sheet_v1_17"
+      rect:
+        serializedVersion: 2
+        x: 1073
+        y: 702
+        width: 230
+        height: 191
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e0ae825896a117341b7b3ae5866ee5cb
+      internalID: -1829335406
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "ui_Bot\xF5esPS-sprite-sheet_v1_18"
+      rect:
+        serializedVersion: 2
+        x: 1234
+        y: 825
+        width: 192
+        height: 230
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9f3467b113b66ae429b0cb047b0e0bf2
+      internalID: -621112791
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "ui_Bot\xF5esPS-sprite-sheet_v1_19"
+      rect:
+        serializedVersion: 2
+        x: 1357
+        y: 703
+        width: 230
+        height: 191
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d0d8ef0af0bb83f408665fb173af989e
+      internalID: 473709217
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "ui_Bot\xF5esPS-sprite-sheet_v1_20"
+      rect:
+        serializedVersion: 2
+        x: 1605
+        y: 702
+        width: 230
+        height: 191
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e52dd234c4ec8fd46a6a0c7f118596b8
+      internalID: 366687045
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "ui_Bot\xF5esPS-sprite-sheet_v1_21"
+      rect:
+        serializedVersion: 2
+        x: 1766
+        y: 825
+        width: 192
+        height: 230
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 77a2d6b323aadf24ca8754979fe20bba
+      internalID: -1835630132
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "ui_Bot\xF5esPS-sprite-sheet_v1_22"
+      rect:
+        serializedVersion: 2
+        x: 1889
+        y: 703
+        width: 230
+        height: 191
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 23203946d6439d0449d37bdaa1beebdc
+      internalID: -1306114951
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "ui_Bot\xF5esPS-sprite-sheet_v1_23"
+      rect:
+        serializedVersion: 2
+        x: 172
+        y: 541
+        width: 191
+        height: 230
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3c725f748f1d7284d92fc3e99e019075
+      internalID: -1700007585
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "ui_Bot\xF5esPS-sprite-sheet_v1_24"
+      rect:
+        serializedVersion: 2
+        x: 704
+        y: 541
+        width: 191
+        height: 230
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0f4a0c2bcaa3d3a4da8e63b412e96700
+      internalID: 1802307052
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "ui_Bot\xF5esPS-sprite-sheet_v1_25"
+      rect:
+        serializedVersion: 2
+        x: 1236
+        y: 541
+        width: 191
+        height: 230
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 497dc75152ed1f94daa8c917cb58d616
+      internalID: -2141035332
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "ui_Bot\xF5esPS-sprite-sheet_v1_26"
+      rect:
+        serializedVersion: 2
+        x: 1768
+        y: 541
+        width: 191
+        height: 230
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1382299028df02141b1cc9a0dc69c353
+      internalID: 1456673687
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "ui_Bot\xF5esPS-sprite-sheet_v1_27"
+      rect:
+        serializedVersion: 2
+        x: 9
+        y: 9
+        width: 514
+        height: 514
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 248c4768248a44c42bde5d02a713f2d5
+      internalID: -1503556232
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: "ui_Bot\xF5esPS-sprite-sheet_v1_28"
+      rect:
+        serializedVersion: 2
+        x: 541
+        y: 9
+        width: 514
+        height: 514
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a5a8a652db40fc14e91fc3813d4dac7d
+      internalID: 766986506
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: eebebb1de15d9e0428409f1afc39da52
     internalID: 0
     vertices: []
     indices: 
@@ -135,7 +773,36 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      "ui_Bot\xF5esPS-sprite-sheet_v1_0": 1183415607
+      "ui_Bot\xF5esPS-sprite-sheet_v1_1": -1223513909
+      "ui_Bot\xF5esPS-sprite-sheet_v1_10": -1892990912
+      "ui_Bot\xF5esPS-sprite-sheet_v1_11": 533718322
+      "ui_Bot\xF5esPS-sprite-sheet_v1_12": 1064223522
+      "ui_Bot\xF5esPS-sprite-sheet_v1_13": -1810330403
+      "ui_Bot\xF5esPS-sprite-sheet_v1_14": -1551884865
+      "ui_Bot\xF5esPS-sprite-sheet_v1_15": 16694949
+      "ui_Bot\xF5esPS-sprite-sheet_v1_16": -1407410804
+      "ui_Bot\xF5esPS-sprite-sheet_v1_17": -1829335406
+      "ui_Bot\xF5esPS-sprite-sheet_v1_18": -621112791
+      "ui_Bot\xF5esPS-sprite-sheet_v1_19": 473709217
+      "ui_Bot\xF5esPS-sprite-sheet_v1_2": 1204834668
+      "ui_Bot\xF5esPS-sprite-sheet_v1_20": 366687045
+      "ui_Bot\xF5esPS-sprite-sheet_v1_21": -1835630132
+      "ui_Bot\xF5esPS-sprite-sheet_v1_22": -1306114951
+      "ui_Bot\xF5esPS-sprite-sheet_v1_23": -1700007585
+      "ui_Bot\xF5esPS-sprite-sheet_v1_24": 1802307052
+      "ui_Bot\xF5esPS-sprite-sheet_v1_25": -2141035332
+      "ui_Bot\xF5esPS-sprite-sheet_v1_26": 1456673687
+      "ui_Bot\xF5esPS-sprite-sheet_v1_27": -1503556232
+      "ui_Bot\xF5esPS-sprite-sheet_v1_28": 766986506
+      "ui_Bot\xF5esPS-sprite-sheet_v1_3": 326895573
+      "ui_Bot\xF5esPS-sprite-sheet_v1_4": -945144878
+      "ui_Bot\xF5esPS-sprite-sheet_v1_5": 666486962
+      "ui_Bot\xF5esPS-sprite-sheet_v1_6": -349949924
+      "ui_Bot\xF5esPS-sprite-sheet_v1_7": 572616382
+      "ui_Bot\xF5esPS-sprite-sheet_v1_8": 1104698740
+      "ui_Bot\xF5esPS-sprite-sheet_v1_9": 104968054
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
