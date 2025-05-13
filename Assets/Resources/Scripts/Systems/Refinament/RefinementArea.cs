@@ -89,14 +89,14 @@ namespace Tcp4.Assets.Resources.Scripts.Systems.Areas
             }
             else if (isCountingDown)
             {
-                currentTime = 0f; // para UI de contagem secundária
+                currentTime = 0f; 
                 UpdateInteractionUI();
 
                 countdownTimer += Time.deltaTime;
                 timeImage.ChangeSprite(GameAssets.Instance.sprSpoilingWarning);
                 timeImage.UpdateFill(countdownTimer);
 
-                // Durante momento para estragar, permanece ativo
+               
                 if (!IsInteractable()) EnableInteraction();
 
                 if (countdownTimer >= refinementTime * spoilThreshold)
@@ -141,7 +141,7 @@ namespace Tcp4.Assets.Resources.Scripts.Systems.Areas
                 processingQueue.Enqueue(selectedRecipe.inputProduct);
 
             
-            // Após inserir: desativado
+            
             DisableInteraction();
             activator.canInteract = true;
             activator.EnableInteraction();
@@ -158,7 +158,7 @@ namespace Tcp4.Assets.Resources.Scripts.Systems.Areas
             maxTime = refinementTime * spoilThreshold;
             currentTime = 0f;
 
-            // Processo de refinamento: permanece desativado
+            
             DisableInteraction();
             anim?.ExecuteAnimation("Refinar");
             timeImage.SetFillMethod(Image.FillMethod.Radial360);
@@ -171,7 +171,7 @@ namespace Tcp4.Assets.Resources.Scripts.Systems.Areas
             isRefining = false;
             processingCurrentItem = false;
 
-            // Ao ficar pronto: ativo
+           
             EnableInteraction();
             timeImage.SetFillMethod(Image.FillMethod.Vertical);
             timeImage.ChangeSprite(collectProductSprite);
@@ -194,7 +194,7 @@ namespace Tcp4.Assets.Resources.Scripts.Systems.Areas
                 return;
             }
 
-            // Após coleta completa, volta ao estado ativo
+            
             EnableInteraction();
             UpdateInteractionUI();
         }
@@ -231,7 +231,7 @@ namespace Tcp4.Assets.Resources.Scripts.Systems.Areas
 
         private void SpoiledProduct()
         {
-            // Ao estragar: desativado
+            
             DisableInteraction();
             processingCurrentItem = false;
             processingQueue.Clear();
@@ -252,7 +252,7 @@ namespace Tcp4.Assets.Resources.Scripts.Systems.Areas
         {
             yield return new WaitForSeconds(delay);
             isSpoiled = false;
-            // Após resetar: ativo
+            
             EnableInteraction();
             activator.Reset();
             UpdateInteractionUI();

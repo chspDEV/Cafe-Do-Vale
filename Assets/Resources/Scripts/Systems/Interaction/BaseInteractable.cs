@@ -11,8 +11,13 @@ public abstract class BaseInteractable : MonoBehaviour, IInteractable
 
     [TabGroup("Configurações", "Visual")]
     [BoxGroup("Configurações/Visual/UI", ShowLabel = false)]
-    [LabelText("Offset UI")]
-    [SerializeField] protected Vector3 uiOffset = new Vector3(0, 1.5f, 0);
+    [LabelText("uiRotationOffset")]
+    [SerializeField] protected Vector3 uiRotationOffset = new();
+
+    [TabGroup("Configurações", "Visual")]
+    [BoxGroup("Configurações/Visual/UI", ShowLabel = false)]
+    [LabelText("uiPositionOffset")]
+    [SerializeField] protected Vector3 uiPositionOffset = new(0, 1.5f, 0);
 
     [BoxGroup("Configurações/Visual/UI")]
     [LabelText("Sprite de Interação")]
@@ -166,7 +171,8 @@ public abstract class BaseInteractable : MonoBehaviour, IInteractable
             Billboard billboard = interactionIndicator.GetComponent<Billboard>();
             if (billboard != null)
             {
-                billboard.positionOffset = uiOffset;
+                billboard.positionOffset = uiPositionOffset;
+                billboard.rotationOffset = uiRotationOffset;
             }
         }
     }

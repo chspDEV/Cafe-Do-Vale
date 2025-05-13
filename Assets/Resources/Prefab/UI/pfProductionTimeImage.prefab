@@ -161,7 +161,7 @@ GameObject:
   - component: {fileID: 6434958217183908785}
   - component: {fileID: 5009079484357941930}
   - component: {fileID: 4693158722015561392}
-  - component: {fileID: 6845837210125206187}
+  - component: {fileID: 7992711962213773285}
   m_Layer: 5
   m_Name: pfProductionTimeImage
   m_TagString: Untagged
@@ -213,7 +213,7 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6260145864655188467}
   m_CullTransparentMesh: 1
---- !u!114 &6845837210125206187
+--- !u!114 &7992711962213773285
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -225,5 +225,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b093fb677c3ef6549bdc6e14857616d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rotationOffset: {x: 0, y: 0, z: 0}
+  rotationOffset: {x: -70, y: 0, z: 0}
   positionOffset: {x: 0, y: 0, z: 0}
