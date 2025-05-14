@@ -8,6 +8,8 @@ public class SeedManager : Singleton<SeedManager>
     [SerializeField] private List<Seed> allSeeds;
     private Dictionary<Production, int> seedInventory = new Dictionary<Production, int>();
 
+    public SeedShop seedShop;
+
     public void AddSeed(Production production, int amount = 1)
     {
         if (seedInventory.ContainsKey(production))

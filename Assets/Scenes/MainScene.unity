@@ -33624,6 +33624,10 @@ MonoBehaviour:
   allSeeds:
   - {fileID: 11400000, guid: cea25d2e07ae551459dcae50ac21cc7f, type: 2}
   - {fileID: 11400000, guid: 792c5f409308bd544a9053c5d82cfcca, type: 2}
+  - {fileID: 11400000, guid: baefd42a9cbb73b42864e3f4115c518c, type: 2}
+  - {fileID: 11400000, guid: 480f3a033e07c4f44a13412c47605f65, type: 2}
+  - {fileID: 11400000, guid: 3e02e22e40598b743b2b1106c5ea85e5, type: 2}
+  seedShop: {fileID: 2114238629}
 --- !u!1001 &1102887975
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -40589,7 +40593,9 @@ MonoBehaviour:
   uiManager: {fileID: 1250448550}
   timeManager: {fileID: 325764624}
   storageManager: {fileID: 1813106716}
+  seedManager: {fileID: 1099840752}
   shopManager: {fileID: 1932829699}
+  unlockManager: {fileID: 1011573507}
   creationManager: {fileID: 1984761857}
 --- !u!1 &1303133980
 GameObject:
@@ -59935,7 +59941,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 77aa70fa988114f44922d77669d688ad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  money: 0
+  money: 500
   stars: 0
   cupLevel: 0
   cupPrefabs:

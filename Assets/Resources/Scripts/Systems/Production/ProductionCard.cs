@@ -25,6 +25,11 @@ namespace Tcp4
             cardName.text = myProduction.product.productName;
         }
 
+        private void OnEnable()
+        {
+            UpdateUI();
+        }
+
         private void UpdateUI()
         {
             bool hasSeed = SeedManager.Instance.HasSeed(myProduction);
@@ -32,7 +37,11 @@ namespace Tcp4
 
             if (SeedManager.Instance.GetInventory.TryGetValue(myProduction, out int count))
             {
-                seedCountText.text = count.ToString();
+                seedCountText.text = count.ToString() + "x";
+            }
+            else
+            {
+                seedCountText.text = "0x";
             }
         }
 

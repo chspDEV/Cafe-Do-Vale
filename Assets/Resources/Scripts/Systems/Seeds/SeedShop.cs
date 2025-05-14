@@ -28,8 +28,7 @@ public class SeedShop : BaseInteractable
         UIManager.Instance.ControlSeedShop(false);
     }
 
-    [Button]
-    private void PopulateShop()
+    public void PopulateShop()
     {
         foreach (Seed seed in SeedManager.Instance.GetAllSeeds)
         {

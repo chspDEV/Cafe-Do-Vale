@@ -10,7 +10,12 @@ public class UnlockableItem<T>
 {
     public T item;
     public int requiredReputationLevel;
-    public bool isUnlocked;
+    public bool isUnlocked = false;
+
+    private void OnValidate()
+    {
+        isUnlocked = false;
+    }
 }
 
 public class UnlockManager : Singleton<UnlockManager>
@@ -68,9 +73,26 @@ public class UnlockManager : Singleton<UnlockManager>
 
     private void UpdateUnlockStates()
     {
+        //POR ENQUANTO SEM SAVE
+        LockAll(config.unlockableProductions);
+        LockAll(config.unlockableDrinks);
+        LockAll(config.unlockableCups);
+        //---//---
+
+
         CheckAndUnlock(config.unlockableProductions);
         CheckAndUnlock(config.unlockableDrinks);
         CheckAndUnlock(config.unlockableCups);
+    }
+
+    //por enquanto sem sistema de save
+    void LockAll<T>(List<UnlockableItem<T>> items)
+    {
+        //Por enquanto sem sistema de save
+        foreach (var item in items)
+        {
+            item.isUnlocked = false;
+        }
     }
 
     private void CheckAndUnlock<T>(List<UnlockableItem<T>> items)

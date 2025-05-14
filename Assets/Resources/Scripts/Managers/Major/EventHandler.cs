@@ -12,8 +12,10 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
         public UIManager uiManager;
         public TimeManager timeManager;
         public StorageManager storageManager;
+        public SeedManager seedManager;
 
         public ShopManager shopManager;
+        public UnlockManager unlockManager;
 
         public CreationManager creationManager;
 
@@ -46,6 +48,8 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
 
             shopManager.OnChangeMoney               += uiManager.UpdateMoney;
             shopManager.OnChangeStar                += uiManager.UpdateStars;
+
+            unlockManager.OnProductionsUpdated      += seedManager.seedShop.PopulateShop;
 
             //StepSound stepSound = GameAssets.Instance.player.GetComponent<StepSound>();
 

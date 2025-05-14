@@ -46,6 +46,18 @@ namespace Tcp4
         {
             HandleRotation();
             HandleAnimation();
+
+#if UNITY_EDITOR
+            if (Input.GetKeyDown(KeyCode.K))
+            {
+                moveSpeed += 50;
+            }
+
+            if (Input.GetKeyDown(KeyCode.L))
+            {
+                moveSpeed -= 50;
+            }
+#endif
         }
 
         void FixedUpdate()
