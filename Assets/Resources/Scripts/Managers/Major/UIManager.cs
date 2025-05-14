@@ -20,6 +20,7 @@ namespace Tcp4
         [TabGroup("Menus")] [SerializeField] private GameObject storageMenu;
         [TabGroup("Menus")] [SerializeField] private GameObject creationMenu;
         [TabGroup("Menus")] [SerializeField] private GameObject configMenu;
+        [TabGroup("Menus")] [SerializeField] private GameObject seedShopMenu;
 
         [TabGroup("Prefabs")]
         [TabGroup("Prefabs")] public GameObject pfImageToFill;
@@ -194,6 +195,14 @@ namespace Tcp4
         }
         #endregion
 
+        #region Seed Shop Management
+
+        public void ControlSeedShop(bool isActive)
+        { 
+            seedShopMenu.SetActive(isActive);
+        }
+
+        #endregion
         #region Notifications
 
         public void NewClientNotification(Client clientSettings)

@@ -9,14 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 66faa371c0004c0d9bc3295490044948, type: 3}
-  m_Name: TimeSettings
+  m_Script: {fileID: 11500000, guid: 80d140a2a6f2ec24da3dccdc512f63e4, type: 3}
+  m_Name: Cafe_semente
   m_EditorClassIdentifier: 
-  timeMultiplier: 3000
-  startHour: 0
-  sunriseHour: 6
-  sunsetHour: 18
-  closeCoffeeShop: 0
-  startDay: 1
-  startMonth: 1
-  startYear: 2025
+  targetProduction: {fileID: 11400000, guid: c1fd9e34ede5bfb4b8abd7111c028530, type: 2}
+  purchaseCost: 10
+  seedIcon: {fileID: 21300000, guid: a74bb0153a4ddc147a9684eebd905c0b, type: 3}

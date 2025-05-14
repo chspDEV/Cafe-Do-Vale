@@ -1,0 +1,50 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f4109eea99574d41a146ce32cc65b08, type: 3}
+  m_Name: UnlockData
+  m_EditorClassIdentifier: 
+  unlockableProductions:
+  - item: {fileID: 11400000, guid: c1fd9e34ede5bfb4b8abd7111c028530, type: 2}
+    requiredReputationLevel: 0
+    isUnlocked: 0
+  - item: {fileID: 11400000, guid: a700651e4a707c647a3e89be282bc69d, type: 2}
+    requiredReputationLevel: 1
+    isUnlocked: 0
+  - item: {fileID: 11400000, guid: 90f5aa24ebbd48b4db8ba61259d0b9d8, type: 2}
+    requiredReputationLevel: 2
+    isUnlocked: 0
+  - item: {fileID: 11400000, guid: d85380f429a027642824fcb909aece3e, type: 2}
+    requiredReputationLevel: 3
+    isUnlocked: 0
+  - item: {fileID: 11400000, guid: 1b8920d533897b84e8931529f6a606fb, type: 2}
+    requiredReputationLevel: 4
+    isUnlocked: 0
+  unlockableDrinks:
+  - item: {fileID: 11400000, guid: 27c8ecdb80ae6e24aa65e947be778fca, type: 2}
+    requiredReputationLevel: 0
+    isUnlocked: 0
+  - item: {fileID: 11400000, guid: 40c413e35dba2664492c2e11c4f0cce5, type: 2}
+    requiredReputationLevel: 1
+    isUnlocked: 0
+  - item: {fileID: 11400000, guid: 2b0d376919a0e10408348c4ad9dd9b5e, type: 2}
+    requiredReputationLevel: 2
+    isUnlocked: 0
+  - item: {fileID: 11400000, guid: a575c9a0e507fba4988772fb78cbb01b, type: 2}
+    requiredReputationLevel: 3
+    isUnlocked: 0
+  - item: {fileID: 11400000, guid: 8946233ee6c9a7c499750d8577ac7826, type: 2}
+    requiredReputationLevel: 3
+    isUnlocked: 0
+  - item: {fileID: 11400000, guid: ec8f7eca9297a8b459e4138efc9e6802, type: 2}
+    requiredReputationLevel: 4
+    isUnlocked: 0
+  unlockableCups: []

@@ -66,7 +66,6 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
                 return;
             }
 
-            // Restante do código original
             int currentCupLevel = UnlockManager.Instance.GetCurrentReputationLevel();
             GameObject go = Instantiate(cupPrefabs[currentCupLevel], cupHolder);
             Cup cup = go.GetComponent<Cup>();

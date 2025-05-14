@@ -13,14 +13,6 @@ public class UnlockableItem<T>
     public bool isUnlocked;
 }
 
-[CreateAssetMenu(menuName = "Unlock System/Unlock Config")]
-public class UnlockConfig : ScriptableObject
-{
-    public List<UnlockableItem<Production>> unlockableProductions = new();
-    public List<UnlockableItem<Drink>> unlockableDrinks = new();
-    public List<UnlockableItem<GameObject>> unlockableCups = new();
-}
-
 public class UnlockManager : Singleton<UnlockManager>
 {
     [SerializeField] private UnlockConfig config;
@@ -40,13 +32,13 @@ public class UnlockManager : Singleton<UnlockManager>
     protected override void Awake()
     {
         base.Awake();
-        shopManager = ShopManager.Instance;
-        shopManager.OnChangeStar += HandleReputationUpdate;
     }
 
     private void Start()
     {
         uiManager = UIManager.Instance;
+        shopManager = ShopManager.Instance;
+        shopManager.OnChangeStar += HandleReputationUpdate;
         InitializeUnlockables();
     }
 
