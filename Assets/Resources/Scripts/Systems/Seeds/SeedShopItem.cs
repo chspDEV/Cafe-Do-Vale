@@ -24,6 +24,7 @@ public class SeedShopItem : MonoBehaviour
         if (ShopManager.Instance.TrySpendMoney(seed.purchaseCost))
         {
             SeedManager.Instance.AddSeed(seed.targetProduction);
+            Destroy(this.gameObject);
         }
     }
 }

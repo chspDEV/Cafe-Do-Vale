@@ -9,6 +9,8 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
         [TitleGroup("Configurações de Tempo")]
         [PropertyRange(1, 500)]
         [SerializeField] private float timeMultiplier = 1f;
+        [SerializeField] private float initialHour = 6f;
+        [SerializeField] private bool isFirstDay = true;
 
         [TitleGroup("Horário Comercial")]
         [PropertyRange(0, 24)]
@@ -80,7 +82,7 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
         {
             base.Awake();
             gameDate = new DateTime(2024, 1, 1);
-            CurrentHour = startHour;
+            CurrentHour = initialHour;
             isDay = CurrentHour >= startHour && CurrentHour < closeHour;
         }
 
@@ -96,6 +98,8 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
 
             if (CurrentHour >= 24)
             {
+                if (isFirstDay) isFirstDay = false;
+
                 CurrentHour -= 24;
                 gameDate = gameDate.AddDays(1);
             }
@@ -104,12 +108,16 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
 
             if (Mathf.FloorToInt(CurrentHour) == (int)startHour && !isDay)
             {
-                OnOpenCoffeeShop?.Invoke();
+                if(!isFirstDay)
+                    OnOpenCoffeeShop?.Invoke();
+                
                 isDay = true;
             }
             else if (Mathf.FloorToInt(CurrentHour) == (int)closeHour && isDay)
             {
-                OnCloseCoffeeShop?.Invoke();
+                if (!isFirstDay) 
+                    OnCloseCoffeeShop?.Invoke();
+
                 isDay = false;
             }
         }
@@ -124,7 +132,6 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
             return $"{GetFormattedDate()} {GetFormattedTime(CurrentHour)}";
         }
 
-        // Restante dos métodos permanecem inalterados
         private void UpdateLighting()
         {
             if (directionalLight == null) return;

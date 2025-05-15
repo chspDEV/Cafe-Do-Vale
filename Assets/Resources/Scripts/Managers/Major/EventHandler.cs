@@ -1,5 +1,4 @@
-﻿using ComponentUtils.ComponentUtils.Scripts;
-using System.Collections;
+﻿using System.Collections;
 using UnityEngine;
 using Tcp4.Assets.Resources.Scripts;
 
@@ -36,9 +35,10 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
 
             timeManager.OnCloseCoffeeShop           += uiManager.CloseShopNotification;
             timeManager.OnCloseCoffeeShop           += clientManager.StopSpawnClients;
-            timeManager.OnCloseCoffeeShop           += RestartDay;
+
 
             clientManager.OnClientSetup             += uiManager.NewClientNotification;
+
 
             storageManager.OnChangeStorage          += uiManager.UpdateStorageView;
             storageManager.OnCleanStorage           += uiManager.CleanStorageSlots;
@@ -50,6 +50,7 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
             shopManager.OnChangeStar                += uiManager.UpdateStars;
 
             unlockManager.OnProductionsUpdated      += seedManager.seedShop.PopulateShop;
+            timeManager.OnCloseCoffeeShop           += seedManager.seedShop.PopulateShop;
 
             //StepSound stepSound = GameAssets.Instance.player.GetComponent<StepSound>();
 

@@ -1,6 +1,5 @@
 ﻿using System;
 using UnityEngine;
-using ComponentUtils.ComponentUtils.Scripts;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -24,8 +23,9 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
         public Transform point;
         public Transform cupHolder;
 
+
         #region Sistema de Moeda
-        public void IncreaseMoney(int value)
+        public void AddMoney(int value)
         {
             money += value;
             OnChangeMoney?.Invoke();
@@ -95,7 +95,7 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
 #if UNITY_EDITOR
             if (Input.GetKeyDown(KeyCode.Tab))
             {
-                IncreaseMoney(1000);
+                AddMoney(1000);
                 AddStars(200);
             }
 #endif

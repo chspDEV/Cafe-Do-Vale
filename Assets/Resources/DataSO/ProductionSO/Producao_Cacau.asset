@@ -17,5 +17,5 @@ MonoBehaviour:
   - {fileID: 229090437696229089, guid: f8bd4988615ed6e4ab5c9f22daae2c2d, type: 3}
   - {fileID: 8577265967838493335, guid: 2009e4363a83b3a4db6418bc2e2d4b64, type: 3}
   product: {fileID: 11400000, guid: f8c402991715c3147a4c108993b828b8, type: 2}
-  timeToGrow: 35
+  timeToGrow: 120
   timeToHarvest: 15
