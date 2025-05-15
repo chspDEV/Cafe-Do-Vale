@@ -222,7 +222,7 @@ namespace Tcp4
 
         public void UpdateMoney()
         {
-            moneyText.text = "$" + ShopManager.Instance.GetMoney().ToString();
+            moneyText.text = ShopManager.Instance.GetMoney().ToString();
             money.ExecuteAnimation("pop");
         }
 
