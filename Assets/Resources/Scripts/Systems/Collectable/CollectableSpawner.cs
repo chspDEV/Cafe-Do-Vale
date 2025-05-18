@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Tcp4
 {
-    public class CollectableSpawner : BaseInteractable
+    public class CollectableSpawner : MonoBehaviour
     {
         [TitleGroup("Configurações de Spawn", "Configurações principais para geração de coletáveis")]
         [BoxGroup("Configurações de Spawn/Área")]
@@ -31,9 +31,8 @@ namespace Tcp4
         [ToggleLeft]
         [SerializeField] private bool showSpawnArea = true;
 
-        public override void Start()
+        public void Start()
         {
-            base.Start();
             SpawnCollectables();
         }
 

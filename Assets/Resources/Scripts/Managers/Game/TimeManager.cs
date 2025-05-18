@@ -10,7 +10,7 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
         [PropertyRange(1, 500)]
         [SerializeField] private float timeMultiplier = 1f;
         [SerializeField] private float initialHour = 6f;
-        [SerializeField] private bool isFirstDay = true;
+        [SerializeField] public bool isFirstDay = true;
 
         [TitleGroup("Horário Comercial")]
         [PropertyRange(0, 24)]
@@ -65,7 +65,7 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
         public string CurrentDate => GetFormattedDate();
 
         private DateTime gameDate;
-        private bool isDay;
+        public bool isDay;
 
         [Button("Validar Referência de Luz")]
         [Obsolete]

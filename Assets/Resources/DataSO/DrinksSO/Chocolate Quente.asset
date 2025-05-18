@@ -20,5 +20,5 @@ MonoBehaviour:
   requiredIngredients:
   - {fileID: 11400000, guid: 9993b18cd8f91e641925f92575c6007f, type: 2}
   - {fileID: 11400000, guid: 9993b18cd8f91e641925f92575c6007f, type: 2}
-  - {fileID: 11400000, guid: 60650c2deda852545b18238811400605, type: 2}
+  - {fileID: 11400000, guid: 82468106468400241af0a271eae4e11b, type: 2}
   preparationTime: 1
