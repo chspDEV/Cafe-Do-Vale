@@ -53,7 +53,7 @@ namespace Tcp4.Assets.Resources.Scripts.Systems.Clients
         public void Delivered()
         {
             ShopManager.Instance.AddMoney(10); 
-            ShopManager.Instance.AddStars(10f + stars);
+            ShopManager.Instance.AddStars(25f + stars);
             ClientManager.Instance.DeleteSpecificClient(this);
             Destroy(this.gameObject);
         }
