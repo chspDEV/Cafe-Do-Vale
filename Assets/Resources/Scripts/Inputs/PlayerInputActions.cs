@@ -44,6 +44,51 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Pause"",
+                    ""type"": ""Button"",
+                    ""id"": ""bd521a60-8f1d-4314-af25-1739554b8960"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Map"",
+                    ""type"": ""Button"",
+                    ""id"": ""eeb1ac4d-7a4b-4efb-85d6-dc8492e419a9"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Notification"",
+                    ""type"": ""Button"",
+                    ""id"": ""95afb00f-6002-4b77-ba02-5ffbd71cdbb4"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""SeedInventory"",
+                    ""type"": ""Button"",
+                    ""id"": ""74b6c185-3c96-4d95-bfd7-f83428926c44"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Recipe"",
+                    ""type"": ""Button"",
+                    ""id"": ""18c88d5e-19d1-460b-acf2-73c8612c50c0"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -95,61 +140,6 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""name"": ""right"",
                     ""id"": ""560fcf79-d84d-48d0-9110-fd12ec09ca08"",
                     ""path"": ""<Keyboard>/d"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Movement"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""Gamepad Arrows"",
-                    ""id"": ""dc3b2dce-e967-4cc1-bbed-eca776036818"",
-                    ""path"": ""2DVector"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Movement"",
-                    ""isComposite"": true,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": ""up"",
-                    ""id"": ""942f622b-b9df-4581-91ce-5a12d23ad263"",
-                    ""path"": ""<Gamepad>/dpad/up"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Movement"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""down"",
-                    ""id"": ""ef6f7ca7-0b8c-4ecb-bd40-27b9e363eff4"",
-                    ""path"": ""<Gamepad>/dpad/down"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Movement"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""left"",
-                    ""id"": ""bd6261c9-6b81-41c7-bba8-9f47f98b313f"",
-                    ""path"": ""<Gamepad>/dpad/left"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Movement"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""right"",
-                    ""id"": ""58f86c1f-b8c6-4491-ac44-3cafd227e0c6"",
-                    ""path"": ""<Gamepad>/dpad/right"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -233,6 +223,171 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""action"": ""Interact"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""2a06aae4-bde1-4660-b1a4-663c3f87c291"",
+                    ""path"": ""<DualShockGamepad>/start"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Pause"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""16fa9643-796b-404c-9d35-2144ddf1285d"",
+                    ""path"": ""<Gamepad>/start"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Pause"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""f66532a8-bda5-409d-81bb-e673e2fbb13a"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Pause"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""2da949da-b1b5-4ed8-adfb-a361a760beaf"",
+                    ""path"": ""<Keyboard>/m"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Map"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""aa7fa428-107f-4fda-a43b-a558c8c983cc"",
+                    ""path"": ""<DualShockGamepad>/dpad/down"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Map"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""e098b227-a215-4119-ac41-93095b90cf79"",
+                    ""path"": ""<Gamepad>/dpad/down"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Map"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""9205ee89-0773-4d79-8fa0-3bba1ce94c3c"",
+                    ""path"": ""<DualShockGamepad>/dpad/left"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Notification"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""a041724b-c619-4bf4-8f5f-6a992f26dd6a"",
+                    ""path"": ""<Keyboard>/tab"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Notification"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""a12d2592-58a3-46ea-9e20-2b8a800fbf7e"",
+                    ""path"": ""<Gamepad>/dpad/left"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Notification"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""0867fb71-b1d0-4cc8-a5f1-4b5c4c1b0f7a"",
+                    ""path"": ""<Gamepad>/dpad/right"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SeedInventory"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""9e5c6c54-0ef9-4ac0-91c2-ae3377325dbd"",
+                    ""path"": ""<DualShockGamepad>/dpad/right"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SeedInventory"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""f791b0ad-dd47-465c-b483-64df12bcc355"",
+                    ""path"": ""<Keyboard>/i"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""SeedInventory"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""43a20902-eece-486f-8ab9-46fde5baff7f"",
+                    ""path"": ""<DualShockGamepad>/dpad/up"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Recipe"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""1afa4371-badf-447f-9363-f4b9c6688964"",
+                    ""path"": ""<Gamepad>/dpad/up"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Recipe"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""2f34b67c-379f-4bd6-bc3d-93dfbf89ced1"",
+                    ""path"": ""<Keyboard>/r"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Recipe"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -282,6 +437,11 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         m_Player = asset.FindActionMap("Player", throwIfNotFound: true);
         m_Player_Movement = m_Player.FindAction("Movement", throwIfNotFound: true);
         m_Player_Interact = m_Player.FindAction("Interact", throwIfNotFound: true);
+        m_Player_Pause = m_Player.FindAction("Pause", throwIfNotFound: true);
+        m_Player_Map = m_Player.FindAction("Map", throwIfNotFound: true);
+        m_Player_Notification = m_Player.FindAction("Notification", throwIfNotFound: true);
+        m_Player_SeedInventory = m_Player.FindAction("SeedInventory", throwIfNotFound: true);
+        m_Player_Recipe = m_Player.FindAction("Recipe", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -354,12 +514,22 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
     private List<IPlayerActions> m_PlayerActionsCallbackInterfaces = new List<IPlayerActions>();
     private readonly InputAction m_Player_Movement;
     private readonly InputAction m_Player_Interact;
+    private readonly InputAction m_Player_Pause;
+    private readonly InputAction m_Player_Map;
+    private readonly InputAction m_Player_Notification;
+    private readonly InputAction m_Player_SeedInventory;
+    private readonly InputAction m_Player_Recipe;
     public struct PlayerActions
     {
         private @PlayerInputActions m_Wrapper;
         public PlayerActions(@PlayerInputActions wrapper) { m_Wrapper = wrapper; }
         public InputAction @Movement => m_Wrapper.m_Player_Movement;
         public InputAction @Interact => m_Wrapper.m_Player_Interact;
+        public InputAction @Pause => m_Wrapper.m_Player_Pause;
+        public InputAction @Map => m_Wrapper.m_Player_Map;
+        public InputAction @Notification => m_Wrapper.m_Player_Notification;
+        public InputAction @SeedInventory => m_Wrapper.m_Player_SeedInventory;
+        public InputAction @Recipe => m_Wrapper.m_Player_Recipe;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -375,6 +545,21 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             @Interact.started += instance.OnInteract;
             @Interact.performed += instance.OnInteract;
             @Interact.canceled += instance.OnInteract;
+            @Pause.started += instance.OnPause;
+            @Pause.performed += instance.OnPause;
+            @Pause.canceled += instance.OnPause;
+            @Map.started += instance.OnMap;
+            @Map.performed += instance.OnMap;
+            @Map.canceled += instance.OnMap;
+            @Notification.started += instance.OnNotification;
+            @Notification.performed += instance.OnNotification;
+            @Notification.canceled += instance.OnNotification;
+            @SeedInventory.started += instance.OnSeedInventory;
+            @SeedInventory.performed += instance.OnSeedInventory;
+            @SeedInventory.canceled += instance.OnSeedInventory;
+            @Recipe.started += instance.OnRecipe;
+            @Recipe.performed += instance.OnRecipe;
+            @Recipe.canceled += instance.OnRecipe;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -385,6 +570,21 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             @Interact.started -= instance.OnInteract;
             @Interact.performed -= instance.OnInteract;
             @Interact.canceled -= instance.OnInteract;
+            @Pause.started -= instance.OnPause;
+            @Pause.performed -= instance.OnPause;
+            @Pause.canceled -= instance.OnPause;
+            @Map.started -= instance.OnMap;
+            @Map.performed -= instance.OnMap;
+            @Map.canceled -= instance.OnMap;
+            @Notification.started -= instance.OnNotification;
+            @Notification.performed -= instance.OnNotification;
+            @Notification.canceled -= instance.OnNotification;
+            @SeedInventory.started -= instance.OnSeedInventory;
+            @SeedInventory.performed -= instance.OnSeedInventory;
+            @SeedInventory.canceled -= instance.OnSeedInventory;
+            @Recipe.started -= instance.OnRecipe;
+            @Recipe.performed -= instance.OnRecipe;
+            @Recipe.canceled -= instance.OnRecipe;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -452,6 +652,11 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
     {
         void OnMovement(InputAction.CallbackContext context);
         void OnInteract(InputAction.CallbackContext context);
+        void OnPause(InputAction.CallbackContext context);
+        void OnMap(InputAction.CallbackContext context);
+        void OnNotification(InputAction.CallbackContext context);
+        void OnSeedInventory(InputAction.CallbackContext context);
+        void OnRecipe(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {

@@ -8,6 +8,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using ChristinaCreatesGames.UI;
 
 namespace Tcp4
 {
@@ -21,6 +22,23 @@ namespace Tcp4
         [TabGroup("Menus")] [SerializeField] private GameObject creationMenu;
         [TabGroup("Menus")] [SerializeField] private GameObject configMenu;
         [TabGroup("Menus")] [SerializeField] private GameObject seedShopMenu;
+
+        [TabGroup("Menus")] [SerializeField] private GameObject recipeMenu;
+        [TabGroup("Menus")] [SerializeField] private GameObject mapMenu;
+
+        [TabGroup("UI Interactions")][SerializeField] private SetsUiElementToSelectOnInteraction mapInteraction;
+        [TabGroup("UI Interactions")][SerializeField] private SetsUiElementToSelectOnInteraction recipeInteraction;
+        [TabGroup("UI Interactions")][SerializeField] private SetsUiElementToSelectOnInteraction pauseInteraction;
+        [TabGroup("UI Interactions")][SerializeField] private SetsUiElementToSelectOnInteraction seedInventoryInteraction;
+        [TabGroup("UI Interactions")][SerializeField] private SetsUiElementToSelectOnInteraction seedShopInteraction;
+        [TabGroup("UI Interactions")][SerializeField] private SetsUiElementToSelectOnInteraction notificationInteraction;
+
+
+        [TabGroup("UI Interactions")][SerializeField] private SetsUiElementToSelectOnInteraction productionInteraction;
+        [TabGroup("UI Interactions")][SerializeField] private SetsUiElementToSelectOnInteraction creationInteraction;
+
+
+        [TabGroup("UI Interactions")][SerializeField] private SetsUiElementToSelectOnInteraction storageInteraction;
 
         [TabGroup("Prefabs")]
         [TabGroup("Prefabs")] public GameObject pfImageToFill;
@@ -101,7 +119,17 @@ namespace Tcp4
         private List<GameObject> CreationSlotInstances = new();
         private List<GameObject> IngredientsSlotInstances = new();
 
-        public void ControlCreationMenu(bool isActive) => creationMenu.SetActive(isActive);
+        public void ControlCreationMenu(bool isActive)
+        {
+            creationMenu.SetActive(isActive);
+
+            if (isActive && creationInteraction != null)
+            {
+                creationInteraction.JumpToElement();
+            }
+
+        }
+        
 
         public void CleanCreationSlots()
         {
@@ -200,6 +228,11 @@ namespace Tcp4
         public void ControlSeedShop(bool isActive)
         { 
             seedShopMenu.SetActive(isActive);
+
+            if (isActive && seedShopInteraction != null)
+            {
+                seedShopInteraction.JumpToElement();
+            }
         }
 
         #endregion
@@ -236,7 +269,41 @@ namespace Tcp4
 
         #region Utility
 
-        public void ControlProductionMenu(bool isActive) => productionMenu.SetActive(isActive);
+        public void ControlProductionMenu(bool isActive)
+        {
+
+            productionMenu.SetActive(isActive);
+
+            if (isActive && productionInteraction != null)
+            {
+                productionInteraction.JumpToElement();
+            }
+
+        }
+
+        public void ControlMap(bool isActive)
+        {
+
+            mapMenu.SetActive(isActive);
+
+            if (isActive && mapInteraction != null)
+            {
+                mapInteraction.JumpToElement();
+            }
+
+        }
+
+        public void ControlRecipeMenu(bool isActive)
+        {
+
+            recipeMenu.SetActive(isActive);
+
+            if (isActive && recipeInteraction != null)
+            {
+                recipeInteraction.JumpToElement();
+            }
+
+        }
 
         public void ControlConfigMenu()
         {
@@ -249,6 +316,12 @@ namespace Tcp4
             else
             {
                 configMenu.SetActive(true);
+
+                if (pauseInteraction != null)
+                {
+                    pauseInteraction.JumpToElement();
+                }
+
                 Time.timeScale = 0;
             }
         }
