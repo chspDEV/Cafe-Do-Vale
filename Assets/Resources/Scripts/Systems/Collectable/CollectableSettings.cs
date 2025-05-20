@@ -1,41 +1,40 @@
-using Tcp4.Assets.Resources.Scripts.Managers;
 using UnityEngine;
+using Tcp4.Assets.Resources.Scripts.Managers;  // onde está seu TimeManager
+using Sirenix.OdinInspector;
 
 namespace Tcp4
 {
+    [RequireComponent(typeof(Collider))]
     public class CollectableSettings : MonoBehaviour
     {
-        TimeManager tm;
+        [FoldoutGroup("Config")]
+        [LabelText("Apenas à Noite")]
+        [SerializeField] private bool onlyNight;
 
-        [SerializeField] bool onlyNight;
-
-        private void Start()
+        private void Awake()
         {
-            tm = TimeManager.Instance;
-            
-
-            if (onlyNight)
-            {
-                gameObject.SetActive(false);
-                InvokeRepeating(nameof(CheckNight), 0f, 5f);
-            }
-
-        }
-        void Update()
-        {
-        
+            UpdateActiveState(TimeManager.Instance.isDay);
         }
 
-        void CheckNight()
+        private void OnEnable()
         {
-            if (!tm.isDay)
-            {
-                gameObject.SetActive(true);
-            }
-            else
-            {
-                gameObject.SetActive(false);
-            }
+            TimeManager.Instance.OnDayNightChanged += UpdateActiveState;
+        }
+
+        private void OnDisable()
+        {
+            TimeManager.Instance.OnDayNightChanged -= UpdateActiveState;
+        }
+
+        /// <summary>
+        /// Chamado sempre que o TimeManager alterna entre dia e noite.
+        /// </summary>
+        private void UpdateActiveState(bool isDay)
+        {
+            // se onlyNight==true -> ativo somente quando !isDay
+            bool shouldBeActive = onlyNight ? !isDay : isDay;
+            if (gameObject.activeSelf != shouldBeActive)
+                gameObject.SetActive(shouldBeActive);
         }
     }
 }

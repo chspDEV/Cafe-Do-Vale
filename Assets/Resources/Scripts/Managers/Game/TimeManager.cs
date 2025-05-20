@@ -44,6 +44,9 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
         public event Action OnResetDay;
 
         [FoldoutGroup("Eventos")]
+        public event Action<bool> OnDayNightChanged;
+
+        [FoldoutGroup("Eventos")]
         public event Action OnOpenCoffeeShop;
 
         [FoldoutGroup("Eventos")]
@@ -109,8 +112,9 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
             {
                 if(!isFirstDay)
                     OnOpenCoffeeShop?.Invoke();
-                
+
                 isDay = true;
+                OnDayNightChanged?.Invoke(isDay);
             }
             else if (Mathf.FloorToInt(CurrentHour) == (int)closeHour && isDay)
             {
@@ -118,6 +122,7 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
                     OnCloseCoffeeShop?.Invoke();
 
                 isDay = false;
+                OnDayNightChanged?.Invoke(isDay);
             }
         }
 

@@ -29,7 +29,7 @@ namespace Tcp4.Assets.Resources.Scripts.Systems.Clients
             nameClient = GameAssets.Instance.clientNames[Random.Range(0, GameAssets.Instance.clientNames.Count)];
             modelClient = GameAssets.Instance.clientModels[Random.Range(0, GameAssets.Instance.clientModels.Count)];
             nameTmp.text = nameClient;
-            max_wait_time = 25f - (stars * 2); 
+            max_wait_time = 30f - (stars * 2); 
             wait_time = max_wait_time;
             ui_timer.fillAmount = wait_time / max_wait_time;
             ID = GameAssets.GenerateID(5);
@@ -60,7 +60,7 @@ namespace Tcp4.Assets.Resources.Scripts.Systems.Clients
 
         public void NotDelivered()
         {
-            ShopManager.Instance.AddStars(-0.5f - stars);
+            ShopManager.Instance.AddStars(-stars);
             ClientManager.Instance.DeleteSpecificClient(this);
             Destroy(this.gameObject);
         }
