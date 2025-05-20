@@ -64,5 +64,17 @@ namespace Tcp4
                 else { Debug.LogWarning("InteractionManager não inicializado!"); }
             }
         }
+
+        public void SetCloseMenu(InputAction.CallbackContext context)
+        {
+            if (context.performed)
+            {
+                if (UIManager.Instance != null)
+                {
+                    UIManager.Instance.CloseLastMenu();
+                }
+                else { Debug.LogWarning("InteractionManager não inicializado!"); }
+            }
+        }
     }
 }

@@ -89,6 +89,15 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""CloseMenu"",
+                    ""type"": ""Button"",
+                    ""id"": ""d6e772f2-774b-4c27-a35a-2f2d3f08440b"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -226,6 +235,17 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
+                    ""id"": ""6183390f-9de7-4573-9219-88bc3c5bab2f"",
+                    ""path"": ""<DualShockGamepad>/buttonSouth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Interact"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
                     ""id"": ""2a06aae4-bde1-4660-b1a4-663c3f87c291"",
                     ""path"": ""<DualShockGamepad>/start"",
                     ""interactions"": """",
@@ -304,7 +324,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""a041724b-c619-4bf4-8f5f-6a992f26dd6a"",
-                    ""path"": ""<Keyboard>/tab"",
+                    ""path"": ""<Keyboard>/n"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -388,6 +408,39 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""action"": ""Recipe"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""40625bb3-289e-4309-a06f-5ff45d5abfa3"",
+                    ""path"": ""<Gamepad>/buttonEast"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""CloseMenu"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""e430fd0d-c04c-433c-927c-67fb81a3cd67"",
+                    ""path"": ""<DualShockGamepad>/buttonEast"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""CloseMenu"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""ef20bcca-05f5-496a-9480-2778c520ced4"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""CloseMenu"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -442,6 +495,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         m_Player_Notification = m_Player.FindAction("Notification", throwIfNotFound: true);
         m_Player_SeedInventory = m_Player.FindAction("SeedInventory", throwIfNotFound: true);
         m_Player_Recipe = m_Player.FindAction("Recipe", throwIfNotFound: true);
+        m_Player_CloseMenu = m_Player.FindAction("CloseMenu", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -519,6 +573,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Notification;
     private readonly InputAction m_Player_SeedInventory;
     private readonly InputAction m_Player_Recipe;
+    private readonly InputAction m_Player_CloseMenu;
     public struct PlayerActions
     {
         private @PlayerInputActions m_Wrapper;
@@ -530,6 +585,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         public InputAction @Notification => m_Wrapper.m_Player_Notification;
         public InputAction @SeedInventory => m_Wrapper.m_Player_SeedInventory;
         public InputAction @Recipe => m_Wrapper.m_Player_Recipe;
+        public InputAction @CloseMenu => m_Wrapper.m_Player_CloseMenu;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -560,6 +616,9 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             @Recipe.started += instance.OnRecipe;
             @Recipe.performed += instance.OnRecipe;
             @Recipe.canceled += instance.OnRecipe;
+            @CloseMenu.started += instance.OnCloseMenu;
+            @CloseMenu.performed += instance.OnCloseMenu;
+            @CloseMenu.canceled += instance.OnCloseMenu;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -585,6 +644,9 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             @Recipe.started -= instance.OnRecipe;
             @Recipe.performed -= instance.OnRecipe;
             @Recipe.canceled -= instance.OnRecipe;
+            @CloseMenu.started -= instance.OnCloseMenu;
+            @CloseMenu.performed -= instance.OnCloseMenu;
+            @CloseMenu.canceled -= instance.OnCloseMenu;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -657,6 +719,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         void OnNotification(InputAction.CallbackContext context);
         void OnSeedInventory(InputAction.CallbackContext context);
         void OnRecipe(InputAction.CallbackContext context);
+        void OnCloseMenu(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {

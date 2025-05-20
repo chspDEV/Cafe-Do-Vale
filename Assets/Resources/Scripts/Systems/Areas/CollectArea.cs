@@ -9,7 +9,7 @@ namespace Tcp4
     {
         [Header("Setup")]
         [SerializeField] private Production production;
-        [SerializeField] private float timeToGive = 1.3f;
+        //[SerializeField] private float timeToGive = 1.3f;
         [SerializeField] private int amount;
         [SerializeField] private float timeToOpenInterface;
 

@@ -36,14 +36,12 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
         [MinMaxSlider(0, 0.2f, true)]
         [SerializeField] private Vector2 dayFogRange = new Vector2(0.01f, 0.05f);
 
-        [FoldoutGroup("Eventos", expanded: false)]
-        [SerializeField] private bool showEvents = true;
 
         [FoldoutGroup("Eventos")]
         public event Action<float> OnTimeChanged;
 
         [FoldoutGroup("Eventos")]
-        public event Action<bool> OnDayNightChanged;
+        public event Action OnResetDay;
 
         [FoldoutGroup("Eventos")]
         public event Action OnOpenCoffeeShop;
@@ -101,6 +99,7 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
                 if (isFirstDay) isFirstDay = false;
 
                 CurrentHour -= 24;
+                OnResetDay?.Invoke();
                 gameDate = gameDate.AddDays(1);
             }
 

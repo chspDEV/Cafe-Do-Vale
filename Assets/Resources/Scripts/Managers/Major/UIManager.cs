@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using ComponentUtils.ComponentUtils.Scripts;
 using Sirenix.OdinInspector;
 using Tcp4.Assets.Resources.Scripts.Managers;
 using Tcp4.Assets.Resources.Scripts.Systems.Clients;
@@ -25,6 +24,8 @@ namespace Tcp4
 
         [TabGroup("Menus")] [SerializeField] private GameObject recipeMenu;
         [TabGroup("Menus")] [SerializeField] private GameObject mapMenu;
+
+        private List<GameObject> openedMenus = new List<GameObject>();
 
         [TabGroup("UI Interactions")][SerializeField] private SetsUiElementToSelectOnInteraction mapInteraction;
         [TabGroup("UI Interactions")][SerializeField] private SetsUiElementToSelectOnInteraction recipeInteraction;
@@ -79,7 +80,20 @@ namespace Tcp4
 
         private List<GameObject> StorageSlotInstances = new();
 
-        public void ControlStorageMenu(bool isActive) => storageMenu.SetActive(isActive);
+        public void ControlStorageMenu(bool isActive)
+        {
+            if (isActive)
+            {
+                OpenMenu(storageMenu);
+
+                if (storageInteraction != null)
+                    storageInteraction.JumpToElement();
+            }
+            else
+            {
+                CloseMenu(storageMenu);
+            }
+        }
 
         public void CleanStorageSlots()
         {
@@ -121,11 +135,16 @@ namespace Tcp4
 
         public void ControlCreationMenu(bool isActive)
         {
-            creationMenu.SetActive(isActive);
-
-            if (isActive && creationInteraction != null)
+            if (isActive)
             {
-                creationInteraction.JumpToElement();
+                OpenMenu(creationMenu);
+
+                if (creationInteraction != null)
+                    creationInteraction.JumpToElement();
+            }
+            else
+            {
+                CloseMenu(creationMenu);
             }
 
         }
@@ -226,12 +245,17 @@ namespace Tcp4
         #region Seed Shop Management
 
         public void ControlSeedShop(bool isActive)
-        { 
-            seedShopMenu.SetActive(isActive);
-
-            if (isActive && seedShopInteraction != null)
+        {
+            if (isActive)
             {
-                seedShopInteraction.JumpToElement();
+                OpenMenu(seedShopMenu);
+
+                if (seedShopInteraction != null)
+                    seedShopInteraction.JumpToElement();
+            }
+            else
+            {
+                CloseMenu(seedShopMenu);
             }
         }
 
@@ -272,23 +296,34 @@ namespace Tcp4
         public void ControlProductionMenu(bool isActive)
         {
 
-            productionMenu.SetActive(isActive);
-
-            if (isActive && productionInteraction != null)
+            if (isActive)
             {
-                productionInteraction.JumpToElement();
+                OpenMenu(productionMenu);
+
+                if (productionInteraction != null)
+                    productionInteraction.JumpToElement();
+            }
+            else
+            {
+                CloseMenu(productionMenu);
             }
 
+            
         }
 
         public void ControlMap(bool isActive)
         {
 
-            mapMenu.SetActive(isActive);
-
-            if (isActive && mapInteraction != null)
+            if (isActive)
             {
-                mapInteraction.JumpToElement();
+                OpenMenu(mapMenu);
+
+                if (mapInteraction != null)
+                    mapInteraction.JumpToElement();
+            }
+            else
+            {
+                CloseMenu(mapMenu);
             }
 
         }
@@ -296,11 +331,16 @@ namespace Tcp4
         public void ControlRecipeMenu(bool isActive)
         {
 
-            recipeMenu.SetActive(isActive);
-
-            if (isActive && recipeInteraction != null)
+            if (isActive)
             {
-                recipeInteraction.JumpToElement();
+                OpenMenu(recipeMenu);
+
+                if (recipeInteraction != null)
+                    recipeInteraction.JumpToElement();
+            }
+            else
+            {
+                CloseMenu(recipeMenu);
             }
 
         }
@@ -310,12 +350,12 @@ namespace Tcp4
             SoundManager.PlaySound(SoundType.feedback);
             if (configMenu.activeSelf)
             {
-                configMenu.SetActive(false);
+                CloseMenu(configMenu);
                 Time.timeScale = 1;
             }
             else
             {
-                configMenu.SetActive(true);
+                OpenMenu(configMenu);
 
                 if (pauseInteraction != null)
                 {
@@ -330,6 +370,45 @@ namespace Tcp4
         {
             SceneManager.LoadScene("InitialMenu");
             SoundManager.PlaySound(SoundType.feedback);
+        }
+
+        /// <summary>
+        /// Abre um menu e registra na lista de histórico.
+        /// </summary>
+        public void OpenMenu(GameObject menu)
+        {
+            if (menu == null) return;
+
+            // Se já estiver aberto, removemos a ocorrência anterior
+            openedMenus.Remove(menu);
+
+            // Abrimos e registramos
+            menu.SetActive(true);
+            openedMenus.Add(menu);
+        }
+
+        /// <summary>
+        /// Fecha o menu mais recentemente aberto.
+        /// </summary>
+        public void CloseLastMenu()
+        {
+            if (openedMenus.Count == 0) return;
+
+            // Pega o último, fecha e remove da lista
+            var last = openedMenus[openedMenus.Count - 1];
+            last.SetActive(false);
+            openedMenus.RemoveAt(openedMenus.Count - 1);
+        }
+
+        /// <summary>
+        /// Fecha um menu específico (e remove do histórico).
+        /// </summary>
+        public void CloseMenu(GameObject menu)
+        {
+            if (menu == null) return;
+
+            menu.SetActive(false);
+            openedMenus.Remove(menu);
         }
 
         private void PlaceInWorld(Transform worldObject, RectTransform uiElement, bool isWorldCanvas = true)

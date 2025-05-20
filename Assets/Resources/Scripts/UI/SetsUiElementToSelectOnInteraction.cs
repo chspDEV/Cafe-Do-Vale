@@ -1,47 +1,92 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using System.Collections;
+using Sirenix.OdinInspector;
 
 namespace ChristinaCreatesGames.UI
 {
     public class SetsUiElementToSelectOnInteraction : MonoBehaviour
     {
-        [Header("Setup")]
-        [SerializeField] private EventSystem eventSystem;
-        [SerializeField] private Selectable elementToSelect;
+        [FoldoutGroup("Setup")]
+        [Required]
+        [SerializeField]
+        private EventSystem eventSystem;
 
-        [Header("Visualization")] 
-        [SerializeField] private bool showVisualization;
-        [SerializeField] private Color navigationColour = Color.cyan;
-        
+        [FoldoutGroup("Setup")]
+        [Required]
+        [SerializeField]
+        private Selectable elementToSelect;
+
+        [FoldoutGroup("Tag Search")]
+        [LabelText("Search By Tag")]
+        [SerializeField]
+        private bool searchByTag;
+
+        [FoldoutGroup("Tag Search")]
+        [ShowIf("searchByTag")]
+        [LabelText("Tag To Search")]
+        [SerializeField]
+        private string tagToSearch;
+
+        [FoldoutGroup("Visualization")]
+        [LabelText("Show Gizmo")]
+        [SerializeField]
+        private bool showVisualization;
+
+        [FoldoutGroup("Visualization")]
+        [ShowIf("showVisualization")]
+        [LabelText("Navigation Color")]
+        [SerializeField]
+        private Color navigationColour = Color.cyan;
+
+        private void Start()
+        {
+            StartCoroutine(InitializeRoutine());
+        }
+
+        private IEnumerator InitializeRoutine()
+        {
+            // Ensure EventSystem is assigned
+            if (eventSystem == null)
+                eventSystem = FindFirstObjectByType<EventSystem>();
+
+            // If tag search is enabled, find first matching GameObject over frames
+            if (searchByTag && !string.IsNullOrEmpty(tagToSearch))
+            {
+                GameObject found = null;
+                while (found == null)
+                {
+                    found = GameObject.FindWithTag(tagToSearch);
+                    yield return null; // wait one frame to avoid blocking
+                }
+
+                // Try get Selectable on object or its children
+                elementToSelect = found.GetComponent<Selectable>()
+                                 ?? found.GetComponentInChildren<Selectable>(true);
+            }
+
+
+
+            yield break;
+        }
+
         private void OnDrawGizmos()
         {
-            if (!showVisualization)
+            if (!showVisualization || elementToSelect == null)
                 return;
-            
-            if (elementToSelect == null)
-                return;
-            
+
             Gizmos.color = navigationColour;
-            Gizmos.DrawLine(gameObject.transform.position, elementToSelect.gameObject.transform.position);
+            Gizmos.DrawLine(transform.position, elementToSelect.transform.position);
         }
 
-        private void Reset()
-        {
-            eventSystem = FindFirstObjectByType<EventSystem>();
-            
-            if (eventSystem == null)
-                Debug.Log("Did not find an Event System in your Scene.", this);
-        }
-        
+        /// <summary>
+        /// Jumps the EventSystem selection to the configured UI element.
+        /// </summary>
         public void JumpToElement()
         {
-            if (eventSystem == null)
-                Debug.Log("This item has no event system referenced yet.", this);
-            
-            if (elementToSelect == null)
-                Debug.Log("This should jump where?", this);
-            
+            if (eventSystem == null || elementToSelect == null) return;
+
             eventSystem.SetSelectedGameObject(elementToSelect.gameObject);
         }
     }

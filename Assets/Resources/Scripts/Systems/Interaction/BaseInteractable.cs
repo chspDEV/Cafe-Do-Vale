@@ -114,6 +114,7 @@ public abstract class BaseInteractable : MonoBehaviour, IInteractable
     public virtual void OnInteract()
     {
         if (!IsInteractable()) return;
+
         Debug.Log($"Interagiu com {name}");
     }
 
@@ -199,6 +200,7 @@ public abstract class BaseInteractable : MonoBehaviour, IInteractable
 
         HandleAnimation();
     }
+    
 
     private void HandleAnimation()
     {

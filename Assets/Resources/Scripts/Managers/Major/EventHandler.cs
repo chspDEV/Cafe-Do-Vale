@@ -50,7 +50,7 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
             shopManager.OnChangeStar                += uiManager.UpdateStars;
 
             unlockManager.OnProductionsUpdated      += seedManager.seedShop.PopulateShop;
-            timeManager.OnCloseCoffeeShop           += seedManager.seedShop.PopulateShop;
+            timeManager.OnResetDay                  += seedManager.seedShop.PopulateShop;
 
             //StepSound stepSound = GameAssets.Instance.player.GetComponent<StepSound>();
 

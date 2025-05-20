@@ -16,16 +16,27 @@ public class SeedShop : BaseInteractable
         PopulateShop();
     }
 
+    public override void Update()
+    {
+        base.Update();
+    }
+
     public override void OnInteract()
     {
         base.OnInteract();
+
         UIManager.Instance.ControlSeedShop(true);
+        //DisableInteraction();
+
     }
 
     public override void OnLostFocus()
     {
         base.OnLostFocus();
+
         UIManager.Instance.ControlSeedShop(false);
+        //EnableInteraction();
+
     }
 
     public void PopulateShop()
@@ -34,8 +45,14 @@ public class SeedShop : BaseInteractable
         {
             if (!UnlockManager.Instance.IsProductionUnlocked(seed.targetProduction)) continue;
 
-            var shopItem = Instantiate(seedShopItemPrefab, seedContainer);
-            shopItem.Configure(seed);
+            var rand = Random.Range(1, 3);
+
+            for (int i = 0; i < rand; i++)
+            {
+                var shopItem = Instantiate(seedShopItemPrefab, seedContainer);
+                shopItem.Configure(seed);
+            }
+            
         }
     }
 }

@@ -6644,6 +6644,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   eventSystem: {fileID: 1919822636}
   elementToSelect: {fileID: 1918473346}
+  searchByTag: 0
+  tagToSearch: 
   showVisualization: 1
   navigationColour: {r: 0, g: 1, b: 1, a: 1}
 --- !u!1 &218674452
@@ -9464,7 +9466,6 @@ MonoBehaviour:
     m_RotationOrder: 4
   nightFogRange: {x: 0.05, y: 0.14}
   dayFogRange: {x: 0.01, y: 0.05}
-  showEvents: 1
   nightColor: {r: 0.48584908, g: 0.48584908, b: 1, a: 1}
   dayColor: {r: 1, g: 0.86388165, b: 0.61698115, a: 1}
   isDay: 0
@@ -16259,7 +16260,6 @@ MonoBehaviour:
   bounceSpeed: 5
   interactionIndicator: {fileID: 0}
   production: {fileID: 0}
-  timeToGive: 0.5
   amount: 1
   timeToOpenInterface: 0
   pointToSpawn: {fileID: 790991288}
@@ -18232,7 +18232,6 @@ MonoBehaviour:
   bounceSpeed: 5
   interactionIndicator: {fileID: 0}
   production: {fileID: 0}
-  timeToGive: 0.5
   amount: 1
   timeToOpenInterface: 0
   pointToSpawn: {fileID: 149591447}
@@ -19074,7 +19073,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   eventSystem: {fileID: 1919822636}
-  elementToSelect: {fileID: 82324827}
+  elementToSelect: {fileID: 0}
+  searchByTag: 1
+  tagToSearch: ProductionCard
   showVisualization: 1
   navigationColour: {r: 0, g: 1, b: 1, a: 1}
 --- !u!1 &658617797
@@ -23419,7 +23420,6 @@ MonoBehaviour:
   bounceSpeed: 5
   interactionIndicator: {fileID: 0}
   production: {fileID: 0}
-  timeToGive: 0.5
   amount: 1
   timeToOpenInterface: 0
   pointToSpawn: {fileID: 907390273}
@@ -34494,7 +34494,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f04e24985461481418c956c0e7ecfe71, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 150
+  moveSpeed: 300
   rotationSpeed: 10
   modelTransform: {fileID: 1053910924}
 --- !u!114 &1156479963
@@ -34723,6 +34723,22 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: 18c88d5e-19d1-460b-acf2-73c8612c50c0
     m_ActionName: 'Player/Recipe[/Keyboard/r]'
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1156479968}
+        m_TargetAssemblyTypeName: Tcp4.PlayerInputs, TCP4Global
+        m_MethodName: SetCloseMenu
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: d6e772f2-774b-4c27-a35a-2f2d3f08440b
+    m_ActionName: 'Player/CloseMenu[/DualShock4GamepadHID/buttonEast,/Keyboard/escape]'
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Player
@@ -40229,7 +40245,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   eventSystem: {fileID: 1919822636}
-  elementToSelect: {fileID: 1487998318}
+  elementToSelect: {fileID: 0}
+  searchByTag: 1
+  tagToSearch: SeedCard
   showVisualization: 1
   navigationColour: {r: 0, g: 1, b: 1, a: 1}
 --- !u!1 &1335573923
@@ -45025,6 +45043,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   eventSystem: {fileID: 1919822636}
   elementToSelect: {fileID: 574816797}
+  searchByTag: 0
+  tagToSearch: 
   showVisualization: 1
   navigationColour: {r: 0, g: 1, b: 1, a: 1}
 --- !u!1 &1486819593
@@ -47891,6 +47911,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   eventSystem: {fileID: 1919822636}
   elementToSelect: {fileID: 417233536}
+  searchByTag: 0
+  tagToSearch: 
   showVisualization: 1
   navigationColour: {r: 0, g: 1, b: 1, a: 1}
 --- !u!1 &1572700265
@@ -49815,13 +49837,15 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1638779577}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 335258ac9364eff4baaf621d2646e20d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   eventSystem: {fileID: 1919822636}
-  elementToSelect: {fileID: 1487998318}
+  elementToSelect: {fileID: 0}
+  searchByTag: 0
+  tagToSearch: 
   showVisualization: 1
   navigationColour: {r: 0, g: 1, b: 1, a: 1}
 --- !u!1 &1639515397
@@ -59537,6 +59561,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   eventSystem: {fileID: 1919822636}
   elementToSelect: {fileID: 1879181849}
+  searchByTag: 0
+  tagToSearch: 
   showVisualization: 1
   navigationColour: {r: 0, g: 1, b: 1, a: 1}
 --- !u!1 &1936944492
@@ -60126,6 +60152,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   eventSystem: {fileID: 1919822636}
   elementToSelect: {fileID: 134677772}
+  searchByTag: 0
+  tagToSearch: 
   showVisualization: 1
   navigationColour: {r: 0, g: 1, b: 1, a: 1}
 --- !u!1 &1966094217
@@ -62088,7 +62116,6 @@ MonoBehaviour:
   bounceSpeed: 5
   interactionIndicator: {fileID: 0}
   production: {fileID: 0}
-  timeToGive: 0.5
   amount: 1
   timeToOpenInterface: 0
   pointToSpawn: {fileID: 1146727312}
@@ -64794,8 +64821,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Size: {x: 1, y: 1, z: 0.8843066}
+  m_Center: {x: 0, y: 0, z: -0.014148676}
 --- !u!23 &2114238627
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -64865,7 +64892,7 @@ MonoBehaviour:
   uiRotationOffset: {x: -15, y: 0, z: 0}
   uiPositionOffset: {x: 0, y: 0, z: 0}
   interactionSprite: {fileID: 21300000, guid: ad23f7b8f570849419a6b8c3ac225614, type: 3}
-  interactionCollider: {fileID: 0}
+  interactionCollider: {fileID: 2114238626}
   useTrigger: 0
   initialScale: {x: 0, y: 0, z: 0}
   targetScale: {x: 1, y: 1, z: 1}
@@ -65960,8 +65987,8 @@ Transform:
   m_GameObject: {fileID: 7949322958958400612}
   serializedVersion: 2
   m_LocalRotation: {x: -0.00000008146034, y: 0, z: -0, w: 1}
-  m_LocalPosition: {x: 46.690754, y: 1.7299559, z: -2.0925014}
-  m_LocalScale: {x: 0.7576448, y: 1.1767385, z: 15.0516}
+  m_LocalPosition: {x: 46.691, y: 2.45, z: -2.0925}
+  m_LocalScale: {x: 0.7576448, y: 1.7107424, z: 15.0516}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 9090326075703351956}
@@ -68836,8 +68863,8 @@ Transform:
   m_GameObject: {fileID: 7771971971219029666}
   serializedVersion: 2
   m_LocalRotation: {x: 0.50008726, y: 0.49991277, z: 0.50008726, w: -0.49991277}
-  m_LocalPosition: {x: -5.34, y: -1.2, z: -19}
-  m_LocalScale: {x: 0.90917367, y: 19.887478, z: 1.4120857}
+  m_LocalPosition: {x: -5.34, y: -0.372828, z: -19}
+  m_LocalScale: {x: 0.90917367, y: 19.887478, z: 2.05289}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 8672929230329850520}
@@ -70879,8 +70906,8 @@ Transform:
   m_GameObject: {fileID: 6798296078535893503}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: 0.70710677, z: 0.7071069, w: 0}
-  m_LocalPosition: {x: -24.369999, y: -1.2100067, z: -0.0399971}
-  m_LocalScale: {x: 0.9091736, y: 19.887478, z: 1.4120857}
+  m_LocalPosition: {x: -24.369999, y: -0.3873279, z: -0.0399971}
+  m_LocalScale: {x: 0.9091736, y: 19.887478, z: 2.05289}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 8672929230329850520}
@@ -79144,8 +79171,8 @@ Transform:
   m_GameObject: {fileID: 2297015988307531709}
   serializedVersion: 2
   m_LocalRotation: {x: -0.000000015454313, y: 0.70710677, z: 0.000000015454313, w: 0.7071068}
-  m_LocalPosition: {x: 43.83, y: 0.69, z: 13.67}
-  m_LocalScale: {x: 0.7809593, y: 1.1767385, z: 3.6728678}
+  m_LocalPosition: {x: 43.83, y: 1.79, z: 13.67}
+  m_LocalScale: {x: 0.7809593, y: 1.7039173, z: 3.6728678}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 9090326075703351956}

@@ -88,6 +88,7 @@ namespace Tcp4
 
         private void OnDrawGizmosSelected()
         {
+            if (!showSpawnArea) return;
             Gizmos.color = Color.cyan;
             Gizmos.DrawWireSphere(transform.position, areaRange);
         }
