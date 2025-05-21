@@ -47,6 +47,11 @@ public class SeedShop : BaseInteractable
 
             var rand = Random.Range(1, 3);
 
+            if (TimeManager.Instance.isFirstDay)
+            {
+                rand = 4;
+            }
+
             for (int i = 0; i < rand; i++)
             {
                 var shopItem = Instantiate(seedShopItemPrefab, seedContainer);

@@ -1,5 +1,4 @@
-﻿using ComponentUtils.ComponentUtils.Scripts;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using Tcp4.Assets.Resources.Scripts.Systems.Clients;
 using UnityEditor;
@@ -21,6 +20,13 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
         [SerializeField] private float counter;
         [SerializeField] private float maxCounter;
         [SerializeField] private int maxClients = 24;
+
+        [SerializeField]
+        private AnimationCurve spawnRateCurve = new AnimationCurve(
+            new Keyframe(9f, 1f),
+            new Keyframe(12f, 2f),
+            new Keyframe(18f, 1f)
+        );
 
         public void Start()
         {
@@ -55,8 +61,15 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
         }
 
         void RestartCounter()
-        { 
-            maxCounter = baseTime - ShopManager.Instance.GetStars() / ShopManager.Instance.GetMaxStars() * 2; 
+        {
+            float currentHour = TimeManager.Instance.CurrentHour;
+            float curveValue = spawnRateCurve.Evaluate(currentHour);
+            curveValue = Mathf.Max(curveValue, 0.1f); // Evita divisão por zero
+
+            float starsFactor = ShopManager.Instance.GetStars() / ShopManager.Instance.GetMaxStars();
+            maxCounter = (baseTime / curveValue) - (starsFactor * 2);
+            maxCounter = Mathf.Max(maxCounter, 0.1f); // Garante intervalo mínimo
+
             counter = 0;
         }
 
