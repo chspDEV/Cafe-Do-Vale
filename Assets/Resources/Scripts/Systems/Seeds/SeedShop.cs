@@ -45,7 +45,7 @@ public class SeedShop : BaseInteractable
         {
             if (!UnlockManager.Instance.IsProductionUnlocked(seed.targetProduction)) continue;
 
-            var rand = Random.Range(1, 3);
+            var rand = Random.Range(4, 6);
 
             if (TimeManager.Instance.isFirstDay)
             {

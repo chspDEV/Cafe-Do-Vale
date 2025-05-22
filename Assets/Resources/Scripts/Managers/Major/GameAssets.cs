@@ -33,12 +33,20 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
         public Sprite Money;
         public GameObject player;
         public Transform safePoint;
+        public PlayerMovement playerMovement;
+
         public void Start()
         {
             player = GameObject.FindGameObjectWithTag("Player");
 
+            if(player != null)
+                playerMovement = player.GetComponent<PlayerMovement>();
+
             sprInteraction = inputPLAYSTATION == null ? inputPC : inputPLAYSTATION;
         }
+
+
+
         public static string GenerateID(int tamanho)
         {
             const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";

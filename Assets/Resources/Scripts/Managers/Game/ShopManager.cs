@@ -100,6 +100,11 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
             }
 #endif
         }
+
+        internal bool HasMoney(float remaining)
+        {
+            return money >= remaining;
+        }
         #endregion
     }
 }

@@ -15,5 +15,5 @@ MonoBehaviour:
   models:
   - {fileID: 7784234654982477164, guid: ee4a296f481f51943a77d7a9966194d6, type: 3}
   product: {fileID: 11400000, guid: 60650c2deda852545b18238811400605, type: 2}
-  timeToGrow: 180
+  timeToGrow: 15
   timeToHarvest: 10

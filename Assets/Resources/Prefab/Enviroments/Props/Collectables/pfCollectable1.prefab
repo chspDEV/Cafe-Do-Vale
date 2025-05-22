@@ -122,9 +122,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isInteractable: 1
-  uiRotationOffset: {x: -35, y: 0, z: 0}
+  uiRotationOffset: {x: 0, y: 180, z: 0}
   uiPositionOffset: {x: 0, y: -0.3, z: 0}
-  interactionSprite: {fileID: 21300000, guid: ad23f7b8f570849419a6b8c3ac225614, type: 3}
+  interactionSprite: {fileID: 21300000, guid: afb3c38a191ebd94e995da50a3d85170, type: 3}
   interactionCollider: {fileID: 3579356341135586901, guid: bb2edce9d67c262429320dc1bc4cbff2, type: 3}
   useTrigger: 0
   initialScale: {x: 0, y: 0, z: 0}

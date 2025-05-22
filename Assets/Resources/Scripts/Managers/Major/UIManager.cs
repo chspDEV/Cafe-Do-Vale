@@ -48,6 +48,7 @@ namespace Tcp4
         [TabGroup("Prefabs")] public GameObject pfSlotCreation, pfSlotCreationIngredient;
         [TabGroup("Prefabs")] public GameObject pfClientNotification;
         [TabGroup("Prefabs")] public GameObject pfProductionCard;
+        [TabGroup("Prefabs")] public GameObject pfUpgradeText;
 
         [TabGroup("UI Containers")]
         [TabGroup("UI Containers")] public Transform storageSlotHolder;
@@ -73,6 +74,8 @@ namespace Tcp4
 
         [TabGroup("UI Images")]
         public Image starImage;
+
+        GameAssets gameAssets;
 
         #endregion
 
@@ -351,7 +354,7 @@ namespace Tcp4
             if (configMenu.activeSelf)
             {
                 CloseMenu(configMenu);
-                Time.timeScale = 1;
+                //Time.timeScale = 1;
             }
             else
             {
@@ -362,7 +365,7 @@ namespace Tcp4
                     pauseInteraction.JumpToElement();
                 }
 
-                Time.timeScale = 0;
+                //Time.timeScale = 0;
             }
         }
 
@@ -439,6 +442,21 @@ namespace Tcp4
             return imageFill;
         }
 
+        public TextToProgress PlaceTextProgress(Transform pointToSpawn, float maxValue, float currentValue = 0f)
+        {
+            // Instancia o objeto e obtém o componente
+            var obj = Instantiate(pfUpgradeText, worldCanvas.gameObject.transform);
+            var textProgress = obj.GetComponent<TextToProgress>();
+
+            // Configura os valores iniciais
+            textProgress.Setup(maxValue, currentValue);
+
+            // Posiciona no mundo
+            PlaceInWorld(pointToSpawn, textProgress.GetRectTransform());
+
+            return textProgress;
+        }
+
         public Image PlaceImage(Transform pointToSpawn)
         {
             var obj = Instantiate(pfImage, worldCanvas.gameObject.transform);
@@ -456,5 +474,15 @@ namespace Tcp4
             timeText.text = _formatedHour;
         }
         #endregion
+
+        private void Start()
+        {
+            gameAssets = GameAssets.Instance;
+        }
+
+        private void Update()
+        {
+            gameAssets.playerMovement.ToggleMovement(openedMenus.Count <= 0 || openedMenus == null);
+        }
     }
 }

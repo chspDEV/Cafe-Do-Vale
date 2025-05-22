@@ -1,68 +1,124 @@
+using TMPro;
 using Tcp4.Assets.Resources.Scripts.Managers;
-using Unity.Mathematics;
 using UnityEngine;
-using UnityEngine.PlayerLoop;
+using UnityEngine.UI;
 
 namespace Tcp4.Assets.Resources.Scripts.Systems.Areas
 {
-    public class BuyCollectArea: MonoBehaviour, IUpgradable
+    public class BuyCollectArea : BaseInteractable
     {
+        [Header("UI References")]
         [SerializeField] private ImageToFill priceImage;
-        [SerializeField] float stackedMoney = 0f;
-        [SerializeField] float price = 50f;
+        [SerializeField] private TextToProgress priceText;
+        
 
-        [SerializeField] int decreaseValue = 1;
-        [SerializeField] bool canUpgrade = true;
-        [SerializeField] GameObject pfCollectArea;
-        [SerializeField] Transform pointToImage;
+        [Header("Configurações")]
+        [SerializeField] private int stackedMoney = 0;
+        [SerializeField] private int price = 50;
+        [SerializeField] private bool canUpgrade = true;
 
-        void Start()
+        [Header("Prefabs")]
+        [SerializeField] private GameObject pfCollectArea;
+        [SerializeField] private Transform pointToImage;
+
+        public override void Start()
         {
-            
-            priceImage = UIManager.Instance.PlaceFillImage(pointToImage);
-            priceImage.ChangeSprite(GameAssets.Instance.Money);
-            priceImage.SetupMaxTime(price);
-            priceImage.UpdateFill(stackedMoney);
+            base.Start();
+            InitializeUI();
+            UpdatePriceDisplay();
         }
 
-        public void IncreasePrice()
+        private void InitializeUI()
         {
-            //Nesse Caso aqui nao precisa de upgrade
-        }
-
-        public void OnChangePrice()
-        {
-            priceImage.UpdateFill(stackedMoney);
-        }
-
-        public void OnStackMoney()
-        {
-            if(!canUpgrade || ShopManager.Instance.GetMoney() < decreaseValue) 
+            if (UIManager.Instance != null)
             {
-                Debug.Log($"Não é possivel acumular dinheiro em {name}!");
+                priceImage = UIManager.Instance.PlaceFillImage(pointToImage);
+                priceImage.ChangeSprite(GameAssets.Instance.Money);
+                priceImage.ChangeFillStart(0);
+                priceImage.ChangeSize(new Vector3(0.5f, 1f, 1f));
+                priceImage.ChangeBillboard(Vector3.zero, new Vector3(180f, 0f, 0f));
+                priceImage.SetupMaxTime(price);
+
+                //priceText = UIManager.Instance.PlaceTextProgress(pointToImage, price);
+
+            }
+        }
+
+        public override void OnInteract()
+        {
+            base.OnInteract();
+            TryUpgrade();
+        }
+
+        private void TryUpgrade()
+        {
+            if (!canUpgrade) return;
+
+            float remaining = price - stackedMoney;
+            float playerMoney = ShopManager.Instance.GetMoney();
+
+            if (playerMoney <= 0)
+            {
+                Debug.Log("Sem dinheiro suficiente!");
+                UpdatePriceDisplay();
                 return;
             }
-            
 
-            stackedMoney += decreaseValue;
-            ShopManager.Instance.TrySpendMoney(decreaseValue);
+            // Pega o menor valor entre: o que falta e o que o jogador tem
+            float amountToSpend = Mathf.Min(remaining, playerMoney);
 
-            OnChangePrice();
+            CompletePurchase(Mathf.CeilToInt(amountToSpend));
 
-            if(stackedMoney >= price)
+            // Feedback visual quando não completar
+            if (amountToSpend < remaining)
+            {
+                Debug.Log($"Colocado {amountToSpend:C0} (Faltam {remaining - amountToSpend:C0})");
+            }
+        }
+
+        private void CompletePurchase(int amount)
+        {
+            stackedMoney += amount;
+            ShopManager.Instance.TrySpendMoney(amount);
+            UpdatePriceDisplay();
+
+            if (stackedMoney >= price)
             {
                 OnUpgrade();
+            }
+        }
+
+        private void UpdatePriceDisplay()
+        {
+            // Atualiza a imagem de preenchimento
+            if (priceImage != null)
+            {
+                priceImage.UpdateFill(stackedMoney);
+            }
+
+            // Atualiza o texto com os valores
+            if (priceText != null)
+            {
+                priceText.UpdateProgress(stackedMoney);
             }
         }
 
         public void OnUpgrade()
         {
             canUpgrade = false;
-            Instantiate(pfCollectArea, transform.position, quaternion.identity);
-            Destroy(this.gameObject);
-            Destroy(priceImage.gameObject);
+            Instantiate(pfCollectArea, transform.position, Quaternion.identity);
+            CleanupBeforeDestroy();
         }
-    }
 
-    
+        private void CleanupBeforeDestroy()
+        {
+            if (priceImage != null)
+            {
+                Destroy(priceImage.gameObject);
+            }
+            Destroy(gameObject);
+        }
+
+   
+    }
 }

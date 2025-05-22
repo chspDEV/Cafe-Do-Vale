@@ -52,15 +52,15 @@ namespace Tcp4.Assets.Resources.Scripts.Systems.Clients
 
         public void Delivered()
         {
-            ShopManager.Instance.AddMoney(10); 
-            ShopManager.Instance.AddStars(25f + stars);
+            ShopManager.Instance.AddMoney(35); 
+            ShopManager.Instance.AddStars(Random.Range(40f,50f) + stars);
             ClientManager.Instance.DeleteSpecificClient(this);
             Destroy(this.gameObject);
         }
 
         public void NotDelivered()
         {
-            ShopManager.Instance.AddStars(-stars);
+            ShopManager.Instance.AddStars(-0.1f);
             ClientManager.Instance.DeleteSpecificClient(this);
             Destroy(this.gameObject);
         }

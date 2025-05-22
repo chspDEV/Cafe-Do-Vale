@@ -154,12 +154,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 397e09f8c490a8449bdae65c47c8be15, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isInteractable: 1
+  uiRotationOffset: {x: 0, y: 0, z: 0}
+  uiPositionOffset: {x: 0, y: 2.5, z: 0}
+  interactionSprite: {fileID: 21300000, guid: ad23f7b8f570849419a6b8c3ac225614, type: 3}
+  interactionCollider: {fileID: 0}
+  useTrigger: 0
+  initialScale: {x: 0, y: 0, z: 0}
+  targetScale: {x: 0.7, y: 0.7, z: 0.7}
+  growDuration: 0.3
+  bounceScaleMin: 0.9
+  bounceScaleMax: 1.1
+  bounceSpeed: 5
+  interactionIndicator: {fileID: 0}
   priceImage: {fileID: 0}
+  priceText: {fileID: 0}
   stackedMoney: 0
   price: 50
-  decreaseValue: 1
   canUpgrade: 1
-  pfCollectArea: {fileID: 4813536482238623967, guid: fa32ee1544ac75045baae0247cdbb6ea, type: 3}
+  pfCollectArea: {fileID: 1700925573276864742, guid: fa32ee1544ac75045baae0247cdbb6ea, type: 3}
   pointToImage: {fileID: 4980251354838650603}
 --- !u!1001 &9104924865457820448
 PrefabInstance:

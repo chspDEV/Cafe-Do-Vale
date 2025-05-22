@@ -12,11 +12,13 @@ namespace Tcp4
         private Rigidbody rb;
         private Vector2 movement;
         private Animator animator;
+        private bool canMove = true;
 
         void Awake()
         {
             rb = GetComponent<Rigidbody>();
             animator = GetComponentInChildren<Animator>();
+            canMove = true;
         }
 
         public void SetMovement(InputAction.CallbackContext value)
@@ -44,6 +46,8 @@ namespace Tcp4
 
         void Update()
         {
+            if (!canMove) return;
+
             HandleRotation();
             HandleAnimation();
 
@@ -62,7 +66,31 @@ namespace Tcp4
 
         void FixedUpdate()
         {
-            rb.linearVelocity = new Vector3(movement.x, 0, movement.y) * moveSpeed * Time.fixedDeltaTime;
+            if (canMove)
+            {
+                rb.linearVelocity = new Vector3(movement.x, 0, movement.y) * moveSpeed * Time.fixedDeltaTime;
+            }
+            else
+            {
+                rb.linearVelocity = Vector3.zero;
+            }
+                
+        }
+
+        public void Active()
+        {
+            canMove = true;
+        }
+
+        public void Deactive()
+        { 
+            canMove = false; 
+        }
+
+        public void ToggleMovement(bool state)
+        {
+            if (state) Active();
+            else Deactive();
         }
     }
 }
