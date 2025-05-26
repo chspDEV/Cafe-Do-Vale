@@ -414,6 +414,11 @@ namespace Tcp4
             openedMenus.Remove(menu);
         }
 
+        public bool HasMenuOpen()
+        { 
+            return openedMenus.Count > 0;
+        }
+
         private void PlaceInWorld(Transform worldObject, RectTransform uiElement, bool isWorldCanvas = true)
         {
             if (!isWorldCanvas)
@@ -444,14 +449,11 @@ namespace Tcp4
 
         public TextToProgress PlaceTextProgress(Transform pointToSpawn, float maxValue, float currentValue = 0f)
         {
-            // Instancia o objeto e obtém o componente
             var obj = Instantiate(pfUpgradeText, worldCanvas.gameObject.transform);
             var textProgress = obj.GetComponent<TextToProgress>();
 
-            // Configura os valores iniciais
             textProgress.Setup(maxValue, currentValue);
 
-            // Posiciona no mundo
             PlaceInWorld(pointToSpawn, textProgress.GetRectTransform());
 
             return textProgress;

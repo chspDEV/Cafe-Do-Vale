@@ -17,6 +17,7 @@ public class TextToProgress : MonoBehaviour
     [SerializeField] private Color midColor = Color.yellow;
     [SerializeField] private Color lowColor = Color.red;
 
+    private Billboard billboard;
     private float _currentValue;
     private RectTransform _rectTransform;
 
@@ -26,6 +27,7 @@ public class TextToProgress : MonoBehaviour
             Debug.LogError("NAO ENCONTREI O TEXTO");
 
         _rectTransform = progressText.rectTransform;
+        billboard = GetComponentInChildren<Billboard>();
         UpdateVisuals();
     }
 
@@ -82,6 +84,14 @@ public class TextToProgress : MonoBehaviour
     public void Decrement(float amount)
     {
         UpdateProgress(_currentValue - amount);
+    }
+
+    public void ChangeBillboard(Vector3 _positionOffset, Vector3 _rotationOffset)
+    {
+        if (billboard == null) return;
+
+        billboard.positionOffset = _positionOffset;
+        billboard.rotationOffset = _rotationOffset;
     }
 
     public float GetProgress01() => _currentValue / maxValue;

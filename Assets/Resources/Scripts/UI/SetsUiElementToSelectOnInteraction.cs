@@ -88,6 +88,7 @@ namespace ChristinaCreatesGames.UI
             if (eventSystem == null || elementToSelect == null) return;
 
             eventSystem.SetSelectedGameObject(elementToSelect.gameObject);
+
         }
     }
 }

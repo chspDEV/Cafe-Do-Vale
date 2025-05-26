@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 80d140a2a6f2ec24da3dccdc512f63e4, type: 3}
   m_Name: Mel_semente
   m_EditorClassIdentifier: 
+  seedName: Abelhas
   targetProduction: {fileID: 11400000, guid: 1b8920d533897b84e8931529f6a606fb, type: 2}
   purchaseCost: 40
-  seedIcon: {fileID: 21300000, guid: 2ebfb91ebb28f58478a3a2031ac69cfd, type: 3}
+  seedIcon: {fileID: 21300000, guid: 6690e3e24def70c46a1b151aae2c4209, type: 3}

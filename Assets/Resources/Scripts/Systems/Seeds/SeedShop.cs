@@ -1,4 +1,5 @@
 using Sirenix.OdinInspector;
+using System.Collections.Generic;
 using Tcp4;
 using Tcp4.Assets.Resources.Scripts.Managers;
 using TMPro;
@@ -9,6 +10,8 @@ public class SeedShop : BaseInteractable
 {
     [SerializeField] private Transform seedContainer;
     [SerializeField] private SeedShopItem seedShopItemPrefab;
+
+    private List<GameObject> instances = new();
 
     public override void Start()
     {
@@ -45,17 +48,23 @@ public class SeedShop : BaseInteractable
         {
             if (!UnlockManager.Instance.IsProductionUnlocked(seed.targetProduction)) continue;
 
-            var rand = Random.Range(4, 6);
-
-            if (TimeManager.Instance.isFirstDay)
+            if (instances.Count > 0)
             {
-                rand = 4;
+                foreach (var i in instances)
+                {
+                    Destroy(i);
+                }
             }
 
-            for (int i = 0; i < rand; i++)
+            instances.Clear();
+
+            var quantity = 4;
+
+            for (int i = 0; i < quantity; i++)
             {
                 var shopItem = Instantiate(seedShopItemPrefab, seedContainer);
                 shopItem.Configure(seed);
+                instances.Add(shopItem.gameObject);
             }
             
         }

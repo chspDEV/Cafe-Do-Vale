@@ -36,11 +36,10 @@ namespace Tcp4.Assets.Resources.Scripts.Systems.Areas
                 priceImage.ChangeSprite(GameAssets.Instance.Money);
                 priceImage.ChangeFillStart(0);
                 priceImage.ChangeSize(new Vector3(0.5f, 1f, 1f));
-                priceImage.ChangeBillboard(Vector3.zero, new Vector3(180f, 0f, 0f));
                 priceImage.SetupMaxTime(price);
 
-                //priceText = UIManager.Instance.PlaceTextProgress(pointToImage, price);
-
+                priceText = UIManager.Instance.PlaceTextProgress(pointToImage, price);
+                priceText.ChangeBillboard(new Vector3(0f, -0.7f, 0f), new Vector3(35f, 180f, 0f));
             }
         }
 
@@ -63,15 +62,13 @@ namespace Tcp4.Assets.Resources.Scripts.Systems.Areas
                 UpdatePriceDisplay();
                 return;
             }
-
-            // Pega o menor valor entre: o que falta e o que o jogador tem
             float amountToSpend = Mathf.Min(remaining, playerMoney);
 
             CompletePurchase(Mathf.CeilToInt(amountToSpend));
 
-            // Feedback visual quando não completar
             if (amountToSpend < remaining)
             {
+                //BOTAR FEEDBACKS AQ
                 Debug.Log($"Colocado {amountToSpend:C0} (Faltam {remaining - amountToSpend:C0})");
             }
         }
@@ -116,6 +113,12 @@ namespace Tcp4.Assets.Resources.Scripts.Systems.Areas
             {
                 Destroy(priceImage.gameObject);
             }
+
+            if (priceText != null)
+            {
+                Destroy(priceText.gameObject);
+            }
+
             Destroy(gameObject);
         }
 

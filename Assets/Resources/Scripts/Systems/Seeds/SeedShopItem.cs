@@ -6,7 +6,7 @@ using Tcp4.Assets.Resources.Scripts.Managers;
 public class SeedShopItem : MonoBehaviour
 {
     [SerializeField] private Image seedIcon;
-    [SerializeField] private TextMeshProUGUI priceText;
+    [SerializeField] private TextMeshProUGUI displayText;
     [SerializeField] private Button buyButton;
 
     private Seed seed;
@@ -15,7 +15,7 @@ public class SeedShopItem : MonoBehaviour
     {
         seed = seedData;
         seedIcon.sprite = seed.seedIcon;
-        priceText.text = seed.purchaseCost.ToString();
+        displayText.text = $"{seed.seedName}\n\n" +"R$ " + seed.purchaseCost.ToString();
         buyButton.onClick.AddListener(OnBuyClicked);
     }
 

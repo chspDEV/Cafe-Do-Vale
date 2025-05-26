@@ -1,9 +1,22 @@
-﻿using ComponentUtils.ComponentUtils.Scripts;
+﻿
 using Sirenix.OdinInspector;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.DualShock;
+using UnityEngine.InputSystem.XInput;
+using UnityEngine.Windows;
+
+public enum CurrentInputType
+{ 
+    PC,
+    XBOX,
+    PLAYSTATION,
+    NONE
+}
 
 namespace Tcp4.Assets.Resources.Scripts.Managers
 {
@@ -14,10 +27,10 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
         [TabGroup("Refinamento")] public Sprite sprRefinamentWait;
         [TabGroup("Refinamento")] public Sprite sprSpoilingWarning;
 
-        [TabGroup("Gerais")] [HideInInspector] public Sprite sprInteraction;
         [TabGroup("Gerais")] public Sprite ready;
         [TabGroup("Gerais")] public Sprite transparent;
 
+        [TabGroup("Interacao")] public Sprite sprInteraction;
         [TabGroup("Interacao")]
         [SerializeField] private Sprite inputXBOX;
         [TabGroup("Interacao")]
@@ -35,17 +48,108 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
         public Transform safePoint;
         public PlayerMovement playerMovement;
 
-        public void Start()
+        public event Action OnChangeInteractionSprite;
+        public CurrentInputType currentInputType = CurrentInputType.NONE;
+
+        public override void Awake()
         {
+            base.Awake();
+
             player = GameObject.FindGameObjectWithTag("Player");
 
             if(player != null)
                 playerMovement = player.GetComponent<PlayerMovement>();
 
-            sprInteraction = inputPLAYSTATION == null ? inputPC : inputPLAYSTATION;
+            UpdateControlSprite();
+            
         }
 
+        private void Start()
+        {
+            UpdateControlSprite();
+        }
 
+        public void UpdateControlSprite()
+        {
+            // String de debug
+            string debugText = "Dispositivos conectados: ";
+
+            // Verifica se há gamepads conectados
+            var gamepads = Gamepad.all;
+            bool hasGamepad = gamepads.Count > 0;
+
+            // Debug: Lista todos os dispositivos
+            foreach (InputDevice device in InputSystem.devices)
+            {
+                debugText += $"\n- {device.name} ({device.layout})";
+            }
+            Debug.Log(debugText);
+
+            // Caso não tenha gamepads conectados
+            if (!hasGamepad)
+            {
+                sprInteraction = inputPC;
+                OnChangeInteractionSprite?.Invoke();
+                Debug.Log("[SPRITE ATUALIZADO] MODELO COMPUTADOR (Teclado/Mouse)");
+                currentInputType = CurrentInputType.PC;
+                return;
+            }
+
+            // Verifica cada gamepad conectado
+            foreach (Gamepad gamepad in gamepads)
+            {
+                // PlayStation (DualShock/DualSense)
+                if (gamepad is DualShockGamepad )
+                    
+                {
+                    sprInteraction = inputPLAYSTATION;
+                    OnChangeInteractionSprite?.Invoke();
+                    Debug.Log("[SPRITE ATUALIZADO] MODELO PLAYSTATION");
+                    currentInputType = CurrentInputType.PLAYSTATION;
+                    return;
+                }
+                // Xbox
+                else if (gamepad is XInputController)
+                {
+                    sprInteraction = inputXBOX;
+                    OnChangeInteractionSprite?.Invoke();
+                    Debug.Log("[SPRITE ATUALIZADO] MODELO XBOX");
+                    currentInputType = CurrentInputType.XBOX;
+                    return;
+                }
+            }
+
+            // Se chegou aqui, é um gamepad genérico
+            sprInteraction = inputPLAYSTATION; 
+            OnChangeInteractionSprite?.Invoke();
+            Debug.Log("[SPRITE ATUALIZADO] MODELO GENÉRICO");
+        }
+
+        private void OnDeviceChanged(InputDevice device, InputDeviceChange change)
+        {
+            if (change == InputDeviceChange.Added ||
+                change == InputDeviceChange.Removed ||
+                change == InputDeviceChange.Reconnected || 
+                change == InputDeviceChange.Disconnected ||
+                change == InputDeviceChange.Enabled ||
+                change == InputDeviceChange.Disabled ||
+                change == InputDeviceChange.SoftReset ||
+                change == InputDeviceChange.HardReset)
+            {
+                
+                UpdateControlSprite();
+            }
+        }
+
+        private void OnEnable()
+        {
+            InputSystem.onDeviceChange += OnDeviceChanged;
+        }
+
+        private void OnDisable()
+        {
+            InputSystem.onDeviceChange -= OnDeviceChanged;
+        }
 
         public static string GenerateID(int tamanho)
         {

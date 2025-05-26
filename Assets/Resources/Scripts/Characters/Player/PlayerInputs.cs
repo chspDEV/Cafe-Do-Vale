@@ -9,7 +9,7 @@ namespace Tcp4
         {
             if (context.performed)
             {
-                if (UIManager.Instance != null)
+                if (UIManager.Instance != null && !UIManager.Instance.HasMenuOpen())
                 {
                     UIManager.Instance.ControlMap(true);
                 }
@@ -21,7 +21,7 @@ namespace Tcp4
         {
             if (context.performed)
             {
-                if (UIManager.Instance != null)
+                if (UIManager.Instance != null && !UIManager.Instance.HasMenuOpen())
                 {
                     //UIManager.Instance.ControlNotification(true);
                 }
@@ -33,7 +33,7 @@ namespace Tcp4
         {
             if (context.performed)
             {
-                if (UIManager.Instance != null)
+                if (UIManager.Instance != null && !UIManager.Instance.HasMenuOpen())
                 {
                     //UIManager.Instance.ControlSeedInventory(true);
                 }
@@ -45,7 +45,7 @@ namespace Tcp4
         {
             if (context.performed)
             {
-                if (UIManager.Instance != null)
+                if (UIManager.Instance != null && !UIManager.Instance.HasMenuOpen())
                 {
                     UIManager.Instance.ControlConfigMenu();
                 }
@@ -57,7 +57,7 @@ namespace Tcp4
         {
             if (context.performed)
             {
-                if (UIManager.Instance != null)
+                if (UIManager.Instance != null && !UIManager.Instance.HasMenuOpen())
                 {
                     UIManager.Instance.ControlRecipeMenu(true);
                 }

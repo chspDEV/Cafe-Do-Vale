@@ -79,7 +79,7 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
             }
         }
 
-        protected override void Awake()
+        public override void Awake()
         {
             base.Awake();
             gameDate = new DateTime(2024, 1, 1);

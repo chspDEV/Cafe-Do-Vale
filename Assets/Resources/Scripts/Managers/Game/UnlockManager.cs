@@ -33,12 +33,6 @@ public class UnlockManager : Singleton<UnlockManager>
     public List<Drink> CurrentMenu { get; private set; } = new();
 
     
-
-    protected override void Awake()
-    {
-        base.Awake();
-    }
-
     private void Start()
     {
         uiManager = UIManager.Instance;

@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using Tcp4;
 using Sirenix.OdinInspector;
 using Tcp4.Assets.Resources.Scripts.Managers;
+using System.Collections;
 
 public abstract class BaseInteractable : MonoBehaviour, IInteractable
 {
@@ -20,10 +21,7 @@ public abstract class BaseInteractable : MonoBehaviour, IInteractable
     [LabelText("uiPositionOffset")]
     [SerializeField] protected Vector3 uiPositionOffset = new(0, 1.5f, 0);
 
-    [BoxGroup("Configurações/Visual/UI")]
-    [LabelText("Sprite de Interação")]
-    [PreviewField(50)]
-    [SerializeField] protected Sprite interactionSprite;
+    protected Sprite interactionSprite;
 
     [TabGroup("Configurações", "Física")]
     [BoxGroup("Configurações/Física/Colisor")]
@@ -93,11 +91,37 @@ public abstract class BaseInteractable : MonoBehaviour, IInteractable
         CreateInteractionIndicator();
         InitializeBillboard();
         ApplyInitialScale();
+        StartCoroutine(InitializeSettings(.25f));
+    }
 
-        var _ = GameAssets.Instance.sprInteraction;
+    private IEnumerator InitializeSettings(float delay)
+    { 
+        yield return new WaitForSeconds(delay);
+        GameAssets gameAssets = GameAssets.Instance;
 
-        if(_ != null)
-            interactionSprite = GameAssets.Instance.sprInteraction;
+        if (gameAssets != null)
+        {
+            gameAssets.OnChangeInteractionSprite += UpdateSpriteInteraction;
+            UpdateSpriteInteraction();
+            Debug.Log("Encontrei o gameAssets!");
+        }
+        else
+        {
+            Debug.Log("Não encontrei o gameAssets!");
+        }
+
+        yield return null;
+            
+    }
+
+
+    void UpdateSpriteInteraction()
+    {
+        if (interactionIndicator == null) return;
+
+        interactionSprite = GameAssets.Instance.sprInteraction;
+        interactionIndicator.sprite = interactionSprite;
+        Debug.Log($"Sprite de {gameObject.name} atualizado para {interactionSprite}");
     }
 
     #region Interface Implementation
@@ -246,6 +270,13 @@ public abstract class BaseInteractable : MonoBehaviour, IInteractable
     {
         if (interactionIndicator != null)
         {
+            GameAssets gameAssets = GameAssets.Instance;
+
+            if (gameAssets != null)
+            {
+                gameAssets.OnChangeInteractionSprite -= UpdateSpriteInteraction;
+            }
+
             Destroy(interactionIndicator.gameObject);
         }
     }

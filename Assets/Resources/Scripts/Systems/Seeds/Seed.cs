@@ -4,6 +4,7 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "Nova semente", menuName = "Production/Seed")]
 public class Seed : ScriptableObject
 {
+    public string seedName;
     public Production targetProduction;
     public int purchaseCost;
     public Sprite seedIcon;

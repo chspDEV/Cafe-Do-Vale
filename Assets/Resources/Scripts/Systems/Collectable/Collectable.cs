@@ -11,7 +11,7 @@ namespace Tcp4
         {
             base.OnInteract();
             ShopManager.Instance.AddMoney(money);
-            SoundManager.PlaySound(SoundType.coletar, 1);
+            SoundManager.PlaySound(SoundType.coletar, .7f);
             Destroy(gameObject);
         }
     }

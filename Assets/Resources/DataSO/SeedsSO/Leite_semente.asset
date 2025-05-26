@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 80d140a2a6f2ec24da3dccdc512f63e4, type: 3}
   m_Name: Leite_semente
   m_EditorClassIdentifier: 
+  seedName: Vaca
   targetProduction: {fileID: 11400000, guid: a700651e4a707c647a3e89be282bc69d, type: 2}
   purchaseCost: 30
-  seedIcon: {fileID: 21300000, guid: 9e81e92f28685c04faef504e8ae123a9, type: 3}
+  seedIcon: {fileID: 21300000, guid: 89a7b3ebd11643d47b8df45df5cce819, type: 3}

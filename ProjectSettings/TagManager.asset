@@ -11,6 +11,8 @@ TagManager:
   - Props
   - PlayerModel
   - SeedCard
+  - CreationSlot
+  - CreationIngredient
   layers:
   - Default
   - TransparentFX

@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 80d140a2a6f2ec24da3dccdc512f63e4, type: 3}
   m_Name: Cacau_semente
   m_EditorClassIdentifier: 
+  seedName: Semente de Cacau
   targetProduction: {fileID: 11400000, guid: 90f5aa24ebbd48b4db8ba61259d0b9d8, type: 2}
   purchaseCost: 20
-  seedIcon: {fileID: 21300000, guid: 8b430aed4ededdd4dbcbbc791acfe805, type: 3}
+  seedIcon: {fileID: 21300000, guid: dfcebb051d0f4d743a93ab4b87756628, type: 3}
