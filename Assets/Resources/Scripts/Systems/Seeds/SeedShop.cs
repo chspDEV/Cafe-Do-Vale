@@ -1,5 +1,6 @@
 using Sirenix.OdinInspector;
 using System.Collections.Generic;
+using System.Linq;
 using Tcp4;
 using Tcp4.Assets.Resources.Scripts.Managers;
 using TMPro;
@@ -44,29 +45,71 @@ public class SeedShop : BaseInteractable
 
     public void PopulateShop()
     {
-        foreach (Seed seed in SeedManager.Instance.GetAllSeeds)
+        if (instances != null)
         {
-            if (!UnlockManager.Instance.IsProductionUnlocked(seed.targetProduction)) continue;
-
-            if (instances.Count > 0)
+            foreach (GameObject instanceGO in instances)
             {
-                foreach (var i in instances)
+                if (instanceGO != null) 
                 {
-                    Destroy(i);
+                    Destroy(instanceGO);
                 }
             }
+            instances.Clear(); 
+        }
+        else
+        {
+            instances = new List<GameObject>(); 
+        }
 
-            instances.Clear();
-
-            var quantity = 4;
-
-            for (int i = 0; i < quantity; i++)
+        List<Seed> unlockedSeeds = new();
+        if (SeedManager.Instance != null && UnlockManager.Instance != null)
+        {
+            foreach (Seed seed in SeedManager.Instance.GetAllSeeds)
             {
-                var shopItem = Instantiate(seedShopItemPrefab, seedContainer);
-                shopItem.Configure(seed);
-                instances.Add(shopItem.gameObject);
+                if (UnlockManager.Instance.IsProductionUnlocked(seed.targetProduction))
+                {
+                    unlockedSeeds.Add(seed);
+                }
             }
-            
+        }
+        else
+        {
+            Debug.LogError("seedmanager ou unlockmanager nao foi encontrado."); 
+            return; 
+        }
+
+        List<Seed> seedsToShowInShop = new();
+        int maxItemsInShop = 4;
+
+        if (unlockedSeeds.Count > 0)
+        {
+            System.Random rng = new();
+            List<Seed> shuffledUnlockedSeeds = unlockedSeeds.OrderBy(s => rng.Next()).ToList();
+
+            int numberOfItemsToDisplay = Mathf.Min(maxItemsInShop, shuffledUnlockedSeeds.Count);
+
+            for (int i = 0; i < numberOfItemsToDisplay; i++)
+            {
+                seedsToShowInShop.Add(shuffledUnlockedSeeds[i]);
+            }
+        }
+
+        if (seedShopItemPrefab == null)
+        {
+            Debug.LogError("prefab do item da loja de sementes (seedshopitemprefab) nao esta atribuido."); 
+            return;
+        }
+        if (seedContainer == null)
+        {
+            Debug.LogError("container das sementes (seedcontainer) nao esta atribuido."); 
+            return;
+        }
+
+        foreach (Seed seedToDisplay in seedsToShowInShop)
+        {
+            SeedShopItem shopItemInstance = Instantiate(seedShopItemPrefab, seedContainer);
+            shopItemInstance.Configure(seedToDisplay);
+            instances.Add(shopItemInstance.gameObject); 
         }
     }
 }

@@ -15,7 +15,7 @@ MonoBehaviour:
   productName: Termogenico
   quality: 0
   productID: 1
-  model: {fileID: 0}
+  model: {fileID: 828628952653485657, guid: 0e55602d41e5d1948b0677603e4e437e, type: 3}
   productImage: {fileID: 21300000, guid: 2ebfb91ebb28f58478a3a2031ac69cfd, type: 3}
   requiredIngredients:
   - {fileID: 11400000, guid: ad5d708b28f03f74386f9ed6df8eb4db, type: 2}

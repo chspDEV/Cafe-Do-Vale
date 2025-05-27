@@ -21,8 +21,8 @@ namespace Tcp4
 
         public void ConfigureVisuals()
         {
-            cardImage.sprite = myProduction.product.productImage;
-            cardName.text = myProduction.product.productName;
+            cardImage.sprite = myProduction.outputProduct.productImage;
+            cardName.text = myProduction.outputProduct.productName;
         }
 
         private void OnEnable()

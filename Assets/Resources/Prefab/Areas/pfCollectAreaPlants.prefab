@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 3537664820212885101}
   - component: {fileID: 757595936906334569}
   m_Layer: 11
-  m_Name: pfCollectArea
+  m_Name: pfCollectAreaPlants
   m_TagString: CollectArea
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -126,7 +126,6 @@ MonoBehaviour:
   isInteractable: 1
   uiRotationOffset: {x: 0, y: 180, z: 0}
   uiPositionOffset: {x: 0, y: 1, z: 0}
-  interactionSprite: {fileID: 21300000, guid: afb3c38a191ebd94e995da50a3d85170, type: 3}
   interactionCollider: {fileID: 3537664820212885101}
   useTrigger: 1
   initialScale: {x: 0, y: 0, z: 0}
@@ -139,6 +138,10 @@ MonoBehaviour:
   production: {fileID: 0}
   amount: 1
   timeToOpenInterface: 0
+  canProduce:
+  - {fileID: 11400000, guid: 90f5aa24ebbd48b4db8ba61259d0b9d8, type: 2}
+  - {fileID: 11400000, guid: c1fd9e34ede5bfb4b8abd7111c028530, type: 2}
+  - {fileID: 11400000, guid: d85380f429a027642824fcb909aece3e, type: 2}
   pointToSpawn: {fileID: 4662990052312389057}
   currentModel: {fileID: 0}
 --- !u!1 &2785099760025017261

@@ -1,6 +1,4 @@
-﻿using ComponentUtils.ComponentUtils.Scripts;
-using NUnit.Framework;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -50,7 +48,7 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
             return null;
         }
 
-        public void ReloadCards()
+        public void ReloadCards(List<Production> canProduce)
         {
             choices.Clear();
 
@@ -59,10 +57,17 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
             foreach (var go in goList)
             {
                 var p = go.GetComponent<ProductionCard>();
-                if (p != null)
+
+
+                if (p != null && canProduce.Contains(p.myProduction))
                 {
                     p.SetColletArea(reference);
                     choices.Add(p);
+                    p.gameObject.SetActive(true);
+                }
+                else
+                { 
+                    p.gameObject.SetActive(false);
                 }
             }
         }

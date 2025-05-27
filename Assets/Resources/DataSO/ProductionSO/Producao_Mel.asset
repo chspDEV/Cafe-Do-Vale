@@ -14,6 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   models:
   - {fileID: 7705158285447433269, guid: 894425840a5c54349b2216ec4beac327, type: 3}
-  product: {fileID: 11400000, guid: 94a2e396290fdf34fb1b215604089d68, type: 2}
+  outputProduct: {fileID: 11400000, guid: 94a2e396290fdf34fb1b215604089d68, type: 2}
   timeToGrow: 15
-  timeToHarvest: 10

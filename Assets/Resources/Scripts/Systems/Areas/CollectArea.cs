@@ -12,6 +12,7 @@ namespace Tcp4
         //[SerializeField] private float timeToGive = 1.3f;
         [SerializeField] private int amount;
         [SerializeField] private float timeToOpenInterface;
+        [SerializeField] private List<Production> canProduce;
 
         [Space(10)]
 
@@ -127,7 +128,7 @@ namespace Tcp4
             var productionManager = ProductionManager.Instance;
             productionManager.Clean();
             productionManager.SetupNewReference(this);
-            productionManager.ReloadCards();
+            productionManager.ReloadCards(canProduce);
             UIManager.Instance.ControlProductionMenu(true);
         }
 
@@ -208,7 +209,7 @@ namespace Tcp4
             if (isAbleToGive && isGrown && playerInventory != null && playerInventory.CanStorage())
             {
                 SoundManager.PlaySound(SoundType.coletar, 0.2f);
-                playerInventory.AddProduct(production.product, amount);
+                playerInventory.AddProduct(production.outputProduct, amount);
                 currentTime = 0;
                 isAbleToGive = false;
                 isGrown = false;

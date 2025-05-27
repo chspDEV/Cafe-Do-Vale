@@ -8,8 +8,8 @@ namespace Tcp4
     public class Production : ScriptableObject
     {
         public GameObject[] models;
-        public BaseProduct product;
+        public BaseProduct outputProduct;
         public float timeToGrow;
-        public float timeToHarvest;
+        //public float timeToHarvest;
     }
 }

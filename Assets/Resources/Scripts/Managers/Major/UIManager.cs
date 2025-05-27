@@ -230,7 +230,7 @@ namespace Tcp4
             card.myProduction = p;
             card.ConfigureVisuals();
 
-            go.name = $"PRODUCAO: {p.product.productName}";
+            go.name = $"PRODUCAO: {p.outputProduct.productName}";
             productionCardInstances.Add(go);
         }
 

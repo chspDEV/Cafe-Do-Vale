@@ -15,7 +15,7 @@ MonoBehaviour:
   productName: Chocolate Quente
   quality: 0
   productID: 4
-  model: {fileID: 7397341027057396301, guid: 236d1308a8fd663428f008a3caa11a45, type: 3}
+  model: {fileID: 828628952653485657, guid: 0e55602d41e5d1948b0677603e4e437e, type: 3}
   productImage: {fileID: 482201420, guid: 3af18b4aaa0452c49b39b5d0b931ca46, type: 3}
   requiredIngredients:
   - {fileID: 11400000, guid: 9993b18cd8f91e641925f92575c6007f, type: 2}
