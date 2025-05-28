@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Audio;
 
 namespace Tcp4
 {
@@ -15,19 +16,19 @@ namespace Tcp4
         concluido,
         moendo,
         leite
-
     }
 
     [RequireComponent(typeof(AudioSource))]
     public class SoundManager : MonoBehaviour
     {
         [SerializeField] private AudioClip[] soundList;
+        [SerializeField] private AudioMixer audioMixer;
+
+        public Slider sliderMaster;
+        public Slider sliderSFX;
+
         private static SoundManager instance;
         private AudioSource audioSource;
-
-        public AudioSource musicSource;
-        public Toggle toggleMusic;
-        public Toggle toggleSFX;
 
         private void Awake()
         {
@@ -42,58 +43,48 @@ namespace Tcp4
             }
         }
 
-        public static void PlaySound(SoundType sound, float volume = 1)
-        {
-            if (instance != null && instance.audioSource != null)
-            {
-                instance.audioSource.PlayOneShot(instance.soundList[(int)sound], volume * instance.GetSFXVolume());
-            }
-        }
-
         private void Start()
         {
             audioSource = GetComponent<AudioSource>();
 
-            bool isMusicOn = PlayerPrefs.GetInt("Music", 1) == 1;
-            bool isSFXOn = PlayerPrefs.GetInt("SFX", 1) == 1;
+            float masterDB = PlayerPrefs.GetFloat("MasterVolume", 0f);
+            float sfxDB = PlayerPrefs.GetFloat("SFXVolume", 0f);
 
-            toggleMusic.isOn = !isMusicOn;
-            toggleSFX.isOn = !isSFXOn;
+            sliderMaster.value = Mathf.Pow(10f, masterDB / 20f);
+            sliderSFX.value = Mathf.Pow(10f, sfxDB / 20f);
 
-            ToggleMusic(toggleMusic.isOn);
-            ToggleSFX(toggleSFX.isOn);
+            SetMasterVolume(sliderMaster.value);
+            SetSFXVolume(sliderSFX.value);
 
-            toggleMusic.onValueChanged.AddListener(ToggleMusic);
-            toggleSFX.onValueChanged.AddListener(ToggleSFX);
+            sliderMaster.onValueChanged.AddListener(SetMasterVolume);
+            sliderSFX.onValueChanged.AddListener(SetSFXVolume);
         }
 
-        public void ToggleMusic(bool isOn)
+        public static void PlaySound(SoundType sound, float volume = 1)
         {
-            SoundManager.PlaySound(SoundType.feedback);
-            musicSource.mute = isOn;
-            PlayerPrefs.SetInt("Music", isOn ? 0 : 1);
+            if (instance != null && instance.audioSource != null)
+            {
+                instance.audioSource.PlayOneShot(instance.soundList[(int)sound], volume);
+            }
         }
 
-        public void ToggleSFX(bool isOn)
+        public void SetMasterVolume(float value)
         {
-            SoundManager.PlaySound(SoundType.feedback);
-            SetSFXVolume(isOn ? 0 : 1);
-            PlayerPrefs.SetInt("SFX", isOn ? 0 : 1);
+            float dB = Mathf.Log10(Mathf.Clamp(value, 0.0001f, 1f)) * 20f;
+            audioMixer.SetFloat("MasterVolume", dB);
+            PlayerPrefs.SetFloat("MasterVolume", dB);
         }
 
-        private void SetSFXVolume(float volume)
+        public void SetSFXVolume(float value)
         {
-            audioSource.volume = volume;
-        }
-
-        private float GetSFXVolume()
-        {
-            return audioSource.volume;
+            float dB = Mathf.Log10(Mathf.Clamp(value, 0.0001f, 1f)) * 20f;
+            audioMixer.SetFloat("SFXVolume", dB);
+            PlayerPrefs.SetFloat("SFXVolume", dB);
         }
 
         public void feedbackSound()
         {
-            SoundManager.PlaySound(SoundType.feedback, 0.5f);
+            PlaySound(SoundType.feedback, 0.5f);
         }
     }
 }

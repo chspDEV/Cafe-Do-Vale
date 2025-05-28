@@ -35,9 +35,9 @@ namespace Tcp4
             {
                 if (UIManager.Instance != null && !UIManager.Instance.HasMenuOpen())
                 {
-                    //UIManager.Instance.ControlSeedInventory(true);
+                    UIManager.Instance.ControlSeedInventory(true);
                 }
-                else { Debug.LogWarning("InteractionManager não inicializado!"); }
+                else { Debug.LogWarning("UIManager não inicializado ou outro menu aberto."); }
             }
         }
 
@@ -47,7 +47,7 @@ namespace Tcp4
             {
                 if (UIManager.Instance != null && !UIManager.Instance.HasMenuOpen())
                 {
-                    UIManager.Instance.ControlConfigMenu();
+                    UIManager.Instance.ControlConfigMenu(true);
                 }
                 else { Debug.LogWarning("InteractionManager não inicializado!"); }
             }

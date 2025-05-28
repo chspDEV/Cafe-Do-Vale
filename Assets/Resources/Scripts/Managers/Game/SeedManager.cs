@@ -47,6 +47,9 @@ public class SeedManager : Singleton<SeedManager>
 
     private void UpdateUI()
     {
-        // Implemente a atualização da UI do inventário aqui
+        if (UIManager.Instance != null)
+        {
+            UIManager.Instance.UpdateSeedInventoryView();
+        }
     }
 }

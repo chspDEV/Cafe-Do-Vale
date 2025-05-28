@@ -22,8 +22,11 @@ namespace Tcp4
         [TabGroup("Menus")] [SerializeField] private GameObject configMenu;
         [TabGroup("Menus")] [SerializeField] private GameObject seedShopMenu;
 
+        [TabGroup("Menus")] [SerializeField] private GameObject bookMenu;
+        [TabGroup("Menus")] [SerializeField] private GameObject seedInventoryMenu;
         [TabGroup("Menus")] [SerializeField] private GameObject recipeMenu;
         [TabGroup("Menus")] [SerializeField] private GameObject mapMenu;
+        [TabGroup("Menus")] [SerializeField] private UI_Book uiBook;
 
         private List<GameObject> openedMenus = new List<GameObject>();
 
@@ -49,12 +52,14 @@ namespace Tcp4
         [TabGroup("Prefabs")] public GameObject pfClientNotification;
         [TabGroup("Prefabs")] public GameObject pfProductionCard;
         [TabGroup("Prefabs")] public GameObject pfUpgradeText;
+        [TabGroup("Prefabs")] public GameObject pfSeedInventoryCard;
 
         [TabGroup("UI Containers")]
         [TabGroup("UI Containers")] public Transform storageSlotHolder;
         [TabGroup("UI Containers")] public Transform productionSlotHolder;
         [TabGroup("UI Containers")] public Transform creationSlotHolder, ingredientSlotHolder;
         [TabGroup("UI Containers")] public Transform notificationHolder;
+        [TabGroup("UI Containers")] public Transform seedInventorySlotHolder;
         [TabGroup("UI Containers")] public Canvas hudCanvas;
         [TabGroup("UI Containers")] public Canvas worldCanvas;
 
@@ -263,6 +268,47 @@ namespace Tcp4
         }
 
         #endregion
+        #region Seed Inventory
+
+
+        private List<GameObject> seedInventoryInstances = new();
+
+        public void ControlSeedInventory(bool isActive)
+        {
+            if (isActive)
+            {
+                OpenBookSection(3); // Inventário
+                UpdateSeedInventoryView();
+            }
+            else
+                bookMenu.SetActive(false);
+        }
+
+        public void UpdateSeedInventoryView()
+        {
+            ClearSeedInventory();
+
+            foreach (var pair in SeedManager.Instance.GetInventory)
+            {
+                if (pair.Value <= 0) continue;
+
+                GameObject go = Instantiate(pfSeedInventoryCard, seedInventorySlotHolder);
+                var card = go.GetComponent<SeedInventoryCard>();
+                card.Configure(pair.Key, pair.Value);
+                seedInventoryInstances.Add(go);
+            }
+        }
+
+        private void ClearSeedInventory()
+        {
+            foreach (var obj in seedInventoryInstances)
+            {
+                Destroy(obj);
+            }
+            seedInventoryInstances.Clear();
+        }
+
+        #endregion
         #region Notifications
 
         public void NewClientNotification(Client clientSettings)
@@ -319,14 +365,12 @@ namespace Tcp4
 
             if (isActive)
             {
-                OpenMenu(mapMenu);
-
-                if (mapInteraction != null)
-                    mapInteraction.JumpToElement();
+                OpenMenu(bookMenu);
+                OpenBookSection(5);
             }
             else
             {
-                CloseMenu(mapMenu);
+                CloseMenu(bookMenu);
             }
 
         }
@@ -336,37 +380,39 @@ namespace Tcp4
 
             if (isActive)
             {
-                OpenMenu(recipeMenu);
-
-                if (recipeInteraction != null)
-                    recipeInteraction.JumpToElement();
+                OpenMenu(bookMenu);
+                OpenBookSection(1);
             }
             else
             {
-                CloseMenu(recipeMenu);
+                CloseMenu(bookMenu);
             }
 
         }
 
-        public void ControlConfigMenu()
+        public void ControlConfigMenu(bool isActive)
         {
             SoundManager.PlaySound(SoundType.feedback);
-            if (configMenu.activeSelf)
+            if (isActive)
             {
-                CloseMenu(configMenu);
+                OpenMenu(bookMenu);
+                OpenBookSection(0);
                 //Time.timeScale = 1;
             }
             else
             {
-                OpenMenu(configMenu);
-
-                if (pauseInteraction != null)
-                {
-                    pauseInteraction.JumpToElement();
-                }
-
+                CloseMenu(bookMenu);
                 //Time.timeScale = 0;
             }
+        }
+
+        // para abrir no tabButton correto
+        public void OpenBookSection(int tabIndex)
+        {
+            if (bookMenu != null && !bookMenu.activeSelf)
+                bookMenu.SetActive(true);
+
+            uiBook.ForceShowTab(tabIndex);
         }
 
         public void VoltarMenu()
