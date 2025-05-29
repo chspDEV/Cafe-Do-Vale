@@ -8,6 +8,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using ChristinaCreatesGames.UI;
+using GameResources.Project.Scripts.Utilities.Audio;
 
 namespace Tcp4
 {
@@ -313,7 +314,16 @@ namespace Tcp4
 
         public void NewClientNotification(Client clientSettings)
         {
-            SoundManager.PlaySound(SoundType.interacao, 0.2f);
+            //Fazendo o request de sfx
+            SoundEventArgs sfxArgs = new()
+            {
+                Category = SoundEventArgs.SoundCategory.SFX,
+                AudioID = "interacao", // O ID do seu SFX (sem "sfx_" e em minúsculas)
+                Position = gameAssets.player.transform.position, // Posição para o som 3D
+                VolumeScale = .3f // Escala de volume (opcional, padrão é 1f)
+            };
+            SoundEvent.RequestSound(sfxArgs);
+
             GameObject go = Instantiate(pfClientNotification, notificationHolder);
             ClientNotification c = go.GetComponent<ClientNotification>();
             c.Setup(clientSettings.spriteClient, clientSettings.wantedProduct.productImage, clientSettings.stars);
@@ -392,7 +402,17 @@ namespace Tcp4
 
         public void ControlConfigMenu(bool isActive)
         {
-            SoundManager.PlaySound(SoundType.feedback);
+            //Fazendo o request de sfx
+            SoundEventArgs sfxArgs = new()
+            {
+                Category = SoundEventArgs.SoundCategory.SFX,
+                AudioID = "feedback", // O ID do seu SFX (sem "sfx_" e em minúsculas)
+                Position = gameAssets.player.transform.position, // Posição para o som 3D
+                VolumeScale = 1.0f // Escala de volume (opcional, padrão é 1f)
+            };
+            SoundEvent.RequestSound(sfxArgs);
+
+
             if (isActive)
             {
                 OpenMenu(bookMenu);
@@ -418,7 +438,15 @@ namespace Tcp4
         public void VoltarMenu()
         {
             SceneManager.LoadScene("InitialMenu");
-            SoundManager.PlaySound(SoundType.feedback);
+            //Fazendo o request de sfx
+            SoundEventArgs sfxArgs = new()
+            {
+                Category = SoundEventArgs.SoundCategory.SFX,
+                AudioID = "feedback", // O ID do seu SFX (sem "sfx_" e em minúsculas)
+                Position = transform.position, // Posição para o som 3D
+                VolumeScale = 1.0f // Escala de volume (opcional, padrão é 1f)
+            };
+            SoundEvent.RequestSound(sfxArgs);
         }
 
         /// <summary>

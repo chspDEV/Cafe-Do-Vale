@@ -6,6 +6,7 @@ using Tcp4;
 using Tcp4.Assets.Resources.Scripts.Managers;
 using UnityEngine.UI;
 using System;
+using GameResources.Project.Scripts.Utilities.Audio;
 
 namespace Tcp4.Assets.Resources.Scripts.Systems.Areas
 {
@@ -50,6 +51,14 @@ namespace Tcp4.Assets.Resources.Scripts.Systems.Areas
             isActive = true;
             transform.position = new Vector3(transform.position.x, transform.position.y - 0.35f, transform.position.z);
             DisableInteraction();
+            //Fazendo o request de sfx
+            SoundEventArgs ostArgs = new()
+            {
+                Category = SoundEventArgs.SoundCategory.SFX,
+                AudioID = "button_click", // O ID do seu SFX (sem "sfx_" e em minúsculas)
+                VolumeScale = 1f // Escala de volume (opcional, padrão é 1f)
+            };
+            SoundEvent.RequestSound(ostArgs);
             OnActive?.Invoke();
         }
 

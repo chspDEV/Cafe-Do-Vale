@@ -1,3 +1,4 @@
+using GameResources.Project.Scripts.Utilities.Audio;
 using Tcp4.Assets.Resources.Scripts.Managers;
 using UnityEngine;
 
@@ -11,7 +12,17 @@ namespace Tcp4
         {
             base.OnInteract();
             ShopManager.Instance.AddMoney(money);
-            SoundManager.PlaySound(SoundType.coletar, .7f);
+
+            //Fazendo o request de sfx
+            SoundEventArgs sfxArgs = new()
+            {
+                Category = SoundEventArgs.SoundCategory.SFX,
+                AudioID = "coletar", // O ID do seu SFX (sem "sfx_" e em minúsculas)
+                Position = transform.position, // Posição para o som 3D
+                VolumeScale = .7f // Escala de volume (opcional, padrão é 1f)
+            };
+            SoundEvent.RequestSound(sfxArgs);
+
             Destroy(gameObject);
         }
     }

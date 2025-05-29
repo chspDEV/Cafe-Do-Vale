@@ -103,11 +103,11 @@ public abstract class BaseInteractable : MonoBehaviour, IInteractable
         {
             gameAssets.OnChangeInteractionSprite += UpdateSpriteInteraction;
             UpdateSpriteInteraction();
-            Debug.Log("Encontrei o gameAssets!");
+            //Debug.Log("Encontrei o gameAssets!");
         }
         else
         {
-            Debug.Log("Não encontrei o gameAssets!");
+            Debug.LogError("Não encontrei o gameAssets!");
         }
 
         yield return null;
@@ -121,7 +121,7 @@ public abstract class BaseInteractable : MonoBehaviour, IInteractable
 
         interactionSprite = GameAssets.Instance.sprInteraction;
         interactionIndicator.sprite = interactionSprite;
-        Debug.Log($"Sprite de {gameObject.name} atualizado para {interactionSprite}");
+        //Debug.Log($"Sprite de {gameObject.name} atualizado para {interactionSprite}");
     }
 
     #region Interface Implementation

@@ -1,3 +1,4 @@
+using GameResources.Project.Scripts.Utilities.Audio;
 using System.Collections;
 using System.Collections.Generic;
 using Tcp4.Assets.Resources.Scripts.Managers;
@@ -77,7 +78,16 @@ namespace Tcp4
         {
             objectPools = new ObjectPool(pointToSpawn);
             objectPools.AddPool(production.models);
-            SoundManager.PlaySound(SoundType.plantando, 0.5f);
+
+            //Fazendo o request de sfx
+            SoundEventArgs sfxArgs = new()
+            {
+                Category = SoundEventArgs.SoundCategory.SFX,
+                AudioID = "plantando", // O ID do seu SFX (sem "sfx_" e em minúsculas)
+                Position = transform.position, // Posição para o som 3D
+                VolumeScale = 1.0f // Escala de volume (opcional, padrão é 1f)
+            };
+            SoundEvent.RequestSound(sfxArgs);
         }
 
         public override void Update()
@@ -208,7 +218,16 @@ namespace Tcp4
         {
             if (isAbleToGive && isGrown && playerInventory != null && playerInventory.CanStorage())
             {
-                SoundManager.PlaySound(SoundType.coletar, 0.2f);
+                //Fazendo o request de sfx
+                SoundEventArgs sfxArgs = new()
+                {
+                    Category = SoundEventArgs.SoundCategory.SFX,
+                    AudioID = "coleta", // O ID do seu SFX (sem "sfx_" e em minúsculas)
+                    Position = transform.position, // Posição para o som 3D
+                    VolumeScale = 1.0f // Escala de volume (opcional, padrão é 1f)
+                };
+                SoundEvent.RequestSound(sfxArgs);
+
                 playerInventory.AddProduct(production.outputProduct, amount);
                 currentTime = 0;
                 isAbleToGive = false;

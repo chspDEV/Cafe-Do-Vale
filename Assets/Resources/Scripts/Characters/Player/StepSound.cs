@@ -1,3 +1,5 @@
+using GameResources.Project.Scripts.Utilities.Audio;
+using Tcp4.Assets.Resources.Scripts.Managers;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -9,6 +11,12 @@ namespace Tcp4
         public float deadzone = 0.1f; 
         private float stepTimer;
         private Vector2 movementInput;
+        private GameAssets gameAssets;
+        private void Start()
+        {
+            gameAssets = GameAssets.Instance;
+        }
+
 
         private void Update()
         {
@@ -20,7 +28,18 @@ namespace Tcp4
             {
                 if (stepTimer <= 0)
                 {
-                    SoundManager.PlaySound(SoundType.passos, 0.2f);
+                    //Fazendo o request de sfx
+                    SoundEventArgs sfxArgs = new()
+                    {
+                        Category = SoundEventArgs.SoundCategory.SFX,
+                        AudioID = "passos", // O ID do seu SFX (sem "sfx_" e em minúsculas)
+                        Position = gameAssets.player.transform.position, // Posição para o som 3D
+                        VolumeScale = 1.0f // Escala de volume (opcional, padrão é 1f)
+                    };
+                    SoundEvent.RequestSound(sfxArgs);
+
+                    //ANTIGO!
+                    //SoundManager.PlaySound(SoundType.passos, 0.2f);
                     stepTimer = stepInterval;
                 }
             }

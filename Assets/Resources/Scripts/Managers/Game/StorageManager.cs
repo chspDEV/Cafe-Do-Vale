@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using ComponentUtils.ComponentUtils.Scripts;
+using GameResources.Project.Scripts.Utilities.Audio;
+using Tcp4.Assets.Resources.Scripts.Managers;
 using Tcp4.Assets.Resources.Scripts.Systems.Clients;
 using Tcp4.Assets.Resources.Scripts.Systems.Collect_Cook;
 using UnityEngine;
@@ -52,7 +54,17 @@ namespace Tcp4
 
             if (isAbleToTransfer)
             {
-                SoundManager.PlaySound(SoundType.colocando, 0.05f);
+                //Fazendo o request de sfx
+                SoundEventArgs sfxArgs = new()
+                {
+                    Category = SoundEventArgs.SoundCategory.SFX,
+                    AudioID = "interacao", // O ID do seu SFX (sem "sfx_" e em minúsculas)
+                    Position = transform.position, // Posição para o som 3D
+                    VolumeScale = .5f // Escala de volume (opcional, padrão é 1f)
+                };
+                SoundEvent.RequestSound(sfxArgs);
+
+
                 playerInventory.RemoveProduct(currentStorage.item, 1);
                 storageInventory.AddProduct(currentStorage.item, 1);
             }

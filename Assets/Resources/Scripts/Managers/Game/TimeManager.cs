@@ -110,7 +110,7 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
 
             if (Mathf.FloorToInt(CurrentHour) == (int)startHour && !isDay)
             {
-                if(!isFirstDay)
+                if (!isFirstDay)
                     OnOpenCoffeeShop?.Invoke();
 
                 isDay = true;
@@ -118,7 +118,7 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
             }
             else if (Mathf.FloorToInt(CurrentHour) == (int)closeHour && isDay)
             {
-                if (!isFirstDay) 
+                if (!isFirstDay)
                     OnCloseCoffeeShop?.Invoke();
 
                 isDay = false;
@@ -148,18 +148,31 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
             directionalLight.color = lightColor.Evaluate(timePercent);
             directionalLight.intensity = lightIntensity.Evaluate(timePercent);
 
-            RenderSettings.fogDensity = Mathf.Lerp(nightFogRange.y, dayFogRange.x, timePercent);
-
             UpdatePostProcessing(timePercent);
+            UpdateFog(timePercent);
+        }
+
+        private void UpdateFog(float timePercent)
+        {
+            float dayNightLerpFactor = 1f - Mathf.Abs(timePercent - 0.5f) * 2f;
+            dayNightLerpFactor = Mathf.Clamp01(dayNightLerpFactor);
+
+            float targetFogDensity = Mathf.Lerp(nightFogRange.y, dayFogRange.x, dayNightLerpFactor);
+            RenderSettings.fogDensity = targetFogDensity;
         }
 
         private void UpdatePostProcessing(float timePercent)
         {
             if (PostProcessManager.Instance != null)
             {
-                Color temperatureColor = Color.Lerp(nightColor, dayColor, timePercent);
+                float dayNightLerpFactor = 1f - Mathf.Abs(timePercent - 0.5f) * 2f;
+                dayNightLerpFactor = Mathf.Clamp01(dayNightLerpFactor);
+
+                Color temperatureColor = Color.Lerp(nightColor, dayColor, dayNightLerpFactor);
                 PostProcessManager.Instance.SetTemperature(temperatureColor);
-                PostProcessManager.Instance.SetExposure(Mathf.Lerp(0.3f, 1.2f, timePercent));
+
+                float exposure = Mathf.Lerp(0.3f, 1.2f, dayNightLerpFactor);
+                PostProcessManager.Instance.SetExposure(exposure);
             }
             else
             {

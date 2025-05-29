@@ -2,6 +2,7 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using GameResources.Project.Scripts.Utilities.Audio;
 
 namespace Tcp4.Assets.Resources.Scripts.Managers
 {
@@ -71,7 +72,15 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
             Cup cup = go.GetComponent<Cup>();
             cup.myDrink = d;
             cup.point = this.point;
-            SoundManager.PlaySound(SoundType.concluido, 0.6f);
+            //Fazendo o request de sfx
+            SoundEventArgs sfxArgs = new()
+            {
+                Category = SoundEventArgs.SoundCategory.SFX,
+                AudioID = "concluido", // O ID do seu SFX (sem "sfx_" e em minúsculas)
+                Position = transform.position, // Posição para o som 3D
+                VolumeScale = .8f // Escala de volume (opcional, padrão é 1f)
+            };
+            SoundEvent.RequestSound(sfxArgs);
         }
         #endregion
 
@@ -92,13 +101,13 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
         #region Cheats (Opcional)
         void Update()
         {
-#if UNITY_EDITOR
-            if (Input.GetKeyDown(KeyCode.Tab))
+
+            if (Input.GetKeyDown(KeyCode.H))
             {
                 AddMoney(1000);
                 AddStars(200);
             }
-#endif
+
         }
 
         internal bool HasMoney(float remaining)

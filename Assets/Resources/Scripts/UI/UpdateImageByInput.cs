@@ -29,11 +29,11 @@ namespace Tcp4
             {
                 reference.OnChangeInteractionSprite += UpdateSpriteInteraction;
                 UpdateSpriteInteraction();
-                Debug.Log("Encontrei o gameAssets!");
+                //Debug.Log("Encontrei o gameAssets!");
             }
             else
             {
-                Debug.Log("Não encontrei o gameAssets!");
+                Debug.LogError("Não encontrei o gameAssets!");
             }
 
             yield return null;

@@ -5482,14 +5482,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isInteractable: 1
   uiRotationOffset: {x: 0, y: 180, z: 0}
-  uiPositionOffset: {x: 0, y: 0, z: 0}
+  uiPositionOffset: {x: 0, y: 0.7, z: 0}
   interactionCollider: {fileID: 157992014}
   useTrigger: 0
   initialScale: {x: 0, y: 0, z: 0}
-  targetScale: {x: 0.7, y: 0.7, z: 0.7}
+  targetScale: {x: 0.6, y: 0.6, z: 0.6}
   growDuration: 0.3
-  bounceScaleMin: 0.85
-  bounceScaleMax: 1.15
+  bounceScaleMin: 0.95
+  bounceScaleMax: 1.1
   bounceSpeed: 3
   interactionIndicator: {fileID: 0}
   refinementTime: 5
@@ -5500,7 +5500,7 @@ MonoBehaviour:
   activator: {fileID: 79214427}
   insertProductSprite: {fileID: 21300000, guid: dc0e20a1f7385874da6b59b66ff5e524, type: 3}
   startRefinementSprite: {fileID: 21300000, guid: b998e89e93193db478c93c962418a9f6, type: 3}
-  collectProductSprite: {fileID: 21300000, guid: 12ab5dc32675f8a44824b8402e3b3ced, type: 3}
+  collectProductSprite: {fileID: 21300000, guid: 83285bc88987bf347bb2b2df6cee2c49, type: 3}
   selectedRecipe:
     inputProduct: {fileID: 11400000, guid: 31ce6c66ce14f2e40baf34d7a438a15c, type: 2}
     outputProduct: {fileID: 11400000, guid: ad5d708b28f03f74386f9ed6df8eb4db, type: 2}
@@ -13656,7 +13656,7 @@ PrefabInstance:
     - target: {fileID: 118650847051293347, guid: 84b687764b81506429cd76c38b01a787, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Target
       value: 
-      objectReference: {fileID: 1269650622}
+      objectReference: {fileID: 0}
     - target: {fileID: 118650847051293347, guid: 84b687764b81506429cd76c38b01a787, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_CallState
       value: 2
@@ -18449,7 +18449,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 1269650622}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: Tcp4.SoundManager, TCP4Global
         m_MethodName: feedbackSound
         m_Mode: 1
@@ -23473,7 +23473,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
-      - m_Target: {fileID: 1269650622}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: Tcp4.SoundManager, TCP4Global
         m_MethodName: feedbackSound
         m_Mode: 1
@@ -25072,14 +25072,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isInteractable: 1
   uiRotationOffset: {x: 0, y: 180, z: 0}
-  uiPositionOffset: {x: 0, y: 0, z: 0}
+  uiPositionOffset: {x: 0, y: 0.7, z: 0}
   interactionCollider: {fileID: 801551221}
   useTrigger: 0
   initialScale: {x: 0, y: 0, z: 0}
-  targetScale: {x: 0.7, y: 0.7, z: 0.7}
+  targetScale: {x: 0.6, y: 0.6, z: 0.6}
   growDuration: 0.3
-  bounceScaleMin: 0.85
-  bounceScaleMax: 1.15
+  bounceScaleMin: 0.95
+  bounceScaleMax: 1.1
   bounceSpeed: 3
   interactionIndicator: {fileID: 0}
   refinementTime: 25
@@ -25090,7 +25090,7 @@ MonoBehaviour:
   activator: {fileID: 1417909082}
   insertProductSprite: {fileID: 21300000, guid: dc0e20a1f7385874da6b59b66ff5e524, type: 3}
   startRefinementSprite: {fileID: 21300000, guid: b998e89e93193db478c93c962418a9f6, type: 3}
-  collectProductSprite: {fileID: 21300000, guid: 6d0326e2c15960140959bead8e7c1811, type: 3}
+  collectProductSprite: {fileID: 21300000, guid: 83285bc88987bf347bb2b2df6cee2c49, type: 3}
   selectedRecipe:
     inputProduct: {fileID: 11400000, guid: 94a2e396290fdf34fb1b215604089d68, type: 2}
     outputProduct: {fileID: 11400000, guid: aa7655295d591634bb8d20973bfbc0f0, type: 2}
@@ -29143,7 +29143,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 1269650622}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: Tcp4.SoundManager, TCP4Global
         m_MethodName: feedbackSound
         m_Mode: 1
@@ -29857,7 +29857,7 @@ Transform:
   m_GameObject: {fileID: 943021851}
   serializedVersion: 2
   m_LocalRotation: {x: 0.46174863, y: 0, z: 0, w: 0.8870109}
-  m_LocalPosition: {x: -40.5482, y: 9.33, z: -0.36000013}
+  m_LocalPosition: {x: -35.4282, y: 9.33, z: 11.35}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -31342,7 +31342,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
-      - m_Target: {fileID: 1269650622}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: Tcp4.SoundManager, TCP4Global
         m_MethodName: feedbackSound
         m_Mode: 1
@@ -35809,14 +35809,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isInteractable: 1
   uiRotationOffset: {x: 0, y: 180, z: 0}
-  uiPositionOffset: {x: 0, y: 0, z: 0}
+  uiPositionOffset: {x: 0, y: 0.7, z: 0}
   interactionCollider: {fileID: 1148001330}
   useTrigger: 0
   initialScale: {x: 0, y: 0, z: 0}
-  targetScale: {x: 0.7, y: 0.7, z: 0.7}
+  targetScale: {x: 0.6, y: 0.6, z: 0.6}
   growDuration: 0.3
-  bounceScaleMin: 0.85
-  bounceScaleMax: 1.15
+  bounceScaleMin: 0.95
+  bounceScaleMax: 1.1
   bounceSpeed: 3
   interactionIndicator: {fileID: 0}
   refinementTime: 10
@@ -35827,7 +35827,7 @@ MonoBehaviour:
   activator: {fileID: 701304897}
   insertProductSprite: {fileID: 21300000, guid: dc0e20a1f7385874da6b59b66ff5e524, type: 3}
   startRefinementSprite: {fileID: 21300000, guid: b998e89e93193db478c93c962418a9f6, type: 3}
-  collectProductSprite: {fileID: 21300000, guid: 21261ee0b9ec2a2498f27be25b9a4ee4, type: 3}
+  collectProductSprite: {fileID: 21300000, guid: 83285bc88987bf347bb2b2df6cee2c49, type: 3}
   selectedRecipe:
     inputProduct: {fileID: 11400000, guid: f8c402991715c3147a4c108993b828b8, type: 2}
     outputProduct: {fileID: 11400000, guid: 9993b18cd8f91e641925f92575c6007f, type: 2}
@@ -36068,7 +36068,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7bbada6c4cb4ec34c9be239cfbcc8294, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  productInventory: []
+  productInventory:
+  - {fileID: 11400000, guid: 31ce6c66ce14f2e40baf34d7a438a15c, type: 2}
+  - {fileID: 11400000, guid: 31ce6c66ce14f2e40baf34d7a438a15c, type: 2}
   instanceInventory: []
   bagPoint: {fileID: 1997357550}
 --- !u!4 &1156479960
@@ -36080,7 +36082,7 @@ Transform:
   m_GameObject: {fileID: 1156479958}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 2.66, y: 0.33, z: 5.64}
+  m_LocalPosition: {x: 7.78, y: 0.33, z: 17.35}
   m_LocalScale: {x: 1.3, y: 1.3, z: 1.3}
   m_ConstrainProportionsScale: 1
   m_Children:
@@ -36359,6 +36361,14 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: d6e772f2-774b-4c27-a35a-2f2d3f08440b
     m_ActionName: 'Player/CloseMenu[/DualShock4GamepadHID/buttonEast,/Keyboard/escape]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 79cc8c00-a9b6-47f6-96a6-5662aed5d7b2
+    m_ActionName: UI/NextTab
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 0f4501f1-631b-4d17-810f-1f39526752a8
+    m_ActionName: UI/PreviousTab
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Player
@@ -38777,10 +38787,8 @@ Transform:
   - {fileID: 1076498321}
   - {fileID: 2138738695}
   - {fileID: 1250448551}
-  - {fileID: 1269650624}
   - {fileID: 1301880399}
   - {fileID: 1557110650}
-  - {fileID: 1529881740}
   m_Father: {fileID: 798196787}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1208914915
@@ -39068,14 +39076,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isInteractable: 1
   uiRotationOffset: {x: 0, y: 180, z: 0}
-  uiPositionOffset: {x: 0, y: 0, z: 0}
+  uiPositionOffset: {x: 0, y: 0.7, z: 0}
   interactionCollider: {fileID: 1216135033}
   useTrigger: 0
   initialScale: {x: 0, y: 0, z: 0}
-  targetScale: {x: 0.7, y: 0.7, z: 0.7}
+  targetScale: {x: 0.6, y: 0.6, z: 0.6}
   growDuration: 0.3
-  bounceScaleMin: 0.85
-  bounceScaleMax: 1.15
+  bounceScaleMin: 0.95
+  bounceScaleMax: 1.1
   bounceSpeed: 3
   interactionIndicator: {fileID: 0}
   refinementTime: 15
@@ -39086,7 +39094,7 @@ MonoBehaviour:
   activator: {fileID: 934289622}
   insertProductSprite: {fileID: 21300000, guid: dc0e20a1f7385874da6b59b66ff5e524, type: 3}
   startRefinementSprite: {fileID: 21300000, guid: b998e89e93193db478c93c962418a9f6, type: 3}
-  collectProductSprite: {fileID: 21300000, guid: 6d0326e2c15960140959bead8e7c1811, type: 3}
+  collectProductSprite: {fileID: 21300000, guid: 83285bc88987bf347bb2b2df6cee2c49, type: 3}
   selectedRecipe:
     inputProduct: {fileID: 11400000, guid: 60650c2deda852545b18238811400605, type: 2}
     outputProduct: {fileID: 11400000, guid: 82468106468400241af0a271eae4e11b, type: 2}
@@ -40423,8 +40431,11 @@ MonoBehaviour:
   creationMenu: {fileID: 1316522526}
   configMenu: {fileID: 4651207966070376290}
   seedShopMenu: {fileID: 491971210}
+  bookMenu: {fileID: 0}
+  seedInventoryMenu: {fileID: 0}
   recipeMenu: {fileID: 417233535}
   mapMenu: {fileID: 2112987321}
+  uiBook: {fileID: 0}
   mapInteraction: {fileID: 217504156}
   recipeInteraction: {fileID: 1571865598}
   pauseInteraction: {fileID: 1964366454}
@@ -40442,11 +40453,13 @@ MonoBehaviour:
   pfClientNotification: {fileID: 7665299437727792245, guid: 49a0bf0f5841dbc4fb85b714ab2047ae, type: 3}
   pfProductionCard: {fileID: 3565675204560412767, guid: b231686ba8eecc54eb61e90511255827, type: 3}
   pfUpgradeText: {fileID: 6260145864655188467, guid: 299947c8dbdc64d4891f40cc1f507488, type: 3}
+  pfSeedInventoryCard: {fileID: 0}
   storageSlotHolder: {fileID: 1143462471}
   productionSlotHolder: {fileID: 2068409825}
   creationSlotHolder: {fileID: 202836100}
   ingredientSlotHolder: {fileID: 952651882}
   notificationHolder: {fileID: 2104142858}
+  seedInventorySlotHolder: {fileID: 0}
   hudCanvas: {fileID: 846672516}
   worldCanvas: {fileID: 2001170874}
   money: {fileID: 216923222}
@@ -40869,162 +40882,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1625154785}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1269650621
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1269650624}
-  - component: {fileID: 1269650622}
-  - component: {fileID: 1269650623}
-  m_Layer: 0
-  m_Name: SoundManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1269650622
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1269650621}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 922784aee72afe34e81acd6e730118fb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  soundList:
-  - {fileID: 8300000, guid: 248eef82e055ab544b450fad98cb6cb9, type: 3}
-  - {fileID: 8300000, guid: b5e28339812eda042a8e0644f28dfb47, type: 3}
-  - {fileID: 8300000, guid: 96c3f6fbc34680d44ba11a26e3771873, type: 3}
-  - {fileID: 8300000, guid: eb396d92bbb6b564fb1b34c9a33813aa, type: 3}
-  - {fileID: 8300000, guid: 9e91f553efcbd6c4bab78fea5ed2f6df, type: 3}
-  - {fileID: 8300000, guid: a130c749f10d4af46a08d34c7888e237, type: 3}
-  - {fileID: 8300000, guid: f808bebd8d2bcb14fa1f44ee8b24857e, type: 3}
-  - {fileID: 8300000, guid: d627acbd65f8ff9418455b0ace9a66d9, type: 3}
-  - {fileID: 8300000, guid: 1be747e137f04b042916d78f55dc8d1d, type: 3}
-  - {fileID: 8300000, guid: bab21f249f99acc49946b7707f2d81a0, type: 3}
-  musicSource: {fileID: 1529881741}
-  toggleMusic: {fileID: 4479705517005084289}
-  toggleSFX: {fileID: 8476170629604924567}
---- !u!82 &1269650623
-AudioSource:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1269650621}
-  m_Enabled: 1
-  serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 0}
-  m_Resource: {fileID: 0}
-  m_PlayOnAwake: 1
-  m_Volume: 1
-  m_Pitch: 1
-  Loop: 0
-  Mute: 0
-  Spatialize: 0
-  SpatializePostEffects: 0
-  Priority: 128
-  DopplerLevel: 1
-  MinDistance: 1
-  MaxDistance: 500
-  Pan2D: 0
-  rolloffMode: 0
-  BypassEffects: 0
-  BypassListenerEffects: 0
-  BypassReverbZones: 0
-  rolloffCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    - serializedVersion: 3
-      time: 1
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  panLevelCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  spreadCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  reverbZoneMixCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
---- !u!4 &1269650624
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1269650621}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1208914914}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1269761884
 GameObject:
@@ -48569,7 +48426,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 1269650622}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: Tcp4.SoundManager, TCP4Global
         m_MethodName: feedbackSound
         m_Mode: 1
@@ -49704,135 +49561,6 @@ Transform:
   - {fileID: 972839604}
   m_Father: {fileID: 1774449293}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1529881739
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1529881740}
-  - component: {fileID: 1529881741}
-  m_Layer: 0
-  m_Name: Audio Source
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1529881740
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1529881739}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 1788.5515, y: 881.79126, z: 320.19452}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1208914914}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!82 &1529881741
-AudioSource:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1529881739}
-  m_Enabled: 1
-  serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: c205cdaf8bc7fdc4c9b5e7b27e681cf8, type: 3}
-  m_Resource: {fileID: 8300000, guid: c205cdaf8bc7fdc4c9b5e7b27e681cf8, type: 3}
-  m_PlayOnAwake: 1
-  m_Volume: 0.1
-  m_Pitch: 1
-  Loop: 1
-  Mute: 0
-  Spatialize: 0
-  SpatializePostEffects: 0
-  Priority: 128
-  DopplerLevel: 1
-  MinDistance: 1
-  MaxDistance: 500
-  Pan2D: 0
-  rolloffMode: 0
-  BypassEffects: 0
-  BypassListenerEffects: 0
-  BypassReverbZones: 0
-  rolloffCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    - serializedVersion: 3
-      time: 1
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  panLevelCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  spreadCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  reverbZoneMixCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
 --- !u!1 &1532195411
 GameObject:
   m_ObjectHideFlags: 0
@@ -50929,7 +50657,7 @@ MonoBehaviour:
   sprError: {fileID: 1977787350, guid: a71fe7c7a9bdee14c84cd603307e878c, type: 3}
   sprProductionWait: {fileID: 21300000, guid: fb224836be44abb44b63df04f2733534, type: 3}
   sprRefinamentWait: {fileID: 21300000, guid: b998e89e93193db478c93c962418a9f6, type: 3}
-  sprSpoilingWarning: {fileID: 21300000, guid: 6f6d22c23c391bf4ca4bdf02eb2e30ff, type: 3}
+  sprSpoilingWarning: {fileID: 1977787350, guid: a71fe7c7a9bdee14c84cd603307e878c, type: 3}
   ready: {fileID: 21300000, guid: 83285bc88987bf347bb2b2df6cee2c49, type: 3}
   transparent: {fileID: 21300000, guid: dc0e20a1f7385874da6b59b66ff5e524, type: 3}
   sprInteraction: {fileID: 0}
@@ -52947,7 +52675,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 1269650622}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: Tcp4.SoundManager, TCP4Global
         m_MethodName: feedbackSound
         m_Mode: 1
@@ -57179,7 +56907,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 1269650622}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: Tcp4.SoundManager, TCP4Global
         m_MethodName: feedbackSound
         m_Mode: 1
@@ -59253,7 +58981,7 @@ Transform:
   m_GameObject: {fileID: 1795542089}
   serializedVersion: 2
   m_LocalRotation: {x: 0.46174863, y: 0, z: 0, w: 0.8870109}
-  m_LocalPosition: {x: -40.5482, y: 9.33, z: -0.36000013}
+  m_LocalPosition: {x: -35.4282, y: 9.33, z: 11.35}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -60944,14 +60672,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isInteractable: 1
   uiRotationOffset: {x: 0, y: 180, z: 0}
-  uiPositionOffset: {x: 0, y: 0, z: 0}
+  uiPositionOffset: {x: 0, y: 0.7, z: 0}
   interactionCollider: {fileID: 1849327690}
   useTrigger: 0
   initialScale: {x: 0, y: 0, z: 0}
-  targetScale: {x: 0.7, y: 0.7, z: 0.7}
+  targetScale: {x: 0.6, y: 0.6, z: 0.6}
   growDuration: 0.3
-  bounceScaleMin: 0.85
-  bounceScaleMax: 1.15
+  bounceScaleMin: 0.95
+  bounceScaleMax: 1.1
   bounceSpeed: 3
   interactionIndicator: {fileID: 0}
   refinementTime: 20
@@ -60962,7 +60690,7 @@ MonoBehaviour:
   activator: {fileID: 1918720653}
   insertProductSprite: {fileID: 21300000, guid: dc0e20a1f7385874da6b59b66ff5e524, type: 3}
   startRefinementSprite: {fileID: 21300000, guid: b998e89e93193db478c93c962418a9f6, type: 3}
-  collectProductSprite: {fileID: 21300000, guid: 6d0326e2c15960140959bead8e7c1811, type: 3}
+  collectProductSprite: {fileID: 21300000, guid: 83285bc88987bf347bb2b2df6cee2c49, type: 3}
   selectedRecipe:
     inputProduct: {fileID: 11400000, guid: df60ac8e23274b7439f757150af8ac6a, type: 2}
     outputProduct: {fileID: 11400000, guid: 44e63f349bede0d4b8eba72d60583c18, type: 2}
@@ -74889,14 +74617,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isInteractable: 1
   uiRotationOffset: {x: 0, y: 180, z: 0}
-  uiPositionOffset: {x: 0, y: 0, z: 0}
+  uiPositionOffset: {x: 0, y: 0.7, z: 0}
   interactionCollider: {fileID: 1864756103594551470}
   useTrigger: 0
   initialScale: {x: 0, y: 0, z: 0}
-  targetScale: {x: 0.7, y: 0.7, z: 0.7}
+  targetScale: {x: 0.6, y: 0.6, z: 0.6}
   growDuration: 0.3
-  bounceScaleMin: 0.85
-  bounceScaleMax: 1.15
+  bounceScaleMin: 0.95
+  bounceScaleMax: 1.1
   bounceSpeed: 3
   interactionIndicator: {fileID: 0}
   refinementTime: 5
@@ -74905,9 +74633,9 @@ MonoBehaviour:
   pointToSpawn: {fileID: 3255381945499540586}
   anim: {fileID: 0}
   activator: {fileID: 1774899726}
-  insertProductSprite: {fileID: 21300000, guid: dc0e20a1f7385874da6b59b66ff5e524, type: 3}
+  insertProductSprite: {fileID: 21300000, guid: a74bb0153a4ddc147a9684eebd905c0b, type: 3}
   startRefinementSprite: {fileID: 21300000, guid: b998e89e93193db478c93c962418a9f6, type: 3}
-  collectProductSprite: {fileID: 21300000, guid: 12ab5dc32675f8a44824b8402e3b3ced, type: 3}
+  collectProductSprite: {fileID: 21300000, guid: 83285bc88987bf347bb2b2df6cee2c49, type: 3}
   selectedRecipe:
     inputProduct: {fileID: 11400000, guid: 31ce6c66ce14f2e40baf34d7a438a15c, type: 2}
     outputProduct: {fileID: 11400000, guid: ad5d708b28f03f74386f9ed6df8eb4db, type: 2}

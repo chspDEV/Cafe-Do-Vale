@@ -5,6 +5,7 @@ using Sirenix.OdinInspector;
 using Tcp4;
 using Tcp4.Assets.Resources.Scripts.Managers;
 using UnityEngine.UI;
+using GameResources.Project.Scripts.Utilities.Audio;
 
 namespace Tcp4.Assets.Resources.Scripts.Systems.Areas
 {
@@ -57,6 +58,7 @@ namespace Tcp4.Assets.Resources.Scripts.Systems.Areas
         private Inventory playerInventory;
         private float currentTime = 0f;
         private Coroutine collectRoutine;
+        private GameAssets gameAssets;
 
         private bool isCountingDown = false;
         private float countdownTimer = 0f;
@@ -65,8 +67,11 @@ namespace Tcp4.Assets.Resources.Scripts.Systems.Areas
         {
             base.Start();
             timeImage = UIManager.Instance.PlaceFillImage(pointToSpawn);
-            playerInventory = GameAssets.Instance.player.GetComponent<Inventory>();
-            // Início: ativo para inserção
+            gameAssets = GameAssets.Instance;
+            if (gameAssets != null && gameAssets.player != null)
+            {
+                playerInventory = gameAssets.player.GetComponent<Inventory>();
+            }
             EnableInteraction();
             UpdateInteractionUI();
 
@@ -81,7 +86,7 @@ namespace Tcp4.Assets.Resources.Scripts.Systems.Areas
             if (processingCurrentItem)
             {
                 currentTime += Time.deltaTime;
-                timeImage.UpdateFill(currentTime);
+                if (timeImage != null) timeImage.UpdateFill(currentTime);
                 UpdateInteractionUI();
 
                 if (currentTime >= refinementTime)
@@ -89,20 +94,21 @@ namespace Tcp4.Assets.Resources.Scripts.Systems.Areas
             }
             else if (isCountingDown)
             {
-                currentTime = 0f; 
+                currentTime = 0f;
                 UpdateInteractionUI();
 
                 countdownTimer += Time.deltaTime;
-                timeImage.ChangeSprite(GameAssets.Instance.sprSpoilingWarning);
-                timeImage.UpdateFill(countdownTimer);
+                if (timeImage != null)
+                {
+                    timeImage.ChangeSprite(GameAssets.Instance.sprSpoilingWarning);
+                    timeImage.UpdateFill(countdownTimer);
+                }
 
-               
                 if (!IsInteractable()) EnableInteraction();
 
                 if (countdownTimer >= refinementTime * spoilThreshold)
                 {
                     SpoiledProduct();
-                    ResetCountdown();
                 }
             }
         }
@@ -111,12 +117,11 @@ namespace Tcp4.Assets.Resources.Scripts.Systems.Areas
         {
             if (!IsInteractable() || isRefining || isSpoiled) return;
 
-            if (processingQueue.Count == 0)
+            if (processingQueue.Count == 0 && !isReady)
                 TryInsertProducts();
             else if (isReady)
                 CollectProduct();
 
-            UpdateInteractionUI();
         }
 
         private IEnumerable GetAllRecipes() =>
@@ -133,18 +138,31 @@ namespace Tcp4.Assets.Resources.Scripts.Systems.Areas
                 return;
             }
 
+            //Fazendo o request de sfx
+            SoundEventArgs sfxArgs = new()
+            {
+                Category = SoundEventArgs.SoundCategory.SFX,
+                AudioID = "colocando", // O ID do seu SFX (sem "sfx_" e em minúsculas)
+                Position = transform.position, // Posição para o som 3D
+                VolumeScale = .6f // Escala de volume (opcional, padrão é 1f)
+            };
+            SoundEvent.RequestSound(sfxArgs);
+
             int capacity = playerInventory.GetLimit() - processingQueue.Count;
             int amountToAdd = Mathf.Min(Mathf.Min(available, capacity), itemGetAmount);
+
+            if (amountToAdd <= 0) return;
 
             playerInventory.RemoveProduct(selectedRecipe.inputProduct, amountToAdd);
             for (int i = 0; i < amountToAdd; i++)
                 processingQueue.Enqueue(selectedRecipe.inputProduct);
 
-            
-            
             DisableInteraction();
-            activator.canInteract = true;
-            activator.EnableInteraction();
+            if (activator != null)
+            {
+                activator.canInteract = true;
+                activator.EnableInteraction();
+            }
             UpdateInteractionUI();
         }
 
@@ -158,11 +176,12 @@ namespace Tcp4.Assets.Resources.Scripts.Systems.Areas
             maxTime = refinementTime * spoilThreshold;
             currentTime = 0f;
 
-            
             DisableInteraction();
-            anim?.ExecuteAnimation("Refinar");
-            timeImage.SetFillMethod(Image.FillMethod.Radial360);
-            timeImage.ChangeSprite(startRefinementSprite);
+            if (anim != null) anim.ExecuteAnimation("Refinar");
+
+            if (timeImage != null) timeImage.SetFillMethod(Image.FillMethod.Radial360);
+
+            UpdateInteractionUI();
         }
 
         private void FinishRefinement()
@@ -171,39 +190,44 @@ namespace Tcp4.Assets.Resources.Scripts.Systems.Areas
             isRefining = false;
             processingCurrentItem = false;
 
-           
             EnableInteraction();
-            timeImage.SetFillMethod(Image.FillMethod.Vertical);
-            timeImage.ChangeSprite(collectProductSprite);
+            if (timeImage != null)
+            {
+                timeImage.SetFillMethod(Image.FillMethod.Vertical);
+                timeImage.ChangeSprite(collectProductSprite);
+            }
             Debug.Log("Produto pronto para coleta.");
 
+            if (collectRoutine != null) StopCoroutine(collectRoutine);
             collectRoutine = StartCoroutine(CollectCountdown());
             UpdateInteractionUI();
         }
 
         private void CompleteCurrentProcessing()
         {
-            processingQueue.Dequeue();
+            if (processingQueue.Count > 0) processingQueue.Dequeue();
             currentProduct = null;
             isReady = false;
 
-            timeImage.SetFillMethod(Image.FillMethod.Vertical);
+            if (timeImage != null) timeImage.SetFillMethod(Image.FillMethod.Vertical);
+
             if (processingQueue.Count > 0)
             {
                 StartRefinement();
                 return;
             }
 
-            
+            if (activator != null) activator.Reset();
             EnableInteraction();
             UpdateInteractionUI();
         }
 
         private IEnumerator CollectCountdown()
         {
-            yield return new WaitForSeconds(3f);
+            yield return new WaitForSeconds(5f);
             isCountingDown = true;
             countdownTimer = 0f;
+            UpdateInteractionUI();
         }
 
         private void ResetCountdown()
@@ -216,35 +240,58 @@ namespace Tcp4.Assets.Resources.Scripts.Systems.Areas
         {
             if (!isReady) return;
 
-            playerInventory.AddProduct(
-                RefinamentManager.Instance.Refine(currentProduct),
-                1
-            );
+            if (collectRoutine != null)
+            {
+                StopCoroutine(collectRoutine);
+                collectRoutine = null;
+            }
+
+            if (isCountingDown)
+            {
+                ResetCountdown();
+            }
+
+            if (playerInventory != null && RefinamentManager.Instance != null && currentProduct != null)
+            {
+                playerInventory.AddProduct(
+                    RefinamentManager.Instance.Refine(currentProduct),
+                    1
+                );
+
+                //Fazendo o request de sfx
+                SoundEventArgs ostArgs = new()
+                {
+                    Category = SoundEventArgs.SoundCategory.SFX,
+                    AudioID = "coletar", // O ID do seu SFX (sem "sfx_" e em minúsculas)
+                    VolumeScale = .7f // Escala de volume (opcional, padrão é 1f)
+                };
+
+                SoundEvent.RequestSound(ostArgs);
+            }
 
             CompleteCurrentProcessing();
-            if (collectRoutine != null)
-                StopCoroutine(collectRoutine);
-
-            activator.Reset();
-            UpdateInteractionUI();
         }
 
         private void SpoiledProduct()
         {
-            
             DisableInteraction();
             processingCurrentItem = false;
             processingQueue.Clear();
+            currentProduct = null;
+
             isRefining = false;
             isReady = false;
             isSpoiled = true;
 
             if (collectRoutine != null)
+            {
                 StopCoroutine(collectRoutine);
+                collectRoutine = null;
+            }
+            ResetCountdown();
 
-            timeImage.UpdateFill(999f);
-            StartCoroutine(ResetAfterDelay(3f));
-            timeImage.SetFillMethod(Image.FillMethod.Vertical);
+            StartCoroutine(ResetAfterDelay(.5f));
+            if (timeImage != null) timeImage.SetFillMethod(Image.FillMethod.Vertical);
             UpdateInteractionUI();
         }
 
@@ -252,33 +299,72 @@ namespace Tcp4.Assets.Resources.Scripts.Systems.Areas
         {
             yield return new WaitForSeconds(delay);
             isSpoiled = false;
-            
+            if (timeImage != null)
+            {
+                timeImage.SetupMaxTime(1f);
+                timeImage.UpdateFill(1f);
+            }
             EnableInteraction();
-            activator.Reset();
+            if (activator != null) activator.Reset();
             UpdateInteractionUI();
         }
 
         private void UpdateInteractionUI()
         {
-            if (timeImage == null) return;
+            if (timeImage == null || gameAssets == null) return;
 
-            bool isSpoiling = isRefining && currentTime > refinementTime && !isSpoiled;
+            bool isSpoilingOriginalDefinition = isRefining && currentTime > refinementTime && !isSpoiled && !isReady;
 
-            timeImage.ChangeSprite(
-                isSpoiled ? GameAssets.Instance.sprError :
-                isSpoiling ? GameAssets.Instance.sprSpoilingWarning :
-                isReady ? GameAssets.Instance.ready :
-                isRefining ? GameAssets.Instance.sprRefinamentWait :
-                processingQueue.Count > 0 ? startRefinementSprite :
-                insertProductSprite
-            );
+            Sprite spriteToSet;
+            float maxTimeToSet;
+            float fillAmountToSet;
 
-            float currentMax = isSpoiling ?
-                (refinementTime * spoilThreshold) - refinementTime :
-                refinementTime * (isRefining ? spoilThreshold : 1f);
+            if (isSpoiled)
+            {
+                spriteToSet = gameAssets.sprError;
+                maxTimeToSet = 1f;
+                fillAmountToSet = 1f;
+            }
+            else if (isCountingDown && isReady)
+            {
+                spriteToSet = gameAssets.sprSpoilingWarning;
+                maxTimeToSet = refinementTime * spoilThreshold;
+                fillAmountToSet = countdownTimer;
+            }
+            else if (isReady)
+            {
+                spriteToSet = gameAssets.ready;
+                maxTimeToSet = 1f;
+                fillAmountToSet = 1f;
+            }
+            else if (isSpoilingOriginalDefinition)
+            {
+                spriteToSet = gameAssets.sprSpoilingWarning;
+                maxTimeToSet = refinementTime * spoilThreshold;
+                fillAmountToSet = currentTime - refinementTime;
+            }
+            else if (isRefining)
+            {
+                spriteToSet = gameAssets.sprRefinamentWait;
+                maxTimeToSet = refinementTime;
+                fillAmountToSet = currentTime;
+            }
+            else if (processingQueue.Count > 0)
+            {
+                spriteToSet = startRefinementSprite;
+                maxTimeToSet = refinementTime;
+                fillAmountToSet = 0f;
+            }
+            else
+            {
+                spriteToSet = insertProductSprite;
+                maxTimeToSet = 1f;
+                fillAmountToSet = 1f;
+            }
 
-            timeImage.SetupMaxTime(currentMax);
-            timeImage.UpdateFill(isSpoiling ? currentTime - refinementTime : currentTime);
+            timeImage.ChangeSprite(spriteToSet);
+            timeImage.SetupMaxTime(maxTimeToSet);
+            timeImage.UpdateFill(fillAmountToSet);
         }
 
         public void DecreaseRefinamentTime(float amount)

@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using ComponentUtils.ComponentUtils.Scripts;
+using GameResources.Project.Scripts.Utilities.Audio;
 using Tcp4.Assets.Resources.Scripts.Managers;
 using UnityEngine;
 
@@ -18,7 +18,16 @@ namespace Tcp4
         {
             if(CanAdd())
             {
-                SoundManager.PlaySound(SoundType.servindo, 0.2f);
+                //Fazendo o request de sfx
+                SoundEventArgs sfxArgs = new()
+                {
+                    Category = SoundEventArgs.SoundCategory.SFX,
+                    AudioID = "servindo", // O ID do seu SFX (sem "sfx_" e em minúsculas)
+                    Position = transform.position, // Posição para o som 3D
+                    VolumeScale = .7f // Escala de volume (opcional, padrão é 1f)
+                };
+
+                SoundEvent.RequestSound(sfxArgs);
                 StorageManager.Instance.playerInventory.RemoveProduct(pd, 1);
                 AddIngredient(pd);
                 OnChangeInventory?.Invoke();

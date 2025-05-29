@@ -1,4 +1,5 @@
 ﻿
+using GameResources.Project.Scripts.Utilities.Audio;
 using Sirenix.OdinInspector;
 using System;
 using System.Collections;
@@ -67,6 +68,16 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
         private void Start()
         {
             UpdateControlSprite();
+
+            //Fazendo o request de ost
+            SoundEventArgs ostArgs = new()
+            {
+                Category = SoundEventArgs.SoundCategory.Music,
+                AudioID = "fazenda", // O ID do seu SFX (sem "sfx_" e em minúsculas)
+                VolumeScale = .1f // Escala de volume (opcional, padrão é 1f)
+            };
+
+            SoundEvent.RequestSound(ostArgs);
         }
 
         public void UpdateControlSprite()
