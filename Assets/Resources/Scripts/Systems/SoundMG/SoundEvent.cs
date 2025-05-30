@@ -26,5 +26,6 @@ namespace GameResources.Project.Scripts.Utilities.Audio
         public Vector3 Position { get; set; }
         public float VolumeScale { get; set; } = 1f;
         public Transform TargetTransform { get; set; }
+        public float Pitch { get; set; } = 1f;
     }
 }

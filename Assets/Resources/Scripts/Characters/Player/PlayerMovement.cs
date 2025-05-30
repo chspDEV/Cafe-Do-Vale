@@ -13,10 +13,12 @@ namespace Tcp4
         private Vector2 movement;
         private Animator animator;
         private bool canMove = true;
+        private StepSound stepSound;
 
         void Awake()
         {
             rb = GetComponent<Rigidbody>();
+            stepSound = GetComponent<StepSound>();
             animator = GetComponentInChildren<Animator>();
             canMove = true;
         }
@@ -25,6 +27,8 @@ namespace Tcp4
         {
             movement = value.ReadValue<Vector2>();
         }
+
+        public bool CanMove() => canMove;
 
         private void HandleRotation()
         {
@@ -39,6 +43,7 @@ namespace Tcp4
         private void HandleAnimation()
         {
             var _speed = movement.magnitude;
+            stepSound.SetMovementInput(movement);
             var _isRunning = _speed > 0.1f;
             animator.SetFloat("Speed", _speed);
             animator.SetBool("IsRunning", _isRunning);

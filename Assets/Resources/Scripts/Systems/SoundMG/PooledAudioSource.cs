@@ -7,7 +7,7 @@ namespace GameResources.Project.Scripts.Utilities.Audio
     [RequireComponent(typeof(AudioSource))]
     public class PooledAudioSource : MonoBehaviour
     {
-        private AudioSource _audioSource;
+        public AudioSource _audioSource;
         private Queue<GameObject> _pool;
         private Transform _poolParent;
 

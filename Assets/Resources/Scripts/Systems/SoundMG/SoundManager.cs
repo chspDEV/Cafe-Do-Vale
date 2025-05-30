@@ -186,7 +186,7 @@ namespace GameResources.Project.Scripts.Utilities.Audio
             }
         }
 
-        public static void PlaySFX(string id, Vector3 position, float volumeScale = 1f)
+        public static void PlaySFX(string id, Vector3 position, float volumeScale = 1f, float pitch = 1f)
         {
             if (_config == null)
             {
@@ -213,6 +213,7 @@ namespace GameResources.Project.Scripts.Utilities.Audio
                 sourceObj.transform.position = position;
                 var pooledSource = sourceObj.GetComponent<PooledAudioSource>();
                 pooledSource.Play(clip, volumeScale);
+                pooledSource._audioSource.pitch = pitch;
                 OnSFXPlay?.Invoke(id);
             }
             else
@@ -221,9 +222,9 @@ namespace GameResources.Project.Scripts.Utilities.Audio
             }
         }
 
-        public static void PlaySFX(string id, Transform targetTransform, float volumeScale = 1f)
+        public static void PlaySFX(string id, Transform targetTransform, float volumeScale = 1f, float pitch = 1f)
         {
-            PlaySFX(id, targetTransform.position, volumeScale);
+            PlaySFX(id, targetTransform.position, volumeScale, pitch);
         }
 
         public static void StopMusic()

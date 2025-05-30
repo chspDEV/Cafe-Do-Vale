@@ -25,11 +25,11 @@ namespace GameResources.Project.Scripts.Utilities.Audio
                 case SoundEventArgs.SoundCategory.SFX:
                     if (args.TargetTransform != null)
                     {
-                        SoundManager.PlaySFX(args.AudioID, args.TargetTransform, args.VolumeScale);
+                        SoundManager.PlaySFX(args.AudioID, args.TargetTransform, args.VolumeScale, args.Pitch);
                     }
                     else
                     {
-                        SoundManager.PlaySFX(args.AudioID, args.Position, args.VolumeScale);
+                        SoundManager.PlaySFX(args.AudioID, args.Position, args.VolumeScale, args.Pitch);
                     }
                     break;
             }
