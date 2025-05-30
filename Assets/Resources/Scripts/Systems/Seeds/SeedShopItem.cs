@@ -19,7 +19,7 @@ public class SeedShopItem : MonoBehaviour
         buyButton.onClick.AddListener(OnBuyClicked);
     }
 
-    private void OnBuyClicked()
+    public void OnBuyClicked()
     {
         if (ShopManager.Instance.TrySpendMoney(seed.purchaseCost))
         {

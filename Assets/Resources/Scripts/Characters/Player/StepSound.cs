@@ -34,7 +34,7 @@ namespace Tcp4
                         Category = SoundEventArgs.SoundCategory.SFX,
                         AudioID = "passos", // O ID do seu SFX (sem "sfx_" e em minúsculas)
                         Position = gameAssets.player.transform.position, // Posição para o som 3D
-                        VolumeScale = .8f, // Escala de volume (opcional, padrão é 1f)
+                        VolumeScale = .5f, // Escala de volume (opcional, padrão é 1f)
                         Pitch = Random.Range(0.9f, 1.1f)
 
                     };

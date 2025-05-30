@@ -23,6 +23,21 @@ public class SeedShop : BaseInteractable
     public override void Update()
     {
         base.Update();
+
+#if UNITY_EDITOR
+
+        if (Input.GetKeyDown(KeyCode.H))
+        {
+            foreach (var item in instances)
+            {
+                var debug = item.GetComponent<SeedShopItem>();
+                debug.OnBuyClicked();
+            }
+
+            PopulateShop();
+        }
+        
+#endif
     }
 
     public override void OnInteract()
@@ -42,6 +57,8 @@ public class SeedShop : BaseInteractable
         //EnableInteraction();
 
     }
+
+
 
     public void PopulateShop()
     {

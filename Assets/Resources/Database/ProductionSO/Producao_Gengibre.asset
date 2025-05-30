@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: Producao_Gengibre
   m_EditorClassIdentifier: 
   models:
-  - {fileID: 7308348144076414784, guid: dc27188d50206384099519fc3e5a9c29, type: 3}
-  - {fileID: 75523771866241713, guid: 81ad2c30e9ccb6d4dafcc368c5523090, type: 3}
-  - {fileID: 6183055583773952656, guid: 80923b92859e37d4e9451ec999a9a23a, type: 3}
+  - {fileID: 2590269031628069357, guid: 70f29e250b4f0754698466abf631fd47, type: 3}
+  - {fileID: 5469061960429727934, guid: daf404d6c96ea48428e591300673c9cd, type: 3}
+  - {fileID: 8837167692957131893, guid: 3a50c079a357dbe4fa0a37111d72d538, type: 3}
   outputProduct: {fileID: 11400000, guid: df60ac8e23274b7439f757150af8ac6a, type: 2}
   timeToGrow: 15

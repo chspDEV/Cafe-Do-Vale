@@ -15,5 +15,5 @@ MonoBehaviour:
   productName: FavoDeMel
   quality: 15
   productID: 66
-  model: {fileID: 3630688256257129159, guid: 036fbe8eee86ece4fb3ea92a21fe3b4b, type: 3}
+  model: {fileID: 1021864435424459753, guid: 6cd80396a43d21449a5cf6f83564d904, type: 3}
   productImage: {fileID: 21300000, guid: 3731cf00450fb374095c1b275f277bcf, type: 3}

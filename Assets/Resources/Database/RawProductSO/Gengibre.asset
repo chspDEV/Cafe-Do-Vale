@@ -15,5 +15,5 @@ MonoBehaviour:
   productName: Gengibre
   quality: 30
   productID: 255
-  model: {fileID: 2255765643877195712, guid: 9f5237b5216a3ba4ba4cc9f1df3bc17f, type: 3}
+  model: {fileID: 1243903001139260318, guid: 604b77dbb86a9a144b49a3e7cae8b02c, type: 3}
   productImage: {fileID: 21300000, guid: 0e1080877986a804998b090e99e70abb, type: 3}

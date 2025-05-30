@@ -222,7 +222,7 @@ namespace Tcp4
                 SoundEventArgs sfxArgs = new()
                 {
                     Category = SoundEventArgs.SoundCategory.SFX,
-                    AudioID = "coleta", // O ID do seu SFX (sem "sfx_" e em minúsculas)
+                    AudioID = "coletar", // O ID do seu SFX (sem "sfx_" e em minúsculas)
                     Position = transform.position, // Posição para o som 3D
                     VolumeScale = 1.0f // Escala de volume (opcional, padrão é 1f)
                 };

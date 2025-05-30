@@ -197,6 +197,16 @@ namespace Tcp4.Assets.Resources.Scripts.Systems.Areas
                 timeImage.ChangeSprite(collectProductSprite);
             }
             Debug.Log("Produto pronto para coleta.");
+            //Fazendo o request de sfx
+            SoundEventArgs sfxArgs = new()
+            {
+                Category = SoundEventArgs.SoundCategory.SFX,
+                AudioID = "concluido", // O ID do seu SFX (sem "sfx_" e em minúsculas)
+                Position = transform.position, // Posição para o som 3D
+                VolumeScale = .8f, // Escala de volume (opcional, padrão é 1f)
+
+            };
+            SoundEvent.RequestSound(sfxArgs);
 
             if (collectRoutine != null) StopCoroutine(collectRoutine);
             collectRoutine = StartCoroutine(CollectCountdown());
