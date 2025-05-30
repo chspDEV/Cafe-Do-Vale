@@ -376,7 +376,7 @@ namespace Tcp4
             if (isActive)
             {
                 OpenMenu(bookMenu);
-                OpenBookSection(5);
+                OpenBookSection(1);
             }
             else
             {
@@ -391,7 +391,7 @@ namespace Tcp4
             if (isActive)
             {
                 OpenMenu(bookMenu);
-                OpenBookSection(1);
+                OpenBookSection(4);
             }
             else
             {
