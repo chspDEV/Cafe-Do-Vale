@@ -13,7 +13,7 @@ namespace Tcp4
                 {
                     UIManager.Instance.ControlMap(true);
                 }
-                else { Debug.LogWarning("InteractionManager não inicializado!"); }
+                else { Debug.LogWarning("UIManager não inicializado ou outro menu aberto!"); }
             }
         }
 
@@ -25,7 +25,7 @@ namespace Tcp4
                 {
                     //UIManager.Instance.ControlNotification(true);
                 }
-                else { Debug.LogWarning("InteractionManager não inicializado!"); }
+                else { Debug.LogWarning("UIManager não inicializado ou outro menu aberto!"); }
             }
         }
 
@@ -49,7 +49,7 @@ namespace Tcp4
                 {
                     UIManager.Instance.ControlConfigMenu(true);
                 }
-                else { Debug.LogWarning("InteractionManager não inicializado!"); }
+                else { Debug.LogWarning("UIManager não inicializado ou outro menu aberto!"); }
             }
         }
 
@@ -61,7 +61,7 @@ namespace Tcp4
                 {
                     UIManager.Instance.ControlRecipeMenu(true);
                 }
-                else { Debug.LogWarning("InteractionManager não inicializado!"); }
+                else { Debug.LogWarning("UIManager não inicializado ou outro menu aberto!"); }
             }
         }
 
@@ -69,11 +69,11 @@ namespace Tcp4
         {
             if (context.performed)
             {
-                if (UIManager.Instance != null)
+                if (UIManager.Instance != null && UIManager.Instance.HasMenuOpen())
                 {
                     UIManager.Instance.CloseLastMenu();
                 }
-                else { Debug.LogWarning("InteractionManager não inicializado!"); }
+                else { Debug.LogWarning("UIManager não inicializado ou outro menu aberto!"); }
             }
         }
     }

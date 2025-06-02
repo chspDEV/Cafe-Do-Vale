@@ -26,5 +26,6 @@ public class SeedShopItem : MonoBehaviour
             SeedManager.Instance.AddSeed(seed.targetProduction);
             Destroy(this.gameObject);
         }
+        else { Debug.LogError("Nao foi possivel comprar a semente!"); }
     }
 }

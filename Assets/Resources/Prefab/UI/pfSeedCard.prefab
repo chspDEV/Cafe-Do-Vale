@@ -104,7 +104,7 @@ GameObject:
   - component: {fileID: 202589208941941121}
   m_Layer: 0
   m_Name: pfSeedCard
-  m_TagString: Untagged
+  m_TagString: SeedCard
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

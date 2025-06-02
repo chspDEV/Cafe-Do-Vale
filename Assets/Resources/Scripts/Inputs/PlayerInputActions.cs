@@ -269,7 +269,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""f66532a8-bda5-409d-81bb-e673e2fbb13a"",
-                    ""path"": ""<Keyboard>/escape"",
+                    ""path"": ""<Keyboard>/backspace"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -474,6 +474,24 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Click"",
+                    ""type"": ""PassThrough"",
+                    ""id"": ""29456a77-98e4-4c8a-ad9a-79eb168cd470"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Point"",
+                    ""type"": ""PassThrough"",
+                    ""id"": ""adb89b3e-053f-456c-928f-d08b9ea5bc8c"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
                 }
             ],
             ""bindings"": [
@@ -481,6 +499,28 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""name"": """",
                     ""id"": ""45d46f84-d763-41f2-912b-cc6fd84e1857"",
                     ""path"": ""<Gamepad>/rightShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""NextTab"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""b3946db3-bbe7-4ac9-bc63-1bc792b5635c"",
+                    ""path"": ""<Mouse>/forwardButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""NextTab"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""e5202763-0cbd-4a01-bf43-f6a4c85b632e"",
+                    ""path"": ""<Keyboard>/2"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -501,12 +541,56 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
+                    ""id"": ""1d409631-2bf2-4f0f-9770-0146a277b0cd"",
+                    ""path"": ""<Mouse>/backButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""PreviousTab"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""af34bebb-3490-4154-96de-0b06821beeb4"",
+                    ""path"": ""<Keyboard>/1"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""PreviousTab"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
                     ""id"": ""0a18eed1-b219-4410-9810-00b727d44940"",
                     ""path"": ""<Gamepad>/leftStick"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Navigate"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""968531c1-6ba5-4219-bfa7-48aed4dc5c8c"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Click"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""60e98f57-26d8-4586-8179-dc45a0eac04b"",
+                    ""path"": ""<Mouse>/position"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Point"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -530,6 +614,8 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
         m_UI_NextTab = m_UI.FindAction("NextTab", throwIfNotFound: true);
         m_UI_PreviousTab = m_UI.FindAction("PreviousTab", throwIfNotFound: true);
+        m_UI_Click = m_UI.FindAction("Click", throwIfNotFound: true);
+        m_UI_Point = m_UI.FindAction("Point", throwIfNotFound: true);
     }
 
     ~@PlayerInputActions()
@@ -702,6 +788,8 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
     private readonly InputAction m_UI_Navigate;
     private readonly InputAction m_UI_NextTab;
     private readonly InputAction m_UI_PreviousTab;
+    private readonly InputAction m_UI_Click;
+    private readonly InputAction m_UI_Point;
     public struct UIActions
     {
         private @PlayerInputActions m_Wrapper;
@@ -709,6 +797,8 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         public InputAction @Navigate => m_Wrapper.m_UI_Navigate;
         public InputAction @NextTab => m_Wrapper.m_UI_NextTab;
         public InputAction @PreviousTab => m_Wrapper.m_UI_PreviousTab;
+        public InputAction @Click => m_Wrapper.m_UI_Click;
+        public InputAction @Point => m_Wrapper.m_UI_Point;
         public InputActionMap Get() { return m_Wrapper.m_UI; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -727,6 +817,12 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             @PreviousTab.started += instance.OnPreviousTab;
             @PreviousTab.performed += instance.OnPreviousTab;
             @PreviousTab.canceled += instance.OnPreviousTab;
+            @Click.started += instance.OnClick;
+            @Click.performed += instance.OnClick;
+            @Click.canceled += instance.OnClick;
+            @Point.started += instance.OnPoint;
+            @Point.performed += instance.OnPoint;
+            @Point.canceled += instance.OnPoint;
         }
 
         private void UnregisterCallbacks(IUIActions instance)
@@ -740,6 +836,12 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             @PreviousTab.started -= instance.OnPreviousTab;
             @PreviousTab.performed -= instance.OnPreviousTab;
             @PreviousTab.canceled -= instance.OnPreviousTab;
+            @Click.started -= instance.OnClick;
+            @Click.performed -= instance.OnClick;
+            @Click.canceled -= instance.OnClick;
+            @Point.started -= instance.OnPoint;
+            @Point.performed -= instance.OnPoint;
+            @Point.canceled -= instance.OnPoint;
         }
 
         public void RemoveCallbacks(IUIActions instance)
@@ -773,5 +875,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         void OnNavigate(InputAction.CallbackContext context);
         void OnNextTab(InputAction.CallbackContext context);
         void OnPreviousTab(InputAction.CallbackContext context);
+        void OnClick(InputAction.CallbackContext context);
+        void OnPoint(InputAction.CallbackContext context);
     }
 }

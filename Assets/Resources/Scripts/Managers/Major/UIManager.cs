@@ -361,6 +361,16 @@ namespace Tcp4
 
                 if (productionInteraction != null)
                     productionInteraction.JumpToElement();
+
+                //Fazendo o request de sfx
+                SoundEventArgs sfxArgs = new()
+                {
+                    Category = SoundEventArgs.SoundCategory.SFX,
+                    AudioID = "feedback", // O ID do seu SFX (sem "sfx_" e em minúsculas)
+                    Position = gameAssets.player.transform.position, // Posição para o som 3D
+                    VolumeScale = 1.0f // Escala de volume (opcional, padrão é 1f)
+                };
+                SoundEvent.RequestSound(sfxArgs);
             }
             else
             {
@@ -377,6 +387,16 @@ namespace Tcp4
             {
                 OpenMenu(bookMenu);
                 OpenBookSection(1);
+
+                //Fazendo o request de sfx
+                SoundEventArgs sfxArgs = new()
+                {
+                    Category = SoundEventArgs.SoundCategory.SFX,
+                    AudioID = "feedback", // O ID do seu SFX (sem "sfx_" e em minúsculas)
+                    Position = gameAssets.player.transform.position, // Posição para o som 3D
+                    VolumeScale = 1.0f // Escala de volume (opcional, padrão é 1f)
+                };
+                SoundEvent.RequestSound(sfxArgs);
             }
             else
             {
@@ -392,6 +412,16 @@ namespace Tcp4
             {
                 OpenMenu(bookMenu);
                 OpenBookSection(4);
+
+                //Fazendo o request de sfx
+                SoundEventArgs sfxArgs = new()
+                {
+                    Category = SoundEventArgs.SoundCategory.SFX,
+                    AudioID = "feedback", // O ID do seu SFX (sem "sfx_" e em minúsculas)
+                    Position = gameAssets.player.transform.position, // Posição para o som 3D
+                    VolumeScale = 1.0f // Escala de volume (opcional, padrão é 1f)
+                };
+                SoundEvent.RequestSound(sfxArgs);
             }
             else
             {
@@ -402,27 +432,25 @@ namespace Tcp4
 
         public void ControlConfigMenu(bool isActive)
         {
-            //Fazendo o request de sfx
-            SoundEventArgs sfxArgs = new()
-            {
-                Category = SoundEventArgs.SoundCategory.SFX,
-                AudioID = "feedback", // O ID do seu SFX (sem "sfx_" e em minúsculas)
-                Position = gameAssets.player.transform.position, // Posição para o som 3D
-                VolumeScale = 1.0f // Escala de volume (opcional, padrão é 1f)
-            };
-            SoundEvent.RequestSound(sfxArgs);
-
-
             if (isActive)
             {
                 OpenMenu(bookMenu);
                 OpenBookSection(0);
-                //Time.timeScale = 1;
+
+                //Fazendo o request de sfx
+                SoundEventArgs sfxArgs = new()
+                {
+                    Category = SoundEventArgs.SoundCategory.SFX,
+                    AudioID = "feedback", // O ID do seu SFX (sem "sfx_" e em minúsculas)
+                    Position = gameAssets.player.transform.position, // Posição para o som 3D
+                    VolumeScale = 1.0f // Escala de volume (opcional, padrão é 1f)
+                };
+                SoundEvent.RequestSound(sfxArgs);
             }
             else
             {
+                Debug.Log("fechei menu pause");
                 CloseMenu(bookMenu);
-                //Time.timeScale = 0;
             }
         }
 

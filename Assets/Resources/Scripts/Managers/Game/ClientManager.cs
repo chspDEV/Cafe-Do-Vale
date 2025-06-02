@@ -105,10 +105,12 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
 
             foreach (GameObject c in clients)
             {
-                Client cClient = c.GetComponent<Client>();
+                
+                if (!c.TryGetComponent<Client>(out var cClient)) return;
 
                 if(cClient.ID == client.ID)
                 {
+                    if(c != null)
                     clients.Remove(c);
                     break;
                 }
