@@ -1440,7 +1440,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 423.23337, y: -470}
+  m_AnchoredPosition: {x: 423.1517, y: -470}
   m_SizeDelta: {x: 600, y: 800}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &203411253
@@ -7914,10 +7914,10 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "<#713625><b>Game Design</b></color>\r\nCarlos Henrique\r\nMatheus Teixeira\r\n\r\n<#713625><b>Arte
-    2D/3D</b></color>\r\nAmanda Alvisi\r\nArtur Gomes\r\nManuela Reis\r\nMatheus
-    Manfro\r\nVitor Gomes\r\n\r\n<#713625><b>Programa\xE7\xE3o</b></color>\r\nCarlos
-    Henrique\r\nJeniffer Xavier\r\nNathan Miranda\r\n"
+  m_text: "<#713625><b>Game Design</b></color>\r\nCarlos Henrique\r\n\r\n<#713625><b>Arte
+    2D/3D</b></color>\r\nAmanda Alvisi\r\nArtur Gomes\r\r\nMatheus Manfro\r\nVitor
+    Gomes\r\n\r\n<#713625><b>Programa\xE7\xE3o</b></color>\r\nCarlos Henrique\r\nJeniffer
+    Xavier\r\r\n"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: c3f5ef1bcc065e34fb5392430bc973a1, type: 2}
   m_sharedMaterial: {fileID: -5285171022136759511, guid: c3f5ef1bcc065e34fb5392430bc973a1, type: 2}
@@ -10952,10 +10952,9 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "<#713625><b>\xC1udio</b></color>\r\nEvelyn Lima\r\n\r\n<#713625><b>QA</b></color>\r\nMatheus
-    Teixeira\r\n\r\n<#713625><b>Gest\xE3o</b></color>\r\nManuela Reis\r\nMatheus
-    Manfro\r\n\r\n<#713625><b>Consultoria</b></color>\r\nMaria Luiza Gon\xE7alves\r\n\r\n<#713625><b>Orientador</b></color>\r\nGabriel
-    Aprigliano"
+  m_text: "<#713625><b>\xC1udio</b></color>\r\nEvelyn Lima\r\r\n\r\n<#713625><b>Gest\xE3o</b></color>\r\nManuela
+    Reis\r\n\r\n\r<#713625><b>Produ\xE7\xE3o</b></color>\nMatheus Teixeira\r\n\r\n<#713625><b>Orientador</b></color>\r\nJonas
+    Lana"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: c3f5ef1bcc065e34fb5392430bc973a1, type: 2}
   m_sharedMaterial: {fileID: -5285171022136759511, guid: c3f5ef1bcc065e34fb5392430bc973a1, type: 2}
@@ -12253,7 +12252,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 1059.7001, y: -470}
+  m_AnchoredPosition: {x: 1059.4551, y: -470}
   m_SizeDelta: {x: 600, y: 800}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1501546616

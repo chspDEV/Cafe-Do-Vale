@@ -14,7 +14,6 @@ namespace ChristinaCreatesGames.UI
         private EventSystem eventSystem;
 
         [FoldoutGroup("Setup")]
-        [Required]
         [SerializeField]
         private Selectable elementToSelect;
 

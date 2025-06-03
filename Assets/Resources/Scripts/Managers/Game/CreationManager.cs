@@ -10,7 +10,7 @@ namespace Tcp4
     public class CreationManager : Singleton<CreationManager>
     {
         public event Action OnChangeInventory;
-        public List<BaseProduct> Ingredients = new(2);
+        [HideInInspector] public List<BaseProduct> Ingredients = new(2);
         
 
         public bool CanAdd() {return Ingredients.Count < 3;}
