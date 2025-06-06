@@ -13,6 +13,7 @@ TagManager:
   - SeedCard
   - CreationSlot
   - CreationIngredient
+  - HeatmapSphere
   layers:
   - Default
   - TransparentFX
