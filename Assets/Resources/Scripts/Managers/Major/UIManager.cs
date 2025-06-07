@@ -324,9 +324,10 @@ namespace Tcp4
             };
             SoundEvent.RequestSound(sfxArgs);
 
-            GameObject go = Instantiate(pfClientNotification, notificationHolder);
-            ClientNotification c = go.GetComponent<ClientNotification>();
-            c.Setup(clientSettings.spriteClient, clientSettings.wantedProduct.productImage, clientSettings.stars);
+            //REFAZER O SISTEMA DE NOTIFICAO
+            //GameObject go = Instantiate(pfClientNotification, notificationHolder);
+            //ClientNotification c = go.GetComponent<ClientNotification>();
+            //c.Setup(clientSettings.wantedProduct, clientSettings.wantedProduct.sprite, clientSettings.);
         }
 
         public void OpenShopNotification() => Debug.Log("Loja aberta!");
