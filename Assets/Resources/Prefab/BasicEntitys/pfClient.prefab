@@ -10,8 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 2909816643740203961}
   - component: {fileID: 3164522894996714659}
-  - component: {fileID: 836218398507677677}
-  - component: {fileID: 6472712124238568921}
   - component: {fileID: 231756032641741443}
   m_Layer: 0
   m_Name: pfClient
@@ -53,49 +51,10 @@ MonoBehaviour:
   nameTmp: {fileID: 5212585619779698965}
   wantedProduct: {fileID: 1585450556551782137}
   timer: {fileID: 6928963521282705599}
---- !u!65 &836218398507677677
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1277494111889277734}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 0.44356823, y: 1.5, z: 0.3671875}
-  m_Center: {x: -0.03442374, y: 0.75, z: -0.01953125}
---- !u!95 &6472712124238568921
-Animator:
-  serializedVersion: 7
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1277494111889277734}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 35ce85f729762684390df5edf4354546, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_AnimatePhysics: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
+  debugAction: naoConfigurado
+  debugState: naoConfigurado
+  idleAnimationName: 
+  runAnimationName: 
 --- !u!195 &231756032641741443
 NavMeshAgent:
   m_ObjectHideFlags: 0

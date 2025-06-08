@@ -9,6 +9,7 @@ using Unity.Collections;
 using Unity.Jobs;
 using Unity.Mathematics;
 using UnityEngine.AI;
+using TMPro;
 
 //[NOTA] certifique-se de que os outros scripts como singleton, timemanager, etc., estao corretos e acessiveis.
 namespace Tcp4.Assets.Resources.Scripts.Managers
@@ -31,6 +32,7 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
         [SerializeField] private int maxClients = 24;
         [SerializeField] private Transform spawnPoint;
         [SerializeField] private Transform shopEntrance;
+        [SerializeField] private Transform streetEnd;
         [SerializeField] private Transform counterPoint;
         [SerializeField] private List<Transform> queueSpots;
         [SerializeField] private List<Transform> seatSpots;
@@ -43,6 +45,7 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
         private NativeArray<ClientAction> clientActionArray;
         private JobHandle aiJobHandle;
         
+
         public override void Awake()
         {
             base.Awake();
@@ -131,7 +134,8 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
                 actionArray = this.clientActionArray,
                 deltaTime = Time.deltaTime,
                 playerReputation = ShopManager.Instance.GetStars() / ShopManager.Instance.GetMaxStars(),
-                shopEntrancePosition = shopEntrance.position
+                shopEntrancePosition = shopEntrance.position,
+                streetEndPosition = streetEnd.position
             };
             aiJobHandle = job.Schedule(maxClients, 32);
         }
@@ -153,11 +157,17 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
                 //atualiza a ui do timer continuamente
                 float maxWaitTime = 30f; //[NOTA] defina o tempo maximo de espera aqui
                 clientComponent.UpdateTimerUI(1f - (data.waitTime / maxWaitTime));
+                clientComponent.UpdateAnimation();
+                clientComponent.debugAction = clientActionArray[i].ToString();
+                clientComponent.debugState = clientDataArray[i].currentState.ToString();
+
 
                 switch (clientActionArray[i])
                 {
                     case ClientAction.MoveToTarget:
-                        clientAgents[i].SetDestination(DetermineTargetPosition(data.currentState));
+                        Vector3 targetPosition = DetermineTargetPosition(data.currentState);
+                        Debug.Log($"manager mandando cliente {i} para o alvo: {targetPosition}"); // <--- ADICIONE ESTA LINHA
+                        clientAgents[i].SetDestination(targetPosition);
                         break;
                         
                     case ClientAction.ShowOrderBubble:
@@ -232,10 +242,27 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
 
         private Vector3 DetermineTargetPosition(ClientState state)
         {
-            //[NOTA] funcao de exemplo. implemente sua logica para encontrar o proximo ponto na fila, etc.
-            if (state == ClientState.GoingToQueue && queueSpots.Count > 0) return queueSpots[0].position;
-            if (state == ClientState.LeavingShop) return spawnPoint.position; //volta para o spawn para sair
-            return transform.position; //fallback
+            //se o objetivo e ir para a fila, manda para a entrada da loja por enquanto
+            if (state == ClientState.GoingToQueue)
+            {
+                //[NOTA] uma logica real aqui encontraria o ultimo lugar vago na fila
+                if (queueSpots.Count > 0) return queueSpots[0].position;
+            }
+            //se o objetivo e sair da loja, manda para o ponto de spawn/saida
+            if (state == ClientState.LeavingShop)
+            {
+                return spawnPoint.position;
+            }
+
+            //se nao houver uma logica clara, manda para a entrada da loja como padrao
+            //isso evita que ele fique parado sem alvo
+            if (shopEntrance != null)
+            {
+                return shopEntrance.position;
+            }
+
+            //fallback de seguranca: retorna a propria posicao (nao vai se mover)
+            return transform.position;
         }
 
         private Sprite GetDrinkSpriteFromID(int id) { /*[NOTA] implemente a logica para pegar o sprite do produto pelo id*/ return null; }

@@ -18,6 +18,13 @@ namespace Tcp4.Assets.Resources.Scripts.Systems.Clients
         public Image timer;
 
         private GameObject currentModel;
+        public string debugAction = "naoConfigurado";
+        public string debugState = "naoConfigurado";
+
+        public string idleAnimationName = "";
+        public string runAnimationName = "";
+
+        private Animator anim;
 
         //setup agora e focado apenas na parte visual inicial
         public void Setup(string newID, string newName, Sprite newSprite, GameObject newModel)
@@ -33,6 +40,7 @@ namespace Tcp4.Assets.Resources.Scripts.Systems.Clients
             }
             //instancia o novo modelo
             currentModel = Instantiate(newModel, transform);
+            anim = currentModel.GetComponent<Animator>();
 
             //configuracao inicial da ui
             wantedProduct.gameObject.SetActive(false);
@@ -46,6 +54,57 @@ namespace Tcp4.Assets.Resources.Scripts.Systems.Clients
             {
                 wantedProduct.sprite = productSprite;
                 wantedProduct.gameObject.SetActive(true);
+            }
+        }
+
+        public void UpdateAnimation()
+        {
+            /* STATES
+             WalkingOnStreet,
+            GoingToQueue,
+            InQueue,
+            GoingToCounter,
+            AtCounter,
+            WaitingForOrder,
+            GoingToSeat,
+            Seated,
+            LeavingShop
+             */
+            switch (debugState)
+            {
+                case "InQueue":
+                    PlayAnimation(runAnimationName);
+                    break;
+
+                case "Seated":
+                    PlayAnimation(runAnimationName);
+                    break;
+
+                case "WaitingForOrder":
+                    PlayAnimation(runAnimationName);
+                    break;
+                case "AtCounter":
+                    PlayAnimation(runAnimationName);
+                    break;
+
+                default:
+                    PlayAnimation(idleAnimationName);
+                    break;
+            }
+        }
+
+        private void PlayAnimation(string animToPlay)
+        {
+            if (anim != null)
+            {
+                if (anim.GetCurrentAnimatorStateInfo(0).normalizedTime >= 1f)
+                {
+                    anim.Play(animToPlay);
+                }  
+            }
+            else
+            {
+                Debug.LogError($"Animator nao encontrado no cliente {clientID}!");
             }
         }
 

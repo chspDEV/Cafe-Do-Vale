@@ -15,6 +15,7 @@ namespace Tcp4
         [ReadOnly] public float deltaTime;
         [ReadOnly] public float playerReputation; //ex: 0.0 a 1.0
         [ReadOnly] public float3 shopEntrancePosition;
+        [ReadOnly] public float3 streetEndPosition;
         [ReadOnly] public float3 counterPosition;
 
         public void Execute(int index)
@@ -30,6 +31,7 @@ namespace Tcp4
                     float distanceFromDoor = math.distance(data.currentPosition, shopEntrancePosition);
                     if (distanceFromDoor < 5f) //se estiver perto da porta
                     {
+
                         //a chance de entrar aumenta com a reputacao
                         float chanceToEnter = 0.1f + playerReputation * 0.8f;
                         if (GetRandomValue(data.id) < chanceToEnter)
@@ -38,6 +40,12 @@ namespace Tcp4
                             data.moveTarget = shopEntrancePosition; //temporario, o manager vai definir a posicao real da fila
                             action = ClientAction.MoveToTarget;
                         }
+                    }
+                    else
+                    {
+                        
+                        data.moveTarget = streetEndPosition;
+                        action = ClientAction.MoveToTarget;
                     }
                     break;
 

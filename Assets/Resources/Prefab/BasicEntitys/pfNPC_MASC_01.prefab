@@ -902,6 +902,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8729820232302663528}
+  - component: {fileID: 5055448622141363007}
   m_Layer: 0
   m_Name: pfNPC_MASC_01
   m_TagString: Untagged
@@ -926,6 +927,28 @@ Transform:
   - {fileID: 4768547635959963090}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!95 &5055448622141363007
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 208825514500647138}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 32d62dec5c6a9e94689d031b9b2fc7f7, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &248979460906617146
 GameObject:
   m_ObjectHideFlags: 0
