@@ -18,6 +18,8 @@ namespace Tcp4
         [ReadOnly] public float3 streetEndPosition;
         [ReadOnly] public float3 counterPosition;
 
+
+
         public void Execute(int index)
         {
             ClientData data = clientDataArray[index];
@@ -28,8 +30,9 @@ namespace Tcp4
             {
                 //passo 1: andando pela rua e decidindo entrar
                 case ClientState.WalkingOnStreet:
+
                     float distanceFromDoor = math.distance(data.currentPosition, shopEntrancePosition);
-                    if (distanceFromDoor < 5f) //se estiver perto da porta
+                    if (distanceFromDoor <= 5f) //se estiver perto da porta
                     {
 
                         //a chance de entrar aumenta com a reputacao
@@ -37,13 +40,11 @@ namespace Tcp4
                         if (GetRandomValue(data.id) < chanceToEnter)
                         {
                             data.currentState = ClientState.GoingToQueue;
-                            data.moveTarget = shopEntrancePosition; //temporario, o manager vai definir a posicao real da fila
                             action = ClientAction.MoveToTarget;
                         }
                     }
                     else
                     {
-                        
                         data.moveTarget = streetEndPosition;
                         action = ClientAction.MoveToTarget;
                     }
@@ -51,16 +52,22 @@ namespace Tcp4
 
                 //passo 3: na fila, esperando
                 case ClientState.GoingToQueue:
-                case ClientState.InQueue:
-                    //o manager vai mover o npc. aqui, so verificamos o tempo.
-                    data.waitTime += deltaTime;
-                    if (data.waitTime > 30f) //se esperar mais de 30s
+                    float distanceToQueueSpot = math.distance(data.currentPosition, data.moveTarget);
+
+                    if (distanceToQueueSpot <= 0.5f)
                     {
-                        //passo 5.1: desistiu por tempo de espera
-                        data.currentState = ClientState.LeavingShop;
-                        action = ClientAction.ApplyPenalty;
+                        data.currentState = ClientState.InQueue;
+                        action = ClientAction.None; 
+                        data.waitTime = 0f; 
                     }
-                    //a logica para ir ao balcao sera gerenciada pelo manager
+                    else
+                    {
+                        action = ClientAction.MoveToTarget;
+                    }
+                    break;
+
+                case ClientState.InQueue:
+                    
                     break;
 
                 //passo 2 & 4: no balcao, decidindo e fazendo o pedido
@@ -77,6 +84,23 @@ namespace Tcp4
                 case ClientState.WaitingForOrder:
                     //aqui, o job apenas espera. a interacao do jogador (atender o pedido)
                     //sera tratada pelo manager, que ira mudar o estado do npc.
+                    break;
+
+                case ClientState.GoingToSeat:
+                    float distanceToSeat = math.distance(data.currentPosition, data.moveTarget);
+
+                    //se o cliente ja chegou perto o suficiente do seu alvo...
+                    if (distanceToSeat <= 2f) //1.0f e uma boa margem de erro
+                    {
+                        //...mudamos seu estado para o proximo passo
+                        data.currentState = ClientState.Seated;
+                        action = ClientAction.None;
+                    }
+                    else
+                    {
+                        action = ClientAction.MoveToTarget;
+                    }
+
                     break;
 
                 //passo 6: sentado, decidindo se faz um novo pedido
@@ -98,10 +122,16 @@ namespace Tcp4
                     break;
 
                 case ClientState.LeavingShop:
-                    //se chegou perto da saida (ex: a porta), desativa
-                    if (math.distance(data.currentPosition, shopEntrancePosition) < 1f)
+
+                    float distanceToStreetEnd = math.distance(data.currentPosition, data.moveTarget);
+
+                    if (distanceToStreetEnd <= 10f)
                     {
                         action = ClientAction.Deactivate;
+                    }
+                    else
+                    {
+                        action = ClientAction.MoveToTarget;
                     }
                     break;
             }

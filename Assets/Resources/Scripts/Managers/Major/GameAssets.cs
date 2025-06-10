@@ -94,14 +94,14 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
             {
                 debugText += $"\n- {device.name} ({device.layout})";
             }
-            Debug.Log(debugText);
+            //Debug.Log(debugText);
 
             // Caso não tenha gamepads conectados
             if (!hasGamepad)
             {
                 sprInteraction = inputPC;
                 OnChangeInteractionSprite?.Invoke();
-                Debug.Log("[SPRITE ATUALIZADO] MODELO COMPUTADOR (Teclado/Mouse)");
+                //Debug.Log("[SPRITE ATUALIZADO] MODELO COMPUTADOR (Teclado/Mouse)");
                 currentInputType = CurrentInputType.PC;
                 return;
             }

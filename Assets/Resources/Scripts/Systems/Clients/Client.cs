@@ -43,7 +43,7 @@ namespace Tcp4.Assets.Resources.Scripts.Systems.Clients
             anim = currentModel.GetComponent<Animator>();
 
             //configuracao inicial da ui
-            wantedProduct.gameObject.SetActive(false);
+            ControlBubble(false);
             timer.fillAmount = 1f;
         }
 
@@ -56,6 +56,12 @@ namespace Tcp4.Assets.Resources.Scripts.Systems.Clients
                 wantedProduct.gameObject.SetActive(true);
             }
         }
+
+        public void ControlBubble(bool isActive)
+        {
+            timer.gameObject.SetActive(isActive);
+            wantedProduct.gameObject.SetActive(isActive);
+        } 
 
         public void UpdateAnimation()
         {
@@ -73,22 +79,27 @@ namespace Tcp4.Assets.Resources.Scripts.Systems.Clients
             switch (debugState)
             {
                 case "InQueue":
-                    PlayAnimation(runAnimationName);
+                    PlayAnimation(idleAnimationName);
+                    //Debug.Log("ANIMACAO: idleAnimationName");
                     break;
 
                 case "Seated":
-                    PlayAnimation(runAnimationName);
+                    PlayAnimation(idleAnimationName);
+                    //Debug.Log("ANIMACAO: idleAnimationName");
                     break;
 
                 case "WaitingForOrder":
-                    PlayAnimation(runAnimationName);
+                    PlayAnimation(idleAnimationName);
+                    //Debug.Log("ANIMACAO: idleAnimationName");
                     break;
                 case "AtCounter":
-                    PlayAnimation(runAnimationName);
+                    PlayAnimation(idleAnimationName);
+                    //Debug.Log("ANIMACAO: idleAnimationName");
                     break;
 
                 default:
-                    PlayAnimation(idleAnimationName);
+                    PlayAnimation(runAnimationName);
+                    //Debug.Log("ANIMACAO: runAnimationName");
                     break;
             }
         }

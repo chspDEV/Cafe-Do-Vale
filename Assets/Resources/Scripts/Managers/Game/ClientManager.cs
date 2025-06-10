@@ -44,13 +44,23 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
         private NativeArray<ClientData> clientDataArray;
         private NativeArray<ClientAction> clientActionArray;
         private JobHandle aiJobHandle;
-        
+
+        [SerializeField] private bool[] isQueueSpotOccupied;
+        [SerializeField] private bool[] isSeatSpotOccupied;
+
+        [SerializeField] private Queue<int> clientQueue = new Queue<int>();
+
+
+
 
         public override void Awake()
         {
             base.Awake();
             InitializeClientPool();
             InitializeJobSystemArrays();
+
+            isQueueSpotOccupied = new bool[queueSpots.Count];
+            isSeatSpotOccupied = new bool[seatSpots.Count];
         }
 
         public void Start()
@@ -154,9 +164,8 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
 
                 Client clientComponent = clientComponents[i];
 
-                //atualiza a ui do timer continuamente
-                float maxWaitTime = 30f; //[NOTA] defina o tempo maximo de espera aqui
-                clientComponent.UpdateTimerUI(1f - (data.waitTime / maxWaitTime));
+                clientComponent.ControlBubble(false);
+                
                 clientComponent.UpdateAnimation();
                 clientComponent.debugAction = clientActionArray[i].ToString();
                 clientComponent.debugState = clientDataArray[i].currentState.ToString();
@@ -165,14 +174,20 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
                 switch (clientActionArray[i])
                 {
                     case ClientAction.MoveToTarget:
-                        Vector3 targetPosition = DetermineTargetPosition(data.currentState);
-                        Debug.Log($"manager mandando cliente {i} para o alvo: {targetPosition}"); // <--- ADICIONE ESTA LINHA
+                        Vector3 targetPosition = DetermineTargetPosition(i);
+                        Debug.Log($"manager mandando cliente {i} para o alvo: {targetPosition}"); 
                         clientAgents[i].SetDestination(targetPosition);
                         break;
                         
                     case ClientAction.ShowOrderBubble:
+                        
                         Sprite drinkSprite = GetDrinkSpriteFromID(data.orderID);
                         clientComponent.ShowWantedProduct(drinkSprite);
+
+                        clientComponent.ControlBubble(true);
+                        //atualiza a ui do timer continuamente
+                        float maxWaitTime = 30f; //[NOTA] defina o tempo maximo de espera aqui
+                        clientComponent.UpdateTimerUI(1f - (data.waitTime / maxWaitTime));
                         break;
                     
                     case ClientAction.GiveReward:
@@ -229,7 +244,7 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
 
         //funcoes de controle de spawn mantidas
         void HandleLogicSpawn() { if (canSpawn) { counter += Time.deltaTime; if (counter >= maxCounter) Spawn(); } }
-        void RestartCounter() { /* ... sua logica original ... */ }
+        void RestartCounter() { counter = 0f; }
         public void StartSpawnClients() { canSpawn = true; }
         public void StopSpawnClients() { canSpawn = false; counter = 0f; /*... logica de deletar todos ...*/ }
 
@@ -240,29 +255,122 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
             return -1;
         }
 
-        private Vector3 DetermineTargetPosition(ClientState state)
+        private Vector3 DetermineTargetPosition(int clientIndex)
         {
-            //se o objetivo e ir para a fila, manda para a entrada da loja por enquanto
-            if (state == ClientState.GoingToQueue)
+            //precisamos de uma copia dos dados para poder modifica-los
+            ClientData data = clientDataArray[clientIndex];
+
+            switch (data.currentState)
             {
-                //[NOTA] uma logica real aqui encontraria o ultimo lugar vago na fila
-                if (queueSpots.Count > 0) return queueSpots[0].position;
-            }
-            //se o objetivo e sair da loja, manda para o ponto de spawn/saida
-            if (state == ClientState.LeavingShop)
-            {
-                return spawnPoint.position;
+                case ClientState.WalkingOnStreet:
+                    return data.moveTarget;
+
+                case ClientState.GoingToQueue:
+                    if (data.canQueue)
+                    {
+                        float distanceToQueueSpot = math.distance(data.currentPosition, queueSpots[data.queueSpotIndex].position);
+                        Debug.Log($"Distancia até spot: {distanceToQueueSpot}");
+                        return queueSpots[data.queueSpotIndex].position;
+                    }
+
+                    int queueIndex = FindNextAvailableQueueSpot();
+
+                    if (queueIndex != -1)
+                    {
+                        //marca a vaga como ocupada
+                        isQueueSpotOccupied[queueIndex] = true;
+
+                        //salva no cliente qual vaga ele pegou
+                        data.queueSpotIndex = queueIndex;
+                        data.canQueue = true;
+                        data.moveTarget = queueSpots[queueIndex].position;
+                        clientDataArray[clientIndex] = data; //salva a alteracao nos dados
+
+
+                        return queueSpots[queueIndex].position;
+                    }
+                    else
+                    {
+                        data.canQueue = false;
+                        data.currentState = ClientState.LeavingShop;
+                    }
+
+                    break;
+
+                case ClientState.GoingToSeat:
+                    if (data.canSeat)
+                    {
+                        return queueSpots[data.seatSpotIndex].position;
+                    }
+
+                    int seatIndex = FindNextAvailableSeatSpot();
+
+                    if (seatIndex != -1)
+                    {
+                        //libera a vaga da fila que ele estava ocupando
+                        if (data.queueSpotIndex != -1)
+                        {
+                            isQueueSpotOccupied[data.queueSpotIndex] = false;
+                            data.canQueue = false;
+                        }
+                            
+                        //ocupa a nova vaga no assento
+                        isSeatSpotOccupied[seatIndex] = true;
+                        data.seatSpotIndex = seatIndex;
+                        data.canSeat = true;
+                        data.moveTarget = seatSpots[seatIndex].position;
+                        clientDataArray[clientIndex] = data; //salva a alteracao
+
+                        return seatSpots[seatIndex].position;
+                    }
+                    else
+                    {
+                        data.currentState = ClientState.LeavingShop;
+                    }
+
+                    break;
+
+                case ClientState.LeavingShop:
+                    //libera o assento que ele estava ocupando
+                    if (data.seatSpotIndex != -1)
+                        isSeatSpotOccupied[data.seatSpotIndex] = false;
+
+                    //reseta os indices para -1
+                    data.queueSpotIndex = -1;
+                    data.seatSpotIndex = -1;
+                    clientDataArray[clientIndex] = data;
+
+                    return streetEnd.position;
             }
 
-            //se nao houver uma logica clara, manda para a entrada da loja como padrao
-            //isso evita que ele fique parado sem alvo
-            if (shopEntrance != null)
-            {
-                return shopEntrance.position;
-            }
+            //fallback de seguranca: se nenhum caso for atendido, retorna a posicao atual (nao se move)
+            return data.currentPosition;
+        }
 
-            //fallback de seguranca: retorna a propria posicao (nao vai se mover)
-            return transform.position;
+        private int FindNextAvailableQueueSpot()
+        {
+            for (int i = 0; i < isQueueSpotOccupied.Length; i++)
+            {
+                if (isQueueSpotOccupied[i] == false)
+                {
+                    return i;
+                }
+            }
+            Debug.Log("Nenhum espaço disponivel na fila");
+            return -1; 
+        }
+
+        private int FindNextAvailableSeatSpot()
+        {
+            for (int i = 0; i < isSeatSpotOccupied.Length; i++)
+            {
+                if (isSeatSpotOccupied[i] == false)
+                {
+                    return i;
+                }
+            }
+            Debug.Log("Nenhum espaço disponivel na cadeira");
+            return -1; 
         }
 
         private Sprite GetDrinkSpriteFromID(int id) { /*[NOTA] implemente a logica para pegar o sprite do produto pelo id*/ return null; }

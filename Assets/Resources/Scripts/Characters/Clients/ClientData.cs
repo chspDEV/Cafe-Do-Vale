@@ -14,5 +14,11 @@ namespace Tcp4
         public float waitTime;
         public float speed;
         internal bool isActive;
+
+        //dados para sentar ou esperar
+
+        public bool canQueue, canSeat;
+        public int queueSpotIndex;
+        public int seatSpotIndex;
     }
 }
