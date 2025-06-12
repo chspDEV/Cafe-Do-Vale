@@ -1,3 +1,4 @@
+using NUnit.Framework;
 using Unity.Mathematics;
 
 namespace Tcp4
@@ -20,5 +21,9 @@ namespace Tcp4
         public bool canQueue, canSeat;
         public int queueSpotIndex;
         public int seatSpotIndex;
+
+
+        //para decidir se entra na cafeteria
+        public bool isShopOpen;
     }
 }

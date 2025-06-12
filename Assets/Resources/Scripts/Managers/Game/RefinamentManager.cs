@@ -55,13 +55,26 @@ namespace Tcp4
         }
 
         public List<RefinementRecipe> GetRecipes() => recipes;
-        public Drink GetDrinkByID(int ID)
+        public Drink GetDrinkByListID(int ID)
         {
             for(var i = 0; i < drinks.Count; i++)
             {
                 if(i == ID)
                 {
                     return drinks[i];
+                }
+            }
+
+            return null;
+        }
+
+        public Drink GetDrinkByID(int ID)
+        {
+            foreach (var d in drinks)
+            {
+                if (d.productID == ID)
+                {
+                    return d;
                 }
             }
 

@@ -1,71 +1,60 @@
-﻿//sem espaco no inicio, sem acentuacao, tudo minusculo
-using System;
+﻿using System;
 using System.Collections.Generic;
-using Tcp4.Assets.Resources.Scripts.Systems.Clients; //sua namespace para o client.cs
+using Tcp4.Assets.Resources.Scripts.Systems.Clients;
 using UnityEngine;
-
-//usings para o job system e navmesh
 using Unity.Collections;
 using Unity.Jobs;
 using Unity.Mathematics;
 using UnityEngine.AI;
 using TMPro;
-
-//[NOTA] certifique-se de que os outros scripts como singleton, timemanager, etc., estao corretos e acessiveis.
 namespace Tcp4.Assets.Resources.Scripts.Managers
 {
     public class ClientManager : Singleton<ClientManager>
     {
         public event Action OnSpawnClient;
         public event Action<Client> OnClientSetup;
-
+        public bool isOpenShop = false;
         [Header("Logica de Spawn (Sua Logica)")]
         [SerializeField] private GameObject clientPrefab;
         [SerializeField] private float baseTime = 20f;
         [SerializeField] private bool canSpawn;
         [SerializeField] private float counter;
         [SerializeField] private float maxCounter;
+
         [SerializeField] private AnimationCurve spawnRateCurve = new AnimationCurve(
             new Keyframe(9f, 1f), new Keyframe(12f, 2f), new Keyframe(18f, 1f));
-        
+
         [Header("Configuracoes e Referencias de Cena")]
         [SerializeField] private int maxClients = 24;
+
+        [Header("Client Settings")]
+        [SerializeField] private float maxQueueWaitTime = 60f; 
+
         [SerializeField] private Transform spawnPoint;
         [SerializeField] private Transform shopEntrance;
         [SerializeField] private Transform streetEnd;
         [SerializeField] private Transform counterPoint;
         [SerializeField] private List<Transform> queueSpots;
         [SerializeField] private List<Transform> seatSpots;
-
-        //estruturas para o job system e pooling
         private List<GameObject> clientPool = new();
         private List<Client> clientComponents = new();
         private List<NavMeshAgent> clientAgents = new();
         private NativeArray<ClientData> clientDataArray;
         private NativeArray<ClientAction> clientActionArray;
         private JobHandle aiJobHandle;
-
         [SerializeField] private bool[] isQueueSpotOccupied;
         [SerializeField] private bool[] isSeatSpotOccupied;
-
-        [SerializeField] private Queue<int> clientQueue = new Queue<int>();
-
-
-
-
         public override void Awake()
         {
             base.Awake();
             InitializeClientPool();
             InitializeJobSystemArrays();
-
-            isQueueSpotOccupied = new bool[queueSpots.Count];
-            isSeatSpotOccupied = new bool[seatSpots.Count];
         }
-
-        public void Start()
+        void Start()
         {
             RestartCounter();
+            isQueueSpotOccupied = new bool[queueSpots.Count];
+            isSeatSpotOccupied = new bool[seatSpots.Count];
         }
 
         private void InitializeClientPool()
@@ -76,7 +65,6 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
                 newClientGO.name = $"Client_{i}";
                 clientPool.Add(newClientGO);
                 clientComponents.Add(newClientGO.GetComponent<Client>());
-                
                 if (!newClientGO.TryGetComponent<NavMeshAgent>(out var agent))
                 {
                     agent = newClientGO.AddComponent<NavMeshAgent>();
@@ -85,7 +73,6 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
                 newClientGO.SetActive(false);
             }
         }
-
         private void InitializeJobSystemArrays()
         {
             clientDataArray = new NativeArray<ClientData>(maxClients, Allocator.Persistent);
@@ -95,30 +82,20 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
                 clientDataArray[i] = new ClientData { isActive = false };
             }
         }
-
         public void Spawn()
         {
             int clientIndex = FindInactiveClientIndex();
             if (clientIndex == -1) return; 
-
             OnSpawnClient?.Invoke();
-
-            //ativa o cliente do pool
             GameObject clientGO = clientPool[clientIndex];
             clientGO.transform.position = spawnPoint.position;
             clientGO.SetActive(true);
-            
-            //pega os dados visuais aleatorios (como era feito no seu client.cs)
             var clientName = GameAssets.Instance.clientNames[UnityEngine.Random.Range(0, GameAssets.Instance.clientNames.Count)];
             var clientSprite = GameAssets.Instance.clientSprites[UnityEngine.Random.Range(0, GameAssets.Instance.clientSprites.Count)];
             var clientModel = GameAssets.Instance.clientModels[UnityEngine.Random.Range(0, GameAssets.Instance.clientModels.Count)];
             var clientID = GameAssets.GenerateID(5);
-            
-            //chama o setup visual do componente client
             Client clientComponent = clientComponents[clientIndex];
             clientComponent.Setup(clientID, clientName, clientSprite, clientModel);
-            
-            //configura os dados para o job system
             clientDataArray[clientIndex] = new ClientData
             {
                 isActive = true,
@@ -129,12 +106,10 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
                 speed = 2f,
                 waitTime = 0f
             };
-
             OnClientSetup?.Invoke(clientComponent);
             RestartCounter();
         }
-        
-        public void Update()
+        private void Update()
         {
             HandleLogicSpawn();
 
@@ -145,27 +120,26 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
                 deltaTime = Time.deltaTime,
                 playerReputation = ShopManager.Instance.GetStars() / ShopManager.Instance.GetMaxStars(),
                 shopEntrancePosition = shopEntrance.position,
-                streetEndPosition = streetEnd.position
+                streetEndPosition = streetEnd.position,
+                counterPosition = counterPoint.position, 
+                isShopOpen = isOpenShop 
             };
             aiJobHandle = job.Schedule(maxClients, 32);
         }
-        
         private void LateUpdate()
         {
             aiJobHandle.Complete();
-
             for (int i = 0; i < maxClients; i++)
             {
                 if (!clientDataArray[i].isActive) continue;
 
                 ClientData data = clientDataArray[i];
                 data.currentPosition = clientPool[i].transform.position;
+                data.isShopOpen = isOpenShop; 
                 clientDataArray[i] = data;
 
                 Client clientComponent = clientComponents[i];
-
                 clientComponent.ControlBubble(false);
-                
                 clientComponent.UpdateAnimation();
                 clientComponent.debugAction = clientActionArray[i].ToString();
                 clientComponent.debugState = clientDataArray[i].currentState.ToString();
@@ -178,93 +152,162 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
                         Debug.Log($"manager mandando cliente {i} para o alvo: {targetPosition}"); 
                         clientAgents[i].SetDestination(targetPosition);
                         break;
-                        
                     case ClientAction.ShowOrderBubble:
-                        
                         Sprite drinkSprite = GetDrinkSpriteFromID(data.orderID);
                         clientComponent.ShowWantedProduct(drinkSprite);
-
                         clientComponent.ControlBubble(true);
-                        //atualiza a ui do timer continuamente
-                        float maxWaitTime = 30f; //[NOTA] defina o tempo maximo de espera aqui
+                        float maxWaitTime = 30f;
                         clientComponent.UpdateTimerUI(1f - (data.waitTime / maxWaitTime));
                         break;
-                    
                     case ClientAction.GiveReward:
                         ShopManager.Instance.AddMoney(35);
                         ShopManager.Instance.AddStars(UnityEngine.Random.Range(70f, 90f));
-                        //muda o estado para o proximo passo (ex: ir sentar ou sair)
-                        //[NOTA] esta logica deve ser mais robusta
                         data.currentState = ClientState.LeavingShop;
                         clientDataArray[i] = data;
                         break;
-
                     case ClientAction.ApplyPenalty:
                         ShopManager.Instance.AddStars(-0.1f);
                         data.currentState = ClientState.LeavingShop;
                         clientDataArray[i] = data;
                         break;
-
                     case ClientAction.Deactivate:
                         DeactivateClient(i);
                         break;
                 }
             }
         }
-        
-        //[NOTA] esta funcao deve ser adaptada para sua logica de jogo
         public void ServeClient(Drink d)
         {
             for (int i = 0; i < maxClients; i++)
             {
-                if (!clientDataArray[i].isActive || clientDataArray[i].currentState != ClientState.WaitingForOrder) continue;
+                if (!clientDataArray[i].isActive ||
+                    clientDataArray[i].currentState != ClientState.WaitingForOrder)
+                    continue;
 
                 ClientData data = clientDataArray[i];
-                //[NOTA] aqui voce precisa de uma forma de comparar a 'drink d' com o 'data.orderid'
+
                 if (IsCorrectDrink(d, data.orderID))
                 {
-                    //pedido correto!
-                    data.currentState = ClientState.GoingToSeat; //ou leaving shop
-                    data.moveTarget = FindFreeSeatPosition();
+                    // Liberar o spot da fila imediatamente
+                    if (data.queueSpotIndex != -1)
+                    {
+                        isQueueSpotOccupied[data.queueSpotIndex] = false;
+                        data.queueSpotIndex = -1;
+                    }
+
+                    // Decisão: 70% chance de sentar, 30% de sair
+                    bool willSit = UnityEngine.Random.Range(0f, 1f) <= 0.7f;
+
+                    if (willSit)
+                    {
+                        int seatIndex = FindNextAvailableSeatSpot();
+                        if (seatIndex != -1)
+                        {
+                            // Reservar o assento
+                            isSeatSpotOccupied[seatIndex] = true;
+                            data.seatSpotIndex = seatIndex;
+                            data.moveTarget = seatSpots[seatIndex].position;
+                            data.currentState = ClientState.GoingToSeat;
+                        }
+                        else
+                        {
+                            // Sem assentos disponíveis - cliente sai
+                            data.currentState = ClientState.LeavingShop;
+                            data.moveTarget = streetEnd.position;
+                        }
+                    }
+                    else
+                    {
+                        // Cliente decide sair após receber pedido
+                        data.currentState = ClientState.LeavingShop;
+                        data.moveTarget = streetEnd.position;
+                    }
+
+                    // Atualizar dados e dar recompensa
                     clientDataArray[i] = data;
-                    //forca a acao de recompensa no proximo frame
-                    clientActionArray[i] = ClientAction.GiveReward; 
-                    return; 
+                    clientActionArray[i] = ClientAction.GiveReward;
+
+                    // Avançar fila e chamar próximo cliente
+                    AdvanceQueue();
+                    CallNextClientToCounter();
+
+                    return;
+                }
+                else
+                {
+                    // Bebida errada - cliente insatisfeito
+                    data.currentState = ClientState.LeavingShop;
+                    data.moveTarget = streetEnd.position;
+
+                    // Liberar spot da fila
+                    if (data.queueSpotIndex != -1)
+                    {
+                        isQueueSpotOccupied[data.queueSpotIndex] = false;
+                        data.queueSpotIndex = -1;
+                    }
+
+                    clientDataArray[i] = data;
+                    clientActionArray[i] = ClientAction.ApplyPenalty;
+
+                    // Avançar fila e chamar próximo cliente
+                    AdvanceQueue();
+                    CallNextClientToCounter();
+
+                    return;
                 }
             }
-            Debug.Log($"nenhum cliente esperando por {d.name}!");
+            Debug.Log($"Nenhum cliente no balcão esperando por {d.name}!");
         }
 
+        // Novo método para chamar próximo cliente ao balcão
+        private void CallNextClientToCounter()
+        {
+            int nextClientIndex = FindClientAtQueueSpot(0);
+            if (nextClientIndex != -1)
+            {
+                ClientData data = clientDataArray[nextClientIndex];
+                data.currentState = ClientState.AtCounter;
+                data.moveTarget = counterPoint.position;
+                clientDataArray[nextClientIndex] = data;
+            }
+        }
         private void DeactivateClient(int index)
         {
             if (index < 0 || index >= maxClients || !clientPool[index].activeSelf) return;
             clientPool[index].SetActive(false);
             clientDataArray[index] = new ClientData { isActive = false };
         }
-
-        //funcoes de controle de spawn mantidas
-        void HandleLogicSpawn() { if (canSpawn) { counter += Time.deltaTime; if (counter >= maxCounter) Spawn(); } }
+        void HandleLogicSpawn()
+        {
+            if (canSpawn) 
+            {
+                if (counter >= maxCounter)
+                {
+                    Spawn();
+                }
+                else
+                {
+                    counter += Time.deltaTime * TimeManager.Instance.timeMultiplier;
+                }
+            }
+        }
         void RestartCounter() { counter = 0f; }
         public void StartSpawnClients() { canSpawn = true; }
-        public void StopSpawnClients() { canSpawn = false; counter = 0f; /*... logica de deletar todos ...*/ }
-
-        //funcoes auxiliares
+        public void StopSpawnClients() { canSpawn = false; counter = 0f; }
+        public void OpenShop() => isOpenShop = true;
+        public void CloseShop() => isOpenShop = false;
         private int FindInactiveClientIndex()
         {
             for (int i = 0; i < maxClients; i++) { if (!clientDataArray[i].isActive) return i; }
             return -1;
         }
-
         private Vector3 DetermineTargetPosition(int clientIndex)
         {
-            //precisamos de uma copia dos dados para poder modifica-los
             ClientData data = clientDataArray[clientIndex];
-
             switch (data.currentState)
             {
                 case ClientState.WalkingOnStreet:
                     return data.moveTarget;
-
                 case ClientState.GoingToQueue:
                     if (data.canQueue)
                     {
@@ -272,21 +315,14 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
                         Debug.Log($"Distancia até spot: {distanceToQueueSpot}");
                         return queueSpots[data.queueSpotIndex].position;
                     }
-
                     int queueIndex = FindNextAvailableQueueSpot();
-
                     if (queueIndex != -1)
                     {
-                        //marca a vaga como ocupada
                         isQueueSpotOccupied[queueIndex] = true;
-
-                        //salva no cliente qual vaga ele pegou
                         data.queueSpotIndex = queueIndex;
                         data.canQueue = true;
                         data.moveTarget = queueSpots[queueIndex].position;
-                        clientDataArray[clientIndex] = data; //salva a alteracao nos dados
-
-
+                        clientDataArray[clientIndex] = data;
                         return queueSpots[queueIndex].position;
                     }
                     else
@@ -294,59 +330,42 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
                         data.canQueue = false;
                         data.currentState = ClientState.LeavingShop;
                     }
-
                     break;
-
                 case ClientState.GoingToSeat:
                     if (data.canSeat)
                     {
                         return queueSpots[data.seatSpotIndex].position;
                     }
-
                     int seatIndex = FindNextAvailableSeatSpot();
-
                     if (seatIndex != -1)
                     {
-                        //libera a vaga da fila que ele estava ocupando
                         if (data.queueSpotIndex != -1)
                         {
                             isQueueSpotOccupied[data.queueSpotIndex] = false;
                             data.canQueue = false;
                         }
-                            
-                        //ocupa a nova vaga no assento
                         isSeatSpotOccupied[seatIndex] = true;
                         data.seatSpotIndex = seatIndex;
                         data.canSeat = true;
                         data.moveTarget = seatSpots[seatIndex].position;
-                        clientDataArray[clientIndex] = data; //salva a alteracao
-
+                        clientDataArray[clientIndex] = data;
                         return seatSpots[seatIndex].position;
                     }
                     else
                     {
                         data.currentState = ClientState.LeavingShop;
                     }
-
                     break;
-
                 case ClientState.LeavingShop:
-                    //libera o assento que ele estava ocupando
                     if (data.seatSpotIndex != -1)
                         isSeatSpotOccupied[data.seatSpotIndex] = false;
-
-                    //reseta os indices para -1
                     data.queueSpotIndex = -1;
                     data.seatSpotIndex = -1;
                     clientDataArray[clientIndex] = data;
-
                     return streetEnd.position;
             }
-
-            //fallback de seguranca: se nenhum caso for atendido, retorna a posicao atual (nao se move)
             return data.currentPosition;
         }
-
         private int FindNextAvailableQueueSpot()
         {
             for (int i = 0; i < isQueueSpotOccupied.Length; i++)
@@ -359,7 +378,6 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
             Debug.Log("Nenhum espaço disponivel na fila");
             return -1; 
         }
-
         private int FindNextAvailableSeatSpot()
         {
             for (int i = 0; i < isSeatSpotOccupied.Length; i++)
@@ -372,15 +390,86 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
             Debug.Log("Nenhum espaço disponivel na cadeira");
             return -1; 
         }
-
-        private Sprite GetDrinkSpriteFromID(int id) { /*[NOTA] implemente a logica para pegar o sprite do produto pelo id*/ return null; }
-        private bool IsCorrectDrink(Drink drink, int orderID) { /*[NOTA] implemente a logica de comparacao*/ return false; }
-        private Vector3 FindFreeSeatPosition() { /*[NOTA] implemente a logica para encontrar uma cadeira livre*/ return seatSpots[0].position; }
-        
+        private Sprite GetDrinkSpriteFromID(int id) { return RefinamentManager.Instance.GetDrinkByID(id).productImage; }
+        private bool IsCorrectDrink(Drink drink, int orderID) { return drink.productID == orderID; }
         private void OnDestroy()
         {
             if (clientDataArray.IsCreated) clientDataArray.Dispose();
             if (clientActionArray.IsCreated) clientActionArray.Dispose();
+        }
+
+        public void AdvanceQueue()
+        {
+            // Libera o primeiro spot
+            if (isQueueSpotOccupied[0])
+            {
+                isQueueSpotOccupied[0] = false;
+
+                // Move todos os clientes uma posição para frente
+                for (int i = 1; i < queueSpots.Count; i++)
+                {
+                    if (isQueueSpotOccupied[i])
+                    {
+                        // Atualiza o spot do cliente
+                        int clientIndex = FindClientAtQueueSpot(i);
+                        if (clientIndex != -1)
+                        {
+                            ClientData data = clientDataArray[clientIndex];
+                            data.queueSpotIndex = i - 1;
+                            data.moveTarget = queueSpots[i - 1].position;
+                            clientDataArray[clientIndex] = data;
+                            clientAgents[clientIndex].SetDestination(queueSpots[i - 1].position);
+
+                            // Atualiza ocupação
+                            isQueueSpotOccupied[i - 1] = true;
+                            isQueueSpotOccupied[i] = false;
+                        }
+                    }
+                }
+            }
+        }
+
+        // Novo método para encontrar cliente em um spot
+        private int FindClientAtQueueSpot(int spotIndex)
+        {
+            for (int i = 0; i < maxClients; i++)
+            {
+                if (clientDataArray[i].isActive &&
+                    clientDataArray[i].queueSpotIndex == spotIndex)
+                {
+                    return i;
+                }
+            }
+            return -1;
+        }
+
+        public void ClientLeftCounter()
+        {
+            AdvanceQueue();
+
+            // Ativa o próximo cliente
+            int nextClientIndex = FindClientAtQueueSpot(0);
+            if (nextClientIndex != -1)
+            {
+                ClientData data = clientDataArray[nextClientIndex];
+                data.currentState = ClientState.AtCounter;
+                clientDataArray[nextClientIndex] = data;
+            }
+        }
+
+        private void AdvanceClientToCounter(int queueIndex)
+        {
+            if (queueIndex != 0) return;
+
+            int clientIndex = FindClientAtQueueSpot(queueIndex);
+            if (clientIndex != -1)
+            {
+                ClientData data = clientDataArray[clientIndex];
+                data.currentState = ClientState.AtCounter;
+                data.moveTarget = counterPoint.position;
+                clientDataArray[clientIndex] = data;
+                clientAgents[clientIndex].SetDestination(counterPoint.position);
+            }
         }
     }
 }

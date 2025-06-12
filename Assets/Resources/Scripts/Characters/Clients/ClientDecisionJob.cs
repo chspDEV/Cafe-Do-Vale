@@ -4,20 +4,19 @@ using Unity.Collections;
 using Unity.Mathematics;
 using System.Xml.Linq;
 using System.Net.NetworkInformation;
-
 namespace Tcp4
 {
     public struct ClientDecisionJob : IJobParallelFor
     {
         public NativeArray<ClientData> clientDataArray;
         [WriteOnly] public NativeArray<ClientAction> actionArray;
-
         [ReadOnly] public float deltaTime;
-        [ReadOnly] public float playerReputation; //ex: 0.0 a 1.0
+        [ReadOnly] public float playerReputation;
         [ReadOnly] public float3 shopEntrancePosition;
         [ReadOnly] public float3 streetEndPosition;
         [ReadOnly] public float3 counterPosition;
-
+        [ReadOnly] public bool isShopOpen; 
+        [ReadOnly] public float maxQueueTime; 
 
 
         public void Execute(int index)
@@ -25,40 +24,74 @@ namespace Tcp4
             ClientData data = clientDataArray[index];
             ClientAction action = ClientAction.None;
 
-            //maquina de estados baseada no estado atual do npc
             switch (data.currentState)
             {
-                //passo 1: andando pela rua e decidindo entrar
                 case ClientState.WalkingOnStreet:
-
                     float distanceFromDoor = math.distance(data.currentPosition, shopEntrancePosition);
-                    if (distanceFromDoor <= 5f) //se estiver perto da porta
-                    {
 
-                        //a chance de entrar aumenta com a reputacao
-                        float chanceToEnter = 0.1f + playerReputation * 0.8f;
-                        if (GetRandomValue(data.id) < chanceToEnter)
+                    if (distanceFromDoor <= 2f) 
+                    {
+                        if (isShopOpen) 
                         {
-                            data.currentState = ClientState.GoingToQueue;
+                            // Cálculo de chance corrigido
+                            float reputationFactor = playerReputation * 0.6f; // 0 a 60%
+                            float baseChance = 0.2f; // 40% base
+                            float chanceToEnter = baseChance + reputationFactor;
+
+                            if (GetRandomValue(data.id) < chanceToEnter)
+                            {
+                                data.currentState = ClientState.GoingToQueue;
+                                action = ClientAction.MoveToTarget;
+                            }
+                            else
+                            {
+                                // Se não entrar, continua andando
+                                data.moveTarget = streetEndPosition;
+                                action = ClientAction.MoveToTarget;
+                            }
+                        }
+                        else
+                        {
+                            // Loja fechada, continua andando
+                            data.moveTarget = streetEndPosition;
                             action = ClientAction.MoveToTarget;
                         }
                     }
                     else
                     {
-                        data.moveTarget = streetEndPosition;
+                        // Continua se movendo para a entrada
+                        data.moveTarget = shopEntrancePosition;
                         action = ClientAction.MoveToTarget;
                     }
                     break;
 
-                //passo 3: na fila, esperando
+                case ClientState.GoingToCounter:
+                    if (!data.isShopOpen) { data.currentState = ClientState.LeavingShop; action = ClientAction.MoveToTarget; }
+                    float distanceToCounter = math.distance(data.currentPosition, counterPosition);
+                    if (distanceToCounter <= 1f)
+                    {
+                        data.currentState = ClientState.AtCounter;
+                        action = ClientAction.None;
+                    }
+                    else
+                    {
+                        action = ClientAction.MoveToTarget;
+                    }
+                    break;
+
                 case ClientState.GoingToQueue:
                     float distanceToQueueSpot = math.distance(data.currentPosition, data.moveTarget);
 
-                    if (distanceToQueueSpot <= 0.5f)
+                    if (!isShopOpen)
+                    {
+                        data.currentState = ClientState.LeavingShop;
+                        action = ClientAction.MoveToTarget;
+                    }
+                    else if (distanceToQueueSpot <= 0.5f)
                     {
                         data.currentState = ClientState.InQueue;
-                        action = ClientAction.None; 
-                        data.waitTime = 0f; 
+                        action = ClientAction.None;
+                        data.waitTime = 0f;
                     }
                     else
                     {
@@ -67,32 +100,43 @@ namespace Tcp4
                     break;
 
                 case ClientState.InQueue:
-                    
+                    data.waitTime += deltaTime;
+
+                    // Verifique se chegou ao balcão
+                    if (data.queueSpotIndex == 0 && math.distance(data.currentPosition, counterPosition) <= 1f)
+                    {
+                        data.currentState = ClientState.AtCounter;
+                    }
+                    // Verifique insatisfação
+                    else if (data.waitTime > 99f)
+                    {
+                        data.currentState = ClientState.LeavingShop;
+                        action = ClientAction.ApplyPenalty;
+                    }
+                    else if (!isShopOpen)
+                    {
+                        data.currentState = ClientState.LeavingShop;
+                        action = ClientAction.MoveToTarget;
+                    }
                     break;
 
-                //passo 2 & 4: no balcao, decidindo e fazendo o pedido
                 case ClientState.AtCounter:
-                    //passo 2: decidir o pedido (logica simplificada)
-                    data.orderID = (int)(GetRandomValue(data.id + 1) * 5) + 1; //escolhe um pedido de 1 a 5
-
-                    //passo 4: falar o pedido
+                    if (!data.isShopOpen) { data.currentState = ClientState.LeavingShop; action = ClientAction.MoveToTarget; }
+                    data.orderID = (int)(GetRandomValue(data.id + 1) * 5) + 1;
                     action = ClientAction.ShowOrderBubble;
                     data.currentState = ClientState.WaitingForOrder;
-                    data.waitTime = 0; //reseta o timer
+                    data.waitTime = 0;
                     break;
 
                 case ClientState.WaitingForOrder:
-                    //aqui, o job apenas espera. a interacao do jogador (atender o pedido)
-                    //sera tratada pelo manager, que ira mudar o estado do npc.
+                    if (!data.isShopOpen) { data.currentState = ClientState.LeavingShop; action = ClientAction.MoveToTarget; }
                     break;
 
                 case ClientState.GoingToSeat:
+                    if (!data.isShopOpen) { data.currentState = ClientState.LeavingShop; action = ClientAction.MoveToTarget; }
                     float distanceToSeat = math.distance(data.currentPosition, data.moveTarget);
-
-                    //se o cliente ja chegou perto o suficiente do seu alvo...
-                    if (distanceToSeat <= 2f) //1.0f e uma boa margem de erro
+                    if (distanceToSeat <= 2f)
                     {
-                        //...mudamos seu estado para o proximo passo
                         data.currentState = ClientState.Seated;
                         action = ClientAction.None;
                     }
@@ -100,15 +144,14 @@ namespace Tcp4
                     {
                         action = ClientAction.MoveToTarget;
                     }
-
                     break;
 
-                //passo 6: sentado, decidindo se faz um novo pedido
                 case ClientState.Seated:
+                    if (!data.isShopOpen) { data.currentState = ClientState.LeavingShop; action = ClientAction.MoveToTarget; }
                     data.waitTime += deltaTime;
-                    if (data.waitTime > 15f) //espera 15s enquanto esta sentado
+                    if (data.waitTime > 15f)
                     {
-                        if (GetRandomValue(data.id + 2) < 0.2f) //20% de chance de um novo pedido
+                        if (GetRandomValue(data.id + 2) < 0.2f)
                         {
                             data.currentState = ClientState.GoingToQueue;
                             data.waitTime = 0;
@@ -122,9 +165,8 @@ namespace Tcp4
                     break;
 
                 case ClientState.LeavingShop:
-
+                    if (!data.isShopOpen) { data.currentState = ClientState.LeavingShop; action = ClientAction.MoveToTarget; }
                     float distanceToStreetEnd = math.distance(data.currentPosition, data.moveTarget);
-
                     if (distanceToStreetEnd <= 10f)
                     {
                         action = ClientAction.Deactivate;
@@ -135,15 +177,11 @@ namespace Tcp4
                     }
                     break;
             }
-
-            //atualiza os arrays de dados e acoes
             clientDataArray[index] = data;
             actionArray[index] = action;
         }
-
         private float GetRandomValue(int seed)
         {
-            //gera um valor pseudo-aleatorio baseado no id para consistencia
             return noise.snoise(new float2(seed, deltaTime));
         }
     }

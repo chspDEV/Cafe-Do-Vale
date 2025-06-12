@@ -8,7 +8,7 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
     {
         [TitleGroup("Configurações de Tempo")]
         [PropertyRange(1, 500)]
-        [SerializeField] private float timeMultiplier = 1f;
+        [SerializeField] public float timeMultiplier = 1f;
         [SerializeField] private float initialHour = 6f;
         [SerializeField] public bool isFirstDay = true;
 
