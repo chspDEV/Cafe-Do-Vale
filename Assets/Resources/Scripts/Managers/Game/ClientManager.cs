@@ -16,7 +16,8 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
         public bool isOpenShop = false;
         [Header("Logica de Spawn (Sua Logica)")]
         [SerializeField] private GameObject clientPrefab;
-        [SerializeField] private float baseTime = 20f;
+        [SerializeField] private float clientWaitOrderTime = 20f;
+        [SerializeField] private float clientWaitQueueTime = 60f;
         [SerializeField] private bool canSpawn;
         [SerializeField] private float counter;
         [SerializeField] private float maxCounter;
@@ -104,7 +105,7 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
                 currentPosition = clientGO.transform.position,
                 moveTarget = shopEntrance.position,
                 speed = 2f,
-                waitTime = 0f
+                waitQueueTime = 0f
             };
             OnClientSetup?.Invoke(clientComponent);
             RestartCounter();
@@ -135,11 +136,12 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
 
                 ClientData data = clientDataArray[i];
                 data.currentPosition = clientPool[i].transform.position;
-                data.isShopOpen = isOpenShop; 
+                data.isShopOpen = isOpenShop;
+                data.maxWaitOrderTime = clientWaitOrderTime;
+                data.maxWaitQueueTime = clientWaitQueueTime;
                 clientDataArray[i] = data;
 
                 Client clientComponent = clientComponents[i];
-                clientComponent.ControlBubble(false);
                 clientComponent.UpdateAnimation();
                 clientComponent.debugAction = clientActionArray[i].ToString();
                 clientComponent.debugState = clientDataArray[i].currentState.ToString();
@@ -149,15 +151,14 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
                 {
                     case ClientAction.MoveToTarget:
                         Vector3 targetPosition = DetermineTargetPosition(i);
-                        Debug.Log($"manager mandando cliente {i} para o alvo: {targetPosition}"); 
+                        //Debug.Log($"manager mandando cliente {i} para o alvo: {targetPosition}"); 
                         clientAgents[i].SetDestination(targetPosition);
                         break;
                     case ClientAction.ShowOrderBubble:
                         Sprite drinkSprite = GetDrinkSpriteFromID(data.orderID);
                         clientComponent.ShowWantedProduct(drinkSprite);
                         clientComponent.ControlBubble(true);
-                        float maxWaitTime = 30f;
-                        clientComponent.UpdateTimerUI(1f - (data.waitTime / maxWaitTime));
+                        data.waitOrderTime = 0f;
                         break;
                     case ClientAction.GiveReward:
                         ShopManager.Instance.AddMoney(35);
@@ -169,6 +170,22 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
                         ShopManager.Instance.AddStars(-0.1f);
                         data.currentState = ClientState.LeavingShop;
                         clientDataArray[i] = data;
+                        break;
+                    case ClientAction.WaitOrder:
+                        data.waitOrderTime += Time.deltaTime;
+
+                        float fillAmount = 1f - (data.waitOrderTime / data.maxWaitOrderTime);
+                        clientComponent.UpdateTimerUI(fillAmount);
+                        Debug.Log($"Preenchimento: {fillAmount}");
+
+                        //importante: sempre que fizer uma alteracao na data reenviar!
+                        clientDataArray[i] = data;
+
+                        if (fillAmount <= 0)
+                        {
+                            clientActionArray[i] = ClientAction.ApplyPenalty;
+                        }
+
                         break;
                     case ClientAction.Deactivate:
                         DeactivateClient(i);
@@ -259,7 +276,6 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
             Debug.Log($"Nenhum cliente no balcão esperando por {d.name}!");
         }
 
-        // Novo método para chamar próximo cliente ao balcão
         private void CallNextClientToCounter()
         {
             int nextClientIndex = FindClientAtQueueSpot(0);
@@ -275,6 +291,7 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
         {
             if (index < 0 || index >= maxClients || !clientPool[index].activeSelf) return;
             clientPool[index].SetActive(false);
+            clientPool[index].transform.position = spawnPoint.position;
             clientDataArray[index] = new ClientData { isActive = false };
         }
         void HandleLogicSpawn()
@@ -312,7 +329,7 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
                     if (data.canQueue)
                     {
                         float distanceToQueueSpot = math.distance(data.currentPosition, queueSpots[data.queueSpotIndex].position);
-                        Debug.Log($"Distancia até spot: {distanceToQueueSpot}");
+                        //Debug.Log($"Distancia até spot: {distanceToQueueSpot}");
                         return queueSpots[data.queueSpotIndex].position;
                     }
                     int queueIndex = FindNextAvailableQueueSpot();

@@ -12,7 +12,10 @@ namespace Tcp4
 
         //dados para as decisoes
         public int orderID;
-        public float waitTime;
+        public float waitQueueTime;
+        public float waitOrderTime;
+        public float maxWaitOrderTime;
+        public float maxWaitQueueTime;
         public float speed;
         internal bool isActive;
 

@@ -21064,7 +21064,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isOpenShop: 0
   clientPrefab: {fileID: 1277494111889277734, guid: 76b18891a1a76f9449ba706dcc18b0ba, type: 3}
-  baseTime: 20
+  clientWaitOrderTime: 20
+  clientWaitQueueTime: 60
   canSpawn: 0
   counter: 0
   maxCounter: 60
@@ -21137,7 +21138,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  maxClients: 100
+  maxClients: 1
   maxQueueWaitTime: 60
   spawnPoint: {fileID: 634518349}
   shopEntrance: {fileID: 1427677025}

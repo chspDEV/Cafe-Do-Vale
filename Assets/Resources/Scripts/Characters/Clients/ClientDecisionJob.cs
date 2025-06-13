@@ -91,7 +91,7 @@ namespace Tcp4
                     {
                         data.currentState = ClientState.InQueue;
                         action = ClientAction.None;
-                        data.waitTime = 0f;
+                        data.waitQueueTime = 0f;
                     }
                     else
                     {
@@ -100,15 +100,15 @@ namespace Tcp4
                     break;
 
                 case ClientState.InQueue:
-                    data.waitTime += deltaTime;
+                    data.waitQueueTime += deltaTime;
 
                     // Verifique se chegou ao balcão
-                    if (data.queueSpotIndex == 0 && math.distance(data.currentPosition, counterPosition) <= 1f)
+                    if (data.queueSpotIndex == 0)
                     {
                         data.currentState = ClientState.AtCounter;
                     }
                     // Verifique insatisfação
-                    else if (data.waitTime > 99f)
+                    else if (data.waitQueueTime > data.maxWaitQueueTime)
                     {
                         data.currentState = ClientState.LeavingShop;
                         action = ClientAction.ApplyPenalty;
@@ -125,7 +125,7 @@ namespace Tcp4
                     data.orderID = (int)(GetRandomValue(data.id + 1) * 5) + 1;
                     action = ClientAction.ShowOrderBubble;
                     data.currentState = ClientState.WaitingForOrder;
-                    data.waitTime = 0;
+                    data.waitQueueTime = 0;
                     break;
 
                 case ClientState.WaitingForOrder:
@@ -148,13 +148,13 @@ namespace Tcp4
 
                 case ClientState.Seated:
                     if (!data.isShopOpen) { data.currentState = ClientState.LeavingShop; action = ClientAction.MoveToTarget; }
-                    data.waitTime += deltaTime;
-                    if (data.waitTime > 15f)
+                    data.waitQueueTime += deltaTime;
+                    if (data.waitQueueTime > 15f)
                     {
                         if (GetRandomValue(data.id + 2) < 0.2f)
                         {
                             data.currentState = ClientState.GoingToQueue;
-                            data.waitTime = 0;
+                            data.waitQueueTime = 0;
                         }
                         else
                         {
@@ -167,7 +167,7 @@ namespace Tcp4
                 case ClientState.LeavingShop:
                     if (!data.isShopOpen) { data.currentState = ClientState.LeavingShop; action = ClientAction.MoveToTarget; }
                     float distanceToStreetEnd = math.distance(data.currentPosition, data.moveTarget);
-                    if (distanceToStreetEnd <= 10f)
+                    if (distanceToStreetEnd <= 2f)
                     {
                         action = ClientAction.Deactivate;
                     }
