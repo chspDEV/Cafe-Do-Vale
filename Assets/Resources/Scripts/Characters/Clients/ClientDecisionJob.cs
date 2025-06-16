@@ -29,13 +29,12 @@ namespace Tcp4
                 case ClientState.WalkingOnStreet:
                     float distanceFromDoor = math.distance(data.currentPosition, shopEntrancePosition);
 
-                    if (distanceFromDoor <= 2f) 
+                    if (distanceFromDoor <= 3f)
                     {
-                        if (isShopOpen) 
+                        if (isShopOpen) // Só entra se a loja estiver aberta
                         {
-                            // Cálculo de chance corrigido
-                            float reputationFactor = playerReputation * 0.6f; // 0 a 60%
-                            float baseChance = 0.2f; // 40% base
+                            float reputationFactor = playerReputation * 0.6f;
+                            float baseChance = 0.4f;
                             float chanceToEnter = baseChance + reputationFactor;
 
                             if (GetRandomValue(data.id) < chanceToEnter)
@@ -45,22 +44,14 @@ namespace Tcp4
                             }
                             else
                             {
-                                // Se não entrar, continua andando
                                 data.moveTarget = streetEndPosition;
                                 action = ClientAction.MoveToTarget;
                             }
                         }
-                        else
-                        {
-                            // Loja fechada, continua andando
-                            data.moveTarget = streetEndPosition;
-                            action = ClientAction.MoveToTarget;
-                        }
                     }
                     else
                     {
-                        // Continua se movendo para a entrada
-                        data.moveTarget = shopEntrancePosition;
+                        data.moveTarget = streetEndPosition;
                         action = ClientAction.MoveToTarget;
                     }
                     break;
@@ -122,7 +113,6 @@ namespace Tcp4
 
                 case ClientState.AtCounter:
                     if (!data.isShopOpen) { data.currentState = ClientState.LeavingShop; action = ClientAction.MoveToTarget; }
-                    data.orderID = (int)(GetRandomValue(data.id + 1) * 5) + 1;
                     action = ClientAction.ShowOrderBubble;
                     data.currentState = ClientState.WaitingForOrder;
                     data.waitQueueTime = 0;

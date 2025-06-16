@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: Expresso
   m_EditorClassIdentifier: 
   productName: Expresso
-  quality: 0
-  productID: 5
+  quality: 30
+  productID: 1
   model: {fileID: 828628952653485657, guid: 0e55602d41e5d1948b0677603e4e437e, type: 3}
   productImage: {fileID: 452477148, guid: d055e500dae5fdd4fafcc61b98f9eff2, type: 3}
   requiredIngredients:

@@ -12,6 +12,7 @@ namespace Tcp4
 
         //dados para as decisoes
         public int orderID;
+        public string orderName;
         public float waitQueueTime;
         public float waitOrderTime;
         public float maxWaitOrderTime;

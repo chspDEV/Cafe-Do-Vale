@@ -22,7 +22,6 @@ namespace Tcp4
         None,
         MoveToTarget,
         ShowOrderBubble,
-        GiveReward,
         ApplyPenalty,
         WaitOrder,
         Deactivate

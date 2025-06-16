@@ -10,12 +10,12 @@ namespace Tcp4.Assets.Resources.Scripts.Systems.Clients
     {
         //informacoes de identificacao e referencias visuais
         public string clientID;
-        public string clientName;
 
         [Header("UI References")]
-        public TextMeshProUGUI nameTmp;
+        public TextMeshProUGUI orderTmp;
         public Image wantedProduct;
         public Image timer;
+
 
         private GameObject currentModel;
         public string debugAction = "naoConfigurado";
@@ -27,11 +27,9 @@ namespace Tcp4.Assets.Resources.Scripts.Systems.Clients
         private Animator anim;
 
         //setup agora e focado apenas na parte visual inicial
-        public void Setup(string newID, string newName, Sprite newSprite, GameObject newModel)
+        public void Setup(string newID, Sprite newSprite, GameObject newModel)
         {
             this.clientID = newID;
-            this.clientName = newName;
-            this.nameTmp.text = newName;
 
             //limpa o modelo antigo se houver
             if (currentModel != null)
@@ -61,7 +59,12 @@ namespace Tcp4.Assets.Resources.Scripts.Systems.Clients
         {
             timer.gameObject.SetActive(isActive);
             wantedProduct.gameObject.SetActive(isActive);
-        } 
+        }
+
+        public void UpdateOrderName(string newOrderName)
+        {
+            this.orderTmp.text = newOrderName;
+        }
 
         public void UpdateAnimation()
         {

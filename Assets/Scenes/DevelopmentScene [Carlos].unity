@@ -21062,12 +21062,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5f93e108f9729364cb5a44d471fba1e0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isOpenShop: 0
   clientPrefab: {fileID: 1277494111889277734, guid: 76b18891a1a76f9449ba706dcc18b0ba, type: 3}
   clientWaitOrderTime: 20
   clientWaitQueueTime: 60
-  canSpawn: 0
-  counter: 0
   maxCounter: 60
   spawnRateCurve:
     serializedVersion: 2
@@ -21138,8 +21135,6 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  maxClients: 1
-  maxQueueWaitTime: 60
   spawnPoint: {fileID: 634518349}
   shopEntrance: {fileID: 1427677025}
   streetEnd: {fileID: 979536579}
@@ -21178,6 +21173,8 @@ MonoBehaviour:
   - {fileID: 1353062089}
   - {fileID: 260955958}
   - {fileID: 978941752}
+  maxClients: 64
+  maxQueueWaitTime: 60
   isQueueSpotOccupied: 
   isSeatSpotOccupied: 
 --- !u!1 &395820686
@@ -72252,7 +72249,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7bbada6c4cb4ec34c9be239cfbcc8294, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  productInventory: []
+  productInventory:
+  - {fileID: 11400000, guid: ad5d708b28f03f74386f9ed6df8eb4db, type: 2}
+  - {fileID: 11400000, guid: ad5d708b28f03f74386f9ed6df8eb4db, type: 2}
+  - {fileID: 11400000, guid: ad5d708b28f03f74386f9ed6df8eb4db, type: 2}
+  - {fileID: 11400000, guid: ad5d708b28f03f74386f9ed6df8eb4db, type: 2}
+  - {fileID: 11400000, guid: ad5d708b28f03f74386f9ed6df8eb4db, type: 2}
+  - {fileID: 11400000, guid: ad5d708b28f03f74386f9ed6df8eb4db, type: 2}
   instanceInventory: []
   bagPoint: {fileID: 177981441}
 --- !u!114 &1485050873
@@ -101969,11 +101972,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 181f0c9cb67047d4c97d3219208e4c5c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  timeMultiplier: 120
+  timeMultiplier: 100
   initialHour: 4
   isFirstDay: 0
-  startHour: 5
-  closeHour: 18
+  startHour: 9
+  closeHour: 21
   directionalLight: {fileID: 519992048}
   lightColor:
     serializedVersion: 2
