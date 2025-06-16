@@ -59,6 +59,7 @@ namespace Tcp4.Assets.Resources.Scripts.Systems.Clients
         {
             timer.gameObject.SetActive(isActive);
             wantedProduct.gameObject.SetActive(isActive);
+            orderTmp.gameObject.SetActive(isActive);
         }
 
         public void UpdateOrderName(string newOrderName)

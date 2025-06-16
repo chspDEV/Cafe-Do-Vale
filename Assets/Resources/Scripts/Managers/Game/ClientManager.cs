@@ -173,13 +173,15 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
         {
             currentCounter = counter;
 
-            if (!canSpawn || !isOpenShop) return;
-
             float currentHour = TimeManager.Instance.CurrentHour;
 
             float spawnMultiplier = spawnRateCurve.Evaluate(currentHour);
 
             float adjustedSpawnInterval = maxCounter / Mathf.Max(spawnMultiplier, 0.1f);
+
+            canSpawn = currentHour < 22f && currentHour > 5f;
+
+            if (!canSpawn) return;
 
             if (counter >= adjustedSpawnInterval)
             {

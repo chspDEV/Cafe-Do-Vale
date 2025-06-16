@@ -21070,8 +21070,8 @@ MonoBehaviour:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
-      time: 9.001259
-      value: -0.0018194318
+      time: 6.00309
+      value: 0.010662258
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -21115,8 +21115,8 @@ MonoBehaviour:
       inWeight: 0.33333334
       outWeight: 0.33333334
     - serializedVersion: 3
-      time: 16.507034
-      value: 0.9974002
+      time: 17.039902
+      value: 0.8564243
       inSlope: -0.014102575
       outSlope: -0.014102575
       tangentMode: 0
@@ -21124,8 +21124,8 @@ MonoBehaviour:
       inWeight: 0.33333334
       outWeight: 0.33333334
     - serializedVersion: 3
-      time: 18.014864
-      value: 0.0069515407
+      time: 21.294954
+      value: 0.010461062
       inSlope: -0.006450223
       outSlope: -0.006450223
       tangentMode: 0
@@ -101972,7 +101972,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 181f0c9cb67047d4c97d3219208e4c5c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  timeMultiplier: 100
+  timeMultiplier: 21
   initialHour: 4
   isFirstDay: 0
   startHour: 9

@@ -31,11 +31,9 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
         {
             yield return new WaitForSeconds(1f);
             timeManager.OnOpenCoffeeShop            += uiManager.OpenShopNotification;
-            timeManager.OnOpenCoffeeShop            += clientManager.StartSpawnClients;
             timeManager.OnOpenCoffeeShop            += clientManager.OpenShop;
 
             timeManager.OnCloseCoffeeShop           += uiManager.CloseShopNotification;
-            timeManager.OnCloseCoffeeShop           += clientManager.StopSpawnClients;
             timeManager.OnCloseCoffeeShop           += clientManager.CloseShop;
 
 

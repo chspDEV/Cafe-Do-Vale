@@ -59,7 +59,7 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
         [ColorUsage(true, true)]
         [SerializeField] private Color dayColor = new Color(1f, 0.6f, 0.4f);
 
-        [ShowInInspector, ReadOnly, ProgressBar(0, 24)]
+        [ShowInInspector, ReadOnly]
         public float CurrentHour { get; private set; }
 
         [ShowInInspector, ReadOnly]
