@@ -29,9 +29,15 @@ namespace Tcp4
                 case ClientState.WalkingOnStreet:
                     float distanceFromDoor = math.distance(data.currentPosition, shopEntrancePosition);
 
-                    if (distanceFromDoor <= 3f)
+                    // Continua se movendo para a entrada se ainda não chegou perto
+                    if (distanceFromDoor > 3f)
                     {
-                        if (isShopOpen) // Só entra se a loja estiver aberta
+                        data.moveTarget = shopEntrancePosition;
+                        action = ClientAction.MoveToTarget;
+                    }
+                    else // Quando chega perto da entrada
+                    {
+                        if (isShopOpen)
                         {
                             float reputationFactor = playerReputation * 0.6f;
                             float baseChance = 0.4f;
@@ -41,18 +47,21 @@ namespace Tcp4
                             {
                                 data.currentState = ClientState.GoingToQueue;
                                 action = ClientAction.MoveToTarget;
+                                data.moveTarget = shopEntrancePosition; // Mantém o destino como entrada
                             }
                             else
                             {
+                                data.currentState = ClientState.LeavingShop;
                                 data.moveTarget = streetEndPosition;
                                 action = ClientAction.MoveToTarget;
                             }
                         }
-                    }
-                    else
-                    {
-                        data.moveTarget = streetEndPosition;
-                        action = ClientAction.MoveToTarget;
+                        else
+                        {
+                            data.currentState = ClientState.LeavingShop;
+                            data.moveTarget = streetEndPosition;
+                            action = ClientAction.MoveToTarget;
+                        }
                     }
                     break;
 
@@ -71,18 +80,32 @@ namespace Tcp4
                     break;
 
                 case ClientState.GoingToQueue:
-                    float distanceToQueueSpot = math.distance(data.currentPosition, data.moveTarget);
+                    float distanceToEntrance = math.distance(data.currentPosition, shopEntrancePosition);
 
                     if (!isShopOpen)
                     {
                         data.currentState = ClientState.LeavingShop;
                         action = ClientAction.MoveToTarget;
                     }
-                    else if (distanceToQueueSpot <= 0.5f)
+                    else if (distanceToEntrance <= 3f && !data.canQueue)
                     {
-                        data.currentState = ClientState.InQueue;
-                        action = ClientAction.None;
-                        data.waitQueueTime = 0f;
+                        // Sinaliza para o ClientManager que precisa de um spot
+                        action = ClientAction.RequestQueueSpot;
+                    }
+                    else if (data.canQueue)
+                    {
+                        float distanceToQueueSpot = math.distance(data.currentPosition, data.moveTarget);
+
+                        if (distanceToQueueSpot <= 0.5f)
+                        {
+                            data.currentState = ClientState.InQueue;
+                            action = ClientAction.None;
+                            data.waitQueueTime = 0f;
+                        }
+                        else
+                        {
+                            action = ClientAction.MoveToTarget;
+                        }
                     }
                     else
                     {
@@ -125,7 +148,7 @@ namespace Tcp4
                 case ClientState.GoingToSeat:
                     if (!data.isShopOpen) { data.currentState = ClientState.LeavingShop; action = ClientAction.MoveToTarget; }
                     float distanceToSeat = math.distance(data.currentPosition, data.moveTarget);
-                    if (distanceToSeat <= 2f)
+                    if (distanceToSeat <= .8f)
                     {
                         data.currentState = ClientState.Seated;
                         action = ClientAction.None;

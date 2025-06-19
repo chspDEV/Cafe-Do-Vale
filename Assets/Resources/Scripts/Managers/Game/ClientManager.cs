@@ -288,6 +288,9 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
                 case ClientAction.Deactivate:
                     DeactivateClient(index);
                     break;
+                case ClientAction.RequestQueueSpot:
+                    HandleQueueSpotRequest(index);
+                    break;
             }
         }
         #endregion
@@ -372,6 +375,34 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
             }
         }
 
+        private void HandleQueueSpotRequest(int index)
+        {
+            Debug.Log($"Cliente {index} solicitando spot na fila");
+
+            ClientData data = clientDataArray[index];
+            int queueIndex = FindAvailableQueueSpot();
+
+            if (queueIndex != -1)
+            {
+                Debug.Log($"Spot {queueIndex} atribuído ao cliente {index}");
+                isQueueSpotOccupied[queueIndex] = true;
+                data.queueSpotIndex = queueIndex;
+                data.canQueue = true;
+                data.moveTarget = queueSpots[queueIndex].position;
+                clientDataArray[index] = data;
+
+                clientAgents[index].SetDestination(queueSpots[queueIndex].position);
+            }
+            else
+            {
+                Debug.Log($"Nenhum spot disponível para cliente {index}");
+                data.canQueue = false;
+                data.currentState = ClientState.LeavingShop;
+                data.moveTarget = streetEnd.position;
+                clientDataArray[index] = data;
+            }
+        }
+
         private void DeactivateClient(int index)
         {
             if (index < 0 || index >= maxClients || !clientPool[index].activeSelf) return;
@@ -418,7 +449,11 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
             // Liberar o spot da fila primeiro
             if (data.queueSpotIndex != -1)
             {
-                isQueueSpotOccupied[data.queueSpotIndex] = false;
+                // Verifica se o spot ainda está marcado como ocupado
+                if (data.queueSpotIndex < isQueueSpotOccupied.Length)
+                {
+                    isQueueSpotOccupied[data.queueSpotIndex] = false;
+                }
                 data.queueSpotIndex = -1;
             }
 
@@ -426,6 +461,9 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
 
             // Decisão: 70% chance de sentar, 30% de sair
             bool willSit = UnityEngine.Random.Range(0f, 1f) <= 0.7f;
+
+            // Avança a fila e chama próximo cliente
+            AdvanceQueue();
 
             if (willSit)
             {
@@ -455,8 +493,7 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
             // Atualiza os dados primeiro
             clientDataArray[index] = data;
 
-            // Avança a fila e chama próximo cliente
-            AdvanceQueue();
+            
         }
 
         public void AdvanceQueue()
@@ -464,12 +501,15 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
             // Verifica se o primeiro spot está ocupado
             if (!isQueueSpotOccupied[0]) return;
 
+            Debug.Log("TENTANDO AVANÇAR FILA!");
             // Libera o primeiro spot
             isQueueSpotOccupied[0] = false;
 
             // Move todos os clientes uma posição para frente
             for (int i = 1; i < queueSpots.Count; i++)
             {
+                Debug.Log("[CHECANDO POSICOES DE CLIENTE]");
+
                 if (isQueueSpotOccupied[i])
                 {
                     int clientIndex = FindClientAtQueueSpot(i);
@@ -478,6 +518,8 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
                         ClientData data = clientDataArray[clientIndex];
                         data.queueSpotIndex = i - 1;
                         data.moveTarget = queueSpots[i - 1].position;
+
+                        Debug.Log($"Cliente na posicao {i} foi para {data.queueSpotIndex}");
                         clientDataArray[clientIndex] = data;
 
                         // Atualiza ocupação
@@ -486,6 +528,7 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
 
                         // Força o movimento imediato
                         clientAgents[clientIndex].SetDestination(queueSpots[i - 1].position);
+
                     }
                 }
             }
@@ -535,14 +578,11 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
             switch (data.currentState)
             {
                 case ClientState.WalkingOnStreet:
-                    return data.moveTarget;
+                    return data.moveTarget; // Já deve ser shopEntrance.position
 
                 case ClientState.GoingToQueue:
-                    if (data.canQueue)
-                    {
-                        return queueSpots[data.queueSpotIndex].position;
-                    }
-                    return HandleQueueSpotAssignment(clientIndex, data);
+                    // Sempre retorna a posição da entrada da loja
+                    return queueSpots[data.queueSpotIndex].position;
 
                 case ClientState.GoingToSeat:
                     if (data.canSeat)
@@ -567,21 +607,37 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
 
         private Vector3 HandleQueueSpotAssignment(int clientIndex, ClientData data)
         {
-            int queueIndex = FindNextAvailableQueueSpot();
-            if (queueIndex != -1)
-            {
-                isQueueSpotOccupied[queueIndex] = true;
-                data.queueSpotIndex = queueIndex;
-                data.canQueue = true;
-                data.moveTarget = queueSpots[queueIndex].position;
-                clientDataArray[clientIndex] = data;
-                return queueSpots[queueIndex].position;
-            }
 
-            data.canQueue = false;
-            data.currentState = ClientState.LeavingShop;
-            clientDataArray[clientIndex] = data;
-            return streetEnd.position;
+            // Se chegou perto do shopEntrance, tenta conseguir um spot
+            float distToEntrance = math.distance(data.currentPosition, shopEntrance.position);
+
+            if (distToEntrance <= 5f)
+            {
+                int queueIndex = FindAvailableQueueSpot();
+
+                if (queueIndex != -1)
+                {
+                    isQueueSpotOccupied[queueIndex] = true;
+                    data.queueSpotIndex = queueIndex;
+                    data.canQueue = true;
+                    data.moveTarget = queueSpots[queueIndex].position;
+                    clientDataArray[clientIndex] = data;
+                    return queueSpots[queueIndex].position;
+                }
+                else
+                {
+                    Debug.Log("Nao consegui um spot disponivel");
+                    data.canQueue = false;
+                    data.currentState = ClientState.LeavingShop;
+                    clientDataArray[clientIndex] = data;
+                    return streetEnd.position;
+                }
+            }
+            else
+            {
+                // Continua indo para a entrada da loja
+                return shopEntrance.position;
+            }
         }
 
         private Vector3 HandleSeatSpotAssignment(int clientIndex, ClientData data)
@@ -608,7 +664,7 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
             return streetEnd.position;
         }
 
-        private int FindNextAvailableQueueSpot()
+        private int FindAvailableQueueSpot()
         {
             for (int i = 0; i < isQueueSpotOccupied.Length; i++)
             {
@@ -658,6 +714,17 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
         private bool IsCorrectDrink(Drink drink, int orderID)
         {
             return drink.productID == orderID;
+        }
+
+        private void OnDrawGizmos()
+        {
+            if (shopEntrance != null)
+            {
+                Gizmos.color = Color.yellow;
+                Gizmos.DrawWireSphere(shopEntrance.position, 3f);
+                Gizmos.color = Color.green;
+                Gizmos.DrawWireSphere(shopEntrance.position, 0.5f);
+            }
         }
         #endregion
     }

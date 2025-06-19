@@ -24,7 +24,8 @@ namespace Tcp4
         ShowOrderBubble,
         ApplyPenalty,
         WaitOrder,
-        Deactivate
+        Deactivate,
+        RequestQueueSpot
     }
 
 }

@@ -91,6 +91,19 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
         {
             UpdateTime();
             UpdateLighting();
+
+            //DEBUG
+            if (Input.GetKeyDown(KeyCode.O))
+            {
+                timeMultiplier += 25f;
+            }
+
+            if (Input.GetKeyDown(KeyCode.P))
+            {
+                
+                timeMultiplier -= 25f;
+                if (timeMultiplier < 21) timeMultiplier = 21;
+            }
         }
 
         private void UpdateTime()
