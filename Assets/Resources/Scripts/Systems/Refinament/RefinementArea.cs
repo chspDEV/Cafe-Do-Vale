@@ -115,7 +115,10 @@ namespace Tcp4.Assets.Resources.Scripts.Systems.Areas
 
         public override void OnInteract()
         {
-            if (!IsInteractable() || isRefining || isSpoiled) return;
+            if (!IsInteractable() || isRefining || isSpoiled)
+            {
+                return;
+            } 
 
             if (processingQueue.Count == 0 && !isReady)
                 TryInsertProducts();
@@ -134,6 +137,15 @@ namespace Tcp4.Assets.Resources.Scripts.Systems.Areas
             int available = playerInventory.CountItem(selectedRecipe.inputProduct);
             if (available <= 0)
             {
+                //Fazendo o request de sfx
+                SoundEventArgs sfx1Args = new()
+                {
+                    Category = SoundEventArgs.SoundCategory.SFX,
+                    AudioID = "erro", // O ID do seu SFX (sem "sfx_" e em minúsculas)
+                    VolumeScale = .6f // Escala de volume (opcional, padrão é 1f)
+                };
+                SoundEvent.RequestSound(sfx1Args);
+
                 Debug.Log("Refinamento: sem produtos para inserir.");
                 return;
             }
