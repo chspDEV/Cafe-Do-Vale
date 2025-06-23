@@ -211,6 +211,7 @@ namespace Tcp4.Assets.Resources.Scripts.Systems.Areas
             if (collectRoutine != null) StopCoroutine(collectRoutine);
             collectRoutine = StartCoroutine(CollectCountdown());
             UpdateInteractionUI();
+            //
         }
 
         private void CompleteCurrentProcessing()

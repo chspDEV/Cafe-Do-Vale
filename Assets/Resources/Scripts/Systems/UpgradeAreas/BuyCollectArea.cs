@@ -2,6 +2,7 @@ using TMPro;
 using Tcp4.Assets.Resources.Scripts.Managers;
 using UnityEngine;
 using UnityEngine.UI;
+using GameResources.Project.Scripts.Utilities.Audio;
 
 namespace Tcp4.Assets.Resources.Scripts.Systems.Areas
 {
@@ -59,6 +60,16 @@ namespace Tcp4.Assets.Resources.Scripts.Systems.Areas
             if (playerMoney <= 0)
             {
                 Debug.Log("Sem dinheiro suficiente!");
+
+                SoundEventArgs sfxArgs = new()
+                {
+                    Category = SoundEventArgs.SoundCategory.SFX,
+                    AudioID = "erro", // O ID do seu SFX (sem "sfx_" e em minúsculas)
+                    VolumeScale = .8f, // Escala de volume (opcional, padrão é 1f)
+
+                };
+                SoundEvent.RequestSound(sfxArgs);
+
                 UpdatePriceDisplay();
                 return;
             }

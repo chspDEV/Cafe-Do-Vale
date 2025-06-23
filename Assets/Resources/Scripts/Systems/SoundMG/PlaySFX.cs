@@ -8,13 +8,23 @@ namespace GameResources.Project.Scripts.Utilities.Audio
         public string sfx_Name;
         void Start()
         {
-            SoundEvent.RequestSound(new SoundEventArgs
+            Play();
+        }
+
+        // <summary>
+        // RODADO AUTOMATICAMENTE NO START()
+        //</summary>
+        public void Play()
+        {
+            SoundEventArgs sfxArgs = new()
             {
                 Category = SoundEventArgs.SoundCategory.SFX,
                 AudioID = sfx_Name,
                 Position = transform.position,
                 VolumeScale = 1f
-            });
+            };
+
+            SoundEvent.RequestSound(sfxArgs);
         }
     }
 }

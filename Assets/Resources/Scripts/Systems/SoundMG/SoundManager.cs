@@ -210,8 +210,14 @@ namespace GameResources.Project.Scripts.Utilities.Audio
                     sourceObj = _sfxPool.Dequeue();
                 }
 
-                sourceObj.transform.position = position;
                 var pooledSource = sourceObj.GetComponent<PooledAudioSource>();
+
+                if (position != null && position != Vector3.zero)
+                {
+                    pooledSource._audioSource.spatialBlend = 1;
+                    sourceObj.transform.position = position;
+                }
+                
                 pooledSource.Play(clip, volumeScale);
                 pooledSource._audioSource.pitch = pitch;
                 OnSFXPlay?.Invoke(id);

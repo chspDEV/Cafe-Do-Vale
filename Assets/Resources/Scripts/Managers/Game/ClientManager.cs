@@ -391,7 +391,15 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
                 data.moveTarget = queueSpots[queueIndex].position;
                 clientDataArray[index] = data;
 
-                clientAgents[index].SetDestination(queueSpots[queueIndex].position);
+                if (data.queueSpotIndex != 0)
+                {
+                    clientAgents[index].SetDestination(queueSpots[queueIndex].position);
+                }
+                else
+                {
+                    clientAgents[index].SetDestination(counterPoint.position);
+                    data.currentState = ClientState.GoingToCounter;
+                }
             }
             else
             {
@@ -499,7 +507,7 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
         public void AdvanceQueue()
         {
             // Verifica se o primeiro spot está ocupado
-            if (!isQueueSpotOccupied[0]) return;
+            //if (!isQueueSpotOccupied[0]) return;
 
             Debug.Log("TENTANDO AVANÇAR FILA!");
             // Libera o primeiro spot

@@ -23,7 +23,6 @@ namespace Tcp4
                 {
                     Category = SoundEventArgs.SoundCategory.SFX,
                     AudioID = "servindo", // O ID do seu SFX (sem "sfx_" e em minúsculas)
-                    Position = transform.position, // Posição para o som 3D
                     VolumeScale = .7f // Escala de volume (opcional, padrão é 1f)
                 };
 
@@ -74,6 +73,15 @@ namespace Tcp4
             }
             else
             {
+                //Fazendo o request de sfx
+                SoundEventArgs sfxArgs = new()
+                {
+                    Category = SoundEventArgs.SoundCategory.SFX,
+                    AudioID = "erro", // O ID do seu SFX (sem "sfx_" e em minúsculas)
+                    VolumeScale = .8f // Escala de volume (opcional, padrão é 1f)
+                };
+                SoundEvent.RequestSound(sfxArgs);
+
                 Debug.Log("Drink está nulo e nao pode ser servido!");
             }
             

@@ -85,7 +85,7 @@ namespace Tcp4
                 Category = SoundEventArgs.SoundCategory.SFX,
                 AudioID = "plantando", // O ID do seu SFX (sem "sfx_" e em minúsculas)
                 Position = transform.position, // Posição para o som 3D
-                VolumeScale = 1.0f // Escala de volume (opcional, padrão é 1f)
+                VolumeScale = 0.9f // Escala de volume (opcional, padrão é 1f)
             };
             SoundEvent.RequestSound(sfxArgs);
         }
@@ -223,8 +223,7 @@ namespace Tcp4
                 {
                     Category = SoundEventArgs.SoundCategory.SFX,
                     AudioID = "coletar", // O ID do seu SFX (sem "sfx_" e em minúsculas)
-                    Position = transform.position, // Posição para o som 3D
-                    VolumeScale = 1.0f // Escala de volume (opcional, padrão é 1f)
+                    VolumeScale = .8f // Escala de volume (opcional, padrão é 1f)
                 };
                 SoundEvent.RequestSound(sfxArgs);
 

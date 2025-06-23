@@ -30,6 +30,15 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
         {
             money += value;
             OnChangeMoney?.Invoke();
+
+            //Fazendo o request de sfx
+            SoundEventArgs sfxArgs = new()
+            {
+                Category = SoundEventArgs.SoundCategory.SFX,
+                AudioID = "dinheiro", // O ID do seu SFX (sem "sfx_" e em minúsculas)
+                VolumeScale = .7f // Escala de volume (opcional, padrão é 1f)
+            };
+            SoundEvent.RequestSound(sfxArgs);
         }
 
         public bool TrySpendMoney(int value)
@@ -38,6 +47,16 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
             {
                 money -= value;
                 OnChangeMoney?.Invoke();
+
+                //Fazendo o request de sfx
+                SoundEventArgs sfxArgs = new()
+                {
+                    Category = SoundEventArgs.SoundCategory.SFX,
+                    AudioID = "dinheiro", // O ID do seu SFX (sem "sfx_" e em minúsculas)
+                    VolumeScale = .7f // Escala de volume (opcional, padrão é 1f)
+                };
+                SoundEvent.RequestSound(sfxArgs);
+
                 return true;
             }
             Debug.Log("Dinheiro insuficiente!");

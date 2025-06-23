@@ -70,15 +70,18 @@ namespace Tcp4.Assets.Resources.Scripts.Systems.Clients
         public void UpdateAnimation()
         {
             /* STATES
-             WalkingOnStreet,
-            GoingToQueue,
-            InQueue,
-            GoingToCounter,
-            AtCounter,
-            WaitingForOrder,
-            GoingToSeat,
-            Seated,
-            LeavingShop
+             public enum ClientState
+                {
+                    WalkingOnStreet,
+                    GoingToQueue,
+                    InQueue,
+                    GoingToCounter,
+                    AtCounter,
+                    WaitingForOrder,
+                    GoingToSeat,
+                    Seated,
+                    LeavingShop
+                }
              */
             switch (debugState)
             {

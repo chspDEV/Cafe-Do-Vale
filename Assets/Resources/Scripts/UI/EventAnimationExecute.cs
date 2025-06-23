@@ -20,7 +20,7 @@ namespace Tcp4
 
         private bool IsAnimationPlaying()
         {
-            return anim.IsInTransition(0) || anim.GetCurrentAnimatorStateInfo(0).normalizedTime < 1.0f;
+            return anim.IsInTransition(0) || anim.GetCurrentAnimatorStateInfo(0).normalizedTime < 0.8f;
         }
     }
 }
