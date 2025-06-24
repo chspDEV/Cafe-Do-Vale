@@ -1,3 +1,4 @@
+using Tcp4.Assets.Resources.Scripts.Managers;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -56,17 +57,18 @@ namespace Tcp4
             HandleRotation();
             HandleAnimation();
 
-
-            if (Input.GetKeyDown(KeyCode.K))
+            if (GameAssets.Instance.isDebugMode)
             {
-                moveSpeed += 50;
-            }
+                if (Input.GetKeyDown(KeyCode.K))
+                {
+                    moveSpeed += 50;
+                }
 
-            if (Input.GetKeyDown(KeyCode.L))
-            {
-                moveSpeed -= 50;
+                if (Input.GetKeyDown(KeyCode.L))
+                {
+                    moveSpeed -= 50;
+                }
             }
-
         }
 
         void FixedUpdate()

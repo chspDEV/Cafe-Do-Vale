@@ -24,9 +24,7 @@ public class SeedShop : BaseInteractable
     {
         base.Update();
 
-#if UNITY_EDITOR
-
-        if (Input.GetKeyDown(KeyCode.H))
+        if (Input.GetKeyDown(KeyCode.H) && GameAssets.Instance.isDebugMode)
         {
             foreach (var item in instances)
             {
@@ -37,7 +35,7 @@ public class SeedShop : BaseInteractable
             PopulateShop();
         }
         
-#endif
+
     }
 
     public override void OnInteract()
@@ -103,11 +101,9 @@ public class SeedShop : BaseInteractable
             System.Random rng = new();
             List<Seed> shuffledUnlockedSeeds = unlockedSeeds.OrderBy(s => rng.Next()).ToList();
 
-            int numberOfItemsToDisplay = Mathf.Min(1, maxItemsInShop);
-
-            for (int i = 0; i < numberOfItemsToDisplay; i++)
+            for (int i = 0; i < maxItemsInShop; i++)
             {
-                seedsToShowInShop.Add(shuffledUnlockedSeeds[i]);
+                seedsToShowInShop.Add(shuffledUnlockedSeeds[Random.Range(0,shuffledUnlockedSeeds.Count)]);
             }
         }
 

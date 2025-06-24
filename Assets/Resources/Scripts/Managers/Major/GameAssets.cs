@@ -52,6 +52,56 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
         public event Action OnChangeInteractionSprite;
         public CurrentInputType currentInputType = CurrentInputType.NONE;
 
+        #region DEBUG MODE
+        public bool isDebugMode = false;
+        private KeyCode[] debugSequence = { KeyCode.D, KeyCode.E, KeyCode.B, KeyCode.U, KeyCode.G };
+        private int currentSequenceIndex = 0;
+        private float sequenceTimeout = 2f; 
+        private float lastKeyPressTime = 0f;
+
+        private void Update()
+        {
+            // Verifica se alguma tecla foi pressionada
+            if (UnityEngine.Input.anyKeyDown)
+            {
+                // Verifica se a tecla pressionada é a próxima na sequência
+                if (UnityEngine.Input.GetKeyDown(debugSequence[currentSequenceIndex]))
+                {
+                    currentSequenceIndex++;
+                    lastKeyPressTime = Time.time;
+
+                    // Se completou toda a sequência
+                    if (currentSequenceIndex == debugSequence.Length)
+                    {
+                        isDebugMode = !isDebugMode; // Alterna o modo debug
+                        Debug.Log("Debug Mode " + (isDebugMode ? "ON" : "OFF"));
+                        currentSequenceIndex = 0; // Reseta a sequência
+                    }
+                }
+                else
+                {
+                    // Tecla errada - reseta a sequência
+                    currentSequenceIndex = 0;
+                }
+            }
+
+            // Reseta a sequência se o tempo entre teclas for muito longo
+            if (Time.time - lastKeyPressTime > sequenceTimeout && currentSequenceIndex > 0)
+            {
+                currentSequenceIndex = 0;
+            }
+        }
+
+        private void OnGUI()
+        {
+            if (isDebugMode)
+            {
+                GUI.Label(new Rect(250, 10, 200, 30), "DEBUG MODE ATIVO");
+            }
+        }
+
+        #endregion
+
         public override void Awake()
         {
             base.Awake();

@@ -590,7 +590,18 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
 
                 case ClientState.GoingToQueue:
                     // Sempre retorna a posição da entrada da loja
-                    return queueSpots[data.queueSpotIndex].position;
+                    if (queueSpots[data.queueSpotIndex].position != null)
+                    {
+                        return queueSpots[data.queueSpotIndex].position;
+                    }
+                    else
+                    {
+                        //Fallback
+                        data.currentState = ClientState.LeavingShop;
+                        return streetEnd.position;
+                    }
+
+
 
                 case ClientState.GoingToSeat:
                     if (data.canSeat)
@@ -599,18 +610,18 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
                     }
                     return HandleSeatSpotAssignment(clientIndex, data);
 
-                case ClientState.LeavingShop:
-                    if (data.seatSpotIndex != -1)
-                        isSeatSpotOccupied[data.seatSpotIndex] = false;
+                        case ClientState.LeavingShop:
+                            if (data.seatSpotIndex != -1)
+                                isSeatSpotOccupied[data.seatSpotIndex] = false;
 
-                    data.queueSpotIndex = -1;
-                    data.seatSpotIndex = -1;
-                    clientDataArray[clientIndex] = data;
-                    return streetEnd.position;
+                            data.queueSpotIndex = -1;
+                            data.seatSpotIndex = -1;
+                            clientDataArray[clientIndex] = data;
+                            return streetEnd.position;
 
-                default:
-                    return data.currentPosition;
-            }
+                        default:
+                            return data.currentPosition;
+                        }
         }
 
         private Vector3 HandleQueueSpotAssignment(int clientIndex, ClientData data)

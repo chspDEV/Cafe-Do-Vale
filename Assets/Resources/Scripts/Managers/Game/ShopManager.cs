@@ -130,7 +130,7 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
         void Update()
         {
 
-            if (Input.GetKeyDown(KeyCode.H))
+            if (Input.GetKeyDown(KeyCode.H) && GameAssets.Instance.isDebugMode)
             {
                 AddMoney(1000);
                 AddStars(200);

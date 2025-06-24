@@ -57,6 +57,20 @@ namespace Tcp4
 
         public void Create()
         {
+            if (Ingredients.Count < 3)
+            {
+                SoundEventArgs sfxArgs1 = new()
+                {
+                    Category = SoundEventArgs.SoundCategory.SFX,
+                    AudioID = "erro", // O ID do seu SFX (sem "sfx_" e em minúsculas)
+                    VolumeScale = .8f, // Escala de volume (opcional, padrão é 1f)
+
+                };
+                SoundEvent.RequestSound(sfxArgs1);
+
+                return;
+            }
+
             Drink newDrink = RefinamentManager.Instance.CreateDrink(Ingredients);
 
             Debug.Log($"{newDrink} criado!");
