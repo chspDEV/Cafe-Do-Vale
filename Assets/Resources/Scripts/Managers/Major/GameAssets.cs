@@ -58,6 +58,7 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
         private int currentSequenceIndex = 0;
         private float sequenceTimeout = 2f; 
         private float lastKeyPressTime = 0f;
+        
 
         private void Update()
         {
