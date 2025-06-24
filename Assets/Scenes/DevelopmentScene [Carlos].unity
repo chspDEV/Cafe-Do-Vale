@@ -101670,7 +101670,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   timeMultiplier: 21
   initialHour: 6
-  isFirstDay: 0
+  isFirstDay: 1
   startHour: 9
   closeHour: 21
   directionalLight: {fileID: 519992048}

@@ -28,15 +28,6 @@ public class HeatmapSphere : MonoBehaviour
         }
     }
 
-    //chamado uma vez quando outro trigger sai
-    private void OnTriggerExit(Collider other)
-    {
-        if (other.CompareTag("HeatmapSphere"))
-        {
-            nearbySphereCount--;
-            UpdateColor();
-        }
-    }
 
     //funcao central para atualizar a cor
     private void UpdateColor()

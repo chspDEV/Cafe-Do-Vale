@@ -60,6 +60,15 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
                 return true;
             }
             Debug.Log("Dinheiro insuficiente!");
+
+            //Fazendo o request de sfx
+            SoundEventArgs sfxArgs1 = new()
+            {
+                Category = SoundEventArgs.SoundCategory.SFX,
+                AudioID = "erro", // O ID do seu SFX (sem "sfx_" e em minúsculas)
+                VolumeScale = .7f // Escala de volume (opcional, padrão é 1f)
+            };
+            SoundEvent.RequestSound(sfxArgs1);
             return false;
         }
 

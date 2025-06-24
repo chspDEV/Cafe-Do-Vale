@@ -132,7 +132,8 @@ namespace Tcp4.Assets.Resources.Scripts.Systems.Areas
 
         private void TryInsertProducts()
         {
-            if (playerInventory == null || selectedRecipe == null) return;
+            if (playerInventory == null || selectedRecipe == 
+                null) return;
 
             int available = playerInventory.CountItem(selectedRecipe.inputProduct);
             if (available <= 0)

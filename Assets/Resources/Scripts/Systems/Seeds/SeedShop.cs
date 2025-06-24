@@ -103,7 +103,7 @@ public class SeedShop : BaseInteractable
             System.Random rng = new();
             List<Seed> shuffledUnlockedSeeds = unlockedSeeds.OrderBy(s => rng.Next()).ToList();
 
-            int numberOfItemsToDisplay = Mathf.Min(maxItemsInShop, shuffledUnlockedSeeds.Count);
+            int numberOfItemsToDisplay = Mathf.Min(1, maxItemsInShop);
 
             for (int i = 0; i < numberOfItemsToDisplay; i++)
             {

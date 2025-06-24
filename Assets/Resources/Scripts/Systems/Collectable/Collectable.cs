@@ -13,6 +13,7 @@ namespace Tcp4
             base.OnInteract();
             ShopManager.Instance.AddMoney(money);
 
+            /* Deixei apenas o som de dinheiro
             //Fazendo o request de sfx
             SoundEventArgs sfxArgs = new()
             {
@@ -21,6 +22,7 @@ namespace Tcp4
                 VolumeScale = .4f // Escala de volume (opcional, padrão é 1f)
             };
             SoundEvent.RequestSound(sfxArgs);
+            */
 
             Destroy(gameObject);
         }

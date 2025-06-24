@@ -1,6 +1,6 @@
 ===== RELATORIO DE PLAYTEST =====
-Data e Hora: 2025-06-17_11-29-31
-Tempo de Jogo: 0.83 minutos
+Data e Hora: 2025-06-24_08-05-17
+Tempo de Jogo: 0.30 minutos
 
 --- Atendimento ---
 Clientes Atendidos: 0
