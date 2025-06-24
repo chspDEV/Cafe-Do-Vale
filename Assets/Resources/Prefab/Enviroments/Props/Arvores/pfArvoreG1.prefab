@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 1358568361566143334}
   - component: {fileID: 7507032545943502423}
   - component: {fileID: -4948404124811314826}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: pfArvoreG1
   m_TagString: Props
   m_Icon: {fileID: 0}

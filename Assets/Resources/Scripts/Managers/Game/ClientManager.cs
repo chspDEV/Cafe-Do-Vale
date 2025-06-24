@@ -70,8 +70,7 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
         void Start()
         {
             RestartCounter();
-            isQueueSpotOccupied = new bool[queueSpots.Count];
-            isSeatSpotOccupied = new bool[seatSpots.Count];
+            ClearQueueAndSeats();           
         }
 
         private void Update()
@@ -543,6 +542,12 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
 
             // Chama o próximo cliente para o balcão
             CallNextClientToCounter();
+        }
+
+        public void ClearQueueAndSeats()
+        {
+            isQueueSpotOccupied = new bool[queueSpots.Count];
+            isSeatSpotOccupied = new bool[seatSpots.Count];
         }
 
         private void CallNextClientToCounter()

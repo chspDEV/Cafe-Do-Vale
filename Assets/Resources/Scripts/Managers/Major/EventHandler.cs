@@ -35,6 +35,7 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
 
             timeManager.OnCloseCoffeeShop           += uiManager.CloseShopNotification;
             timeManager.OnCloseCoffeeShop           += clientManager.CloseShop;
+            timeManager.OnCloseCoffeeShop           += clientManager.ClearQueueAndSeats;
 
 
             clientManager.OnClientSetup             += uiManager.NewClientNotification;

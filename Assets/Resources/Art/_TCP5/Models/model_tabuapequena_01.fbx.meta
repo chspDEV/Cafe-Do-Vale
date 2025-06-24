@@ -3,7 +3,17 @@ guid: 745ade8df6e40b6439b485fc5b31019d
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: p1
+    second: {fileID: 2100000, guid: 28538a43e34e05943a8378f52ed1f12e, type: 2}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: txt_tabua_pequena_01
+    second: {fileID: 2800000, guid: dcfb07de9cfb69742a29434f268af7c6, type: 3}
   materials:
     materialImportMode: 2
     materialName: 0
