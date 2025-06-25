@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0bbb4f07877bea0489ed2bd40d13b5a5, type: 3}
   m_Name: FavoDeMel
   m_EditorClassIdentifier: 
-  productName: FavoDeMel
+  productName: Favo De Mel
   quality: 15
   productID: 66
   model: {fileID: 1021864435424459753, guid: 6cd80396a43d21449a5cf6f83564d904, type: 3}

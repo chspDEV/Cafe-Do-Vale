@@ -52,6 +52,7 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
 
             unlockManager.OnProductionsUpdated      += seedManager.seedShop.PopulateShop;
             timeManager.OnResetDay                  += seedManager.seedShop.PopulateShop;
+            timeManager.OnResetDay                  += RestartDay;
 
             //StepSound stepSound = GameAssets.Instance.player.GetComponent<StepSound>();
 
@@ -78,7 +79,7 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
         public void RestartDay()
         {
             //GameAssets.Instance.player.transform.position = GameAssets.Instance.safePoint.position;
-            //Instantiate(GameAssets.Instance.pfNovoDia, uiManager.hudCanvas.transform);
+            Instantiate(GameAssets.Instance.pfNovoDia, uiManager.hudCanvas.transform);
         }
     }
 }

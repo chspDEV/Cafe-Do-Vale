@@ -315,14 +315,14 @@ namespace Tcp4
         public void NewClientNotification(Client clientSettings)
         {
             //Fazendo o request de sfx
-            SoundEventArgs sfxArgs = new()
+            /*SoundEventArgs sfxArgs = new()
             {
                 Category = SoundEventArgs.SoundCategory.SFX,
                 AudioID = "interacao", // O ID do seu SFX (sem "sfx_" e em minúsculas)
                 Position = gameAssets.player.transform.position, // Posição para o som 3D
                 VolumeScale = .3f // Escala de volume (opcional, padrão é 1f)
             };
-            SoundEvent.RequestSound(sfxArgs);
+            SoundEvent.RequestSound(sfxArgs);*/
 
             //REFAZER O SISTEMA DE NOTIFICAO
             //GameObject go = Instantiate(pfClientNotification, notificationHolder);

@@ -6,6 +6,7 @@ namespace GameResources.Project.Scripts.Utilities.Audio
     {
         [Tooltip("name whitout prefix")]
         public string sfx_Name;
+        public float volume = 1.0f;
         void Start()
         {
             Play();
@@ -20,8 +21,7 @@ namespace GameResources.Project.Scripts.Utilities.Audio
             {
                 Category = SoundEventArgs.SoundCategory.SFX,
                 AudioID = sfx_Name,
-                Position = transform.position,
-                VolumeScale = 1f
+                VolumeScale = volume
             };
 
             SoundEvent.RequestSound(sfxArgs);

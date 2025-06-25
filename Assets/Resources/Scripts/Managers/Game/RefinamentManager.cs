@@ -1,12 +1,18 @@
 ﻿using System.Collections.Generic;
+using Tcp4.Assets.Resources.Scripts.Managers;
 using UnityEngine;
 
 namespace Tcp4
 {
     public class RefinamentManager : Singleton<RefinamentManager>
     {
+
+        [Header("Config")]
         [SerializeField] private List<RefinementRecipe> recipes;
         [SerializeField] private List<Drink> drinks;
+
+        [Header("Debug")]
+        [SerializeField] private List<Ingredients> debugIngredients;
 
         public BaseProduct Refine(BaseProduct inputProduct)
         {
@@ -79,6 +85,21 @@ namespace Tcp4
             }
 
             return null;
+        }
+
+        private void Update()
+        {
+            if (GameAssets.Instance.isDebugMode)
+            {
+                if (Input.GetKeyDown(KeyCode.H))
+                {
+                    Inventory i = GameAssets.Instance.player.GetComponent<Inventory>();
+                    i.UpdateLimit(90);
+
+                    foreach (var ingredient in debugIngredients)
+                        i.AddProduct(ingredient, 3);
+                }
+            }
         }
     }
 

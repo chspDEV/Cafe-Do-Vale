@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 9098377995502531323}
   - component: {fileID: 4032403239164747047}
   - component: {fileID: 4961542150451248454}
+  - component: {fileID: 8333371454987642450}
   m_Layer: 0
   m_Name: pfNovoDia
   m_TagString: Untagged
@@ -60,7 +61,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0, b: 0, a: 1}
+  m_Color: {r: 0.083704166, g: 0.083704166, b: 0.1792453, a: 0.70980394}
   m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -102,3 +103,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   fadeDuration: 5
+--- !u!114 &8333371454987642450
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4667641227935505117}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d17e8e0d874bf354282385cd486367c7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sfx_Name: galo
+  volume: 0.25
