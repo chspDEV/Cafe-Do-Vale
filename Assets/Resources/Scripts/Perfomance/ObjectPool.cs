@@ -16,8 +16,8 @@ public class ObjectPool
         for (int i = 0; i < prefab.Length; i++)
         {
             GameObject obj = Object.Instantiate(prefab[i]);
-            obj.transform.parent = parent;
-            obj.transform.position = Vector3.zero;
+            //obj.transform.parent = parent;
+            obj.transform.position = parent.transform.position;
             obj.SetActive(false);
             pool.Enqueue(obj);
         }

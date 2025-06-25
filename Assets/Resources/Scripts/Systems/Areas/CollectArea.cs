@@ -28,7 +28,6 @@ namespace Tcp4
         private bool isAbleToGive;
         private bool isGrown;
         private bool hasChoosedProduction;
-        private const string PlayerTag = "Player";
 
         public override void Start()
         {
@@ -46,8 +45,6 @@ namespace Tcp4
             
             playerInventory = GameAssets.Instance.player.GetComponent<Inventory>();
             if (playerInventory == null) { Debug.Log("Inventario do Jogador nulo!"); return; }
-
-            Debug.Log("interagiiiiiiiiiiiiiii");
 
             if (!hasChoosedProduction)
             {
