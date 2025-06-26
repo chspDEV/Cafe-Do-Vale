@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   productName: Latte
   quality: 0
-  productID: 96
+  productID: 4
   model: {fileID: 828628952653485657, guid: 0e55602d41e5d1948b0677603e4e437e, type: 3}
   productImage: {fileID: 21300000, guid: 32385195c8c33b343ac874077f6fbcc5, type: 3}
   requiredIngredients:

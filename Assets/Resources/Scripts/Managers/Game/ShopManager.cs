@@ -26,10 +26,12 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
 
 
         #region Sistema de Moeda
+
         public void AddMoney(int value)
         {
             money += value;
             OnChangeMoney?.Invoke();
+            PlaytestManager.Instance.AddMoney(value);
 
             //Fazendo o request de sfx
             SoundEventArgs sfxArgs = new()
@@ -39,6 +41,9 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
                 VolumeScale = .7f // Escala de volume (opcional, padrão é 1f)
             };
             SoundEvent.RequestSound(sfxArgs);
+
+            
+            
         }
 
         public bool TrySpendMoney(int value)
@@ -46,6 +51,7 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
             if (money >= value)
             {
                 money -= value;
+                PlaytestManager.Instance.AddSpentMoney(value);
                 OnChangeMoney?.Invoke();
 
                 //Fazendo o request de sfx
@@ -69,6 +75,7 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
                 VolumeScale = .7f // Escala de volume (opcional, padrão é 1f)
             };
             SoundEvent.RequestSound(sfxArgs1);
+
             return false;
         }
 
@@ -80,6 +87,16 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
         {
             stars = Mathf.Clamp(stars + value, 0, MaxStar);
             OnChangeStar?.Invoke();
+
+            if (value > 0)
+            {
+                PlaytestManager.Instance.AddReputation(value / MaxStar);
+            }
+            else
+            {
+                PlaytestManager.Instance.LoseReputation(value / MaxStar);
+            }
+            
         }
 
         public float GetStars() => stars;

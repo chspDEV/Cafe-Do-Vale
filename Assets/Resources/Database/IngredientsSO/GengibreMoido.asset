@@ -14,6 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   productName: Gengibre Moido
   quality: 0
-  productID: 3
+  productID: 9
   model: {fileID: 81306645994841501, guid: 7cc56923c01818b479a87ef189ab6b1c, type: 3}
   productImage: {fileID: 21300000, guid: e81da03713035fe48921ea69ae2de22d, type: 3}
