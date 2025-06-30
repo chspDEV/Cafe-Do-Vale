@@ -23,6 +23,8 @@ public class InteractionManager : Singleton<InteractionManager>
     [SerializeField, Range(0.1f, 0.5f)] private float sphereRadius = 0.3f;
 
     private Transform playerTransform;
+
+    private string lastIdInteracted;
     
 
     private void Start()
@@ -54,6 +56,16 @@ public class InteractionManager : Singleton<InteractionManager>
     public void ForceCheckInteractables()
     {
         CheckForInteractables();
+    }
+
+    public string GetLastIdInteracted()
+    {
+        return lastIdInteracted;
+    }
+
+    public void UpdateLastId(string id)
+    {
+        lastIdInteracted = id;
     }
 
     private void CheckForInteractables()

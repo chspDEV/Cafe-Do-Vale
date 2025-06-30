@@ -16,6 +16,8 @@ namespace Tcp4
         private bool canMove = true;
         private StepSound stepSound;
 
+        public bool forwardPressed, backwardPressed, leftPressed, rightPressed;
+
         void Awake()
         {
             rb = GetComponent<Rigidbody>();
@@ -27,6 +29,13 @@ namespace Tcp4
         public void SetMovement(InputAction.CallbackContext value)
         {
             movement = value.ReadValue<Vector2>();
+
+            //Checagens para booleanas de tutoriais
+            forwardPressed = movement.y     >= 0.1f;
+            backwardPressed = movement.y    <= -0.1f;
+            leftPressed = movement.x        <= -0.1f;
+            rightPressed = movement.x       >= 0.1f;
+
         }
 
         public bool CanMove() => canMove;

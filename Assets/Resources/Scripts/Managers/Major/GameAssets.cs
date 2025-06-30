@@ -129,6 +129,8 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
             };
 
             SoundEvent.RequestSound(ostArgs);
+
+            TutorialManager.Instance.StartMission("movimento_basico");
         }
 
         public void UpdateControlSprite()

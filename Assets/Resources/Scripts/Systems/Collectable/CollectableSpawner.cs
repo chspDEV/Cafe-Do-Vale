@@ -17,7 +17,7 @@ namespace Tcp4
 
         [BoxGroup("Configurações de Spawn/Valores")]
         [PropertyRange(1, 500)]
-        [SerializeField] private int propMaxPrice = 5;
+        [SerializeField] private int propMaxPrice = 3;
 
         [BoxGroup("Configurações de Spawn/Camadas")]
         [SerializeField] private LayerMask avoidLayer;
@@ -55,7 +55,7 @@ namespace Tcp4
                     Collectable collectable = collectableInstance.GetComponent<Collectable>();
                     if (collectable != null)
                     {
-                        collectable.money = Random.Range(1, propMaxPrice + 1);
+                        collectable.money = Random.Range(2, propMaxPrice + 1);
                     }
                 }
                 else

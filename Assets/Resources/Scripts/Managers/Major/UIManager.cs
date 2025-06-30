@@ -353,6 +353,11 @@ namespace Tcp4
 
         #region Utility
 
+        public void GoToMainMenu()
+        {
+            SceneManager.LoadScene("InitialMenu");
+        }
+
         public void ControlProductionMenu(bool isActive)
         {
 

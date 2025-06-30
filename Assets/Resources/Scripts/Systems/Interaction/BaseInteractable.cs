@@ -10,6 +10,7 @@ public abstract class BaseInteractable : MonoBehaviour, IInteractable
     [TabGroup("Configurações", "Interagível")]
     [LabelText("Habilitado")]
     [SerializeField] private bool isInteractable = true;
+    [SerializeField] public string interactable_id = "interactable";
 
     [TabGroup("Configurações", "Visual")]
     [BoxGroup("Configurações/Visual/UI", ShowLabel = false)]
@@ -139,6 +140,7 @@ public abstract class BaseInteractable : MonoBehaviour, IInteractable
     {
         if (!IsInteractable()) return;
 
+        InteractionManager.Instance.UpdateLastId(interactable_id);
         Debug.Log($"Interagiu com {name}");
     }
 

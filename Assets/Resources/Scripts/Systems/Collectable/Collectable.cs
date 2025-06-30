@@ -8,10 +8,17 @@ namespace Tcp4
     {
         public int money;
 
+        public override void Start()
+        {
+            base.Start();
+            interactable_id = "collectable";
+        }
+
         public override void OnInteract()
         {
             base.OnInteract();
             ShopManager.Instance.AddMoney(money);
+            TutorialManager.Instance.CheckItemCollected(interactable_id);
 
             /* Deixei apenas o som de dinheiro
             //Fazendo o request de sfx
@@ -26,5 +33,7 @@ namespace Tcp4
 
             Destroy(gameObject);
         }
+
+
     }
 }

@@ -17,6 +17,7 @@ public class SeedShop : BaseInteractable
     public override void Start()
     {
         base.Start();
+        interactable_id = "seedShop";
         PopulateShop();
     }
 
