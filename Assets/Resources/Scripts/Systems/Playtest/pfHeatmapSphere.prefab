@@ -48,7 +48,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 15b2da4987b263a469f809a74791d868, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxNearbySpheres: 15
+  maxNearbySpheres: 35
 --- !u!33 &7985362689902689657
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -80,7 +80,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 34aa43eb3dd2ae5438b5eebbe40033aa, type: 2}
+  - {fileID: 2100000, guid: 1b06ef4c7edaabd4f9c0e43e8500ecb5, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

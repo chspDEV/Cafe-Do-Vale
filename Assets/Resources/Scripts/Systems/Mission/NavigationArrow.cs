@@ -5,7 +5,7 @@ public class NavigationArrow : MonoBehaviour
     public Transform target;
     public Transform player;
     public float heightOffset = 2f;
-    public float rotationSpeed = 5f;
+    public float rotationSpeed = 10f; // Aumentada para resposta mais rápida
 
     private void Update()
     {
@@ -14,14 +14,22 @@ public class NavigationArrow : MonoBehaviour
         // Posiciona a seta acima do jogador
         transform.position = player.position + Vector3.up * heightOffset;
 
-        // Rotaciona para apontar para o alvo
-        Vector3 direction = target.position - transform.position;
-        direction.y = 0; // Mantém a seta nivelada
+        // Calcula a direção ignorando diferenças de altura entre jogador e alvo
+        Vector3 horizontalDirection = (target.position - player.position).normalized;
+        horizontalDirection.y = 0;
 
-        if (direction != Vector3.zero)
+        if (horizontalDirection != Vector3.zero)
         {
-            Quaternion targetRotation = Quaternion.LookRotation(direction);
-            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
+            // Rotação instantânea para melhor precisão
+            Quaternion targetRotation = Quaternion.LookRotation(horizontalDirection);
+            transform.rotation = targetRotation;
+
+            // Caso prefira suavização (mais lenta):
+            // transform.rotation = Quaternion.Slerp(
+            //     transform.rotation,
+            //     targetRotation,
+            //     rotationSpeed * Time.deltaTime
+            // );
         }
     }
 }

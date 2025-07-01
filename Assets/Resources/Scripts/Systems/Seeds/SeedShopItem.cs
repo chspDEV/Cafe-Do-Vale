@@ -10,6 +10,7 @@ public class SeedShopItem : MonoBehaviour
     [SerializeField] private Button buyButton;
 
     private Seed seed;
+    private string item_id;
 
     public void Configure(Seed seedData)
     {
@@ -17,6 +18,7 @@ public class SeedShopItem : MonoBehaviour
         seedIcon.sprite = seed.seedIcon;
         displayText.text = $"{seed.seedName}\n\n" +"R$ " + seed.purchaseCost.ToString();
         buyButton.onClick.AddListener(OnBuyClicked);
+        item_id = seed.seedName;
     }
 
     public void OnBuyClicked()
@@ -24,6 +26,7 @@ public class SeedShopItem : MonoBehaviour
         if (ShopManager.Instance.TrySpendMoney(seed.purchaseCost))
         {
             SeedManager.Instance.AddSeed(seed.targetProduction);
+            TutorialManager.Instance.CheckItemCollected(item_id);
             Destroy(this.gameObject);
         }
         else { Debug.LogError("Nao foi possivel comprar a semente!"); }
