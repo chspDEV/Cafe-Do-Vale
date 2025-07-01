@@ -36,6 +36,8 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
         [MinMaxSlider(0, 0.2f, true)]
         [SerializeField] private Vector2 dayFogRange = new Vector2(0.01f, 0.05f);
 
+        private float savetimeMultiplier;
+
 
         [FoldoutGroup("Eventos")]
         public event Action<float> OnTimeChanged;
@@ -152,6 +154,18 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
         public string GetFullDateTime()
         {
             return $"{GetFormattedDate()} {GetFormattedTime(CurrentHour)}";
+        }
+
+        public void Freeze()
+        {
+            savetimeMultiplier = timeMultiplier;
+            timeMultiplier = 0;
+        }
+
+        public void Unfreeze()
+        {
+            timeMultiplier = savetimeMultiplier;
+
         }
 
         private void UpdateLighting()

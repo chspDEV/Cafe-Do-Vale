@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -5,6 +6,7 @@ namespace Tcp4
 {
     public class PlayerInteraction : MonoBehaviour
     {
+        public static event Action OnPlayerInteraction;
         public void SetInteraction(InputAction.CallbackContext context)
         {
             if (context.performed)
@@ -13,6 +15,7 @@ namespace Tcp4
                 {
 
                     InteractionManager.Instance.TryInteract();
+                    OnPlayerInteraction?.Invoke();
 
                 }
                 else { Debug.LogWarning("InteractionManager não inicializado!"); }

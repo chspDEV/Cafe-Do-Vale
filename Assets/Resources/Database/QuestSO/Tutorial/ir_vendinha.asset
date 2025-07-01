@@ -9,10 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: db6063a670b1291468999ca7715d9e56, type: 3}
-  m_Name: Producao_Mel
+  m_Script: {fileID: 11500000, guid: 1d753dccf7fca774eaeb57b2988eab5f, type: 3}
+  m_Name: ir_vendinha
   m_EditorClassIdentifier: 
-  models:
-  - {fileID: 2163951715431109568, guid: 83914e8a22af7ed49ac875a7f847726a, type: 3}
-  outputProduct: {fileID: 11400000, guid: 94a2e396290fdf34fb1b215604089d68, type: 2}
-  timeToGrow: 30
+  questID: limpar_fazenda
+  questName: "M\xE3os a obra"
+  steps: []
+  isCompleted: 0

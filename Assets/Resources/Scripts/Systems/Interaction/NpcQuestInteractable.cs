@@ -1,6 +1,9 @@
 using UnityEngine;
 using System.Linq;
 using System;
+using NUnit.Framework;
+using System.Collections.Generic;
+using Unity.Cinemachine;
 namespace Tcp4
 {
     public enum NpcQuestStatus
@@ -24,6 +27,9 @@ namespace Tcp4
         public Animator anim;
         public string onLookAnimation;
         public string onInteractAnimation;
+        public CinemachineCamera npcCamera;
+
+        public List<DialogueData> dialogues;
 
         private int currentMissionIndex = -1;
 
@@ -44,7 +50,7 @@ namespace Tcp4
         {
             for (int i = 0; i < missions.Length; i++)
             {
-                bool missionCompleted = TutorialManager.Instance.IsMissionCompleted(missions[i].mission_id);
+                bool missionCompleted = QuestManager.Instance.IsMissionCompleted(missions[i].mission_id);
                 bool missionStarted = IsMissionStarted(missions[i]);
 
                 if (!missionCompleted || (missionStarted && !missionCompleted))
@@ -72,7 +78,7 @@ namespace Tcp4
             NpcQuest currentMission = missions[currentMissionIndex];
 
             // Se a missão atual foi completada, avança para a próxima
-            if (TutorialManager.Instance.IsMissionCompleted(currentMission.mission_id))
+            if (QuestManager.Instance.IsMissionCompleted(currentMission.mission_id))
             {
                 currentMissionIndex++;
                 UpdateCurrentMissionIndex();
@@ -103,7 +109,17 @@ namespace Tcp4
         private void StartCurrentMission()
         {
             string mission = missions[currentMissionIndex].mission_id;
-            TutorialManager.Instance.StartMission(mission);
+            QuestManager.Instance.StartMission(mission);
+
+            if (dialogues[currentMissionIndex] != null)
+            {
+                if (npcCamera != null)
+                {
+                    CameraManager.Instance.SetupDialogueCamera(npcCamera);
+                }
+
+                DialogueManager.Instance.StartDialogue(dialogues[currentMissionIndex]);
+            }
 
             if (showDebugMessages) Debug.Log($"Missão iniciada: {mission}");
         }

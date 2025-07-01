@@ -4,25 +4,41 @@ using TMPro;
 using System.Collections;
 using System.Linq;
 using System.Reflection;
+using Sirenix.OdinInspector;
 
-public class TutorialUI : Singleton<TutorialUI>
+public class QuestUI : Singleton<QuestUI>
 {
-    [Header("UI References")]
-    [SerializeField] private GameObject tutorialPanel;
-    [SerializeField] private TextMeshProUGUI instructionText;
-    [SerializeField] private Image progressFill;
-    [SerializeField] private GameObject completionMarkerPrefab;
-    [SerializeField] private Transform progressContainer;
-    [SerializeField] private Button skipButton;
-    [SerializeField] private Button nextButton;
-    [SerializeField] private float displayDuration = 3f;
+    [Title("Configurações Principais")]
+    [BoxGroup("Configurações de Exibição")]
+    [SerializeField] private float displayDuration = 60 * 30f;
 
-    [Header("Animation Settings")]
-    [SerializeField] private float fadeDuration = 0.5f;
-    [SerializeField] private CanvasGroup canvasGroup;
+    [Title("Referências de UI")]
+    [BoxGroup("Referências de UI")]
+    [Required][SerializeField] private GameObject tutorialPanel;
+    [BoxGroup("Referências de UI")]
+    [Required][SerializeField] private TextMeshProUGUI instructionText;
+    [BoxGroup("Referências de UI")]
+    [Required][SerializeField] private Image progressFill;
+    [BoxGroup("Referências de UI")]
+    [Required][SerializeField] private GameObject completionMarkerPrefab;
+    [BoxGroup("Referências de UI")]
+    [Required][SerializeField] private Transform progressContainer;
+    [BoxGroup("Referências de UI")]
+    [Required][SerializeField] private Button skipButton;
+    [BoxGroup("Referências de UI")]
+    [Required][SerializeField] private Button nextButton;
 
-    private bool isShowingInstruction;
-    private Coroutine currentDisplayRoutine;
+    [Title("Configurações de Animação")]
+    [BoxGroup("Configurações de Animação")]
+    [Range(0.1f, 2f)][SerializeField] private float fadeDuration = 0.5f;
+    [BoxGroup("Configurações de Animação")]
+    [Required][SerializeField] private CanvasGroup canvasGroup;
+
+    [Title("Estado Interno")]
+    [BoxGroup("Estado Interno")]
+    [ShowInInspector][ReadOnly] private bool isShowingInstruction;
+    [BoxGroup("Estado Interno")]
+    [ShowInInspector][ReadOnly] private Coroutine currentDisplayRoutine;
 
     public override void Awake()
     {
@@ -41,16 +57,16 @@ public class TutorialUI : Singleton<TutorialUI>
 
     private void OnEnable()
     {
-        TutorialManager.OnTutorialStarted += OnTutorialStarted;
-        TutorialManager.OnTutorialStepChanged += OnStepChanged;
-        TutorialManager.OnTutorialCompleted += OnTutorialCompleted;
+        QuestManager.OnTutorialStarted += OnTutorialStarted;
+        QuestManager.OnTutorialStepChanged += OnStepChanged;
+        QuestManager.OnTutorialCompleted += OnTutorialCompleted;
     }
 
     private void OnDisable()
     {
-        TutorialManager.OnTutorialStarted -= OnTutorialStarted;
-        TutorialManager.OnTutorialStepChanged -= OnStepChanged;
-        TutorialManager.OnTutorialCompleted -= OnTutorialCompleted;
+        QuestManager.OnTutorialStarted -= OnTutorialStarted;
+        QuestManager.OnTutorialStepChanged -= OnStepChanged;
+        QuestManager.OnTutorialCompleted -= OnTutorialCompleted;
     }
 
     public void ShowInstruction(string instruction)
@@ -81,13 +97,6 @@ public class TutorialUI : Singleton<TutorialUI>
             yield return null;
         }
 
-        // Fade out se não houver interação
-        if (isShowingInstruction)
-        {
-            yield return StartCoroutine(FadePanel(250, 0));
-            tutorialPanel.SetActive(false);
-        }
-
         isShowingInstruction = false;
     }
 
@@ -103,24 +112,24 @@ public class TutorialUI : Singleton<TutorialUI>
         canvasGroup.alpha = to;
     }
 
-    private void OnTutorialStarted(TutorialMission mission)
+    private void OnTutorialStarted(Quest mission)
     {
         // Atualiza a UI para mostrar o progresso
         UpdateProgressUI(mission);
 
         // Mostra o nome da missão como primeira instrução
-        ShowInstruction($"Tutorial: {mission.missionName}");
+        ShowInstruction($"Tutorial: {mission.questName}");
     }
 
-    private void OnStepChanged(TutorialStep step)
+    private void OnStepChanged(QuestStep step)
     {
-        if(TutorialManager.Instance.CurrentMission != null)
-            UpdateProgressUI(TutorialManager.Instance.CurrentMission);
+        if(QuestManager.Instance.CurrentMission != null)
+            UpdateProgressUI(QuestManager.Instance.CurrentMission);
 
         ShowInstruction(step.instructionText);
 
         // Mostra ou esconde o botão "Next" dependendo do tipo de objetivo
-        nextButton.gameObject.SetActive(step.objective.objectiveType == TutorialObjectiveType.InfoOnly);
+        nextButton.gameObject.SetActive(step.objective.objectiveType == QuestObjectiveType.InfoOnly);
     }
 
     private void OnTutorialCompleted(string missionId)
@@ -137,7 +146,7 @@ public class TutorialUI : Singleton<TutorialUI>
         tutorialPanel.SetActive(false);
     }
 
-    private void UpdateProgressUI(TutorialMission mission)
+    private void UpdateProgressUI(Quest mission)
     {
         // Limpa marcadores antigos
         foreach (Transform child in progressContainer)
@@ -164,15 +173,15 @@ public class TutorialUI : Singleton<TutorialUI>
         if (isShowingInstruction)
         {
             isShowingInstruction = false;
-            TutorialManager.Instance.CompleteCurrentStep();
+            QuestManager.Instance.CompleteCurrentStep();
         }
     }
 
     public void SkipTutorial()
     {
-        if (TutorialManager.Instance.CurrentMission != null)
+        if (QuestManager.Instance.CurrentMission != null)
         {
-            TutorialManager.Instance.CompleteCurrentMission();
+            QuestManager.Instance.CompleteCurrentMission();
             StartCoroutine(FadePanel(canvasGroup.alpha, 0));
             tutorialPanel.SetActive(false);
         }

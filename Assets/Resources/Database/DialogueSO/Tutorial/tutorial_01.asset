@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 30a77f9d18157c64f97bc1ffbbd812e8, type: 3}
+  m_Name: tutorial_01
+  m_EditorClassIdentifier: 
+  dialogueLines:
+  - characterName: Zeca
+    dialogueText: "Olha s\xF3 se n\xE3o \xE9 voc\xEA! Uma pena o que aconteceu com
+      seu tio Juli\xE3o..."
+  - characterName: Zeca
+    dialogueText: "Mas veja pelo lado bom, agora voc\xEA tem isso tudo aqui s\xF3
+      pra voc\xEA!"
+  - characterName: Zeca
+    dialogueText: "Antes dele partir ele tinha me pedido para dar uma limpada por
+      aqui, mas como agora voc\xEA chegou, vou te instruir."

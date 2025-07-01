@@ -1,0 +1,73 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1d753dccf7fca774eaeb57b2988eab5f, type: 3}
+  m_Name: limpar_fazenda
+  m_EditorClassIdentifier: 
+  questID: limpar_fazenda
+  questName: "M\xE3os a obra"
+  steps:
+  - stepID: 0
+    instructionText: Remova 5 entulhos da fazenda!
+    objective:
+      objectiveType: 3
+      requiredInput: 0
+      targetPosition: {x: 0, y: 0, z: 0}
+      radius: 2
+      targetID: collectable
+    isCompleted: 0
+    hasIndicator: 0
+    visualIndicator: {fileID: 0}
+  - stepID: 1
+    instructionText: Remova 4 entulhos da fazenda!
+    objective:
+      objectiveType: 3
+      requiredInput: 0
+      targetPosition: {x: 0, y: 0, z: 0}
+      radius: 2
+      targetID: collectable
+    isCompleted: 0
+    hasIndicator: 0
+    visualIndicator: {fileID: 0}
+  - stepID: 2
+    instructionText: Remova 3 entulhos da fazenda!
+    objective:
+      objectiveType: 3
+      requiredInput: 0
+      targetPosition: {x: 0, y: 0, z: 0}
+      radius: 2
+      targetID: collectable
+    isCompleted: 0
+    hasIndicator: 0
+    visualIndicator: {fileID: 0}
+  - stepID: 3
+    instructionText: Remova 2 entulhos da fazenda!
+    objective:
+      objectiveType: 3
+      requiredInput: 0
+      targetPosition: {x: 0, y: 0, z: 0}
+      radius: 2
+      targetID: collectable
+    isCompleted: 0
+    hasIndicator: 0
+    visualIndicator: {fileID: 0}
+  - stepID: 4
+    instructionText: Remova 1 entulhos da fazenda!
+    objective:
+      objectiveType: 3
+      requiredInput: 0
+      targetPosition: {x: 0, y: 0, z: 0}
+      radius: 2
+      targetID: collectable
+    isCompleted: 0
+    hasIndicator: 0
+    visualIndicator: {fileID: 0}
+  isCompleted: 0

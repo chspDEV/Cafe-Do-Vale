@@ -18,7 +18,7 @@ namespace Tcp4
         {
             base.OnInteract();
             ShopManager.Instance.AddMoney(money);
-            TutorialManager.Instance.CheckItemCollected(interactable_id);
+            QuestManager.Instance.CheckItemCollected(interactable_id);
 
             /* Deixei apenas o som de dinheiro
             //Fazendo o request de sfx

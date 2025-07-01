@@ -1,7 +1,7 @@
 using Sirenix.OdinInspector;
 using UnityEngine;
 
-public enum TutorialObjectiveType
+public enum QuestObjectiveType
 {
     None,
     PressButton,
@@ -25,34 +25,35 @@ public enum InputsPossibilities
 }
 
 [System.Serializable]
-public class TutorialObjective
+public class QuestObjective
 {
     [HorizontalGroup("Type"), LabelWidth(100)]
-    public TutorialObjectiveType objectiveType = TutorialObjectiveType.None;
+    public QuestObjectiveType objectiveType = QuestObjectiveType.None;
 
     // Campo condicional para botões
-    [ShowIf("objectiveType", TutorialObjectiveType.PressButton)]
+    [ShowIf("objectiveType", QuestObjectiveType.PressButton)]
     [HorizontalGroup("Type"), LabelWidth(100)]
     public InputsPossibilities requiredInput;
 
     // Campos condicionais para localização
-    [ShowIf("objectiveType", TutorialObjectiveType.ReachLocation)]
+    [ShowIf("objectiveType", QuestObjectiveType.ReachLocation)]
     [HorizontalGroup("Location"), LabelWidth(120)]
     public Vector3 targetPosition;
 
-    [ShowIf("objectiveType", TutorialObjectiveType.ReachLocation)]
-    [HorizontalGroup("Location"), LabelWidth(140), Range(0.1f, 10f)]
-    public float completionRadius = 2f;
+    [Space(5)]
+    [Range(0.1f,20)]
+    [ShowIf("objectiveType", QuestObjectiveType.ReachLocation)]
+    public float radius = 2f;
 
     // Campo condicional para itens e interações
-    [ShowIf("@objectiveType == TutorialObjectiveType.CollectItem || " +
-             "objectiveType == TutorialObjectiveType.InteractWithObject")]
+    [ShowIf("@objectiveType == QuestObjectiveType.CollectItem || " +
+             "objectiveType == QuestObjectiveType.InteractWithObject")]
     [HorizontalGroup("Target"), LabelWidth(100)]
     public string targetID;
 
     // Métodos auxiliares para Odin
-    private bool ShouldShowLocationFields() => objectiveType == TutorialObjectiveType.ReachLocation;
+    private bool ShouldShowLocationFields() => objectiveType == QuestObjectiveType.ReachLocation;
     private bool ShouldShowTargetID() =>
-        objectiveType == TutorialObjectiveType.CollectItem ||
-        objectiveType == TutorialObjectiveType.InteractWithObject;
+        objectiveType == QuestObjectiveType.CollectItem ||
+        objectiveType == QuestObjectiveType.InteractWithObject;
 }

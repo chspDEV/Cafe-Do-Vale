@@ -17,4 +17,4 @@ MonoBehaviour:
   - {fileID: 626670154938744169, guid: 6f024974da0983b499216fa04bc05fee, type: 3}
   - {fileID: 3679919593632470644, guid: 39450bd5647843a40af7a50943797e32, type: 3}
   outputProduct: {fileID: 11400000, guid: f8c402991715c3147a4c108993b828b8, type: 2}
-  timeToGrow: 15
+  timeToGrow: 25

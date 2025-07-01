@@ -5,7 +5,7 @@ using Tcp4.Assets.Resources.Scripts.Managers;
 using Tcp4;
 using System;
 
-public class TutorialObjectiveChecker : MonoBehaviour
+public class QuestChecker : MonoBehaviour
 {
     [SerializeField] private PlayerInputs playerInputs;
     [SerializeField] private PlayerMovement playerMovement;
@@ -28,7 +28,7 @@ public class TutorialObjectiveChecker : MonoBehaviour
 
     private void Update()
     {
-        var currentStep = TutorialManager.Instance.CurrentStep;
+        var currentStep = QuestManager.Instance.CurrentStep;
 
         if (currentStep == null) return;
 
@@ -38,24 +38,24 @@ public class TutorialObjectiveChecker : MonoBehaviour
 
         switch (objective.objectiveType)
         {
-            case TutorialObjectiveType.PressButton:
+            case QuestObjectiveType.PressButton:
                 CheckButtonPressObjective(objective);
                 break;
 
-            case TutorialObjectiveType.ReachLocation:
+            case QuestObjectiveType.ReachLocation:
                 CheckLocationObjective(objective);
                 break;
-            case TutorialObjectiveType.InteractWithObject:
+            case QuestObjectiveType.InteractWithObject:
                 CheckInteractionObjective(objective);
                 break;
         }
     }
 
-    private void CheckInteractionObjective(TutorialObjective objective)
+    private void CheckInteractionObjective(QuestObjective objective)
     {
         if (InteractionManager.Instance.GetLastIdInteracted() == objective.targetID)
         {
-            TutorialManager.Instance.CompleteCurrentStep();
+            QuestManager.Instance.CompleteCurrentStep();
         }
         else
         {
@@ -63,23 +63,23 @@ public class TutorialObjectiveChecker : MonoBehaviour
         }
     }
 
-    private void CheckButtonPressObjective(TutorialObjective objective)
+    private void CheckButtonPressObjective(QuestObjective objective)
     {
         if (IsMenuBlockingTutorial()) return;
 
         switch (objective.requiredInput)
         {
             case InputsPossibilities.Forward:
-                if(playerMovement.forwardPressed) TutorialManager.Instance.CompleteCurrentStep();
+                if(playerMovement.forwardPressed) QuestManager.Instance.CompleteCurrentStep();
                 break;
             case InputsPossibilities.Backward:
-                if (playerMovement.backwardPressed) TutorialManager.Instance.CompleteCurrentStep();
+                if (playerMovement.backwardPressed) QuestManager.Instance.CompleteCurrentStep();
                 break;
             case InputsPossibilities.Left:
-                if (playerMovement.leftPressed) TutorialManager.Instance.CompleteCurrentStep();
+                if (playerMovement.leftPressed) QuestManager.Instance.CompleteCurrentStep();
                 break;
             case InputsPossibilities.Right:
-                if (playerMovement.rightPressed) TutorialManager.Instance.CompleteCurrentStep();
+                if (playerMovement.rightPressed) QuestManager.Instance.CompleteCurrentStep();
                 break;
             case InputsPossibilities.Map:
                 break;
@@ -102,7 +102,7 @@ public class TutorialObjectiveChecker : MonoBehaviour
         return UIManager.Instance != null && UIManager.Instance.HasMenuOpen();
     }
 
-    private void CheckLocationObjective(TutorialObjective objective)
+    private void CheckLocationObjective(QuestObjective objective)
     {
         if (GameAssets.Instance.player == null) return;
 
@@ -111,9 +111,9 @@ public class TutorialObjectiveChecker : MonoBehaviour
             objective.targetPosition
         );
 
-        if (distance <= objective.completionRadius)
+        if (distance <= objective.radius)
         {
-            TutorialManager.Instance.CompleteCurrentStep();
+            QuestManager.Instance.CompleteCurrentStep();
         }
     }
     // Método auxiliar para obter o nome de exibição do botão

@@ -1,34 +1,58 @@
+using Sirenix.OdinInspector;
 using System;
 using System.Collections.Generic;
 using Tcp4.Assets.Resources.Scripts.Managers;
 using UnityEngine;
 using UnityEngine.Rendering;
 
-public class TutorialManager : Singleton<TutorialManager>
+public class QuestManager : Singleton<QuestManager>
 {
-    [SerializeField] private List<TutorialMission> tutorialMissions;
-    [SerializeField] private GameObject navigationArrowPrefab;
+    [Title("Configurações de Missões")]
+    [BoxGroup("Missões do Tutorial")]
+    [SerializeField, Required, ListDrawerSettings(ShowPaging = true)]
+    private List<Quest> tutorialMissions;
 
+    [BoxGroup("Configurações de Navegação")]
+    [SerializeField, Required, AssetsOnly, PreviewField(50)]
+    private GameObject navigationArrowPrefab;
+
+    [Title("Estado do Tutorial")]
+    [BoxGroup("Estado do Tutorial")]
+    [ShowInInspector, ReadOnly, PropertyOrder(100)]
     private Dictionary<string, bool> completedTutorials = new Dictionary<string, bool>();
 
-    private TutorialMission currentMission;
-    public TutorialMission CurrentMission
+    [BoxGroup("Missão Atual")]
+    [ShowInInspector, ReadOnly, PropertyOrder(1)]
+    private Quest currentMission;
+    public Quest CurrentMission
     {
         get { return currentMission; }
         private set { currentMission = value; }
     }
 
-    private TutorialStep currentStep;
-    public TutorialStep CurrentStep
+    [BoxGroup("Passo Atual")]
+    [ShowInInspector, ReadOnly, PropertyOrder(2)]
+    private QuestStep currentStep;
+    public QuestStep CurrentStep
     {
         get { return currentStep; }
         private set { currentStep = value; }
     }
 
-    public static Action<TutorialMission> OnTutorialStarted { get; internal set; }
-    public static Action<TutorialStep> OnTutorialStepChanged { get; internal set; }
+    [BoxGroup("Eventos")]
+    [ShowInInspector, ReadOnly, PropertyOrder(200)]
+    public static Action<Quest> OnTutorialStarted { get; internal set; }
+
+    [BoxGroup("Eventos")]
+    [ShowInInspector, ReadOnly, PropertyOrder(201)]
+    public static Action<QuestStep> OnTutorialStepChanged { get; internal set; }
+
+    [BoxGroup("Eventos")]
+    [ShowInInspector, ReadOnly, PropertyOrder(202)]
     public static Action<string> OnTutorialCompleted { get; internal set; }
 
+    [BoxGroup("Navegação Atual")]
+    [ShowInInspector, ReadOnly, PropertyOrder(50)]
     private GameObject currentArrow;
 
     public override void Awake()
@@ -49,6 +73,19 @@ public class TutorialManager : Singleton<TutorialManager>
             mission.isCompleted = PlayerPrefs.GetInt(key, 0) == 1;
         }
         */
+
+        //por enquanto que nao tem save
+#if UNITY_EDITOR
+        foreach (var item in tutorialMissions)
+        {
+            item.isCompleted = false;
+            foreach (var s in item.steps)
+            {
+                s.isCompleted = false;
+            }
+        }
+#endif
+
     }
 
     private void SaveTutorialProgress(string missionID)
@@ -61,13 +98,15 @@ public class TutorialManager : Singleton<TutorialManager>
 
     public bool IsMissionCompleted(string identifier)
     { 
-        return tutorialMissions.Find(m => m.missionID == identifier).isCompleted == true;
+        if(tutorialMissions != null) return false;
+
+        return tutorialMissions.Find(m => m.questID == identifier).isCompleted == true;
     }
 
     public void StartMission(string missionID)
     {
         // Encontra a missão
-        currentMission = tutorialMissions.Find(m => m.missionID == missionID);
+        currentMission = tutorialMissions.Find(m => m.questID == missionID);
 
         if (currentMission == null || currentMission.isCompleted) return;
 
@@ -79,12 +118,12 @@ public class TutorialManager : Singleton<TutorialManager>
         SetupStep(currentStep);
     }
 
-    private void SetupStep(TutorialStep step)
+    private void SetupStep(QuestStep step)
     {
-        TutorialUI.Instance.ShowInstruction(step.instructionText);
+        QuestUI.Instance.ShowInstruction(step.instructionText);
 
         // Configura indicadores visuais
-        if (step.objective.objectiveType == TutorialObjectiveType.ReachLocation)
+        if (step.objective.objectiveType == QuestObjectiveType.ReachLocation)
         {
             CreateNavigationArrow(step.objective.targetPosition);
         }
@@ -112,7 +151,7 @@ public class TutorialManager : Singleton<TutorialManager>
 
     public void CheckItemCollected(string item_id)
     {
-        if (currentMission != null && currentStep.objective.objectiveType == TutorialObjectiveType.CollectItem)
+        if (currentMission != null && currentStep.objective.objectiveType == QuestObjectiveType.CollectItem)
         {
             if (item_id == CurrentStep.objective.targetID)
             {
@@ -152,7 +191,7 @@ public class TutorialManager : Singleton<TutorialManager>
     public void CompleteCurrentMission()
     {
         currentMission.isCompleted = true;
-        SaveTutorialProgress(currentMission.missionID);
+        SaveTutorialProgress(currentMission.questID);
 
         // Limpa a referência atual
         currentMission = null;

@@ -32,6 +32,8 @@ namespace Tcp4
         public override void Start()
         {
             base.Start();
+
+            interactable_id = "collectArea";
             hasChoosedProduction = false;
             ProductionManager.Instance.OnChooseProduction += SelectProduction;
             timeImage = UIManager.Instance.PlaceFillImage(pointToSpawn);

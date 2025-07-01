@@ -4,11 +4,11 @@ using System.Collections.Generic;
 using System;
 
 [Serializable]
-public class TutorialStep
+public class QuestStep
 {
     public string stepID;
     public string instructionText;
-    public TutorialObjective objective;
+    public QuestObjective objective;
     public bool isCompleted;
     public bool hasIndicator;
 

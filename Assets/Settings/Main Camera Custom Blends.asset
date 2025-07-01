@@ -16,11 +16,11 @@ MonoBehaviour:
   - From: '**ANY CAMERA**'
     To: '**ANY CAMERA**'
     Blend:
-      Style: 0
-      Time: 0
+      Style: 2
+      Time: 2
       CustomCurve:
         serializedVersion: 2
         m_Curve: []
         m_PreInfinity: 0
         m_PostInfinity: 0
-        m_RotationOrder: 0
+        m_RotationOrder: 4
