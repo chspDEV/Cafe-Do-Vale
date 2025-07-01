@@ -1793,7 +1793,7 @@ GameObject:
   m_Icon: {fileID: -1412012063857583412, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &62192890
 Transform:
   m_ObjectHideFlags: 0
@@ -1823,7 +1823,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   grassMesh: {fileID: -3169986393032714919, guid: 85ee30bfb61a6954984bc517a6a44555, type: 3}
   grassMaterial: {fileID: 2100000, guid: 4a96985f64672f246b315f95031a2bdc, type: 2}
-  maxInstances: 5000
+  maxInstances: 1000
   areaSize: 100
   groundLayer:
     serializedVersion: 2
@@ -13866,6 +13866,94 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!1 &502287046
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 502287047}
+  - component: {fileID: 502287049}
+  - component: {fileID: 502287048}
+  m_Layer: 0
+  m_Name: GrassSpawner (2)
+  m_TagString: Untagged
+  m_Icon: {fileID: -1412012063857583412, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &502287047
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 502287046}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -32.7, y: 1.91, z: -1.5}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1701703493}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!205 &502287048
+LODGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 502287046}
+  serializedVersion: 2
+  m_LocalReferencePoint: {x: 0, y: 0, z: 0}
+  m_Size: 1
+  m_FadeMode: 0
+  m_AnimateCrossFading: 0
+  m_LastLODIsBillboard: 0
+  m_LODs:
+  - screenRelativeHeight: 0.6
+    fadeTransitionWidth: 0
+    renderers: []
+  - screenRelativeHeight: 0.3
+    fadeTransitionWidth: 0
+    renderers: []
+  - screenRelativeHeight: 0.1
+    fadeTransitionWidth: 0
+    renderers: []
+  m_Enabled: 1
+--- !u!114 &502287049
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 502287046}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c3be7762afb77dc47b0aa153b967bd6b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  grassMesh: {fileID: 6416302070336371891, guid: 299f9175345383c44a12af746785a94d, type: 3}
+  grassMaterial: {fileID: 2100000, guid: e18b3dd70e87d6140a74919fdf00c632, type: 2}
+  maxInstances: 1000
+  areaSize: 100
+  groundLayer:
+    serializedVersion: 2
+    m_Bits: 8
+  excludedLayers:
+    serializedVersion: 2
+    m_Bits: 4087
+  checkRadius: 1
+  framesToSpawn: 10
+  lodFOVThresholds:
+  - 30
+  - 40
+  - 45
+  lodInstanceCounts: 88130000b80b0000e8030000
+  lodMeshes: []
+  cam: {fileID: 943021854}
 --- !u!1001 &509001274
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -33437,7 +33525,7 @@ GameObject:
   m_Icon: {fileID: -1412012063857583412, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1099706800
 Transform:
   m_ObjectHideFlags: 0
@@ -33467,7 +33555,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   grassMesh: {fileID: -470067213634067786, guid: 31a97e6498d3fc04797ba68c1daee5a3, type: 3}
   grassMaterial: {fileID: 2100000, guid: b0bfad1c6fbeaf640b3e3512f2a7a21f, type: 2}
-  maxInstances: 5000
+  maxInstances: 1000
   areaSize: 100
   groundLayer:
     serializedVersion: 2
@@ -41585,6 +41673,94 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1372426276}
   m_Mesh: {fileID: -4753976898039024662, guid: af3b9baf178fc564cac7f0a51de669e4, type: 3}
+--- !u!1 &1375748394
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1375748395}
+  - component: {fileID: 1375748397}
+  - component: {fileID: 1375748396}
+  m_Layer: 0
+  m_Name: GrassSpawner (3)
+  m_TagString: Untagged
+  m_Icon: {fileID: -1412012063857583412, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1375748395
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1375748394}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -32.7, y: 1.91, z: -1.5}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1701703493}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!205 &1375748396
+LODGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1375748394}
+  serializedVersion: 2
+  m_LocalReferencePoint: {x: 0, y: 0, z: 0}
+  m_Size: 1
+  m_FadeMode: 0
+  m_AnimateCrossFading: 0
+  m_LastLODIsBillboard: 0
+  m_LODs:
+  - screenRelativeHeight: 0.6
+    fadeTransitionWidth: 0
+    renderers: []
+  - screenRelativeHeight: 0.3
+    fadeTransitionWidth: 0
+    renderers: []
+  - screenRelativeHeight: 0.1
+    fadeTransitionWidth: 0
+    renderers: []
+  m_Enabled: 1
+--- !u!114 &1375748397
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1375748394}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c3be7762afb77dc47b0aa153b967bd6b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  grassMesh: {fileID: 6894428203817054813, guid: 6bcb05078d3b09c45892f12beb22e591, type: 3}
+  grassMaterial: {fileID: 2100000, guid: d678d41041a66df40bc8f477c84f4bc1, type: 2}
+  maxInstances: 30000
+  areaSize: 100
+  groundLayer:
+    serializedVersion: 2
+    m_Bits: 8
+  excludedLayers:
+    serializedVersion: 2
+    m_Bits: 4087
+  checkRadius: 1
+  framesToSpawn: 10
+  lodFOVThresholds:
+  - 30
+  - 40
+  - 45
+  lodInstanceCounts: 88130000b80b0000e8030000
+  lodMeshes: []
+  cam: {fileID: 943021854}
 --- !u!1 &1376803968
 GameObject:
   m_ObjectHideFlags: 0
@@ -52995,6 +53171,8 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 62192890}
+  - {fileID: 1375748395}
+  - {fileID: 502287047}
   - {fileID: 1099706800}
   - {fileID: 1430209668}
   - {fileID: 1805443475}
@@ -68711,24 +68889,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 656ba0cd701aadf419bab56fd130f42e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  showDebugUI: 1
-  fpsText: {fileID: 192804559}
-  memoryText: {fileID: 684156516}
-  settingsText: {fileID: 1337424593}
-  targetFrameRate: 60
-  updateInterval: 0.1
-  renderDistance: 50
-  useDynamicResolution: 1
-  minResolutionScale: 0.5
-  maxResolutionScale: 1
-  textureQuality: 3
-  shadowDistance: 150
-  resolutionDropdown: {fileID: 1474350183}
-  renderScaleSlider: {fileID: 2075190915}
-  optimizeForMobile: 0
-  mobileFPSTarget: 45
-  disableShadowsOnMobile: 0
-  debugCanvasGroup: {fileID: 784005309}
 --- !u!4 &2138738695
 Transform:
   m_ObjectHideFlags: 0

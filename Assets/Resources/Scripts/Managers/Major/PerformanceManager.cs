@@ -5,12 +5,12 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using System;
-using GDX.Collections.Generic;
 
 namespace Tcp4
 {
     public class PerformanceManager : MonoBehaviour
     {
+        /*
         public static PerformanceManager Instance { get; private set; }
         private CancellationTokenSource cancellationTokenSource;
 
@@ -39,11 +39,11 @@ namespace Tcp4
         [SerializeField, Range(1, 200)] private int mobileFPSTarget = 30;
         [SerializeField] private bool disableShadowsOnMobile = true;
 
-        /* Comentei pois nao esta sendo usado e fiz pooling nas proprias classes
+         Comentei pois nao esta sendo usado e fiz pooling nas proprias classes
         [Header("Object Pooling")]
         [SerializeField] private bool useObjectPooling = true;
         [SerializeField, Range(10, 100)] private int defaultPoolSize = 20;
-        */
+        
 
         private readonly Queue<float> fpsQueue = new Queue<float>(30);
         private float lastFPSUpdate;
@@ -314,8 +314,9 @@ namespace Tcp4
         {
             cancellationTokenSource?.Cancel();
         }
+        */
     }
-
+    
     public static class UnityMainThread
     {
         private static readonly TaskScheduler unityScheduler;
