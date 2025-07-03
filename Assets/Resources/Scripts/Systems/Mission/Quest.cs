@@ -10,4 +10,5 @@ public class Quest: ScriptableObject
     public string questName;
     public List<QuestStep> steps;
     public bool isCompleted;
+    public bool isStarted;
 }

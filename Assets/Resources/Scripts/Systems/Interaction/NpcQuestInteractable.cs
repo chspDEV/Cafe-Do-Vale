@@ -1,28 +1,14 @@
 using UnityEngine;
-using System.Linq;
 using System;
-using NUnit.Framework;
 using System.Collections.Generic;
 using Unity.Cinemachine;
+using Tcp4.Assets.Resources.Scripts.Managers;
+
 namespace Tcp4
 {
-    public enum NpcQuestStatus
-    { 
-        Completed,
-        Started,
-        Not_Started
-    }
-
-    [Serializable]
-    public class NpcQuest
-    {
-        public string mission_id;
-        public NpcQuestStatus missionState;
-    }
-
     public class NpcQuestInteractable : BaseInteractable
     {
-        public NpcQuest[] missions; 
+        public List<Quest> missions; // Lista de ScriptableObjects de missão
         public bool showDebugMessages = true;
         public Animator anim;
         public string onLookAnimation;
@@ -32,96 +18,130 @@ namespace Tcp4
         public List<DialogueData> dialogues;
 
         private int currentMissionIndex = -1;
+        private GameObject player;
+        private Quaternion idleRotation;
 
         public override void Start()
         {
             base.Start();
-            // Encontra o ponto de progresso atual
             UpdateCurrentMissionIndex();
+            player = GameAssets.Instance.player;
+            idleRotation = transform.rotation;
         }
 
         public override void OnFocus()
         {
+            if (QuestManager.Instance.completedTutorials.Count <= 0) return;
+
             base.OnFocus();
             anim.Play(onLookAnimation);
+
+            Vector3 direction = player.transform.position - transform.position;
+            direction.y = 0; // Mantém apenas a rotação horizontal
+            transform.rotation = Quaternion.LookRotation(direction * -1f) ;
+        }
+
+        public override void OnLostFocus()
+        {
+            if (QuestManager.Instance.completedTutorials.Count <= 0) return;
+
+            base.OnLostFocus();
+            transform.rotation = idleRotation;
         }
 
         private void UpdateCurrentMissionIndex()
         {
-            for (int i = 0; i < missions.Length; i++)
-            {
-                bool missionCompleted = QuestManager.Instance.IsMissionCompleted(missions[i].mission_id);
-                bool missionStarted = IsMissionStarted(missions[i]);
+            currentMissionIndex = -1;
 
-                if (!missionCompleted || (missionStarted && !missionCompleted))
+            for (int i = 0; i < missions.Count; i++)
+            {
+                string questId = missions[i].questID;
+                bool missionCompleted = QuestManager.Instance.IsMissionCompleted(questId);
+
+                if (!missionCompleted)
                 {
                     currentMissionIndex = i;
-                    return;
+                    break;
                 }
             }
 
-            // Se todas as missões estiverem completas
-            currentMissionIndex = missions.Length;
+            // Se todas estiverem completas
+            if (currentMissionIndex == -1)
+            {
+                currentMissionIndex = missions.Count;
+            }
         }
 
         public override void OnInteract()
         {
+            if (QuestManager.Instance.completedTutorials.Count <= 0) return;
+
             base.OnInteract();
 
             // Todas as missões completas
-            if (currentMissionIndex >= missions.Length)
+            if (currentMissionIndex >= missions.Count)
             {
                 if (showDebugMessages) Debug.Log("Todas as missões deste NPC foram completadas!");
                 return;
             }
 
-            NpcQuest currentMission = missions[currentMissionIndex];
+            Quest currentMission = missions[currentMissionIndex];
+            bool missionCompleted = QuestManager.Instance.IsMissionCompleted(currentMission.questID);
+            bool missionStarted = QuestManager.Instance.IsMissionStarted(currentMission.questID);
 
-            // Se a missão atual foi completada, avança para a próxima
-            if (QuestManager.Instance.IsMissionCompleted(currentMission.mission_id))
+            if (missionCompleted)
             {
+                // Avança para próxima missão
                 currentMissionIndex++;
                 UpdateCurrentMissionIndex();
 
-                if (currentMissionIndex < missions.Length)
+                if (currentMissionIndex < missions.Count)
                 {
                     StartCurrentMission();
                 }
-                return;
             }
-
-            // Se a missão atual não foi iniciada
-            if (!IsMissionStarted(currentMission))
+            else if (!missionStarted)
             {
                 StartCurrentMission();
-                return;
             }
+            else
+            {
+                if (showDebugMessages) Debug.Log($"Missão em progresso: {currentMission.questName}");
 
-            // Se chegou aqui, a missão está em andamento
-            if (showDebugMessages) Debug.Log($"Missão em progresso: {currentMission}");
-        }
-
-        private bool IsMissionStarted(NpcQuest mission)
-        {
-            return mission.missionState == NpcQuestStatus.Started;
+                // Reinicia diálogo se necessário
+                if (dialogues.Count > currentMissionIndex && dialogues[currentMissionIndex] != null)
+                {
+                    StartDialogue(currentMissionIndex);
+                }
+            }
         }
 
         private void StartCurrentMission()
         {
-            string mission = missions[currentMissionIndex].mission_id;
-            QuestManager.Instance.StartMission(mission);
+            Quest currentMission = missions[currentMissionIndex];
 
-            if (dialogues[currentMissionIndex] != null)
+            // Registra no QuestManager como iniciada
+            QuestManager.Instance.StartMission(currentMission.questID);
+
+            if (showDebugMessages) Debug.Log($"Missão iniciada: {currentMission.questName}");
+
+            // Inicia diálogo se disponível
+            if (dialogues.Count > currentMissionIndex && dialogues[currentMissionIndex] != null)
             {
-                if (npcCamera != null)
-                {
-                    CameraManager.Instance.SetupDialogueCamera(npcCamera);
-                }
+                StartDialogue(currentMissionIndex);
+            }
+        }
 
-                DialogueManager.Instance.StartDialogue(dialogues[currentMissionIndex]);
+        private void StartDialogue(int index)
+        {
+            if (npcCamera != null)
+            {
+                // Descomente quando implementar
+                // CameraManager.Instance.SetupDialogueCamera(npcCamera);
             }
 
-            if (showDebugMessages) Debug.Log($"Missão iniciada: {mission}");
+            // Descomente quando implementar
+            // DialogueManager.Instance.StartDialogue(dialogues[index]);
         }
     }
 }

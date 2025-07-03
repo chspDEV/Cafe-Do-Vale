@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1d753dccf7fca774eaeb57b2988eab5f, type: 3}
-  m_Name: movimentos_basicos
+  m_Name: Controles
   m_EditorClassIdentifier: 
-  questID: tutorial01
+  questID: tutorial00
   questName: Controles
   steps:
   - stepID: 0

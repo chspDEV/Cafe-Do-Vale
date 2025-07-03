@@ -19,7 +19,7 @@ public class QuestManager : Singleton<QuestManager>
     [Title("Estado do Tutorial")]
     [BoxGroup("Estado do Tutorial")]
     [ShowInInspector, ReadOnly, PropertyOrder(100)]
-    private Dictionary<string, bool> completedTutorials = new Dictionary<string, bool>();
+    public readonly List<Quest> completedTutorials = new();
 
     [BoxGroup("Missão Atual")]
     [ShowInInspector, ReadOnly, PropertyOrder(1)]
@@ -98,9 +98,17 @@ public class QuestManager : Singleton<QuestManager>
 
     public bool IsMissionCompleted(string identifier)
     { 
-        if(tutorialMissions != null) return false;
+        if(tutorialMissions == null) return false;
 
         return tutorialMissions.Find(m => m.questID == identifier).isCompleted == true;
+    }
+
+    public bool IsMissionStarted(string identifier)
+    {
+        if (tutorialMissions == null) return false;
+
+        return tutorialMissions.Find(m => m.questID == identifier).isCompleted == false &&
+            tutorialMissions.Find(m => m.questID == identifier).isStarted == true;
     }
 
     public void StartMission(string missionID)
@@ -191,6 +199,7 @@ public class QuestManager : Singleton<QuestManager>
     public void CompleteCurrentMission()
     {
         currentMission.isCompleted = true;
+        completedTutorials.Add(currentMission);
         SaveTutorialProgress(currentMission.questID);
 
         // Limpa a referência atual

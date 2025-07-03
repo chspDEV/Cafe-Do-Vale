@@ -6,6 +6,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Tcp4;
 using Tcp4.Assets.Resources.Scripts.Managers;
+using UnityEngine.InputSystem;
 
 // Classe para representar uma linha de diálogo
 [System.Serializable]
@@ -41,12 +42,28 @@ public class DialogueManager : Singleton<DialogueManager>
 
     private bool playerInteracted = false;
 
+    private PlayerInteraction playerInteraction;
+
     private void Start()
     {
         if (dialoguePanel != null)
             dialoguePanel.SetActive(false);
 
-        PlayerInteraction.OnPlayerInteraction += CheckPlayerInteraction;
+        playerInteraction = GameAssets.Instance.player.GetComponent<PlayerInteraction>();
+
+        
+    }
+
+    private void OnEnable()
+    {
+        if (playerInteraction != null)
+            playerInteraction.OnPlayerInteraction += CheckPlayerInteraction;
+    }
+
+    private void OnDisable()
+    {
+        if (playerInteraction != null)
+            playerInteraction.OnPlayerInteraction -= CheckPlayerInteraction;
     }
 
     void CheckPlayerInteraction()

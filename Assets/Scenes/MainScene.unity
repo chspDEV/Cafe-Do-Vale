@@ -17512,6 +17512,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tutorialMissions:
   - {fileID: 11400000, guid: 099a6588a6d489644bbe455e2a0fa64e, type: 2}
+  - {fileID: 11400000, guid: 47ef7e6da51e4084393e02b41b733560, type: 2}
+  - {fileID: 11400000, guid: d025dd5f45758794e96579ea3df7bf0d, type: 2}
+  - {fileID: 11400000, guid: 7706e5ce941659144868316f300eb0a9, type: 2}
+  - {fileID: 11400000, guid: 82d4d44a7b4c78040b7b0cb5d7449fdf, type: 2}
+  - {fileID: 11400000, guid: f476f93d7220dba46b102907e6580920, type: 2}
   navigationArrowPrefab: {fileID: 6998916148638147895, guid: eb88179ca74e9da418a4d5f896a5545a, type: 3}
 --- !u!114 &619587112
 MonoBehaviour:
@@ -52620,10 +52625,11 @@ MonoBehaviour:
   bounceSpeed: 6
   interactionIndicator: {fileID: 0}
   missions:
-  - mission_id: limpar_fazenda
-    missionState: 2
-  - mission_id: ir_vendinha
-    missionState: 2
+  - {fileID: 11400000, guid: 47ef7e6da51e4084393e02b41b733560, type: 2}
+  - {fileID: 11400000, guid: d025dd5f45758794e96579ea3df7bf0d, type: 2}
+  - {fileID: 11400000, guid: 7706e5ce941659144868316f300eb0a9, type: 2}
+  - {fileID: 11400000, guid: 82d4d44a7b4c78040b7b0cb5d7449fdf, type: 2}
+  - {fileID: 11400000, guid: f476f93d7220dba46b102907e6580920, type: 2}
   showDebugMessages: 1
   anim: {fileID: 9208874312899393441}
   onLookAnimation: Saudacao
@@ -53703,7 +53709,7 @@ Transform:
   m_GameObject: {fileID: 1721339815}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.5, y: 2, z: 1}
+  m_LocalPosition: {x: 2, y: 2, z: 1}
   m_LocalScale: {x: 3.19, y: 3.19, z: 3.19}
   m_ConstrainProportionsScale: 1
   m_Children: []

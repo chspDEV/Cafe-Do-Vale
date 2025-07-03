@@ -6,7 +6,8 @@ namespace Tcp4
 {
     public class PlayerInteraction : MonoBehaviour
     {
-        public static event Action OnPlayerInteraction;
+        public event Action OnPlayerInteraction;
+
         public void SetInteraction(InputAction.CallbackContext context)
         {
             if (context.performed)

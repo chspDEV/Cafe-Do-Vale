@@ -10,64 +10,55 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1d753dccf7fca774eaeb57b2988eab5f, type: 3}
-  m_Name: limpar_fazenda
+  m_Name: "M\xE3os a obra III"
   m_EditorClassIdentifier: 
-  questID: limpar_fazenda
-  questName: "M\xE3os a obra"
+  questID: tutorial03
+  questName: "M\xE3os a obra III"
   steps:
   - stepID: 0
-    instructionText: Remova 5 entulhos da fazenda!
+    instructionText: "V\xE1 at\xE9 as \xE1reas de produ\xE7\xE3o"
     objective:
-      objectiveType: 3
+      objectiveType: 2
       requiredInput: 0
-      targetPosition: {x: 0, y: 0, z: 0}
-      radius: 2
-      targetID: collectable
+      targetPosition: {x: 2, y: 1, z: 2}
+      radius: 6
+      targetID: 
     isCompleted: 0
     hasIndicator: 0
     visualIndicator: {fileID: 0}
   - stepID: 1
-    instructionText: Remova 4 entulhos da fazenda!
+    instructionText: "Interaja com uma das \xE1reas."
     objective:
-      objectiveType: 3
+      objectiveType: 4
       requiredInput: 0
       targetPosition: {x: 0, y: 0, z: 0}
       radius: 2
-      targetID: collectable
+      targetID: productionArea
     isCompleted: 0
     hasIndicator: 0
     visualIndicator: {fileID: 0}
   - stepID: 2
-    instructionText: Remova 3 entulhos da fazenda!
+    instructionText: "Agora, selecione o caf\xE9 para come\xE7ar uma produ\xE7\xE3o
+      de caf\xE9."
     objective:
-      objectiveType: 3
+      objectiveType: 4
       requiredInput: 0
       targetPosition: {x: 0, y: 0, z: 0}
       radius: 2
-      targetID: collectable
+      targetID: "Fruto de Caf\xE9"
     isCompleted: 0
     hasIndicator: 0
     visualIndicator: {fileID: 0}
   - stepID: 3
-    instructionText: Remova 2 entulhos da fazenda!
+    instructionText: "Aguarde e colete um Fruto de Caf\xE9."
     objective:
       objectiveType: 3
       requiredInput: 0
       targetPosition: {x: 0, y: 0, z: 0}
       radius: 2
-      targetID: collectable
-    isCompleted: 0
-    hasIndicator: 0
-    visualIndicator: {fileID: 0}
-  - stepID: 4
-    instructionText: Remova 1 entulhos da fazenda!
-    objective:
-      objectiveType: 3
-      requiredInput: 0
-      targetPosition: {x: 0, y: 0, z: 0}
-      radius: 2
-      targetID: collectable
+      targetID: "Fruto de Caf\xE9"
     isCompleted: 0
     hasIndicator: 0
     visualIndicator: {fileID: 0}
   isCompleted: 0
+  isStarted: 0

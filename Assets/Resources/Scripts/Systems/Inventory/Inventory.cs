@@ -29,6 +29,7 @@ namespace Tcp4
             for (int i = 0; i < amount; i++)
             {
                 productInventory.Add(product);
+                QuestManager.Instance.CheckItemCollected(product.productName);
                 Spawn(product.model);
             }
         }

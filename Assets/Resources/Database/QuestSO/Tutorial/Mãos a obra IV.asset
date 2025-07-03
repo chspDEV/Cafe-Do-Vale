@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1d753dccf7fca774eaeb57b2988eab5f, type: 3}
-  m_Name: ir_vendinha
+  m_Name: "M\xE3os a obra IV"
   m_EditorClassIdentifier: 
-  questID: limpar_fazenda
-  questName: "M\xE3os a obra"
+  questID: tutorial04
+  questName: "M\xE3os a obra IV"
   steps: []
   isCompleted: 0

@@ -1,0 +1,62 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1d753dccf7fca774eaeb57b2988eab5f, type: 3}
+  m_Name: "M\xE3os a obra II"
+  m_EditorClassIdentifier: 
+  questID: tutorial02
+  questName: "M\xE3os a obra II"
+  steps:
+  - stepID: 0
+    instructionText: "V\xE1 at\xE9 a Loja."
+    objective:
+      objectiveType: 2
+      requiredInput: 0
+      targetPosition: {x: 43, y: 1, z: 21}
+      radius: 4
+      targetID: 
+    isCompleted: 0
+    hasIndicator: 0
+    visualIndicator: {fileID: 0}
+  - stepID: 1
+    instructionText: Abra a Loja para ver os produtos de hoje.
+    objective:
+      objectiveType: 4
+      requiredInput: 0
+      targetPosition: {x: 0, y: 0, z: 0}
+      radius: 2
+      targetID: seedShop
+    isCompleted: 0
+    hasIndicator: 0
+    visualIndicator: {fileID: 0}
+  - stepID: 2
+    instructionText: "Compre uma semente de caf\xE9."
+    objective:
+      objectiveType: 4
+      requiredInput: 0
+      targetPosition: {x: 0, y: 0, z: 0}
+      radius: 2
+      targetID: "Semente de Caf\xE9"
+    isCompleted: 0
+    hasIndicator: 0
+    visualIndicator: {fileID: 0}
+  - stepID: 3
+    instructionText: Volte para falar com Zeca.
+    objective:
+      objectiveType: 2
+      requiredInput: 0
+      targetPosition: {x: 14, y: 1, z: 14}
+      radius: 3
+      targetID: 
+    isCompleted: 0
+    hasIndicator: 0
+    visualIndicator: {fileID: 0}
+  isCompleted: 0

@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using GameResources.Project.Scripts.Utilities.Audio;
+using System.Collections;
 using Tcp4.Assets.Resources.Scripts.Managers;
 using TMPro;
 using UnityEngine;
@@ -17,12 +18,14 @@ namespace Tcp4
 
         private CollectArea reference;
 
+        private string item_id;
         public void SetColletArea(CollectArea collectarea) => reference = collectarea;
 
         public void ConfigureVisuals()
         {
             cardImage.sprite = myProduction.outputProduct.productImage;
             cardName.text = myProduction.outputProduct.productName;
+            item_id = myProduction.outputProduct.productName;
         }
 
         private void OnEnable()
@@ -50,9 +53,18 @@ namespace Tcp4
             if (!SeedManager.Instance.HasSeed(myProduction))
             {
                 Debug.Log("Você precisa de sementes para esta produção!");
+                SoundEventArgs sfxArgs = new()
+                {
+                    Category = SoundEventArgs.SoundCategory.SFX,
+                    AudioID = "erro", // O ID do seu SFX (sem "sfx_" e em minúsculas)
+                    VolumeScale = .8f, // Escala de volume (opcional, padrão é 1f)
+
+                };
+                SoundEvent.RequestSound(sfxArgs);
                 return;
             }
 
+            InteractionManager.Instance.UpdateLastId(item_id);
             SeedManager.Instance.ConsumeSeed(myProduction);
             ProductionManager.Instance.SetupNewProduction(myProduction);
             ProductionManager.Instance.InvokeChooseProduction();
