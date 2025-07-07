@@ -53,7 +53,7 @@ public class QuestChecker : MonoBehaviour
 
     private void CheckInteractionObjective(QuestObjective objective)
     {
-        if (InteractionManager.Instance.GetLastIdInteracted() == objective.targetID)
+        if (InteractionManager.Instance.GetLastIdInteracted() == objective.targetID.ToString())
         {
             QuestManager.Instance.CompleteCurrentStep();
         }
@@ -62,38 +62,34 @@ public class QuestChecker : MonoBehaviour
             //Debug.LogError($"Esperava id[{objective.targetID}] e o ultimo foi [{InteractionManager.Instance.GetLastIdInteracted()}]");
         }
     }
-
     private void CheckButtonPressObjective(QuestObjective objective)
     {
         if (IsMenuBlockingTutorial()) return;
 
-        switch (objective.requiredInput)
+        if (IsInputPressed(objective.requiredInput))
         {
-            case InputsPossibilities.Forward:
-                if(playerMovement.forwardPressed) QuestManager.Instance.CompleteCurrentStep();
-                break;
-            case InputsPossibilities.Backward:
-                if (playerMovement.backwardPressed) QuestManager.Instance.CompleteCurrentStep();
-                break;
-            case InputsPossibilities.Left:
-                if (playerMovement.leftPressed) QuestManager.Instance.CompleteCurrentStep();
-                break;
-            case InputsPossibilities.Right:
-                if (playerMovement.rightPressed) QuestManager.Instance.CompleteCurrentStep();
-                break;
-            case InputsPossibilities.Map:
-                break;
-            case InputsPossibilities.Recipe:
-                break;
-            case InputsPossibilities.Pause:
-                break;
-            case InputsPossibilities.Inventory:
-                break;
-            case InputsPossibilities.Interact:
-                break;
-            default:
-                break;
+            QuestManager.Instance.CompleteCurrentStep();
         }
+        else
+        {
+            Debug.Log($"Esperava [{objective.requiredInput.ToString()}] e está como [{IsInputPressed(objective.requiredInput)}]");
+        }
+    }
+
+    private bool IsInputPressed(InputsPossibilities input)
+    {
+        return input switch
+        {
+            InputsPossibilities.Forward => playerMovement.forwardPressed,
+            InputsPossibilities.Backward => playerMovement.backwardPressed,
+            InputsPossibilities.Left => playerMovement.leftPressed,
+            InputsPossibilities.Right => playerMovement.rightPressed,
+            InputsPossibilities.Map => playerInputs.map,
+            InputsPossibilities.Recipe => playerInputs.recipe,
+            InputsPossibilities.Pause => playerInputs.pause,
+            InputsPossibilities.Inventory => playerInputs.seedInventory,
+            _ => false,
+        };
     }
 
     private bool IsMenuBlockingTutorial()

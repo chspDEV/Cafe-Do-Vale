@@ -9,16 +9,16 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
         private readonly List<ProductionCard> choices = new();
 
         [SerializeField] private List<Production> productions;
-        private CollectArea reference;
+        private ProductionArea reference;
 
         private Production productionToSet;
         public event Action OnChooseProduction;
 
         public void SetupNewProduction(Production newProduction) => productionToSet = newProduction;
 
-        public void SetupNewReference(CollectArea reference) => this.reference = reference;
+        public void SetupNewReference(ProductionArea reference) => this.reference = reference;
 
-        public CollectArea GetCurrentReference() => reference;
+        public ProductionArea GetCurrentReference() => reference;
 
         public Production GetNewProduction() => productionToSet;
 

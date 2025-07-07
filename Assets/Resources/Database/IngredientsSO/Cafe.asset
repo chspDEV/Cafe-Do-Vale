@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6718556ead9eb114581990b08f3d82f2, type: 3}
   m_Name: Cafe
   m_EditorClassIdentifier: 
-  productName: Cafe
+  productName: "Caf\xE9"
   quality: 10
   productID: 7
   model: {fileID: 3276711653226075482, guid: 77d6285a5359fc14dbb5a7f81b6b5405, type: 3}

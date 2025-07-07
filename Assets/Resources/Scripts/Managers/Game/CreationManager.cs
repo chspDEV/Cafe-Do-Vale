@@ -71,7 +71,7 @@ namespace Tcp4
                 return;
             }
 
-            Drink newDrink = RefinamentManager.Instance.CreateDrink(Ingredients);
+            Drink newDrink = RefinementManager.Instance.CreateDrink(Ingredients);
 
             Debug.Log($"{newDrink} criado!");
 

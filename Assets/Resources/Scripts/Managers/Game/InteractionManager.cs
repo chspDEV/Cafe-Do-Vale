@@ -24,7 +24,7 @@ public class InteractionManager : Singleton<InteractionManager>
 
     private Transform playerTransform;
 
-    private string lastIdInteracted;
+    [SerializeField] private string lastIdInteracted;
     
 
     private void Start()
@@ -60,6 +60,7 @@ public class InteractionManager : Singleton<InteractionManager>
 
     public string GetLastIdInteracted()
     {
+        Debug.Log($"Ultimo ID interagido é: {lastIdInteracted}.");
         return lastIdInteracted;
     }
 

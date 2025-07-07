@@ -25,7 +25,7 @@ namespace Tcp4.Assets.Resources.Scripts.Systems.Areas
         [TabGroup("Configurações", "Referências")]
         [SerializeField] private AnimationExecute anim;
         [TabGroup("Configurações", "Referências")]
-        [SerializeField] private RefinamentActivator activator;
+        [SerializeField] private RefinementActivator activator;
 
         [TabGroup("Interface", "Sprites")]
         [SerializeField, PreviewField(50)] private Sprite insertProductSprite;
@@ -77,6 +77,8 @@ namespace Tcp4.Assets.Resources.Scripts.Systems.Areas
 
             if (activator != null)
                 activator.OnActive += StartRefinement;
+
+            interactable_id = "refinementArea";
         }
 
         public override void Update()
@@ -118,7 +120,9 @@ namespace Tcp4.Assets.Resources.Scripts.Systems.Areas
             if (!IsInteractable() || isRefining || isSpoiled)
             {
                 return;
-            } 
+            }
+
+            InteractionManager.Instance.UpdateLastId(interactable_id);
 
             if (processingQueue.Count == 0 && !isReady)
                 TryInsertProducts();
@@ -128,7 +132,7 @@ namespace Tcp4.Assets.Resources.Scripts.Systems.Areas
         }
 
         private IEnumerable GetAllRecipes() =>
-            RefinamentManager.Instance?.GetRecipes() ?? new List<RefinementRecipe>();
+            RefinementManager.Instance?.GetRecipes() ?? new List<RefinementRecipe>();
 
         private void TryInsertProducts()
         {
@@ -275,12 +279,12 @@ namespace Tcp4.Assets.Resources.Scripts.Systems.Areas
                 ResetCountdown();
             }
 
-            if (playerInventory != null && RefinamentManager.Instance != null && currentProduct != null)
+            if (playerInventory != null && RefinementManager.Instance != null && currentProduct != null)
             {
-                playerInventory.AddProduct(
-                    RefinamentManager.Instance.Refine(currentProduct),
-                    1
-                );
+                BaseProduct refinedProduct = RefinementManager.Instance.Refine(currentProduct);
+                playerInventory.AddProduct(refinedProduct, 1);
+
+                InteractionManager.Instance.UpdateLastId(refinedProduct.productName);
 
                 //Fazendo o request de sfx
                 SoundEventArgs ostArgs = new()

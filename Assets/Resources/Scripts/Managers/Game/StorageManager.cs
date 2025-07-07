@@ -62,6 +62,7 @@ namespace Tcp4
                 };
                 SoundEvent.RequestSound(sfxArgs);
 
+                InteractionManager.Instance.UpdateLastId("guardar " + currentStorage.item.productName);
 
                 playerInventory.RemoveProduct(currentStorage.item, 1);
                 storageInventory.AddProduct(currentStorage.item, 1);
@@ -92,6 +93,8 @@ namespace Tcp4
 
             if (isAbleToTransfer)
             {
+                InteractionManager.Instance.UpdateLastId("retirar " + currentStorage.item.productName);
+
                 playerInventory.AddProduct(currentStorage.item, 1);
                 storageInventory.RemoveProduct(currentStorage.item, 1);
             }

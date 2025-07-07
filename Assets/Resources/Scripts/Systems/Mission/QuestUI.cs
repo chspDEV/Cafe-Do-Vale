@@ -14,7 +14,7 @@ public class QuestUI : Singleton<QuestUI>
 
     [Title("Referências de UI")]
     [BoxGroup("Referências de UI")]
-    [Required][SerializeField] private GameObject tutorialPanel;
+    [Required][SerializeField] private GameObject questPanel;
     [BoxGroup("Referências de UI")]
     [Required][SerializeField] private TextMeshProUGUI instructionText;
     [BoxGroup("Referências de UI")]
@@ -45,28 +45,31 @@ public class QuestUI : Singleton<QuestUI>
         base.Awake();
 
         if(canvasGroup == null)
-        canvasGroup = GetComponent<CanvasGroup>() ?? tutorialPanel.AddComponent<CanvasGroup>();
-
-        skipButton.onClick.AddListener(SkipTutorial);
-        nextButton.onClick.AddListener(CompleteCurrentStep);
+        canvasGroup = GetComponent<CanvasGroup>() ?? questPanel.AddComponent<CanvasGroup>();
 
         // Inicialmente escondido
         canvasGroup.alpha = 0;
-        tutorialPanel.SetActive(false);
+        questPanel.SetActive(false);
+    }
+
+    public void Start()
+    {
+        skipButton.onClick.AddListener(SkipQuest);
+        nextButton.onClick.AddListener(CompleteCurrentStep);
     }
 
     private void OnEnable()
     {
-        QuestManager.OnTutorialStarted += OnTutorialStarted;
-        QuestManager.OnTutorialStepChanged += OnStepChanged;
-        QuestManager.OnTutorialCompleted += OnTutorialCompleted;
+        QuestManager.OnQuestStarted += OnQuestStarted;
+        QuestManager.OnQuestStepChanged += OnStepChanged;
+        QuestManager.OnQuestCompleted += OnQuestCompleted;
     }
 
     private void OnDisable()
     {
-        QuestManager.OnTutorialStarted -= OnTutorialStarted;
-        QuestManager.OnTutorialStepChanged -= OnStepChanged;
-        QuestManager.OnTutorialCompleted -= OnTutorialCompleted;
+        QuestManager.OnQuestStarted -= OnQuestStarted;
+        QuestManager.OnQuestStepChanged -= OnStepChanged;
+        QuestManager.OnQuestCompleted -= OnQuestCompleted;
     }
 
     public void ShowInstruction(string instruction)
@@ -84,7 +87,7 @@ public class QuestUI : Singleton<QuestUI>
         isShowingInstruction = true;
 
         // Ativa e faz fade in
-        tutorialPanel.SetActive(true);
+        questPanel.SetActive(true);
         instructionText.text = instruction;
 
         yield return StartCoroutine(FadePanel(0, 1));
@@ -112,13 +115,13 @@ public class QuestUI : Singleton<QuestUI>
         canvasGroup.alpha = to;
     }
 
-    private void OnTutorialStarted(Quest mission)
+    private void OnQuestStarted(Quest mission)
     {
         // Atualiza a UI para mostrar o progresso
         UpdateProgressUI(mission);
 
         // Mostra o nome da missão como primeira instrução
-        ShowInstruction($"Tutorial: {mission.questName}");
+        ShowInstruction($"Missão: {mission.questName}");
     }
 
     private void OnStepChanged(QuestStep step)
@@ -132,18 +135,18 @@ public class QuestUI : Singleton<QuestUI>
         nextButton.gameObject.SetActive(step.objective.objectiveType == QuestObjectiveType.InfoOnly);
     }
 
-    private void OnTutorialCompleted(string missionId)
+    private void OnQuestCompleted(string questId)
     {
         CompleteProgressUI();
-        ShowInstruction("Tutorial completo!");
-        StartCoroutine(CompleteTutorialRoutine());
+        ShowInstruction("Missão completa!");
+        StartCoroutine(CompleteQuestRoutine());
     }
 
-    private IEnumerator CompleteTutorialRoutine()
+    private IEnumerator CompleteQuestRoutine()
     {
         yield return new WaitForSeconds(2f);
         yield return StartCoroutine(FadePanel(1, 0));
-        tutorialPanel.SetActive(false);
+        questPanel.SetActive(false);
     }
 
     private void UpdateProgressUI(Quest mission)
@@ -177,13 +180,13 @@ public class QuestUI : Singleton<QuestUI>
         }
     }
 
-    public void SkipTutorial()
+    public void SkipQuest()
     {
         if (QuestManager.Instance.CurrentMission != null)
         {
             QuestManager.Instance.CompleteCurrentMission();
             StartCoroutine(FadePanel(canvasGroup.alpha, 0));
-            tutorialPanel.SetActive(false);
+            questPanel.SetActive(false);
         }
     }
 }

@@ -14,5 +14,50 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   questID: tutorial05
   questName: "M\xE3os a obra V"
-  steps: []
+  steps:
+  - stepID: 0
+    instructionText: Abra o menu de receitas.
+    objective:
+      objectiveType: 1
+      requiredInput: 5
+      targetPosition: {x: 0, y: 0, z: 0}
+      radius: 2
+      targetID: 
+    isCompleted: 0
+    hasIndicator: 0
+    visualIndicator: {fileID: 0}
+  - stepID: 1
+    instructionText: "V\xE1 at\xE9 sua cafeteria"
+    objective:
+      objectiveType: 2
+      requiredInput: 0
+      targetPosition: {x: 45, y: 1, z: -1}
+      radius: 15
+      targetID: 
+    isCompleted: 0
+    hasIndicator: 0
+    visualIndicator: {fileID: 0}
+  - stepID: 2
+    instructionText: Encontre a cafeteira, local para criar suas bebidas!
+    objective:
+      objectiveType: 2
+      requiredInput: 0
+      targetPosition: {x: 41.5, y: 1, z: 1}
+      radius: 2
+      targetID: 
+    isCompleted: 0
+    hasIndicator: 0
+    visualIndicator: {fileID: 0}
+  - stepID: 3
+    instructionText: Volte para Zeca para finalizar o tutorial.
+    objective:
+      objectiveType: 2
+      requiredInput: 0
+      targetPosition: {x: 14, y: 1, z: 14}
+      radius: 3
+      targetID: 
+    isCompleted: 0
+    hasIndicator: 0
+    visualIndicator: {fileID: 0}
   isCompleted: 0
+  isStarted: 0

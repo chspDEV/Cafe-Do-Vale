@@ -16,10 +16,10 @@ namespace Tcp4
         [SerializeField] private GameObject lockIcon;
         [SerializeField] private TextMeshProUGUI seedCountText;
 
-        private CollectArea reference;
+        private ProductionArea reference;
 
         private string item_id;
-        public void SetColletArea(CollectArea collectarea) => reference = collectarea;
+        public void SetColletArea(ProductionArea collectarea) => reference = collectarea;
 
         public void ConfigureVisuals()
         {

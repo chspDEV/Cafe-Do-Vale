@@ -41,15 +41,15 @@ public class QuestManager : Singleton<QuestManager>
 
     [BoxGroup("Eventos")]
     [ShowInInspector, ReadOnly, PropertyOrder(200)]
-    public static Action<Quest> OnTutorialStarted { get; internal set; }
+    public static Action<Quest> OnQuestStarted { get; internal set; }
 
     [BoxGroup("Eventos")]
     [ShowInInspector, ReadOnly, PropertyOrder(201)]
-    public static Action<QuestStep> OnTutorialStepChanged { get; internal set; }
+    public static Action<QuestStep> OnQuestStepChanged { get; internal set; }
 
     [BoxGroup("Eventos")]
     [ShowInInspector, ReadOnly, PropertyOrder(202)]
-    public static Action<string> OnTutorialCompleted { get; internal set; }
+    public static Action<string> OnQuestCompleted { get; internal set; }
 
     [BoxGroup("Navegação Atual")]
     [ShowInInspector, ReadOnly, PropertyOrder(50)]
@@ -60,10 +60,10 @@ public class QuestManager : Singleton<QuestManager>
         base.Awake();
         DontDestroyOnLoad(gameObject);
 
-        LoadTutorialProgress();
+        LoadProgress();
     }
 
-    private void LoadTutorialProgress()
+    private void LoadProgress()
     {
         /* implementar asset nathan
         // Carrega o progresso salvo do PlayerPrefs ou de um save system
@@ -88,7 +88,7 @@ public class QuestManager : Singleton<QuestManager>
 
     }
 
-    private void SaveTutorialProgress(string missionID)
+    private void SaveProgress(string missionID)
     {
         /* implementar asset nathan
         PlayerPrefs.SetInt("TUTORIAL_" + missionID, 1);
@@ -136,7 +136,7 @@ public class QuestManager : Singleton<QuestManager>
             CreateNavigationArrow(step.objective.targetPosition);
         }
 
-        OnTutorialStepChanged?.Invoke(currentStep);
+        OnQuestStepChanged?.Invoke(currentStep);
     }
 
     private void CreateNavigationArrow(Vector3 targetPosition)
@@ -200,13 +200,13 @@ public class QuestManager : Singleton<QuestManager>
     {
         currentMission.isCompleted = true;
         completedTutorials.Add(currentMission);
-        SaveTutorialProgress(currentMission.questID);
+        SaveProgress(currentMission.questID);
 
         // Limpa a referência atual
         currentMission = null;
         currentStep = null;
 
         // Implemente qualquer feedback de conclusão
-        OnTutorialCompleted?.Invoke("Missão Completa!");
+        OnQuestCompleted?.Invoke("Missão Completa!");
     }
 }

@@ -19,6 +19,7 @@ namespace Tcp4.Assets.Resources.Scripts.Systems.Collect_Cook
             inventory = GetComponent<Inventory>();
             inventory.UpdateLimit(400);
             isInterfaceOpen = false;
+            interactable_id = "storageArea";
         }
 
         public override void OnLostFocus()

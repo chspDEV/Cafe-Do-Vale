@@ -26,7 +26,7 @@ public class SeedShopItem : MonoBehaviour
         if (ShopManager.Instance.TrySpendMoney(seed.purchaseCost))
         {
             SeedManager.Instance.AddSeed(seed.targetProduction);
-            QuestManager.Instance.CheckItemCollected(item_id);
+            InteractionManager.Instance.UpdateLastId(item_id);
             Destroy(this.gameObject);
         }
         else { Debug.LogError("Nao foi possivel comprar a semente!"); }

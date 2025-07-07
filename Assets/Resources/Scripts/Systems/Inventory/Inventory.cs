@@ -61,7 +61,7 @@ namespace Tcp4
                 return;
             }
 
-            BaseProduct refinedProduct = RefinamentManager.Instance.Refine(product);
+            BaseProduct refinedProduct = RefinementManager.Instance.Refine(product);
 
             if (refinedProduct != null)
             {

@@ -1585,6 +1585,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isInteractable: 1
+  interactable_id: interactable
   uiRotationOffset: {x: 0, y: 180, z: 0}
   uiPositionOffset: {x: 0, y: 1, z: 0}
   interactionCollider: {fileID: 37027055}
@@ -7569,6 +7570,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isInteractable: 1
+  interactable_id: interactable
   uiRotationOffset: {x: 0, y: 180, z: 0}
   uiPositionOffset: {x: 0, y: 1, z: 0}
   interactionCollider: {fileID: 120710077}
@@ -12598,6 +12600,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isInteractable: 1
+  interactable_id: interactable
   uiRotationOffset: {x: 0, y: 180, z: 0}
   uiPositionOffset: {x: 0, y: 1, z: 0}
   interactionCollider: {fileID: 236152223}
@@ -14009,6 +14012,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isInteractable: 1
+  interactable_id: interactable
   uiRotationOffset: {x: 0, y: 180, z: 0}
   uiPositionOffset: {x: 0, y: 1, z: 0}
   interactionCollider: {fileID: 0}
@@ -18018,7 +18022,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   heatmapSpherePrefab: {fileID: 7355209805600324143, guid: 4069fb80466e3c04e8c9a2971b2f0178, type: 3}
-  topDownCamera: {fileID: 993613060}
+  playtestCamera: {fileID: 0}
   playerTransform: {fileID: 1485050871}
   logInterval: 1
   reportBaseName: PlaytestReport
@@ -19682,6 +19686,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isInteractable: 1
+  interactable_id: interactable
   uiRotationOffset: {x: 0, y: 180, z: 0}
   uiPositionOffset: {x: 0, y: 0.7, z: 0}
   interactionCollider: {fileID: 373703250}
@@ -20626,6 +20631,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isInteractable: 1
+  interactable_id: interactable
   uiRotationOffset: {x: 0, y: 180, z: 0}
   uiPositionOffset: {x: 0, y: 0.7, z: 0}
   interactionCollider: {fileID: 387971967}
@@ -21899,6 +21905,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isInteractable: 1
+  interactable_id: interactable
   uiRotationOffset: {x: 0, y: 180, z: 0}
   uiPositionOffset: {x: 0, y: 0.7, z: 0}
   interactionCollider: {fileID: 408761910}
@@ -25281,6 +25288,7 @@ MonoBehaviour:
   safePoint: {fileID: 0}
   playerMovement: {fileID: 0}
   currentInputType: 0
+  isDebugMode: 0
 --- !u!1 &493995659
 GameObject:
   m_ObjectHideFlags: 0
@@ -32659,6 +32667,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isInteractable: 1
+  interactable_id: interactable
   uiRotationOffset: {x: 0, y: 180, z: 0}
   uiPositionOffset: {x: 0, y: 1, z: 0}
   interactionCollider: {fileID: 659590226}
@@ -38297,6 +38306,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isInteractable: 1
+  interactable_id: interactable
   uiRotationOffset: {x: 0, y: 180, z: 0}
   uiPositionOffset: {x: 0, y: 1, z: 0}
   interactionCollider: {fileID: 0}
@@ -40859,6 +40869,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isInteractable: 1
+  interactable_id: interactable
   uiRotationOffset: {x: 0, y: 180, z: 0}
   uiPositionOffset: {x: 0, y: 1, z: 0}
   interactionCollider: {fileID: 829090049}
@@ -44090,6 +44101,7 @@ GameObject:
   m_Component:
   - component: {fileID: 905274088}
   - component: {fileID: 905274089}
+  - component: {fileID: 905274090}
   m_Layer: 0
   m_Name: GrassSpawner (1)
   m_TagString: Untagged
@@ -44124,8 +44136,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c3be7762afb77dc47b0aa153b967bd6b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pfGrass: {fileID: 5852258049074348615, guid: 570a2176744605941aa21fb8ab34548a, type: 3}
-  instances: 15000
+  grassMesh: {fileID: 0}
+  grassMaterial: {fileID: 0}
+  maxInstances: 1000
   areaSize: 150
   groundLayer:
     serializedVersion: 2
@@ -44134,6 +44147,38 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 4087
   checkRadius: 1
+  framesToSpawn: 10
+  lodFOVThresholds:
+  - 30
+  - 40
+  - 45
+  lodInstanceCounts: e8030000f4010000c8000000
+  lodMeshes: []
+  cam: {fileID: 0}
+--- !u!205 &905274090
+LODGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 905274087}
+  serializedVersion: 2
+  m_LocalReferencePoint: {x: 0, y: 0, z: 0}
+  m_Size: 1
+  m_FadeMode: 0
+  m_AnimateCrossFading: 0
+  m_LastLODIsBillboard: 0
+  m_LODs:
+  - screenRelativeHeight: 0.6
+    fadeTransitionWidth: 0
+    renderers: []
+  - screenRelativeHeight: 0.3
+    fadeTransitionWidth: 0
+    renderers: []
+  - screenRelativeHeight: 0.1
+    fadeTransitionWidth: 0
+    renderers: []
+  m_Enabled: 1
 --- !u!1 &905871443
 GameObject:
   m_ObjectHideFlags: 0
@@ -44880,6 +44925,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isInteractable: 1
+  interactable_id: interactable
   uiRotationOffset: {x: 0, y: 180, z: 0}
   uiPositionOffset: {x: 0, y: 1, z: 0}
   interactionCollider: {fileID: 0}
@@ -51114,6 +51160,7 @@ MonoBehaviour:
   gizmoColor: {r: 0, g: 1, b: 1, a: 1}
   sphereColor: {r: 0, g: 1, b: 0, a: 0.1}
   sphereRadius: 0.4
+  lastIdInteracted: 
 --- !u!1 &1056450174
 GameObject:
   m_ObjectHideFlags: 0
@@ -51176,55 +51223,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1892826380}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1058016802
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1058016803}
-  - component: {fileID: 1058016804}
-  m_Layer: 0
-  m_Name: Global Volume
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1058016803
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1058016802}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1187387300}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1058016804
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1058016802}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 172515602e62fb746b5d573b38a5fe58, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_IsGlobal: 1
-  priority: 10
-  blendDistance: 0
-  weight: 1
-  sharedProfile: {fileID: 11400000, guid: dcad5e3390fbf354d8d72c4ac05764a4, type: 2}
 --- !u!1 &1058768942
 GameObject:
   m_ObjectHideFlags: 0
@@ -52478,24 +52476,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 656ba0cd701aadf419bab56fd130f42e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  showDebugUI: 1
-  fpsText: {fileID: 651673851}
-  memoryText: {fileID: 1504271900}
-  settingsText: {fileID: 1154512825}
-  targetFrameRate: 60
-  updateInterval: 0.1
-  renderDistance: 50
-  useDynamicResolution: 1
-  minResolutionScale: 0.5
-  maxResolutionScale: 1
-  textureQuality: 3
-  shadowDistance: 150
-  resolutionDropdown: {fileID: 1208760951}
-  renderScaleSlider: {fileID: 257316491}
-  optimizeForMobile: 0
-  mobileFPSTarget: 45
-  disableShadowsOnMobile: 0
-  debugCanvasGroup: {fileID: 1217083978}
 --- !u!4 &1088809306
 Transform:
   m_ObjectHideFlags: 0
@@ -55336,6 +55316,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isInteractable: 1
+  interactable_id: interactable
   uiRotationOffset: {x: 0, y: 180, z: 0}
   uiPositionOffset: {x: 0, y: 1, z: 0}
   interactionCollider: {fileID: 0}
@@ -55561,6 +55542,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isInteractable: 1
+  interactable_id: interactable
   uiRotationOffset: {x: 0, y: 180, z: 0}
   uiPositionOffset: {x: 0, y: 0.7, z: 0}
   interactionCollider: {fileID: 1151781709}
@@ -57912,6 +57894,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isInteractable: 1
+  interactable_id: interactable
   uiRotationOffset: {x: 0, y: 180, z: 0}
   uiPositionOffset: {x: 0, y: 1, z: 0}
   interactionCollider: {fileID: 1185617373}
@@ -58109,7 +58092,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 1058016803}
   - {fileID: 519992050}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -63195,6 +63177,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isInteractable: 1
+  interactable_id: interactable
   uiRotationOffset: {x: 0, y: 180, z: 0}
   uiPositionOffset: {x: 0, y: 1, z: 0}
   interactionCollider: {fileID: 1299963995}
@@ -63550,6 +63533,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isInteractable: 1
+  interactable_id: interactable
   uiRotationOffset: {x: 0, y: 180, z: 0}
   uiPositionOffset: {x: 0, y: 1, z: 0}
   interactionCollider: {fileID: 1301741636}
@@ -64156,6 +64140,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isInteractable: 1
+  interactable_id: interactable
   uiRotationOffset: {x: 0, y: 180, z: 0}
   uiPositionOffset: {x: 0, y: 0.7, z: 0}
   interactionCollider: {fileID: 1315162398}
@@ -65235,7 +65220,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 58ea3a196ddc1fe4a9961614a41c9b08, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  volume: {fileID: 1058016804}
+  volume: {fileID: 0}
 --- !u!1001 &1338049613
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -66845,6 +66830,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isInteractable: 1
+  interactable_id: interactable
   uiRotationOffset: {x: -15, y: 180, z: 0}
   uiPositionOffset: {x: 0, y: 0, z: 0}
   interactionCollider: {fileID: 1381035650}
@@ -67772,6 +67758,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isInteractable: 1
+  interactable_id: interactable
   uiRotationOffset: {x: 0, y: 180, z: 0}
   uiPositionOffset: {x: 0, y: 1, z: 0}
   interactionCollider: {fileID: 1394583260}
@@ -68745,6 +68732,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isInteractable: 1
+  interactable_id: interactable
   uiRotationOffset: {x: 0, y: 180, z: 0}
   uiPositionOffset: {x: 0, y: 1, z: 0}
   interactionCollider: {fileID: 0}
@@ -72002,6 +71990,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ba0e08dc97b2e2b47a57346e9478de63, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  map: 0
+  notificiation: 0
+  seedInventory: 0
+  pause: 0
+  recipe: 0
 --- !u!114 &1485050874
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -72029,6 +72022,10 @@ MonoBehaviour:
   moveSpeed: 300
   rotationSpeed: 10
   modelTransform: {fileID: 1845572791}
+  forwardPressed: 0
+  backwardPressed: 0
+  leftPressed: 0
+  rightPressed: 0
 --- !u!114 &1485050876
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -79759,6 +79756,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isInteractable: 1
+  interactable_id: interactable
   uiRotationOffset: {x: 0, y: 180, z: 0}
   uiPositionOffset: {x: 0, y: 0.3, z: 0}
   interactionCollider: {fileID: 1627353914}
@@ -82132,6 +82130,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1674272338}
   - component: {fileID: 1674272339}
+  - component: {fileID: 1674272340}
   m_Layer: 0
   m_Name: GrassSpawner
   m_TagString: Untagged
@@ -82166,8 +82165,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c3be7762afb77dc47b0aa153b967bd6b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pfGrass: {fileID: 4630613393404014714, guid: 53c09733370bf0842955fcfa54ca1bf7, type: 3}
-  instances: 10000
+  grassMesh: {fileID: 0}
+  grassMaterial: {fileID: 0}
+  maxInstances: 1000
   areaSize: 150
   groundLayer:
     serializedVersion: 2
@@ -82176,6 +82176,38 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 4087
   checkRadius: 1
+  framesToSpawn: 10
+  lodFOVThresholds:
+  - 30
+  - 40
+  - 45
+  lodInstanceCounts: e8030000f4010000c8000000
+  lodMeshes: []
+  cam: {fileID: 0}
+--- !u!205 &1674272340
+LODGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1674272337}
+  serializedVersion: 2
+  m_LocalReferencePoint: {x: 0, y: 0, z: 0}
+  m_Size: 1
+  m_FadeMode: 0
+  m_AnimateCrossFading: 0
+  m_LastLODIsBillboard: 0
+  m_LODs:
+  - screenRelativeHeight: 0.6
+    fadeTransitionWidth: 0
+    renderers: []
+  - screenRelativeHeight: 0.3
+    fadeTransitionWidth: 0
+    renderers: []
+  - screenRelativeHeight: 0.1
+    fadeTransitionWidth: 0
+    renderers: []
+  m_Enabled: 1
 --- !u!1 &1676071105
 GameObject:
   m_ObjectHideFlags: 0
@@ -84661,6 +84693,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sfx_Name: concluido
+  volume: 1
 --- !u!114 &1721339821
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -90894,6 +90927,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isInteractable: 1
+  interactable_id: interactable
   uiRotationOffset: {x: 0, y: 180, z: 0}
   uiPositionOffset: {x: 0, y: 1, z: 0}
   interactionCollider: {fileID: 1877725175}
@@ -95282,6 +95316,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isInteractable: 1
+  interactable_id: interactable
   uiRotationOffset: {x: 0, y: 180, z: 0}
   uiPositionOffset: {x: 0, y: 0.7, z: 0}
   interactionCollider: {fileID: 1986993404}
@@ -96800,6 +96835,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isInteractable: 1
+  interactable_id: interactable
   uiRotationOffset: {x: 0, y: 180, z: 0}
   uiPositionOffset: {x: 0, y: 1, z: 0}
   interactionCollider: {fileID: 0}
@@ -98074,6 +98110,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isInteractable: 1
+  interactable_id: interactable
   uiRotationOffset: {x: 0, y: 180, z: 0}
   uiPositionOffset: {x: 0, y: 1, z: 0}
   interactionCollider: {fileID: 0}
@@ -98768,6 +98805,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isInteractable: 1
+  interactable_id: interactable
   uiRotationOffset: {x: 0, y: 180, z: 0}
   uiPositionOffset: {x: 0, y: 1, z: 0}
   interactionCollider: {fileID: 0}

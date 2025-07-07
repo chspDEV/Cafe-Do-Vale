@@ -596,7 +596,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 58ea3a196ddc1fe4a9961614a41c9b08, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  volume: {fileID: 713432889}
+  volume: {fileID: 0}
 --- !u!1 &62816776
 GameObject:
   m_ObjectHideFlags: 0
@@ -966,6 +966,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   timeMultiplier: 21
+  initialHour: 6
+  isFirstDay: 1
   startHour: 9
   closeHour: 18
   directionalLight: {fileID: 1147769942}
@@ -1025,9 +1027,9 @@ MonoBehaviour:
     m_RotationOrder: 4
   nightFogRange: {x: 0.05, y: 0.1}
   dayFogRange: {x: 0.01, y: 0.05}
-  showEvents: 1
   nightColor: {r: 0.48584908, g: 0.48584908, b: 1, a: 1}
   dayColor: {r: 1, g: 0.86388165, b: 0.61698115, a: 1}
+  isDay: 0
 --- !u!1 &88006540
 GameObject:
   m_ObjectHideFlags: 0
@@ -1373,10 +1375,21 @@ MonoBehaviour:
   storageMenu: {fileID: 2030552789}
   creationMenu: {fileID: 719495270}
   configMenu: {fileID: 153722744}
-  sprProductionWait: {fileID: 21300000, guid: fb224836be44abb44b63df04f2733534, type: 3}
-  sprRefinamentWait: {fileID: 21300000, guid: b998e89e93193db478c93c962418a9f6, type: 3}
-  ready: {fileID: 21300000, guid: 83285bc88987bf347bb2b2df6cee2c49, type: 3}
-  transparent: {fileID: 21300000, guid: dc0e20a1f7385874da6b59b66ff5e524, type: 3}
+  seedShopMenu: {fileID: 0}
+  bookMenu: {fileID: 0}
+  seedInventoryMenu: {fileID: 0}
+  recipeMenu: {fileID: 0}
+  mapMenu: {fileID: 0}
+  uiBook: {fileID: 0}
+  mapInteraction: {fileID: 0}
+  recipeInteraction: {fileID: 0}
+  pauseInteraction: {fileID: 0}
+  seedInventoryInteraction: {fileID: 0}
+  seedShopInteraction: {fileID: 0}
+  notificationInteraction: {fileID: 0}
+  productionInteraction: {fileID: 0}
+  creationInteraction: {fileID: 0}
+  storageInteraction: {fileID: 0}
   pfImageToFill: {fileID: 6260145864655188467, guid: d999800fdb2dbb049bf172e4214810af, type: 3}
   pfImage: {fileID: 6260145864655188467, guid: a5c1a501cc0f41b4a9ae4e1d1d584b50, type: 3}
   pfSlotStorage: {fileID: 8957933487080865127, guid: 87cc5c443fea97d4eaae2248d2f8db8e, type: 3}
@@ -1384,11 +1397,14 @@ MonoBehaviour:
   pfSlotCreationIngredient: {fileID: 8957933487080865127, guid: fa288ece396b9e346bb25c7684fd2842, type: 3}
   pfClientNotification: {fileID: 7665299437727792245, guid: 49a0bf0f5841dbc4fb85b714ab2047ae, type: 3}
   pfProductionCard: {fileID: 3565675204560412767, guid: b231686ba8eecc54eb61e90511255827, type: 3}
+  pfUpgradeText: {fileID: 0}
+  pfSeedInventoryCard: {fileID: 0}
   storageSlotHolder: {fileID: 795359579}
   productionSlotHolder: {fileID: 1759997961}
   creationSlotHolder: {fileID: 384888870}
   ingredientSlotHolder: {fileID: 1769984987}
   notificationHolder: {fileID: 1163542180}
+  seedInventorySlotHolder: {fileID: 0}
   hudCanvas: {fileID: 655805888}
   worldCanvas: {fileID: 1873769534}
   money: {fileID: 1485574618}
@@ -7382,7 +7398,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: c205cdaf8bc7fdc4c9b5e7b27e681cf8, type: 3}
+  m_audioClip: {fileID: 0}
   m_Resource: {fileID: 8300000, guid: c205cdaf8bc7fdc4c9b5e7b27e681cf8, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 0.1
@@ -10085,55 +10101,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 705816275}
   m_CullTransparentMesh: 1
---- !u!1 &713432888
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 713432890}
-  - component: {fileID: 713432889}
-  m_Layer: 0
-  m_Name: Global Volume
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &713432889
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 713432888}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 172515602e62fb746b5d573b38a5fe58, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_IsGlobal: 1
-  priority: 10
-  blendDistance: 0
-  weight: 1
-  sharedProfile: {fileID: 11400000, guid: dcad5e3390fbf354d8d72c4ac05764a4, type: 2}
---- !u!4 &713432890
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 713432888}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1248173620}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &714621498
 GameObject:
   m_ObjectHideFlags: 0
@@ -11089,6 +11056,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 739aa63890ec2ea4087c420f13d7e27f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isInteractable: 1
+  interactable_id: interactable
+  uiRotationOffset: {x: 0, y: 0, z: 0}
+  uiPositionOffset: {x: 0, y: 1.5, z: 0}
+  interactionCollider: {fileID: 0}
+  useTrigger: 0
+  initialScale: {x: 0, y: 0, z: 0}
+  targetScale: {x: 1, y: 1, z: 1}
+  growDuration: 0.3
+  bounceScaleMin: 0.9
+  bounceScaleMax: 1.1
+  bounceSpeed: 5
+  interactionIndicator: {fileID: 0}
 --- !u!1001 &773930689
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -12890,6 +12870,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: daf952e935c035049a949ac28b3aa5c7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  sprError: {fileID: 0}
+  sprProductionWait: {fileID: 0}
+  sprRefinamentWait: {fileID: 0}
+  sprSpoilingWarning: {fileID: 0}
+  ready: {fileID: 0}
+  transparent: {fileID: 0}
+  sprInteraction: {fileID: 0}
+  inputXBOX: {fileID: 0}
+  inputPLAYSTATION: {fileID: 0}
+  inputPC: {fileID: 0}
   clientSprites:
   - {fileID: 21300000, guid: 6239491d71492854f9341fbbce25cb1e, type: 3}
   - {fileID: 21300000, guid: 908240bc2fbdd164885fdd5277d69a2d, type: 3}
@@ -12927,6 +12917,9 @@ MonoBehaviour:
   Money: {fileID: 21300000, guid: a6f09d9b745f0e54eaecdb3b20bab20d, type: 3}
   player: {fileID: 0}
   safePoint: {fileID: 2122522386}
+  playerMovement: {fileID: 0}
+  currentInputType: 3
+  isDebugMode: 0
 --- !u!1 &851272379
 GameObject:
   m_ObjectHideFlags: 0
@@ -15024,7 +15017,9 @@ MonoBehaviour:
   uiManager: {fileID: 111883944}
   timeManager: {fileID: 87715700}
   storageManager: {fileID: 1046031226}
+  seedManager: {fileID: 0}
   shopManager: {fileID: 1077733032}
+  unlockManager: {fileID: 0}
   creationManager: {fileID: 1946841493}
 --- !u!1 &964378603
 GameObject:
@@ -15461,8 +15456,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isInteractable: 1
-  uiOffset: {x: 0, y: 0, z: 0}
-  interactionSprite: {fileID: 21300000, guid: ea9161683ffa0e9488c395e2b2bbad54, type: 3}
+  interactable_id: interactable
+  uiRotationOffset: {x: 0, y: 0, z: 0}
+  uiPositionOffset: {x: 0, y: 1.5, z: 0}
   interactionCollider: {fileID: 0}
   useTrigger: 0
   initialScale: {x: 0, y: 0, z: 0}
@@ -15471,6 +15467,7 @@ MonoBehaviour:
   bounceScaleMin: 0.9
   bounceScaleMax: 1.1
   bounceSpeed: 5
+  interactionIndicator: {fileID: 0}
 --- !u!1 &996719708
 GameObject:
   m_ObjectHideFlags: 0
@@ -16112,24 +16109,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 656ba0cd701aadf419bab56fd130f42e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  showDebugUI: 1
-  fpsText: {fileID: 705816277}
-  memoryText: {fileID: 1444702274}
-  settingsText: {fileID: 1094020199}
-  targetFrameRate: 60
-  updateInterval: 0.1
-  renderDistance: 50
-  useDynamicResolution: 1
-  minResolutionScale: 0.5
-  maxResolutionScale: 1
-  textureQuality: 3
-  shadowDistance: 150
-  resolutionDropdown: {fileID: 641449256}
-  renderScaleSlider: {fileID: 1180960091}
-  optimizeForMobile: 0
-  mobileFPSTarget: 45
-  disableShadowsOnMobile: 0
-  debugCanvasGroup: {fileID: 998552638}
 --- !u!4 &1059093809
 Transform:
   m_ObjectHideFlags: 0
@@ -16174,6 +16153,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 77aa70fa988114f44922d77669d688ad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  money: 0
   stars: 0
   cupLevel: 0
   cupPrefabs:
@@ -16182,10 +16162,6 @@ MonoBehaviour:
   - {fileID: 828628952653485657, guid: 0e55602d41e5d1948b0677603e4e437e, type: 3}
   point: {fileID: 1299697318}
   cupHolder: {fileID: 2138853349}
-  money: 0
-  porta: {fileID: 0}
-  menu:
-  - {fileID: 11400000, guid: 27c8ecdb80ae6e24aa65e947be778fca, type: 2}
 --- !u!4 &1077733033
 Transform:
   m_ObjectHideFlags: 0
@@ -17836,6 +17812,7 @@ MonoBehaviour:
   gizmoColor: {r: 0, g: 1, b: 1, a: 1}
   sphereColor: {r: 0, g: 1, b: 0, a: 0.1}
   sphereRadius: 0.4
+  lastIdInteracted: 
 --- !u!1 &1230940344
 GameObject:
   m_ObjectHideFlags: 0
@@ -17992,7 +17969,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 713432890}
   - {fileID: 1147769940}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -22411,36 +22387,53 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5f93e108f9729364cb5a44d471fba1e0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  clientSpots:
-  - {fileID: 1688433579}
-  - {fileID: 1871387804}
-  - {fileID: 1361959008}
-  - {fileID: 1842453429}
-  - {fileID: 1441515778}
-  - {fileID: 1911160360}
-  - {fileID: 200730320}
-  - {fileID: 986733123}
-  - {fileID: 1365159701}
-  - {fileID: 1870839035}
-  - {fileID: 372565100}
-  - {fileID: 1584837240}
-  - {fileID: 889285731}
-  - {fileID: 1441109331}
-  - {fileID: 2138501014}
-  - {fileID: 369089634}
-  - {fileID: 964378604}
-  - {fileID: 1495168246}
-  - {fileID: 1454869130}
-  - {fileID: 1343198458}
-  - {fileID: 279844201}
-  - {fileID: 129041129}
-  prefab: {fileID: 1277494111889277734, guid: 76b18891a1a76f9449ba706dcc18b0ba, type: 3}
-  clients: []
-  baseTime: 10
-  canSpawn: 0
-  counter: 0
+  clientPrefab: {fileID: 0}
+  clientWaitOrderTime: 20
+  clientWaitQueueTime: 60
   maxCounter: 60
+  spawnRateCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 9
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 12
+      value: 2
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 18
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spawnPoint: {fileID: 0}
+  shopEntrance: {fileID: 0}
+  streetEnd: {fileID: 0}
+  counterPoint: {fileID: 0}
+  queueSpots: []
+  seatSpots: []
   maxClients: 16
+  maxQueueWaitTime: 60
+  isQueueSpotOccupied: 
+  isSeatSpotOccupied: 
 --- !u!4 &1551439380
 Transform:
   m_ObjectHideFlags: 0
@@ -25312,6 +25305,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1747430444}
   - component: {fileID: 1747430445}
+  - component: {fileID: 1747430446}
   m_Layer: 0
   m_Name: GrassSpawner (1)
   m_TagString: Untagged
@@ -25346,8 +25340,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c3be7762afb77dc47b0aa153b967bd6b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pfGrass: {fileID: 5852258049074348615, guid: 570a2176744605941aa21fb8ab34548a, type: 3}
-  instances: 25000
+  grassMesh: {fileID: 0}
+  grassMaterial: {fileID: 0}
+  maxInstances: 1000
   areaSize: 200
   groundLayer:
     serializedVersion: 2
@@ -25356,6 +25351,38 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 2039
   checkRadius: 1
+  framesToSpawn: 10
+  lodFOVThresholds:
+  - 30
+  - 40
+  - 45
+  lodInstanceCounts: e8030000f4010000c8000000
+  lodMeshes: []
+  cam: {fileID: 0}
+--- !u!205 &1747430446
+LODGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1747430443}
+  serializedVersion: 2
+  m_LocalReferencePoint: {x: 0, y: 0, z: 0}
+  m_Size: 1
+  m_FadeMode: 0
+  m_AnimateCrossFading: 0
+  m_LastLODIsBillboard: 0
+  m_LODs:
+  - screenRelativeHeight: 0.6
+    fadeTransitionWidth: 0
+    renderers: []
+  - screenRelativeHeight: 0.3
+    fadeTransitionWidth: 0
+    renderers: []
+  - screenRelativeHeight: 0.1
+    fadeTransitionWidth: 0
+    renderers: []
+  m_Enabled: 1
 --- !u!1 &1759997960
 GameObject:
   m_ObjectHideFlags: 0
@@ -27080,6 +27107,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1898332263}
   - component: {fileID: 1898332264}
+  - component: {fileID: 1898332265}
   m_Layer: 0
   m_Name: GrassSpawner
   m_TagString: Untagged
@@ -27114,8 +27142,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c3be7762afb77dc47b0aa153b967bd6b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pfGrass: {fileID: 4630613393404014714, guid: 53c09733370bf0842955fcfa54ca1bf7, type: 3}
-  instances: 20000
+  grassMesh: {fileID: 0}
+  grassMaterial: {fileID: 0}
+  maxInstances: 1000
   areaSize: 250
   groundLayer:
     serializedVersion: 2
@@ -27124,6 +27153,38 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 2039
   checkRadius: 1
+  framesToSpawn: 10
+  lodFOVThresholds:
+  - 30
+  - 40
+  - 45
+  lodInstanceCounts: e8030000f4010000c8000000
+  lodMeshes: []
+  cam: {fileID: 0}
+--- !u!205 &1898332265
+LODGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1898332262}
+  serializedVersion: 2
+  m_LocalReferencePoint: {x: 0, y: 0, z: 0}
+  m_Size: 1
+  m_FadeMode: 0
+  m_AnimateCrossFading: 0
+  m_LastLODIsBillboard: 0
+  m_LODs:
+  - screenRelativeHeight: 0.6
+    fadeTransitionWidth: 0
+    renderers: []
+  - screenRelativeHeight: 0.3
+    fadeTransitionWidth: 0
+    renderers: []
+  - screenRelativeHeight: 0.1
+    fadeTransitionWidth: 0
+    renderers: []
+  m_Enabled: 1
 --- !u!1 &1911160359
 GameObject:
   m_ObjectHideFlags: 0
@@ -51705,8 +51766,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isInteractable: 1
-  uiOffset: {x: 0, y: 0, z: 0}
-  interactionSprite: {fileID: 21300000, guid: ea9161683ffa0e9488c395e2b2bbad54, type: 3}
+  interactable_id: interactable
+  uiRotationOffset: {x: 0, y: 0, z: 0}
+  uiPositionOffset: {x: 0, y: 1.5, z: 0}
   interactionCollider: {fileID: 0}
   useTrigger: 0
   initialScale: {x: 0, y: 0, z: 0}
@@ -51715,10 +51777,11 @@ MonoBehaviour:
   bounceScaleMin: 0.9
   bounceScaleMax: 1.1
   bounceSpeed: 5
+  interactionIndicator: {fileID: 0}
   production: {fileID: 0}
-  timeToGive: 0.5
   amount: 1
   timeToOpenInterface: 0
+  canProduce: []
   pointToSpawn: {fileID: 5387840812791619286}
   currentModel: {fileID: 0}
 --- !u!114 &5517440816755876140
@@ -51734,8 +51797,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isInteractable: 1
-  uiOffset: {x: 0, y: 0, z: 0}
-  interactionSprite: {fileID: 21300000, guid: ea9161683ffa0e9488c395e2b2bbad54, type: 3}
+  interactable_id: interactable
+  uiRotationOffset: {x: 0, y: 0, z: 0}
+  uiPositionOffset: {x: 0, y: 1.5, z: 0}
   interactionCollider: {fileID: 0}
   useTrigger: 0
   initialScale: {x: 0, y: 0, z: 0}
@@ -51744,10 +51808,11 @@ MonoBehaviour:
   bounceScaleMin: 0.9
   bounceScaleMax: 1.1
   bounceSpeed: 5
+  interactionIndicator: {fileID: 0}
   production: {fileID: 0}
-  timeToGive: 0.5
   amount: 1
   timeToOpenInterface: 0
+  canProduce: []
   pointToSpawn: {fileID: 5387840812722919132}
   currentModel: {fileID: 0}
 --- !u!114 &5517440817161461056
@@ -51763,8 +51828,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isInteractable: 1
-  uiOffset: {x: 0, y: 0, z: 0}
-  interactionSprite: {fileID: 21300000, guid: ea9161683ffa0e9488c395e2b2bbad54, type: 3}
+  interactable_id: interactable
+  uiRotationOffset: {x: 0, y: 0, z: 0}
+  uiPositionOffset: {x: 0, y: 1.5, z: 0}
   interactionCollider: {fileID: 0}
   useTrigger: 0
   initialScale: {x: 0, y: 0, z: 0}
@@ -51773,10 +51839,11 @@ MonoBehaviour:
   bounceScaleMin: 0.9
   bounceScaleMax: 1.1
   bounceSpeed: 5
+  interactionIndicator: {fileID: 0}
   production: {fileID: 0}
-  timeToGive: 0.5
   amount: 1
   timeToOpenInterface: 0
+  canProduce: []
   pointToSpawn: {fileID: 5387840812164606640}
   currentModel: {fileID: 0}
 --- !u!114 &5517440817345426805
@@ -51792,8 +51859,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isInteractable: 1
-  uiOffset: {x: 0, y: 0, z: 0}
-  interactionSprite: {fileID: 21300000, guid: ea9161683ffa0e9488c395e2b2bbad54, type: 3}
+  interactable_id: interactable
+  uiRotationOffset: {x: 0, y: 0, z: 0}
+  uiPositionOffset: {x: 0, y: 1.5, z: 0}
   interactionCollider: {fileID: 0}
   useTrigger: 0
   initialScale: {x: 0, y: 0, z: 0}
@@ -51802,10 +51870,11 @@ MonoBehaviour:
   bounceScaleMin: 0.9
   bounceScaleMax: 1.1
   bounceSpeed: 5
+  interactionIndicator: {fileID: 0}
   production: {fileID: 0}
-  timeToGive: 0.5
   amount: 1
   timeToOpenInterface: 0
+  canProduce: []
   pointToSpawn: {fileID: 5387840811978670725}
   currentModel: {fileID: 0}
 --- !u!1 &5519021075743649364
@@ -57002,6 +57071,10 @@ MonoBehaviour:
   moveSpeed: 150
   rotationSpeed: 10
   modelTransform: {fileID: 4382591528963010128}
+  forwardPressed: 0
+  backwardPressed: 0
+  leftPressed: 0
+  rightPressed: 0
 --- !u!114 &6827593728480747671
 MonoBehaviour:
   m_ObjectHideFlags: 0

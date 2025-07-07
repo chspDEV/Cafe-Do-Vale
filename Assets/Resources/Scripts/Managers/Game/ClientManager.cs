@@ -723,12 +723,12 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
 
         private Sprite GetDrinkSpriteFromID(int id)
         {
-            return RefinamentManager.Instance.GetDrinkByID(id).productImage;
+            return RefinementManager.Instance.GetDrinkByID(id).productImage;
         }
 
         private String GetDrinkNameFromID(int id)
         {
-            return RefinamentManager.Instance.GetDrinkByID(id).productName;
+            return RefinementManager.Instance.GetDrinkByID(id).productName;
         }
 
         private Drink GetAnyDrink()

@@ -14,5 +14,95 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   questID: tutorial04
   questName: "M\xE3os a obra IV"
-  steps: []
+  steps:
+  - stepID: 0
+    instructionText: 'Abra o Mapa de sua fazenda apertando [M]'
+    objective:
+      objectiveType: 1
+      requiredInput: 4
+      targetPosition: {x: 0, y: 0, z: 0}
+      radius: 2
+      targetID: 
+    isCompleted: 1
+    hasIndicator: 0
+    visualIndicator: {fileID: 0}
+  - stepID: 1
+    instructionText: "V\xE1 at\xE9 a Casa das M\xE1quinas!"
+    objective:
+      objectiveType: 2
+      requiredInput: 0
+      targetPosition: {x: 6, y: 1, z: 15}
+      radius: 2
+      targetID: 
+    isCompleted: 1
+    hasIndicator: 0
+    visualIndicator: {fileID: 0}
+  - stepID: 2
+    instructionText: "Coloque caf\xE9 na m\xE1quina de beneficiamento."
+    objective:
+      objectiveType: 4
+      requiredInput: 0
+      targetPosition: {x: 0, y: 0, z: 0}
+      radius: 2
+      targetID: refinementArea
+    isCompleted: 1
+    hasIndicator: 0
+    visualIndicator: {fileID: 0}
+  - stepID: 3
+    instructionText: "Pressione o bot\xE3o vermelho para a m\xE1quina iniciar seu
+      processo."
+    objective:
+      objectiveType: 4
+      requiredInput: 0
+      targetPosition: {x: 0, y: 0, z: 0}
+      radius: 2
+      targetID: refinementButton
+    isCompleted: 1
+    hasIndicator: 0
+    visualIndicator: {fileID: 0}
+  - stepID: 3.5
+    instructionText: Aguarde para coletar seu produto beneficiado (Ingrediente).
+    objective:
+      objectiveType: 4
+      requiredInput: 0
+      targetPosition: {x: 0, y: 0, z: 0}
+      radius: 2
+      targetID: "Caf\xE9"
+    isCompleted: 0
+    hasIndicator: 0
+    visualIndicator: {fileID: 0}
+  - stepID: 4
+    instructionText: "Agora, v\xE1 at\xE9 o armaz\xE9m para armazenar seu ingrediente."
+    objective:
+      objectiveType: 2
+      requiredInput: 4
+      targetPosition: {x: 41, y: 1, z: -24}
+      radius: 10
+      targetID: 
+    isCompleted: 0
+    hasIndicator: 0
+    visualIndicator: {fileID: 0}
+  - stepID: 5
+    instructionText: "Armazene o caf\xE9 no local correto."
+    objective:
+      objectiveType: 4
+      requiredInput: 0
+      targetPosition: {x: 0, y: 0, z: 0}
+      radius: 2
+      targetID: "guardar Caf\xE9"
+    isCompleted: 0
+    hasIndicator: 0
+    visualIndicator: {fileID: 0}
+  - stepID: 6
+    instructionText: Volte para falar novamente com Zeca
+    objective:
+      objectiveType: 2
+      requiredInput: 0
+      targetPosition: {x: 14, y: 1, z: 14}
+      radius: 3
+      targetID: 
+    isCompleted: 0
+    hasIndicator: 0
+    visualIndicator: {fileID: 0}
   isCompleted: 0
+  isStarted: 0
