@@ -137,11 +137,11 @@ namespace Tcp4
             if (npcCamera != null)
             {
                 // Descomente quando implementar
-                // CameraManager.Instance.SetupDialogueCamera(npcCamera);
+                CameraManager.Instance.SetupDialogueCamera(npcCamera);
             }
 
             // Descomente quando implementar
-            // DialogueManager.Instance.StartDialogue(dialogues[index]);
+            DialogueManager.Instance.StartDialogue(dialogues[index]);
         }
     }
 }

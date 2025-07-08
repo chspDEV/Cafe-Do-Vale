@@ -36,6 +36,8 @@ namespace Tcp4
             interactable_id = "productionArea";
             hasChoosedProduction = false;
             ProductionManager.Instance.OnChooseProduction += SelectProduction;
+            TimeManager.Instance.OnTimeMultiplierChanged += ReSetupMaxTime;
+
             timeImage = UIManager.Instance.PlaceFillImage(pointToSpawn);
         }
 
@@ -97,11 +99,16 @@ namespace Tcp4
             SpritesLogic();
         }
 
+        public void ReSetupMaxTime()
+        { 
+            timeImage.SetupMaxTime(production.timeToGrow * TimeManager.Instance.timeMultiplier);
+        }
+
         private void UpdateCurrentTime()
         {
             if (production != null && !isGrown)
             {
-                currentTime = Mathf.Clamp(currentTime, 0, production.timeToGrow);
+                currentTime = Mathf.Clamp(currentTime, 0, production.timeToGrow * TimeManager.Instance.timeMultiplier);
                 timeImage.UpdateFill(currentTime);
             }
         }
@@ -114,7 +121,7 @@ namespace Tcp4
                 return;
             }
 
-            if (!isAbleToGive && currentTime < production.timeToGrow)
+            if (!isAbleToGive && currentTime < production.timeToGrow * TimeManager.Instance.timeMultiplier)
             {
                 timeImage.ChangeSprite(GameAssets.Instance.sprProductionWait);
             }
@@ -159,7 +166,7 @@ namespace Tcp4
             if (production == null) return;
 
             currentTime = 0;
-            timeImage.SetupMaxTime(production.timeToGrow);
+            timeImage.SetupMaxTime(production.timeToGrow * TimeManager.Instance.timeMultiplier);
             CloseProductionMenu();
             hasChoosedProduction = true;
             productionManager.OnChooseProduction -= SelectProduction;
@@ -177,7 +184,7 @@ namespace Tcp4
         {
             OnLostFocus();
             var models = production.models;
-            var timeToGrow = production.timeToGrow;
+            var timeToGrow = production.timeToGrow * TimeManager.Instance.timeMultiplier;
             int modelIndex = 0;
 
             while (modelIndex < models.Length)

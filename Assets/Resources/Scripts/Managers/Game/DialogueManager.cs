@@ -18,13 +18,6 @@ public class DialogueLine
 
 public class DialogueManager : Singleton<DialogueManager>
 {
-    [System.Serializable]
-    public class DialogueEvent : UnityEvent { }
-
-    [Header("Eventos")]
-    public DialogueEvent OnDialogueStart;
-    public DialogueEvent OnDialogueEnd;
-
     [Header("Configurações")]
     [SerializeField] private float typingSpeed = 0.05f;
     [SerializeField] private float cameraTransitionDelay = 0.5f;
@@ -40,9 +33,10 @@ public class DialogueManager : Singleton<DialogueManager>
     private bool isTyping = false;
     private Coroutine typingCoroutine;
 
-    private bool playerInteracted = false;
-
     private PlayerInteraction playerInteraction;
+    private PlayerMovement playerMovement;
+
+    private DialogueLine currentLine; // Armazena a linha atual
 
     private void Start()
     {
@@ -50,38 +44,17 @@ public class DialogueManager : Singleton<DialogueManager>
             dialoguePanel.SetActive(false);
 
         playerInteraction = GameAssets.Instance.player.GetComponent<PlayerInteraction>();
-
-        
-    }
-
-    private void OnEnable()
-    {
-        if (playerInteraction != null)
-            playerInteraction.OnPlayerInteraction += CheckPlayerInteraction;
-    }
-
-    private void OnDisable()
-    {
-        if (playerInteraction != null)
-            playerInteraction.OnPlayerInteraction -= CheckPlayerInteraction;
-    }
-
-    void CheckPlayerInteraction()
-    {
-        playerInteracted = true;
-        StartCoroutine(nameof(ResetPlayerInteraction));
-    }
-
-    IEnumerator ResetPlayerInteraction()
-    { 
-        yield return new WaitForSeconds(0.25f);
-        playerInteracted = false;
+        playerMovement = GameAssets.Instance.player.GetComponent<PlayerMovement>();
     }
 
     private void Update()
     {
-        if (isDialogueActive && playerInteracted)
+        if (!isDialogueActive) return;
+
+        if (playerInteraction != null && playerInteraction.interactionPressed)
         {
+            playerInteraction.interactionPressed = false; // Reseta a flag de interação
+
             if (isTyping)
             {
                 CompleteLine();
@@ -98,7 +71,9 @@ public class DialogueManager : Singleton<DialogueManager>
     /// </summary>
     public void StartDialogue(DialogueData dialogueData)
     {
-        if (isDialogueActive) return;
+        if (isDialogueActive || dialogueData == null || dialogueData.dialogueLines.Count == 0) return;
+
+        playerMovement.Deactive();
 
         currentLines.Clear();
         foreach (DialogueLine line in dialogueData.dialogueLines)
@@ -112,21 +87,13 @@ public class DialogueManager : Singleton<DialogueManager>
 
     private IEnumerator StartDialogueRoutine()
     {
-        // Ativa a câmera de diálogo
         CameraManager.Instance.SetDialogueCameraActive(true);
-
         TimeManager.Instance.Freeze();
 
-        // Pequeno delay para transição da câmera
         yield return new WaitForSeconds(cameraTransitionDelay);
 
-        // Ativa o painel de diálogo
         dialoguePanel.SetActive(true);
 
-        // Dispara evento de diálogo iniciado
-        OnDialogueStart.Invoke();
-
-        // Mostra a primeira linha
         DisplayNextLine();
     }
 
@@ -135,20 +102,22 @@ public class DialogueManager : Singleton<DialogueManager>
     /// </summary>
     public void DisplayNextLine()
     {
+        if (typingCoroutine != null)
+        {
+            StopCoroutine(typingCoroutine);
+            typingCoroutine = null;
+        }
+
         if (currentLines.Count == 0)
         {
             EndDialogue();
             return;
         }
 
-        DialogueLine line = currentLines.Dequeue();
-        characterNameText.text = line.characterName;
+        currentLine = currentLines.Dequeue();
+        characterNameText.text = currentLine.characterName;
 
-        // Inicia o efeito de digitação
-        if (typingCoroutine != null)
-            StopCoroutine(typingCoroutine);
-
-        typingCoroutine = StartCoroutine(TypeLine(line.dialogueText));
+        typingCoroutine = StartCoroutine(TypeLine(currentLine.dialogueText));
     }
 
     private IEnumerator TypeLine(string line)
@@ -170,13 +139,17 @@ public class DialogueManager : Singleton<DialogueManager>
 
     private void CompleteLine()
     {
-        if (typingCoroutine != null)
-            StopCoroutine(typingCoroutine);
-
-        DialogueLine currentLine = currentLines.Peek();
-        dialogueText.text = currentLine.dialogueText;
-        isTyping = false;
-        continueIndicator.SetActive(true);
+        if (isTyping)
+        {
+            if (typingCoroutine != null)
+            {
+                StopCoroutine(typingCoroutine);
+                typingCoroutine = null;
+            }
+            dialogueText.text = currentLine != null ? currentLine.dialogueText : "";
+            isTyping = false;
+            continueIndicator.SetActive(true);
+        }
     }
 
     /// <summary>
@@ -186,19 +159,16 @@ public class DialogueManager : Singleton<DialogueManager>
     {
         if (!isDialogueActive) return;
 
-        // Desativa o painel de diálogo
         dialoguePanel.SetActive(false);
-
-        // Dispara evento de diálogo terminado
-        OnDialogueEnd.Invoke();
-
-        // Desativa a câmera de diálogo
         CameraManager.Instance.SetDialogueCameraActive(false);
-
         TimeManager.Instance.Unfreeze();
 
-        // Limpa a fila
+        playerMovement.Active();
+
         currentLines.Clear();
         isDialogueActive = false;
+        isTyping = false;
+        typingCoroutine = null;
+        currentLine = null;
     }
 }

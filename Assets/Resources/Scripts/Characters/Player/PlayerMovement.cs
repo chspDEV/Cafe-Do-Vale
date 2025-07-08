@@ -13,7 +13,8 @@ namespace Tcp4
         private Rigidbody rb;
         private Vector2 movement;
         private Animator animator;
-        private bool canMove = true;
+        [SerializeField] private bool canMove = true;
+        [SerializeField] private bool ADMINcanMove = true;
         private StepSound stepSound;
 
         public bool forwardPressed, backwardPressed, leftPressed, rightPressed;
@@ -63,6 +64,8 @@ namespace Tcp4
         {
             if (!canMove) return;
 
+            if (!ADMINcanMove) return;
+
             HandleRotation();
             HandleAnimation();
 
@@ -82,6 +85,8 @@ namespace Tcp4
 
         void FixedUpdate()
         {
+            if (!ADMINcanMove) { rb.linearVelocity = Vector3.zero; return; }
+
             if (canMove)
             {
                 rb.linearVelocity = new Vector3(movement.x, 0, movement.y) * moveSpeed * Time.fixedDeltaTime;
@@ -95,18 +100,19 @@ namespace Tcp4
 
         public void Active()
         {
-            canMove = true;
+            Debug.Log("PLAYER MOVEMENT ATIVADO A FORÇA!");
+            ADMINcanMove = true;
         }
 
         public void Deactive()
-        { 
-            canMove = false; 
+        {
+            Debug.Log("PLAYER MOVEMENT DESATIVADO A FORÇA!");
+            ADMINcanMove = false; 
         }
 
         public void ToggleMovement(bool state)
         {
-            if (state) Active();
-            else Deactive();
+            canMove = state;
         }
     }
 }

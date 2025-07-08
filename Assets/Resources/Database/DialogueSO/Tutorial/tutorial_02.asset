@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 30a77f9d18157c64f97bc1ffbbd812e8, type: 3}
+  m_Name: tutorial_02
+  m_EditorClassIdentifier: 
+  dialogueLines:
+  - characterName: Zeca
+    dialogueText: "At\xE9 que voc\xEA \xE9 r\xE1pido em! Aproveitando o dinheiro
+      que te dei, ache a loja para come\xE7ar suas produ\xE7\xF5es."

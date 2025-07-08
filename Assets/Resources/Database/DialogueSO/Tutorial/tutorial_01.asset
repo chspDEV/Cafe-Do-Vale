@@ -14,11 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dialogueLines:
   - characterName: Zeca
-    dialogueText: "Olha s\xF3 se n\xE3o \xE9 voc\xEA! Uma pena o que aconteceu com
-      seu tio Juli\xE3o..."
+    dialogueText: "Olha s\xF3 se n\xE3o \xE9 voc\xEA! Meus p\xEAsames pelo ocorrido
+      com seu tio\u2026"
   - characterName: Zeca
-    dialogueText: "Mas veja pelo lado bom, agora voc\xEA tem isso tudo aqui s\xF3
-      pra voc\xEA!"
+    dialogueText: "Antes de partir ele havia me pedido para limpar o terreno, mas
+      agora que voc\xEA herdou as terras dele, vou te auxiliar a cuidar do local!"
   - characterName: Zeca
-    dialogueText: "Antes dele partir ele tinha me pedido para dar uma limpada por
-      aqui, mas como agora voc\xEA chegou, vou te instruir."
+    dialogueText: Tira um pouco de entulho da fazenda e vou te dar uns trocados.

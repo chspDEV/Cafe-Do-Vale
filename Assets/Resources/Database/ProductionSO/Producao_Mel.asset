@@ -15,4 +15,4 @@ MonoBehaviour:
   models:
   - {fileID: 2163951715431109568, guid: 83914e8a22af7ed49ac875a7f847726a, type: 3}
   outputProduct: {fileID: 11400000, guid: 94a2e396290fdf34fb1b215604089d68, type: 2}
-  timeToGrow: 30
+  timeToGrow: 1.5

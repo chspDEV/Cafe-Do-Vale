@@ -42,6 +42,8 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
         [FoldoutGroup("Eventos")]
         public event Action<float> OnTimeChanged;
 
+        public event Action OnTimeMultiplierChanged;
+
         [FoldoutGroup("Eventos")]
         public event Action OnResetDay;
 
@@ -101,6 +103,7 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
                 if (Input.GetKeyDown(KeyCode.O))
                 {
                     timeMultiplier += 25f;
+                    OnTimeMultiplierChanged?.Invoke();
                 }
 
                 if (Input.GetKeyDown(KeyCode.P))
@@ -108,6 +111,7 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
 
                     timeMultiplier -= 25f;
                     if (timeMultiplier < 21) timeMultiplier = 21;
+                    OnTimeMultiplierChanged?.Invoke();
                 }
             }
             

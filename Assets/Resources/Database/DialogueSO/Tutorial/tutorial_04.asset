@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 30a77f9d18157c64f97bc1ffbbd812e8, type: 3}
+  m_Name: tutorial_04
+  m_EditorClassIdentifier: 
+  dialogueLines:
+  - characterName: Zeca
+    dialogueText: "\xD3timo, mas n\xE3o fique plantado esperando o caf\xE9 crescer!
+      Use essa suas perninhas para cuidar de outras coisas enquanto o caf\xE9 produz
+      frutos novos."
+  - characterName: Zeca
+    dialogueText: "Aqui ao lado \xE9 onde voc\xEA pode beneficiar o caf\xE9."
+  - characterName: Zeca
+    dialogueText: "O qu\xEA? Seu tio n\xE3o te ensinou nem o que significa isso?!"
+  - characterName: Zeca
+    dialogueText: "Beneficiar um produto significa tratar ele corretamente para o
+      consumo. No seu caso, as m\xE1quinas deixadas pelo seu tio j\xE1 v\xE3o facilitar
+      todo o processo."

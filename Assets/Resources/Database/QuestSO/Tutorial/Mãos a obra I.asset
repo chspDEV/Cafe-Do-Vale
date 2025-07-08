@@ -16,29 +16,29 @@ MonoBehaviour:
   questName: "M\xE3os a obra I"
   steps:
   - stepID: 0
-    instructionText: Remova 5 entulhos da fazenda!
+    instructionText: Remova 5/5 entulhos da fazenda!
     objective:
       objectiveType: 3
       requiredInput: 0
       targetPosition: {x: 0, y: 0, z: 0}
       radius: 2
       targetID: collectable
-    isCompleted: 0
+    isCompleted: 1
     hasIndicator: 0
     visualIndicator: {fileID: 0}
   - stepID: 1
-    instructionText: Remova 4 entulhos da fazenda!
+    instructionText: Remova 4/5 entulhos da fazenda!
     objective:
       objectiveType: 3
       requiredInput: 0
       targetPosition: {x: 0, y: 0, z: 0}
       radius: 2
       targetID: collectable
-    isCompleted: 0
+    isCompleted: 1
     hasIndicator: 0
     visualIndicator: {fileID: 0}
   - stepID: 2
-    instructionText: Remova 3 entulhos da fazenda!
+    instructionText: Remova 3/5 entulhos da fazenda!
     objective:
       objectiveType: 3
       requiredInput: 0
@@ -49,7 +49,7 @@ MonoBehaviour:
     hasIndicator: 0
     visualIndicator: {fileID: 0}
   - stepID: 3
-    instructionText: Remova 2 entulhos da fazenda!
+    instructionText: Remova 2/5 entulhos da fazenda!
     objective:
       objectiveType: 3
       requiredInput: 0
@@ -60,7 +60,7 @@ MonoBehaviour:
     hasIndicator: 0
     visualIndicator: {fileID: 0}
   - stepID: 4
-    instructionText: Remova 1 entulhos da fazenda!
+    instructionText: Remova 1/5 entulhos da fazenda!
     objective:
       objectiveType: 3
       requiredInput: 0
@@ -82,3 +82,4 @@ MonoBehaviour:
     hasIndicator: 0
     visualIndicator: {fileID: 0}
   isCompleted: 0
+  isStarted: 0

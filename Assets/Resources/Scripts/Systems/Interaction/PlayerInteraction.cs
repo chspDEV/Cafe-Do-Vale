@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -6,7 +7,7 @@ namespace Tcp4
 {
     public class PlayerInteraction : MonoBehaviour
     {
-        public event Action OnPlayerInteraction;
+        public bool interactionPressed;
 
         public void SetInteraction(InputAction.CallbackContext context)
         {
@@ -16,11 +17,18 @@ namespace Tcp4
                 {
 
                     InteractionManager.Instance.TryInteract();
-                    OnPlayerInteraction?.Invoke();
+                    interactionPressed = true;
+                    StartCoroutine(ResetInteraction());
 
                 }
                 else { Debug.LogWarning("InteractionManager não inicializado!"); }
             }
+        }
+
+        private IEnumerator ResetInteraction()
+        {
+            yield return new WaitForSeconds(0.2f);
+            interactionPressed = false;
         }
 
         private void OnValidate()

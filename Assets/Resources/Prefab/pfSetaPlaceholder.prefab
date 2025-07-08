@@ -27,7 +27,7 @@ Transform:
   m_GameObject: {fileID: 375437648552728672}
   serializedVersion: 2
   m_LocalRotation: {x: 0.0022252668, y: 0.49999508, z: 0.0038542747, w: 0.86601686}
-  m_LocalPosition: {x: 0.217, y: 0, z: 0.184}
+  m_LocalPosition: {x: 0.115, y: -0.0069999993, z: 1.222}
   m_LocalScale: {x: 0.5299999, y: 0.1, z: 0.1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -113,7 +113,7 @@ Transform:
   m_GameObject: {fileID: 2971427938501657146}
   serializedVersion: 2
   m_LocalRotation: {x: -0.0022252668, y: -0.49999508, z: 0.0038542747, w: 0.86601686}
-  m_LocalPosition: {x: -0.016, y: -0.002, z: 0.179}
+  m_LocalPosition: {x: -0.11799996, y: -0.009, z: 1.217}
   m_LocalScale: {x: 0.53, y: 0.1, z: 0.1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -185,7 +185,7 @@ GameObject:
   m_Layer: 6
   m_Name: pfSetaPlaceholder
   m_TagString: Untagged
-  m_Icon: {fileID: 0}
+  m_Icon: {fileID: -5442936267250999957, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
