@@ -11,8 +11,12 @@ namespace Tcp4
     {
         public event Action OnChangeInventory;
         [HideInInspector] public List<BaseProduct> Ingredients = new(2);
-        
+        public int lastIdInteracted = -1;
 
+        public List<CreationArea> creationAreas = new();
+
+        private Drink newDrink;
+        
         public bool CanAdd() {return Ingredients.Count < 3;}
         public void SelectProduct(BaseProduct pd)
         {
@@ -55,6 +59,41 @@ namespace Tcp4
             return;     
         }
 
+        private void Start()
+        {
+            SetupCreationAreas();
+        }
+
+        public void SetupCreationAreas()
+        {
+            for (int i = 0; i < creationAreas.Count; i++)
+            {
+                creationAreas[i].index = i;
+            }
+        }
+
+        public void SetupCreationArea(CreationArea areaToAdd)
+        {
+            creationAreas.Add(areaToAdd);
+
+            for (int i = 0; i < creationAreas.Count; i++)
+            {
+                creationAreas[i].index = i;
+            }
+        }
+
+        public void FinishDrink()
+        {
+            ShopManager.Instance.SpawnCup(newDrink);
+
+            Ingredients.Clear();
+
+            OnChangeInventory?.Invoke();
+
+            newDrink = null;
+        }
+
+
         public void Create()
         {
             if (Ingredients.Count < 3)
@@ -71,19 +110,14 @@ namespace Tcp4
                 return;
             }
 
-            Drink newDrink = RefinementManager.Instance.CreateDrink(Ingredients);
+            newDrink = RefinementManager.Instance.CreateDrink(Ingredients);
 
             Debug.Log($"{newDrink} criado!");
 
             if(newDrink != null)
             {
-                //ClientManager.Instance.ServeClient(newDrink);
-
-                ShopManager.Instance.SpawnCup(newDrink);
-
-                Ingredients.Clear();
-
-                OnChangeInventory?.Invoke();
+                creationAreas[lastIdInteracted].StartPrepare(newDrink.preparationTime);
+                UIManager.Instance.ControlCreationMenu(false);
             }
             else
             {

@@ -21,6 +21,13 @@ public class ImageToFill : MonoBehaviour
         maxTime = time;
     }
 
+    public float GetMaxTime() => maxTime;
+
+    public void ControlVisibility(bool isActive)
+    {
+        gameObject.SetActive(isActive);
+    }
+
     public void UpdateFill(float cTime)
     {
         if (image == null) return;

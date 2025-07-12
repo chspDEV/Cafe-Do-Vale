@@ -29,9 +29,12 @@ namespace Tcp4
         private bool isGrown;
         private bool hasChoosedProduction;
 
+        TimeManager timeManager;
+
         public override void Start()
         {
             base.Start();
+
 
             interactable_id = "productionArea";
             hasChoosedProduction = false;
@@ -39,11 +42,18 @@ namespace Tcp4
             TimeManager.Instance.OnTimeMultiplierChanged += ReSetupMaxTime;
 
             timeImage = UIManager.Instance.PlaceFillImage(pointToSpawn);
+            timeManager = TimeManager.Instance;
         }
 
-     
+        private void OnDisable()
+        {
+            ProductionManager.Instance.OnChooseProduction -= SelectProduction;
+            timeManager.OnTimeMultiplierChanged -= ReSetupMaxTime;
+        }
 
-    
+
+
+
         public override void OnInteract()
         {
             
@@ -101,14 +111,15 @@ namespace Tcp4
 
         public void ReSetupMaxTime()
         { 
-            timeImage.SetupMaxTime(production.timeToGrow * TimeManager.Instance.timeMultiplier);
+            if(timeImage != null && timeManager != null)
+                timeImage.SetupMaxTime(production.timeToGrow * timeManager.timeMultiplier);
         }
 
         private void UpdateCurrentTime()
         {
             if (production != null && !isGrown)
             {
-                currentTime = Mathf.Clamp(currentTime, 0, production.timeToGrow * TimeManager.Instance.timeMultiplier);
+                currentTime = Mathf.Clamp(currentTime, 0, production.timeToGrow * timeManager.timeMultiplier);
                 timeImage.UpdateFill(currentTime);
             }
         }
@@ -121,7 +132,7 @@ namespace Tcp4
                 return;
             }
 
-            if (!isAbleToGive && currentTime < production.timeToGrow * TimeManager.Instance.timeMultiplier)
+            if (!isAbleToGive && currentTime < production.timeToGrow * timeManager.timeMultiplier)
             {
                 timeImage.ChangeSprite(GameAssets.Instance.sprProductionWait);
             }
@@ -166,7 +177,7 @@ namespace Tcp4
             if (production == null) return;
 
             currentTime = 0;
-            timeImage.SetupMaxTime(production.timeToGrow * TimeManager.Instance.timeMultiplier);
+            timeImage.SetupMaxTime(production.timeToGrow * timeManager.timeMultiplier);
             CloseProductionMenu();
             hasChoosedProduction = true;
             productionManager.OnChooseProduction -= SelectProduction;
@@ -184,7 +195,7 @@ namespace Tcp4
         {
             OnLostFocus();
             var models = production.models;
-            var timeToGrow = production.timeToGrow * TimeManager.Instance.timeMultiplier;
+            var timeToGrow = production.timeToGrow * timeManager.timeMultiplier;
             int modelIndex = 0;
 
             while (modelIndex < models.Length)

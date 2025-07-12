@@ -113,6 +113,8 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
                     if (timeMultiplier < 21) timeMultiplier = 21;
                     OnTimeMultiplierChanged?.Invoke();
                 }
+
+                if (Input.GetKeyDown(KeyCode.F1)) isFirstDay = !isFirstDay;
             }
             
         }
