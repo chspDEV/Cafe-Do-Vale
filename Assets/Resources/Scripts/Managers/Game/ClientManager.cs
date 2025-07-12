@@ -21,8 +21,8 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
         #region Serialized Fields
         [Header("Spawn Settings")]
         [SerializeField] private GameObject clientPrefab;
-        [SerializeField] private float clientWaitOrderTime = 20f;
-        [SerializeField] private float clientWaitQueueTime = 60f;
+        [SerializeField] private float clientWaitOrderTime = 60f;
+        [SerializeField] private float clientWaitQueueTime = 120f;
         [SerializeField] private float maxCounter;
         [SerializeField]
         private AnimationCurve spawnRateCurve = new AnimationCurve(
@@ -76,6 +76,7 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
         private void Update()
         {
             HandleLogicSpawn();
+            UpdateClientTimers();
 
             if (aiJobHandle.IsCompleted)
             {
@@ -161,7 +162,8 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
                 currentPosition = clientGO.transform.position,
                 moveTarget = shopEntrance.position,
                 speed = 2f,
-                waitQueueTime = 0f
+                waitQueueTime = 0f,
+                waitOrderTime = 0f
             };
 
             OnClientSetup?.Invoke(clientComponent);
@@ -240,6 +242,28 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
             }
         }
 
+        private void UpdateClientTimers()
+        {
+            for (int i = 0; i < maxClients; i++)
+            {
+                if (!clientDataArray[i].isActive) continue;
+
+                ClientData data = clientDataArray[i];
+                Client client = clientComponents[i];
+
+                if (data.currentState == ClientState.WaitingForOrder)
+                {
+                    float fillAmount = 1f - (data.waitOrderTime / data.maxWaitOrderTime);
+                    client.UpdateTimerAtCount(fillAmount);
+                }
+                else if (data.currentState == ClientState.InQueue)
+                {
+                    float fillAmount = 1f - (data.waitQueueTime / data.maxWaitQueueTime);
+                    client.UpdateTimerAtQueue(fillAmount);
+                }
+            }
+        }
+
         private void UpdateClientData(int index)
         {
             ClientData data = clientDataArray[index];
@@ -307,7 +331,9 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
             clientComponents[index].ShowWantedProduct(drinkSprite);
             clientComponents[index].UpdateOrderName(drinkName);
 
-            clientComponents[index].ControlBubble(true);
+            clientComponents[index].ControlQueueBubble(false);
+            clientComponents[index].ControlOrderBubble(true);
+            
             data.waitOrderTime = 0f;
             clientDataArray[index] = data;
         }
@@ -315,7 +341,7 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
         private void HideOrderBubble(int index)
         {
             ClientData data = clientDataArray[index];
-            clientComponents[index].ControlBubble(false);
+            clientComponents[index].ControlOrderBubble(false);
             data.waitOrderTime = 0f;
             clientDataArray[index] = data;
         }
@@ -333,12 +359,9 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
         {
             ClientData data = clientDataArray[index];
             data.waitOrderTime += Time.deltaTime;
-
-            float fillAmount = 1f - (data.waitOrderTime / data.maxWaitOrderTime);
-            clientComponents[index].UpdateTimerUI(fillAmount);
             clientDataArray[index] = data;
 
-            if (fillAmount <= 0)
+            if (data.waitOrderTime >= data.maxWaitOrderTime)
             {
                 HandleUnsatisfiedClient(index);
             }
@@ -382,7 +405,7 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
             ClientData data = clientDataArray[index];
             int queueIndex = FindAvailableQueueSpot();
 
-            if (queueIndex != -1)
+            if (queueIndex != -1 && queueIndex < queueSpots.Count)
             {
                 Debug.Log($"Spot {queueIndex} atribuído ao cliente {index}");
                 isQueueSpotOccupied[queueIndex] = true;
@@ -436,7 +459,7 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
                 ClientData data = clientDataArray[i];
 
                 // Esconde o bubble imediatamente
-                clientComponents[i].ControlBubble(false);
+                clientComponents[i].ControlOrderBubble(false);
 
                 if (IsCorrectDrink(drink, data.orderID))
                 {
@@ -454,10 +477,9 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
 
         private void HandleCorrectDrinkServed(int index, ClientData data)
         {
-            // Liberar o spot da fila primeiro
+            // Libera o spot da fila
             if (data.queueSpotIndex != -1)
             {
-                // Verifica se o spot ainda está marcado como ocupado
                 if (data.queueSpotIndex < isQueueSpotOccupied.Length)
                 {
                     isQueueSpotOccupied[data.queueSpotIndex] = false;
@@ -471,7 +493,6 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
             // Decisão: 70% chance de sentar, 30% de sair
             bool willSit = UnityEngine.Random.Range(0f, 1f) <= 0.7f;
 
-            // Avança a fila e chama próximo cliente
             AdvanceQueue();
 
             if (willSit)
@@ -479,7 +500,6 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
                 int seatIndex = FindNextAvailableSeatSpot();
                 if (seatIndex != -1)
                 {
-                    // Reservar o assento
                     isSeatSpotOccupied[seatIndex] = true;
                     data.seatSpotIndex = seatIndex;
                     data.moveTarget = seatSpots[seatIndex].position;
@@ -487,23 +507,19 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
                 }
                 else
                 {
-                    // Sem assentos disponíveis - cliente sai
                     data.currentState = ClientState.LeavingShop;
                     data.moveTarget = streetEnd.position;
                 }
             }
             else
             {
-                // Cliente decide sair após receber pedido
                 data.currentState = ClientState.LeavingShop;
                 data.moveTarget = streetEnd.position;
             }
 
-            // Atualiza os dados primeiro
             clientDataArray[index] = data;
-
-            
         }
+
 
         public void AdvanceQueue()
         {
@@ -548,8 +564,8 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
 
         public void ClearQueueAndSeats()
         {
-            isQueueSpotOccupied = new bool[queueSpots.Count];
-            isSeatSpotOccupied = new bool[seatSpots.Count];
+            isQueueSpotOccupied = new bool[Mathf.Max(queueSpots.Count, 1)];
+            isSeatSpotOccupied = new bool[Mathf.Max(seatSpots.Count, 1)];
         }
 
         private void CallNextClientToCounter()
@@ -596,15 +612,18 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
                     return data.moveTarget; // Já deve ser shopEntrance.position
 
                 case ClientState.GoingToQueue:
-                    // Sempre retorna a posição da entrada da loja
-                    if (queueSpots[data.queueSpotIndex].position != null)
+                    if (data.queueSpotIndex >= 0 && data.queueSpotIndex < queueSpots.Count)
                     {
+
+                        clientComponents[clientIndex].ControlQueueBubble(true);
                         return queueSpots[data.queueSpotIndex].position;
                     }
                     else
                     {
-                        //Fallback
+                        // Fallback seguro
+                        Debug.LogWarning($"Índice inválido de fila: {data.queueSpotIndex} para cliente {clientIndex}");
                         data.currentState = ClientState.LeavingShop;
+                        clientDataArray[clientIndex] = data;
                         return streetEnd.position;
                     }
 

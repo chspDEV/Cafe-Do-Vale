@@ -113,7 +113,7 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
             }
 
             int currentCupLevel = UnlockManager.Instance.GetCurrentReputationLevel();
-            GameObject go = Instantiate(cupPrefabs[currentCupLevel], cupHolder);
+            GameObject go = Instantiate(cupPrefabs[0], cupHolder); //mudar isso aqui depois para ser de cada drink
             Cup cup = go.GetComponent<Cup>();
             cup.myDrink = d;
             cup.point = this.point;

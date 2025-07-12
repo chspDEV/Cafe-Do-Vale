@@ -7513,8 +7513,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   clientPrefab: {fileID: 1277494111889277734, guid: 76b18891a1a76f9449ba706dcc18b0ba, type: 3}
-  clientWaitOrderTime: 20
-  clientWaitQueueTime: 60
+  clientWaitOrderTime: 60
+  clientWaitQueueTime: 120
   maxCounter: 60
   spawnRateCurve:
     serializedVersion: 2
@@ -8558,7 +8558,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   timeMultiplier: 21
   initialHour: 4
-  isFirstDay: 1
+  isFirstDay: 0
   startHour: 9
   closeHour: 21
   directionalLight: {fileID: 1387968589}

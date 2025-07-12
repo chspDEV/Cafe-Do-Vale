@@ -4,6 +4,7 @@ using Unity.Collections;
 using Unity.Mathematics;
 using System.Xml.Linq;
 using System.Net.NetworkInformation;
+using Tcp4.Assets.Resources.Scripts.Managers;
 namespace Tcp4
 {
     public struct ClientDecisionJob : IJobParallelFor
@@ -39,15 +40,33 @@ namespace Tcp4
                     {
                         if (isShopOpen)
                         {
-                            float reputationFactor = playerReputation * 0.6f;
+                            float reputationFactor = playerReputation * 0.5f; 
                             float baseChance = 0.4f;
-                            float chanceToEnter = baseChance + reputationFactor;
+
+                            //float timeFactor = Mathf.Clamp01(1 - Mathf.Abs(TimeManager.Instance.CurrentHour - 14f) / 6f);
+                            //float weatherFactor = WeatherSystem.IsRaining ? 0.85f : 1f;
+
+                            /*
+                            float chanceToEnter = Mathf.Min(
+                                baseChance + (reputationFactor * timeFactor * weatherFactor),
+                                0.9f // Limite máximo
+                            );
+                            */
+
+                            float chanceToEnter = Mathf.Min(
+                                baseChance + reputationFactor,
+                                0.9f // Limite máximo
+                            );
+
+                            // Garante que a chance nunca ultrapasse 90%
+                            chanceToEnter = Mathf.Min(chanceToEnter, 0.9f);
+
 
                             if (GetRandomValue(data.id) < chanceToEnter)
                             {
                                 data.currentState = ClientState.GoingToQueue;
                                 action = ClientAction.MoveToTarget;
-                                data.moveTarget = shopEntrancePosition; // Mantém o destino como entrada
+                                data.moveTarget = shopEntrancePosition;
                             }
                             else
                             {
@@ -139,9 +158,11 @@ namespace Tcp4
                     action = ClientAction.ShowOrderBubble;
                     data.currentState = ClientState.WaitingForOrder;
                     data.waitQueueTime = 0;
+                    data.waitOrderTime = 0;
                     break;
 
                 case ClientState.WaitingForOrder:
+                    data.waitOrderTime += deltaTime;
                     if (!data.isShopOpen) { data.currentState = ClientState.LeavingShop; action = ClientAction.MoveToTarget; }
                     break;
 
@@ -195,7 +216,14 @@ namespace Tcp4
         }
         private float GetRandomValue(int seed)
         {
-            return noise.snoise(new float2(seed, deltaTime));
+            // Implementação de um PRNG simples e eficiente
+            uint state = (uint)seed * 747796405 + 1;
+            state = (state ^ (state >> 16)) * 0x45d9f3b;
+            state = (state ^ (state >> 16)) * 0x45d9f3b;
+            state = state ^ (state >> 16);
+
+            // Convertendo para float no intervalo [0,1)
+            return (state & 0xFFFFFF) / 16777216.0f;
         }
     }
 }

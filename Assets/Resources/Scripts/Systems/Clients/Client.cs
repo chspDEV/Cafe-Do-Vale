@@ -1,7 +1,7 @@
 ﻿//sem espaco no inicio, sem acentuacao, tudo minusculo
-using Tcp4.Assets.Resources.Scripts.Managers;
 using TMPro;
 using UnityEngine;
+using UnityEngine.AI;
 using UnityEngine.UI;
 
 namespace Tcp4.Assets.Resources.Scripts.Systems.Clients
@@ -14,7 +14,10 @@ namespace Tcp4.Assets.Resources.Scripts.Systems.Clients
         [Header("UI References")]
         public TextMeshProUGUI orderTmp;
         public Image wantedProduct;
-        public Image timer;
+        public Image timerAtCounter;
+        public Image timerAtQueue;
+        public Image orderTmpBackground;
+        public Image backgroundTimers;
 
 
         private GameObject currentModel;
@@ -41,8 +44,9 @@ namespace Tcp4.Assets.Resources.Scripts.Systems.Clients
             anim = currentModel.GetComponent<Animator>();
 
             //configuracao inicial da ui
-            ControlBubble(false);
-            timer.fillAmount = 1f;
+            ControlOrderBubble(false);
+            ControlQueueBubble(false);
+            timerAtCounter.fillAmount = 1f;
         }
 
         //funcao publica para o clientmanager chamar quando o pedido for decidido
@@ -55,11 +59,19 @@ namespace Tcp4.Assets.Resources.Scripts.Systems.Clients
             }
         }
 
-        public void ControlBubble(bool isActive)
+        public void ControlOrderBubble(bool isActive)
         {
-            timer.gameObject.SetActive(isActive);
+            backgroundTimers.gameObject.SetActive(isActive);
+            timerAtCounter.gameObject.SetActive(isActive);
             wantedProduct.gameObject.SetActive(isActive);
             orderTmp.gameObject.SetActive(isActive);
+            orderTmpBackground.gameObject.SetActive(isActive);
+        }
+
+        public void ControlQueueBubble(bool isActive)
+        {
+            backgroundTimers.gameObject.SetActive(isActive);
+            timerAtQueue.gameObject.SetActive(isActive);
         }
 
         public void UpdateOrderName(string newOrderName)
@@ -69,47 +81,19 @@ namespace Tcp4.Assets.Resources.Scripts.Systems.Clients
 
         public void UpdateAnimation()
         {
-            /* STATES
-             public enum ClientState
-                {
-                    WalkingOnStreet,
-                    GoingToQueue,
-                    InQueue,
-                    GoingToCounter,
-                    AtCounter,
-                    WaitingForOrder,
-                    GoingToSeat,
-                    Seated,
-                    LeavingShop
-                }
-             */
-            switch (debugState)
+            var agent = GetComponent<NavMeshAgent>();
+
+            if (agent == null)
             {
-                case "InQueue":
-                    PlayAnimation(idleAnimationName);
-                    //Debug.Log("ANIMACAO: idleAnimationName");
-                    break;
-
-                case "Seated":
-                    PlayAnimation(idleAnimationName);
-                    //Debug.Log("ANIMACAO: idleAnimationName");
-                    break;
-
-                case "WaitingForOrder":
-                    PlayAnimation(idleAnimationName);
-                    //Debug.Log("ANIMACAO: idleAnimationName");
-                    break;
-                case "AtCounter":
-                    PlayAnimation(idleAnimationName);
-                    //Debug.Log("ANIMACAO: idleAnimationName");
-                    break;
-
-                default:
-                    PlayAnimation(runAnimationName);
-                    //Debug.Log("ANIMACAO: runAnimationName");
-                    break;
+                agent = GetComponentInChildren<NavMeshAgent>();
             }
+
+            bool isMoving = agent != null && agent.velocity.magnitude > 0.1f;
+
+            PlayAnimation(isMoving ? runAnimationName : idleAnimationName);
+
         }
+
 
         private void PlayAnimation(string animToPlay)
         {
@@ -126,10 +110,39 @@ namespace Tcp4.Assets.Resources.Scripts.Systems.Clients
             }
         }
 
-        //funcao publica para o clientmanager chamar para atualizar a barra de tempo
-        public void UpdateTimerUI(float fillAmount)
+        public void UpdateTimer(Image timerImage, float fillAmount, bool isCritical = false)
         {
-            timer.fillAmount = Mathf.Clamp01(fillAmount);
+            fillAmount = Mathf.Clamp01(fillAmount);
+            timerImage.fillAmount = fillAmount;
+
+            // Cores diferentes para estado crítico
+            if (isCritical)
+            {
+                // Pisca entre vermelho e amarelo quando crítico
+                float blink = Mathf.PingPong(Time.time * 5f, 1f);
+                timerImage.color = Color.Lerp(Color.red, Color.yellow, blink);
+            }
+            else
+            {
+                // Transição suave verde -> amarelo -> vermelho
+                timerImage.color = new Color(
+                    Mathf.Clamp01(1.5f - fillAmount * 1.5f), // Vermelho aumenta
+                    Mathf.Clamp01(fillAmount * 1.5f),          // Verde diminui
+                    0f
+                );
+            }
+        }
+
+        public void UpdateTimerAtCount(float fillAmount)
+        {
+            bool critical = (fillAmount < 0.3f); // Considera crítico abaixo de 30%
+            UpdateTimer(timerAtCounter, fillAmount, critical);
+        }
+
+        public void UpdateTimerAtQueue(float fillAmount)
+        {
+            bool critical = (fillAmount < 0.2f); // Considera crítico abaixo de 20%
+            UpdateTimer(timerAtQueue, fillAmount, critical);
         }
 
         void Start()
