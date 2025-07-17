@@ -4143,6 +4143,56 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 182303087}
   m_CullTransparentMesh: 1
+--- !u!1 &186539652
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 186539653}
+  - component: {fileID: 186539654}
+  m_Layer: 0
+  m_Name: MinigameManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &186539653
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 186539652}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 514837479}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &186539654
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 186539652}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 124af2ab6179b0e48a1d14872ef2e42c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  OnMinigameStarted:
+    m_PersistentCalls:
+      m_Calls: []
+  OnMinigameFinished:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &192804557
 GameObject:
   m_ObjectHideFlags: 0
@@ -10541,6 +10591,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: a700651e4a707c647a3e89be282bc69d, type: 2}
   pointToSpawn: {fileID: 1951194221}
   currentModel: {fileID: 0}
+  minigameTrigger: {fileID: 0}
 --- !u!65 &421252119
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -12324,6 +12375,7 @@ Transform:
   - {fileID: 572230571}
   - {fileID: 2122031904}
   - {fileID: 1800501505}
+  - {fileID: 186539653}
   m_Father: {fileID: 798196787}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &514837480
@@ -14673,6 +14725,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 1b8920d533897b84e8931529f6a606fb, type: 2}
   pointToSpawn: {fileID: 1964484194}
   currentModel: {fileID: 0}
+  minigameTrigger: {fileID: 0}
 --- !u!65 &591185976
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -16343,6 +16396,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 1b8920d533897b84e8931529f6a606fb, type: 2}
   pointToSpawn: {fileID: 395997083}
   currentModel: {fileID: 0}
+  minigameTrigger: {fileID: 0}
 --- !u!65 &671394650
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -31645,6 +31699,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 1b8920d533897b84e8931529f6a606fb, type: 2}
   pointToSpawn: {fileID: 2080777716}
   currentModel: {fileID: 0}
+  minigameTrigger: {fileID: 0}
 --- !u!65 &1214425959
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -33437,6 +33492,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: a700651e4a707c647a3e89be282bc69d, type: 2}
   pointToSpawn: {fileID: 256693689}
   currentModel: {fileID: 0}
+  minigameTrigger: {fileID: 0}
 --- !u!65 &1306427362
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -47927,6 +47983,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: a700651e4a707c647a3e89be282bc69d, type: 2}
   pointToSpawn: {fileID: 1145187869}
   currentModel: {fileID: 0}
+  minigameTrigger: {fileID: 0}
 --- !u!65 &1790886877
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -53946,6 +54003,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 1b8920d533897b84e8931529f6a606fb, type: 2}
   pointToSpawn: {fileID: 377119270}
   currentModel: {fileID: 0}
+  minigameTrigger: {fileID: 0}
 --- !u!65 &2017780784
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -55399,6 +55457,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: a700651e4a707c647a3e89be282bc69d, type: 2}
   pointToSpawn: {fileID: 2142983401}
   currentModel: {fileID: 0}
+  minigameTrigger: {fileID: 0}
 --- !u!65 &2052888082
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -60052,6 +60111,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: d85380f429a027642824fcb909aece3e, type: 2}
   pointToSpawn: {fileID: 4662990051995646083}
   currentModel: {fileID: 0}
+  minigameTrigger: {fileID: 7503956996270251331}
 --- !u!114 &757595937006883578
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -60086,6 +60146,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: d85380f429a027642824fcb909aece3e, type: 2}
   pointToSpawn: {fileID: 4662990051339490898}
   currentModel: {fileID: 0}
+  minigameTrigger: {fileID: 7503956995882021780}
 --- !u!114 &757595937718160883
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -60120,6 +60181,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: d85380f429a027642824fcb909aece3e, type: 2}
   pointToSpawn: {fileID: 4662990053116348763}
   currentModel: {fileID: 0}
+  minigameTrigger: {fileID: 7503956995241782427}
 --- !u!114 &757595937900818113
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -60154,6 +60216,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: d85380f429a027642824fcb909aece3e, type: 2}
   pointToSpawn: {fileID: 4662990053399407209}
   currentModel: {fileID: 0}
+  minigameTrigger: {fileID: 7503956995390738345}
 --- !u!1 &784241738717271507
 GameObject:
   m_ObjectHideFlags: 0
@@ -61878,6 +61941,7 @@ GameObject:
   - component: {fileID: 1220679100290612032}
   - component: {fileID: 3537664819891833647}
   - component: {fileID: 757595936623377451}
+  - component: {fileID: 7503956996270251331}
   m_Layer: 11
   m_Name: pfCollectArea (3)
   m_TagString: CollectArea
@@ -61898,6 +61962,7 @@ GameObject:
   - component: {fileID: 1220679100678837649}
   - component: {fileID: 3537664820313105918}
   - component: {fileID: 757595937006883578}
+  - component: {fileID: 7503956995882021780}
   m_Layer: 11
   m_Name: pfCollectArea (2)
   m_TagString: CollectArea
@@ -61918,6 +61983,7 @@ GameObject:
   - component: {fileID: 1220679101035899306}
   - component: {fileID: 3537664821172427205}
   - component: {fileID: 757595937900818113}
+  - component: {fileID: 7503956995390738345}
   m_Layer: 11
   m_Name: pfCollectArea (1)
   m_TagString: CollectArea
@@ -61938,6 +62004,7 @@ GameObject:
   - component: {fileID: 1220679101386312344}
   - component: {fileID: 3537664821019540215}
   - component: {fileID: 757595937718160883}
+  - component: {fileID: 7503956995241782427}
   m_Layer: 11
   m_Name: pfCollectArea
   m_TagString: CollectArea
@@ -69128,6 +69195,19 @@ Transform:
   - {fileID: 4662990053116348763}
   m_Father: {fileID: 1086208713}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7503956995241782427
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1700925574625037436}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: da5f82627d3f54043ad65f6fd11afbac, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  minigameToStart: {fileID: 11400000, guid: 8ff8c3cb00a38eb43850a6e96506a8e9, type: 2}
 --- !u!4 &7503956995390738344
 Transform:
   m_ObjectHideFlags: 0
@@ -69145,6 +69225,19 @@ Transform:
   - {fileID: 4662990053399407209}
   m_Father: {fileID: 1086208713}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7503956995390738345
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1700925574471757646}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: da5f82627d3f54043ad65f6fd11afbac, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  minigameToStart: {fileID: 11400000, guid: 8ff8c3cb00a38eb43850a6e96506a8e9, type: 2}
 --- !u!4 &7503956995882021779
 Transform:
   m_ObjectHideFlags: 0
@@ -69162,6 +69255,19 @@ Transform:
   - {fileID: 4662990051339490898}
   m_Father: {fileID: 1086208713}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7503956995882021780
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1700925573981557621}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: da5f82627d3f54043ad65f6fd11afbac, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  minigameToStart: {fileID: 11400000, guid: 8ff8c3cb00a38eb43850a6e96506a8e9, type: 2}
 --- !u!4 &7503956996270251330
 Transform:
   m_ObjectHideFlags: 0
@@ -69179,6 +69285,19 @@ Transform:
   - {fileID: 4662990051995646083}
   m_Father: {fileID: 1086208713}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7503956996270251331
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1700925573597527460}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: da5f82627d3f54043ad65f6fd11afbac, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  minigameToStart: {fileID: 11400000, guid: 8ff8c3cb00a38eb43850a6e96506a8e9, type: 2}
 --- !u!4 &7510587012357269416
 Transform:
   m_ObjectHideFlags: 0

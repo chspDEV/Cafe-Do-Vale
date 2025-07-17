@@ -30,11 +30,14 @@ namespace Tcp4
         private bool hasChoosedProduction;
 
         TimeManager timeManager;
+        [Space(10)]
+
+        [Header("Minigame")]
+        [SerializeField] MinigameTrigger minigameTrigger;
 
         public override void Start()
         {
             base.Start();
-
 
             interactable_id = "productionArea";
             hasChoosedProduction = false;
@@ -43,16 +46,16 @@ namespace Tcp4
 
             timeImage = UIManager.Instance.PlaceFillImage(pointToSpawn);
             timeManager = TimeManager.Instance;
+
+            minigameTrigger.minigameToStart.OnGetReward += ResetGrowthCycle;
         }
 
         private void OnDisable()
         {
             ProductionManager.Instance.OnChooseProduction -= SelectProduction;
             timeManager.OnTimeMultiplierChanged -= ReSetupMaxTime;
+            minigameTrigger.minigameToStart.OnGetReward -= ResetGrowthCycle;
         }
-
-
-
 
         public override void OnInteract()
         {
@@ -237,6 +240,7 @@ namespace Tcp4
         {
             if (isAbleToGive && isGrown && playerInventory != null && playerInventory.CanStorage())
             {
+                /* ANTIGO
                 //Fazendo o request de sfx
                 SoundEventArgs sfxArgs = new()
                 {
@@ -252,7 +256,22 @@ namespace Tcp4
                 isAbleToGive = false;
                 isGrown = false;
                 StartCoroutine(GrowthCycle());
+                */
+
+                //Minigame
+                minigameTrigger.minigameToStart.SetupReward(production.outputProduct);
+                minigameTrigger.TriggerMinigame();
+                InteractionManager.Instance.UpdateLastId(production.outputProduct.productName);
+
             }
+        }
+
+        void ResetGrowthCycle()
+        {
+            currentTime = 0;
+            isAbleToGive = false;
+            isGrown = false;
+            StartCoroutine(GrowthCycle());
         }
     }
 }
