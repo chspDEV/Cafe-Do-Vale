@@ -7,18 +7,6 @@
       "dependencies": {},
       "url": "https://packages.unity.com"
     },
-    "com.dotbunny.gdx": {
-      "version": "https://github.com/dotBunny/GDX.git",
-      "depth": 0,
-      "source": "git",
-      "dependencies": {
-        "com.unity.collections": "1.2.3",
-        "com.unity.mathematics": "1.2.5",
-        "com.unity.burst": "1.6.4",
-        "com.unity.modules.uielements": "1.0.0"
-      },
-      "hash": "1f69a687fac6ceddca76935b53c9cffbcd87dd52"
-    },
     "com.merry-yellow.code-assist": {
       "version": "file:com.merry-yellow.code-assist",
       "depth": 0,
@@ -484,18 +472,6 @@
         "com.unity.modules.jsonserialize": "1.0.0"
       },
       "url": "https://packages.unity.com"
-    },
-    "org.khronos.unitygltf": {
-      "version": "https://github.com/KhronosGroup/UnityGLTF.git",
-      "depth": 0,
-      "source": "git",
-      "dependencies": {
-        "com.unity.nuget.newtonsoft-json": "2.0.0",
-        "com.unity.modules.imageconversion": "1.0.0",
-        "com.unity.shadergraph": "10.0.0",
-        "com.unity.mathematics": "1.0.0"
-      },
-      "hash": "b99d85f0b6d5a20ebc2d5a78158f92f938e8438a"
     },
     "com.unity.modules.accessibility": {
       "version": "1.0.0",
