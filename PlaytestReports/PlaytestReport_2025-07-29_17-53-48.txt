@@ -1,0 +1,18 @@
+===== RELATORIO DE PLAYTEST =====
+Data e Hora: 2025-07-29_17-53-48
+Tempo de Jogo: 18,98 minutos
+
+--- Atendimento ---
+Clientes Atendidos: 2
+Clientes Nao Atendidos: 24
+
+--- Financas ---
+Dinheiro Ganho: $325,00
+Dinheiro Gasto: $322,00
+Dinheiro Final: $3,00
+
+--- Reputacao ---
+Reputacao Ganha: 0,1605947
+Reputacao Perdida: -0,002400001
+Reputacao Final: 0,1629947
+===============================

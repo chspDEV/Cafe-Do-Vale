@@ -61,6 +61,7 @@ public class PlantingMinigame : BaseMinigame
     private bool isGameActive = false;
 
     private List<ActiveZone> activeZones = new List<ActiveZone>();
+    private bool canRotate = true;
 
     #region --- Ciclo de Vida do Minigame ---
 
@@ -92,6 +93,7 @@ public class PlantingMinigame : BaseMinigame
 
         HandleRotation();
         HandleInput();
+        HandleInputToPress();
     }
 
     void UpdateLife()
@@ -119,6 +121,8 @@ public class PlantingMinigame : BaseMinigame
 
     private void HandleRotation()
     {
+        if (!canRotate) return;
+
         //calcula o novo angulo
         currentAngle += currentSpeed * Time.deltaTime;
 
@@ -135,12 +139,30 @@ public class PlantingMinigame : BaseMinigame
                 return;
             }
 
-            //gera novas zonas para o proximo ciclo
-            GenerateNewTargetZones();
+            StartCoroutine(nameof(WaitForNextCycle));
         }
 
         //atualiza a rotacao do indicador visual
         rotatingIndicator.rotation = Quaternion.Euler(0, 0, -currentAngle);
+    }
+
+    IEnumerator WaitForNextCycle()
+    {
+        canRotate = false;
+        currentAngle = 0;
+        GenerateNewTargetZones();
+
+        yield return new WaitForSeconds(1f);
+
+        canRotate = true;
+    }
+
+    private void HandleInputToPress()
+    {
+        if (CheckForActiveInput())
+        {
+            if (inputToPress) inputToPress.Play("canPress_inputToPress");
+        }
     }
 
     private void HandleInput()
@@ -153,7 +175,7 @@ public class PlantingMinigame : BaseMinigame
             {
                 //sucesso
                 totalHits++;
-                currentSpeed += speedIncreasePerHit;
+                StartCoroutine(IncreaseSpeed(speedIncreasePerHit));
                 Debug.Log($"acerto! total de acertos: {totalHits}");
                 if (handsAnimator) handsAnimator.Play("hands_get");
                 if (inputToPress) inputToPress.Play("active_inputToPress");
@@ -173,6 +195,20 @@ public class PlantingMinigame : BaseMinigame
         }
     }
 
+    IEnumerator IncreaseSpeed(float increase)
+    {
+        var newSpeed = currentSpeed + increase;
+
+        while (currentSpeed < newSpeed) 
+        { 
+            currentSpeed += 0.5f;
+        }
+
+        currentSpeed = newSpeed;
+
+        yield return null;
+    }
+
     private void EndGame()
     {
         isGameActive = false;
@@ -182,9 +218,9 @@ public class PlantingMinigame : BaseMinigame
         MinigamePerformance performance;
         if (totalHits == 0)
             performance = MinigamePerformance.Fail;
-        else if (totalHits <= 3)
+        else if (totalHits <= 10)
             performance = MinigamePerformance.Bronze;
-        else if (totalHits <= 6)
+        else if (totalHits <= 20)
             performance = MinigamePerformance.Silver;
         else
             performance = MinigamePerformance.Gold;
@@ -234,10 +270,14 @@ public class PlantingMinigame : BaseMinigame
                 float end = start + size;
 
                 bool overlapsWithOthers = false;
+
+                float offset = 20f;
+
                 //verifica se a nova zona colide com alguma ja existente
                 foreach (var existingZone in activeZones)
                 {
-                    if (DoZonesOverlap(start, end, existingZone.startAngle, existingZone.endAngle))
+                    if (DoZonesOverlap(start - offset, end + offset, 
+                        existingZone.startAngle - offset, existingZone.endAngle + offset))
                     {
                         overlapsWithOthers = true;
                         break;
@@ -297,6 +337,32 @@ public class PlantingMinigame : BaseMinigame
             {
                 zone.hit = true;
                 zone.zoneObject.GetComponent<Image>().color = Color.cyan;
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private bool CheckForActiveInput()
+    {
+        foreach (var zone in activeZones)
+        {
+            if (zone.hit) continue;
+
+            //aqui esta a logica corrigida e confiavel:
+            //1. calcula o centro da zona. se start=350 e end=390 (tamanho 40), o centro e 370.
+            //   mathf.deltaangle entende que 370 e o mesmo que 10 graus.
+            float zoneCenterAngle = (zone.startAngle + zone.endAngle) / 2f;
+
+            //2. calcula a menor distancia angular entre o indicador e o centro da zona
+            float angleDifference = Mathf.Abs(Mathf.DeltaAngle(currentAngle, zoneCenterAngle));
+
+            //3. a tolerancia para o acerto e metade do tamanho total da zona
+            float tolerance = zone.angularSize / 2f;
+
+            if (angleDifference <= tolerance)
+            {
                 return true;
             }
         }

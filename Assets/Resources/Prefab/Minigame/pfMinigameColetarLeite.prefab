@@ -74,7 +74,7 @@ MonoBehaviour:
   initialTime: 10
   timeBonusPerHit: 0.4
   fillAmountPerHit: 0.15
-  maxMisses: 99
+  maxMisses: 2
   timePauseOnHitDuration: 0.3
   initialTimeToPress: 1.5
   minTimeToPress: 0.5
