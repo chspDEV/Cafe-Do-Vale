@@ -17,7 +17,8 @@ public class MinigameManager : Singleton<MinigameManager>
 
     public void Start()
     {
-        //playerInventory = GameAssets.Instance.player.GetComponent<Inventory>();
+        if(GameAssets.Instance != null)
+        playerInventory = GameAssets.Instance.player.GetComponent<Inventory>();
     }
     public void StartMinigame(MinigameData data)
     {
@@ -59,7 +60,7 @@ public class MinigameManager : Singleton<MinigameManager>
         int rewardAmount = _currentMinigameData.GetRewardAmount(result.performance);
         Debug.Log($"minigame finalizado! performance: {result.performance}. recompensando player com {rewardAmount} de {_currentMinigameData.rewardProduct.productName}.");
 
-        //aqui voce adicionaria a logica para dar o item ao inventario do jogador
+        if(playerInventory != null)
         playerInventory.AddProduct(_currentMinigameData.rewardProduct, rewardAmount);
 
         //limpa a instancia do minigame

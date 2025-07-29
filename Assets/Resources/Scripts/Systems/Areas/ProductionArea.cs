@@ -47,14 +47,17 @@ namespace Tcp4
             timeImage = UIManager.Instance.PlaceFillImage(pointToSpawn);
             timeManager = TimeManager.Instance;
 
-            minigameTrigger.minigameToStart.OnGetReward += ResetGrowthCycle;
+            if(minigameTrigger != null)
+                minigameTrigger.minigameToStart.OnGetReward += ResetGrowthCycle;
         }
 
         private void OnDisable()
         {
             ProductionManager.Instance.OnChooseProduction -= SelectProduction;
             timeManager.OnTimeMultiplierChanged -= ReSetupMaxTime;
-            minigameTrigger.minigameToStart.OnGetReward -= ResetGrowthCycle;
+
+            if (minigameTrigger != null)
+                minigameTrigger.minigameToStart.OnGetReward -= ResetGrowthCycle;
         }
 
         public override void OnInteract()

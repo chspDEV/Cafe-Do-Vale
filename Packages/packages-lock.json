@@ -13,6 +13,13 @@
       "source": "embedded",
       "dependencies": {}
     },
+    "com.natteens.pluginputpack": {
+      "version": "https://github.com/Natteens/com.natteens.pluginputpack.git",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "89481094b45f5dc71b68e15db5753c7d445ae292"
+    },
     "com.unity.2d.animation": {
       "version": "10.1.3",
       "depth": 0,

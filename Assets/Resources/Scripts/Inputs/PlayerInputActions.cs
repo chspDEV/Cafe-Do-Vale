@@ -98,6 +98,42 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Minigame_Cross"",
+                    ""type"": ""Button"",
+                    ""id"": ""9dde02e9-c5ca-458b-8620-ebadcd9b7caf"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Minigame_Square"",
+                    ""type"": ""Button"",
+                    ""id"": ""69aecac8-8552-4308-9028-968fc4a49c27"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Minigame_Triangle"",
+                    ""type"": ""Button"",
+                    ""id"": ""8bd694b2-c422-47d0-b8c5-f587194e0b10"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Minigame_Circle"",
+                    ""type"": ""Button"",
+                    ""id"": ""ab62ffd6-6ece-4c48-a741-ad5269883532"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -291,7 +327,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""aa7fa428-107f-4fda-a43b-a558c8c983cc"",
-                    ""path"": ""<DualShockGamepad>/dpad/down"",
+                    ""path"": ""<DualShockGamepad>/buttonWest"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -302,7 +338,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""e098b227-a215-4119-ac41-93095b90cf79"",
-                    ""path"": ""<Gamepad>/dpad/down"",
+                    ""path"": ""<Gamepad>/buttonWest"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -379,7 +415,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""43a20902-eece-486f-8ab9-46fde5baff7f"",
-                    ""path"": ""<DualShockGamepad>/dpad/up"",
+                    ""path"": ""<DualShockGamepad>/buttonNorth"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -390,7 +426,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""1afa4371-badf-447f-9363-f4b9c6688964"",
-                    ""path"": ""<Gamepad>/dpad/up"",
+                    ""path"": ""<Gamepad>/buttonNorth"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -439,6 +475,182 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""CloseMenu"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""fe07c8bc-e1c3-458c-b4d9-17f761283ce2"",
+                    ""path"": ""<Gamepad>/buttonSouth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Minigame_Cross"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""00dfa0b0-de34-46bb-bab8-e030da37b1f0"",
+                    ""path"": ""<Keyboard>/s"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Minigame_Cross"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""cfbf7a27-aae5-453a-b071-44437dee7fc1"",
+                    ""path"": ""<DualShockGamepad>/buttonSouth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Minigame_Cross"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""06c7c30d-58e2-425a-a370-a3882da29468"",
+                    ""path"": ""<XInputController>/buttonSouth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Minigame_Cross"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""5156c86d-e78f-4ce6-b4b3-85a81014276e"",
+                    ""path"": ""<DualShockGamepad>/buttonWest"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Minigame_Square"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""311acff8-8856-4bdc-b4f7-21f104c770c1"",
+                    ""path"": ""<XInputController>/buttonWest"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Minigame_Square"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""aba17939-7f0c-4065-9091-7881de774489"",
+                    ""path"": ""<Keyboard>/a"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Minigame_Square"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""65c46a19-6ab7-4237-8eae-1dda10b9502e"",
+                    ""path"": ""<Gamepad>/buttonWest"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Minigame_Square"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""624cd00e-06da-4c10-b659-551991056a91"",
+                    ""path"": ""<DualShockGamepad>/buttonNorth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Minigame_Triangle"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""197c153d-a706-4bb2-a14b-7db953b3cc82"",
+                    ""path"": ""<Keyboard>/w"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Minigame_Triangle"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""082c2c87-8584-44b6-acfd-005d6e18be21"",
+                    ""path"": ""<Gamepad>/buttonNorth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Minigame_Triangle"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""bd8c97d6-cf72-4c97-9313-b0717828ea86"",
+                    ""path"": ""<XInputController>/buttonNorth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Minigame_Triangle"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""be84b12b-1865-44c5-8bbd-017e6354cfee"",
+                    ""path"": ""<Keyboard>/d"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Minigame_Circle"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""b19e2ead-4ed3-4347-a414-c89768015f3b"",
+                    ""path"": ""<DualShockGamepad>/buttonEast"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Minigame_Circle"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""6c9ed032-23ca-4a30-b3e3-3109f8fdd067"",
+                    ""path"": ""<XInputController>/buttonEast"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Minigame_Circle"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""7805a691-509c-4ac5-88da-0c7a7a04fc11"",
+                    ""path"": ""<Gamepad>/buttonEast"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Minigame_Circle"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -609,6 +821,10 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         m_Player_SeedInventory = m_Player.FindAction("SeedInventory", throwIfNotFound: true);
         m_Player_Recipe = m_Player.FindAction("Recipe", throwIfNotFound: true);
         m_Player_CloseMenu = m_Player.FindAction("CloseMenu", throwIfNotFound: true);
+        m_Player_Minigame_Cross = m_Player.FindAction("Minigame_Cross", throwIfNotFound: true);
+        m_Player_Minigame_Square = m_Player.FindAction("Minigame_Square", throwIfNotFound: true);
+        m_Player_Minigame_Triangle = m_Player.FindAction("Minigame_Triangle", throwIfNotFound: true);
+        m_Player_Minigame_Circle = m_Player.FindAction("Minigame_Circle", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -691,6 +907,10 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_SeedInventory;
     private readonly InputAction m_Player_Recipe;
     private readonly InputAction m_Player_CloseMenu;
+    private readonly InputAction m_Player_Minigame_Cross;
+    private readonly InputAction m_Player_Minigame_Square;
+    private readonly InputAction m_Player_Minigame_Triangle;
+    private readonly InputAction m_Player_Minigame_Circle;
     public struct PlayerActions
     {
         private @PlayerInputActions m_Wrapper;
@@ -703,6 +923,10 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         public InputAction @SeedInventory => m_Wrapper.m_Player_SeedInventory;
         public InputAction @Recipe => m_Wrapper.m_Player_Recipe;
         public InputAction @CloseMenu => m_Wrapper.m_Player_CloseMenu;
+        public InputAction @Minigame_Cross => m_Wrapper.m_Player_Minigame_Cross;
+        public InputAction @Minigame_Square => m_Wrapper.m_Player_Minigame_Square;
+        public InputAction @Minigame_Triangle => m_Wrapper.m_Player_Minigame_Triangle;
+        public InputAction @Minigame_Circle => m_Wrapper.m_Player_Minigame_Circle;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -736,6 +960,18 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             @CloseMenu.started += instance.OnCloseMenu;
             @CloseMenu.performed += instance.OnCloseMenu;
             @CloseMenu.canceled += instance.OnCloseMenu;
+            @Minigame_Cross.started += instance.OnMinigame_Cross;
+            @Minigame_Cross.performed += instance.OnMinigame_Cross;
+            @Minigame_Cross.canceled += instance.OnMinigame_Cross;
+            @Minigame_Square.started += instance.OnMinigame_Square;
+            @Minigame_Square.performed += instance.OnMinigame_Square;
+            @Minigame_Square.canceled += instance.OnMinigame_Square;
+            @Minigame_Triangle.started += instance.OnMinigame_Triangle;
+            @Minigame_Triangle.performed += instance.OnMinigame_Triangle;
+            @Minigame_Triangle.canceled += instance.OnMinigame_Triangle;
+            @Minigame_Circle.started += instance.OnMinigame_Circle;
+            @Minigame_Circle.performed += instance.OnMinigame_Circle;
+            @Minigame_Circle.canceled += instance.OnMinigame_Circle;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -764,6 +1000,18 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             @CloseMenu.started -= instance.OnCloseMenu;
             @CloseMenu.performed -= instance.OnCloseMenu;
             @CloseMenu.canceled -= instance.OnCloseMenu;
+            @Minigame_Cross.started -= instance.OnMinigame_Cross;
+            @Minigame_Cross.performed -= instance.OnMinigame_Cross;
+            @Minigame_Cross.canceled -= instance.OnMinigame_Cross;
+            @Minigame_Square.started -= instance.OnMinigame_Square;
+            @Minigame_Square.performed -= instance.OnMinigame_Square;
+            @Minigame_Square.canceled -= instance.OnMinigame_Square;
+            @Minigame_Triangle.started -= instance.OnMinigame_Triangle;
+            @Minigame_Triangle.performed -= instance.OnMinigame_Triangle;
+            @Minigame_Triangle.canceled -= instance.OnMinigame_Triangle;
+            @Minigame_Circle.started -= instance.OnMinigame_Circle;
+            @Minigame_Circle.performed -= instance.OnMinigame_Circle;
+            @Minigame_Circle.canceled -= instance.OnMinigame_Circle;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -869,6 +1117,10 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         void OnSeedInventory(InputAction.CallbackContext context);
         void OnRecipe(InputAction.CallbackContext context);
         void OnCloseMenu(InputAction.CallbackContext context);
+        void OnMinigame_Cross(InputAction.CallbackContext context);
+        void OnMinigame_Square(InputAction.CallbackContext context);
+        void OnMinigame_Triangle(InputAction.CallbackContext context);
+        void OnMinigame_Circle(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {

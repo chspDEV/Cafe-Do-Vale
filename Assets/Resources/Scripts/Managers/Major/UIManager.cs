@@ -592,6 +592,7 @@ namespace Tcp4
 
         private void Update()
         {
+            if (gameAssets != null && gameAssets.playerMovement != null)
             gameAssets.playerMovement.ToggleMovement(openedMenus.Count <= 0 || openedMenus == null);
         }
     }

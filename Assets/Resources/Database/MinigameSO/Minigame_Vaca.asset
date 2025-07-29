@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d13212853132a5041992668761147eda, type: 3}
+  m_Name: Minigame_Vaca
+  m_EditorClassIdentifier: 
+  minigameName: Pegar Leite
+  minigamePrefab: {fileID: 2379580334530737052, guid: 481adddc1478d5f4fbdfe1105bf53051, type: 3}
+  rewardProduct: {fileID: 11400000, guid: 60650c2deda852545b18238811400605, type: 2}
+  rewardTiers:
+  - performanceLevel: 0
+    amount: 0
+  - performanceLevel: 1
+    amount: 1
+  - performanceLevel: 2
+    amount: 2
+  - performanceLevel: 3
+    amount: 3

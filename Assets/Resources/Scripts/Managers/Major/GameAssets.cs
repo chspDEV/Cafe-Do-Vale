@@ -2,14 +2,13 @@
 using GameResources.Project.Scripts.Utilities.Audio;
 using Sirenix.OdinInspector;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.DualShock;
 using UnityEngine.InputSystem.XInput;
-using UnityEngine.Windows;
+using PlugInputPack;
 
 public enum CurrentInputType
 { 
@@ -51,6 +50,8 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
 
         public event Action OnChangeInteractionSprite;
         public CurrentInputType currentInputType = CurrentInputType.NONE;
+
+        public PlugInputComponent inputComponent;
 
         #region DEBUG MODE
         public bool isDebugMode = false;

@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
+using Tcp4.Assets.Resources.Scripts.Managers;
 
 //define as propriedades de uma dificuldade de zona de acerto
 [System.Serializable]
@@ -32,13 +33,15 @@ public class PlantingMinigame : BaseMinigame
     [SerializeField] private Transform zonesContainer; 
     [SerializeField] private Transform lifeContainer; 
     [SerializeField] private Animator handsAnimator; 
-    [SerializeField] private Animator inputToPress; 
+    [SerializeField] private Animator inputToPress;
 
     [Header("Game Rules")]
-    [SerializeField] private KeyCode inputKey = KeyCode.A; //a tecla que o jogador aperta
+    private PlugInputPack.InputAccessor inputKey;
     [SerializeField] private int maxCycles = 3;
     [SerializeField] private int maxMisses = 2;
     [SerializeField] private int zonesPerCycle = 3;
+
+
 
     [Header("Gameplay")]
     [SerializeField] private float initialSpeed = 90f; //velocidade inicial em graus/segundo
@@ -63,6 +66,13 @@ public class PlantingMinigame : BaseMinigame
 
     public override void StartMinigame()
     {
+        StartCoroutine(nameof(LoadingMinigame));
+    }
+
+    IEnumerator LoadingMinigame()
+    {
+        yield return new WaitForSeconds(1.5f);
+        inputKey = GameAssets.Instance.inputComponent["Interact"];
         //reseta o estado inicial
         currentSpeed = initialSpeed;
         currentAngle = 0f;
@@ -73,6 +83,7 @@ public class PlantingMinigame : BaseMinigame
         //prepara o primeiro ciclo e inicia o jogo
         GenerateNewTargetZones();
         isGameActive = true;
+
     }
 
     private void Update()
@@ -134,7 +145,7 @@ public class PlantingMinigame : BaseMinigame
 
     private void HandleInput()
     {
-        if (Input.GetKeyDown(inputKey))
+        if (inputKey.Pressed)
         {
             bool hitSuccess = CheckForHit();
 
@@ -188,13 +199,9 @@ public class PlantingMinigame : BaseMinigame
 
     private bool DoZonesOverlap(float startA, float endA, float startB, float endB)
     {
-        //normaliza os angulos para que o 'end' seja sempre maior que o 'start'
-        //tratando a passagem por 360 graus
         float normalizedEndA = endA < startA ? endA + 360 : endA;
         float normalizedEndB = endB < startB ? endB + 360 : endB;
 
-        //verifica a sobreposicao em um espaco linear e depois checa a mesma logica
-        //para um espaco "enrolado" em 360 graus para cobrir todos os casos
         bool overlaps = (startA < normalizedEndB && endA > startB) ||
                         (startA < (normalizedEndB + 360) && (normalizedEndA) > (startB + 360)) ||
                         ((startA + 360) < normalizedEndB && (normalizedEndA + 360) > startB);
