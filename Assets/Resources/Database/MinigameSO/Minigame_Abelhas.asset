@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d13212853132a5041992668761147eda, type: 3}
+  m_Name: Minigame_Abelhas
+  m_EditorClassIdentifier: 
+  minigameName: Pegar Favos
+  minigamePrefab: {fileID: 1489013191442145253, guid: c994683ee76be3f4fa4a2db4102d69a0, type: 3}
+  rewardProduct: {fileID: 11400000, guid: 94a2e396290fdf34fb1b215604089d68, type: 2}
+  rewardTiers:
+  - performanceLevel: 0
+    amount: 0
+  - performanceLevel: 1
+    amount: 1
+  - performanceLevel: 2
+    amount: 2
+  - performanceLevel: 3
+    amount: 3

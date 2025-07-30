@@ -17,7 +17,7 @@ public class MinigameManager : Singleton<MinigameManager>
 
     public void Start()
     {
-        if(GameAssets.Instance != null)
+        if(GameAssets.Instance != null && GameAssets.Instance.player != null)
         playerInventory = GameAssets.Instance.player.GetComponent<Inventory>();
     }
     public void StartMinigame(MinigameData data)

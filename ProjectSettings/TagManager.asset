@@ -15,6 +15,7 @@ TagManager:
   - CreationIngredient
   - HeatmapSphere
   - Ground
+  - Bee
   layers:
   - Default
   - TransparentFX

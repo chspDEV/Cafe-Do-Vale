@@ -131,7 +131,8 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
 
             SoundEvent.RequestSound(ostArgs);
 
-            QuestManager.Instance.StartMission("tutorial00");
+            if(QuestManager.Instance != null)
+                QuestManager.Instance.StartMission("tutorial00");
         }
 
         public void UpdateControlSprite()
