@@ -134,7 +134,7 @@ public class BeeMinigame : BaseMinigame
         if (currentHandState == PlayerHandState.CarryingHoney)
         {
             float distanceToStart = Vector3.Distance(playerHands.localPosition, startWorldPosition);
-            if (distanceToStart < interactionDistance)
+            if (distanceToStart < interactionDistance / 2f)
             {
                 ScorePoint();
             }

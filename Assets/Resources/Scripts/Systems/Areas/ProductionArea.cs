@@ -48,7 +48,7 @@ namespace Tcp4
             timeManager = TimeManager.Instance;
 
             if(minigameTrigger != null)
-                minigameTrigger.minigameToStart.OnGetReward += ResetGrowthCycle;
+                minigameTrigger.minigameToStart.OnGetReward += this.ResetGrowthCycle;
         }
 
         private void OnDisable()
@@ -57,7 +57,7 @@ namespace Tcp4
             timeManager.OnTimeMultiplierChanged -= ReSetupMaxTime;
 
             if (minigameTrigger != null)
-                minigameTrigger.minigameToStart.OnGetReward -= ResetGrowthCycle;
+                minigameTrigger.minigameToStart.OnGetReward -= this.ResetGrowthCycle;
         }
 
         public override void OnInteract()
@@ -199,32 +199,70 @@ namespace Tcp4
 
         private IEnumerator GrowthCycle()
         {
+            // Verificações de segurança
+            if (production == null)
+            {
+                Debug.LogError($"Production is null in {gameObject.name}. Stopping growth cycle.");
+                yield break;
+            }
+
+            if (timeManager == null)
+            {
+                Debug.LogError($"TimeManager is null in {gameObject.name}. Stopping growth cycle.");
+                yield break;
+            }
+
             OnLostFocus();
             var models = production.models;
+
+            // Verificação adicional para models
+            if (models == null || models.Length == 0)
+            {
+                Debug.LogWarning($"No models found for production in {gameObject.name}. Skipping model spawning.");
+
+                // Ainda assim, execute o tempo de crescimento
+                float _timeToGrow = production.timeToGrow * timeManager.timeMultiplier;
+                float elapsedTime = 0;
+
+                while (elapsedTime < _timeToGrow)
+                {
+                    elapsedTime += Time.deltaTime;
+                    currentTime += Time.deltaTime;
+                    UpdateCurrentTime();
+                    yield return null;
+                }
+
+                isGrown = true;
+                isAbleToGive = true;
+                yield break;
+            }
+
             var timeToGrow = production.timeToGrow * timeManager.timeMultiplier;
             int modelIndex = 0;
 
             while (modelIndex < models.Length)
             {
-                if (currentModel != null)
+                if (currentModel != null && objectPools != null)
                 {
                     objectPools.Return(currentModel);
                 }
 
-                currentModel = objectPools.Get(models[modelIndex]);
+                if (objectPools != null)
+                {
+                    currentModel = objectPools.Get(models[modelIndex]);
 
-                Vector3 normalizedPosition = new(pointToSpawn.position.x,
-                pointToSpawn.position.y, pointToSpawn.position.z);
+                    Vector3 normalizedPosition = new(pointToSpawn.position.x,
+                    pointToSpawn.position.y, pointToSpawn.position.z);
 
-                currentModel.transform.SetPositionAndRotation(normalizedPosition, models[modelIndex].transform.rotation);
-                Debug.Log($"Modelo atual: {currentModel.name} // Posicao: {normalizedPosition}");
+                    currentModel.transform.SetPositionAndRotation(normalizedPosition, models[modelIndex].transform.rotation);
+                    Debug.Log($"Modelo atual: {currentModel.name} // Posicao: {normalizedPosition}");
+                }
 
                 float modelGrowTime = timeToGrow / models.Length;
                 float elapsedTime = 0;
 
                 while (elapsedTime < modelGrowTime)
                 {
-                    
                     elapsedTime += Time.deltaTime;
                     currentTime += Time.deltaTime;
                     UpdateCurrentTime();
@@ -238,39 +276,52 @@ namespace Tcp4
             isAbleToGive = true;
         }
 
-       
+
         private void HarvestProduct()
         {
             if (isAbleToGive && isGrown && playerInventory != null && playerInventory.CanStorage())
             {
-                /* ANTIGO
-                //Fazendo o request de sfx
-                SoundEventArgs sfxArgs = new()
+                // Verificação adicional antes de usar o minigame
+                if (minigameTrigger == null || minigameTrigger.minigameToStart == null)
                 {
-                    Category = SoundEventArgs.SoundCategory.SFX,
-                    AudioID = "coletar", // O ID do seu SFX (sem "sfx_" e em minúsculas)
-                    VolumeScale = .8f // Escala de volume (opcional, padrão é 1f)
-                };
-                SoundEvent.RequestSound(sfxArgs);
+                    Debug.LogError($"MinigameTrigger or minigame is null in {gameObject.name}");
+                    return;
+                }
 
-                InteractionManager.Instance.UpdateLastId(production.outputProduct.productName);
-                playerInventory.AddProduct(production.outputProduct, amount);
-                currentTime = 0;
-                isAbleToGive = false;
-                isGrown = false;
-                StartCoroutine(GrowthCycle());
-                */
+                if (production == null || production.outputProduct == null)
+                {
+                    Debug.LogError($"Production or outputProduct is null in {gameObject.name}");
+                    return;
+                }
 
                 //Minigame
                 minigameTrigger.minigameToStart.SetupReward(production.outputProduct);
                 minigameTrigger.TriggerMinigame();
                 InteractionManager.Instance.UpdateLastId(production.outputProduct.productName);
-
             }
         }
 
         void ResetGrowthCycle()
         {
+            // Verificações de segurança antes de reiniciar o ciclo
+            if (production == null)
+            {
+                Debug.LogError($"Production is null in {gameObject.name}. Cannot reset growth cycle.");
+                return;
+            }
+
+            if (timeManager == null)
+            {
+                Debug.LogError($"TimeManager is null in {gameObject.name}. Cannot reset growth cycle.");
+                return;
+            }
+
+            if (objectPools == null && production.models.Length > 0)
+            {
+                Debug.LogWarning($"ObjectPools is null in {gameObject.name}. Reinitializing...");
+                InitializeObjectPools();
+            }
+
             currentTime = 0;
             isAbleToGive = false;
             isGrown = false;

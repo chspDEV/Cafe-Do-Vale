@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 1220679100041221634}
   - component: {fileID: 3537664820212885101}
   - component: {fileID: 757595936906334569}
+  - component: {fileID: -4239579750870941198}
   m_Layer: 11
   m_Name: pfCollectAreaBees
   m_TagString: CollectArea
@@ -124,6 +125,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isInteractable: 1
+  interactable_id: interactable
   uiRotationOffset: {x: 0, y: 180, z: 0}
   uiPositionOffset: {x: 0, y: 1, z: 0}
   interactionCollider: {fileID: 3537664820212885101}
@@ -142,6 +144,20 @@ MonoBehaviour:
   - {fileID: 11400000, guid: a700651e4a707c647a3e89be282bc69d, type: 2}
   pointToSpawn: {fileID: 4662990052312389057}
   currentModel: {fileID: 0}
+  minigameTrigger: {fileID: -4239579750870941198}
+--- !u!114 &-4239579750870941198
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1700925573276864742}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: da5f82627d3f54043ad65f6fd11afbac, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  minigameToStart: {fileID: 11400000, guid: 29409210cbc7ca74b9383ddf694628ad, type: 2}
 --- !u!1 &2785099760025017261
 GameObject:
   m_ObjectHideFlags: 0

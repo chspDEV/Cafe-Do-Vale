@@ -10535,6 +10535,7 @@ GameObject:
   - component: {fileID: 421252120}
   - component: {fileID: 421252119}
   - component: {fileID: 421252118}
+  - component: {fileID: 421252122}
   m_Layer: 11
   m_Name: pfCollectArea (4)
   m_TagString: CollectArea
@@ -10591,7 +10592,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: a700651e4a707c647a3e89be282bc69d, type: 2}
   pointToSpawn: {fileID: 1951194221}
   currentModel: {fileID: 0}
-  minigameTrigger: {fileID: 0}
+  minigameTrigger: {fileID: 421252122}
 --- !u!65 &421252119
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -10666,6 +10667,19 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 421252116}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &421252122
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 421252116}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: da5f82627d3f54043ad65f6fd11afbac, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  minigameToStart: {fileID: 11400000, guid: f40cba39cacf78740ab45963ba523d0a, type: 2}
 --- !u!1 &428197495
 GameObject:
   m_ObjectHideFlags: 0
@@ -14669,6 +14683,7 @@ GameObject:
   - component: {fileID: 591185977}
   - component: {fileID: 591185976}
   - component: {fileID: 591185975}
+  - component: {fileID: 591185979}
   m_Layer: 11
   m_Name: pfCollectArea (9)
   m_TagString: CollectArea
@@ -14725,7 +14740,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 1b8920d533897b84e8931529f6a606fb, type: 2}
   pointToSpawn: {fileID: 1964484194}
   currentModel: {fileID: 0}
-  minigameTrigger: {fileID: 0}
+  minigameTrigger: {fileID: 591185979}
 --- !u!65 &591185976
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -14800,6 +14815,19 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 591185973}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &591185979
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 591185973}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: da5f82627d3f54043ad65f6fd11afbac, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  minigameToStart: {fileID: 11400000, guid: 29409210cbc7ca74b9383ddf694628ad, type: 2}
 --- !u!1 &597732367
 GameObject:
   m_ObjectHideFlags: 0
@@ -16340,6 +16368,7 @@ GameObject:
   - component: {fileID: 671394651}
   - component: {fileID: 671394650}
   - component: {fileID: 671394649}
+  - component: {fileID: 671394653}
   m_Layer: 11
   m_Name: pfCollectArea (11)
   m_TagString: CollectArea
@@ -16396,7 +16425,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 1b8920d533897b84e8931529f6a606fb, type: 2}
   pointToSpawn: {fileID: 395997083}
   currentModel: {fileID: 0}
-  minigameTrigger: {fileID: 0}
+  minigameTrigger: {fileID: 671394653}
 --- !u!65 &671394650
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -16471,6 +16500,19 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 671394647}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &671394653
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 671394647}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: da5f82627d3f54043ad65f6fd11afbac, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  minigameToStart: {fileID: 11400000, guid: 29409210cbc7ca74b9383ddf694628ad, type: 2}
 --- !u!1 &683213822
 GameObject:
   m_ObjectHideFlags: 0
@@ -31643,6 +31685,7 @@ GameObject:
   - component: {fileID: 1214425960}
   - component: {fileID: 1214425959}
   - component: {fileID: 1214425958}
+  - component: {fileID: 1214425962}
   m_Layer: 11
   m_Name: pfCollectArea (8)
   m_TagString: CollectArea
@@ -31699,7 +31742,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 1b8920d533897b84e8931529f6a606fb, type: 2}
   pointToSpawn: {fileID: 2080777716}
   currentModel: {fileID: 0}
-  minigameTrigger: {fileID: 0}
+  minigameTrigger: {fileID: 1214425962}
 --- !u!65 &1214425959
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -31774,6 +31817,19 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1214425956}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &1214425962
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1214425956}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: da5f82627d3f54043ad65f6fd11afbac, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  minigameToStart: {fileID: 11400000, guid: 29409210cbc7ca74b9383ddf694628ad, type: 2}
 --- !u!1 &1221445599
 GameObject:
   m_ObjectHideFlags: 0
@@ -33436,6 +33492,7 @@ GameObject:
   - component: {fileID: 1306427363}
   - component: {fileID: 1306427362}
   - component: {fileID: 1306427361}
+  - component: {fileID: 1306427365}
   m_Layer: 11
   m_Name: pfCollectArea (7)
   m_TagString: CollectArea
@@ -33492,7 +33549,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: a700651e4a707c647a3e89be282bc69d, type: 2}
   pointToSpawn: {fileID: 256693689}
   currentModel: {fileID: 0}
-  minigameTrigger: {fileID: 0}
+  minigameTrigger: {fileID: 1306427365}
 --- !u!65 &1306427362
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -33567,6 +33624,19 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1306427359}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &1306427365
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1306427359}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: da5f82627d3f54043ad65f6fd11afbac, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  minigameToStart: {fileID: 11400000, guid: f40cba39cacf78740ab45963ba523d0a, type: 2}
 --- !u!1 &1309598863
 GameObject:
   m_ObjectHideFlags: 0
@@ -47942,6 +48012,7 @@ GameObject:
   - component: {fileID: 1790886878}
   - component: {fileID: 1790886877}
   - component: {fileID: 1790886876}
+  - component: {fileID: 1790886880}
   m_Layer: 11
   m_Name: pfCollectArea (5)
   m_TagString: CollectArea
@@ -47998,7 +48069,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: a700651e4a707c647a3e89be282bc69d, type: 2}
   pointToSpawn: {fileID: 1145187869}
   currentModel: {fileID: 0}
-  minigameTrigger: {fileID: 0}
+  minigameTrigger: {fileID: 1790886880}
 --- !u!65 &1790886877
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -48073,6 +48144,19 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1790886874}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &1790886880
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1790886874}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: da5f82627d3f54043ad65f6fd11afbac, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  minigameToStart: {fileID: 11400000, guid: f40cba39cacf78740ab45963ba523d0a, type: 2}
 --- !u!1 &1795542089
 GameObject:
   m_ObjectHideFlags: 0
@@ -53962,6 +54046,7 @@ GameObject:
   - component: {fileID: 2017780785}
   - component: {fileID: 2017780784}
   - component: {fileID: 2017780783}
+  - component: {fileID: 2017780787}
   m_Layer: 11
   m_Name: pfCollectArea (10)
   m_TagString: CollectArea
@@ -54018,7 +54103,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 1b8920d533897b84e8931529f6a606fb, type: 2}
   pointToSpawn: {fileID: 377119270}
   currentModel: {fileID: 0}
-  minigameTrigger: {fileID: 0}
+  minigameTrigger: {fileID: 2017780787}
 --- !u!65 &2017780784
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -54093,6 +54178,19 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2017780781}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &2017780787
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2017780781}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: da5f82627d3f54043ad65f6fd11afbac, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  minigameToStart: {fileID: 11400000, guid: 29409210cbc7ca74b9383ddf694628ad, type: 2}
 --- !u!1 &2018225359
 GameObject:
   m_ObjectHideFlags: 0
@@ -55416,6 +55514,7 @@ GameObject:
   - component: {fileID: 2052888083}
   - component: {fileID: 2052888082}
   - component: {fileID: 2052888081}
+  - component: {fileID: 2052888085}
   m_Layer: 11
   m_Name: pfCollectArea (6)
   m_TagString: CollectArea
@@ -55472,7 +55571,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: a700651e4a707c647a3e89be282bc69d, type: 2}
   pointToSpawn: {fileID: 2142983401}
   currentModel: {fileID: 0}
-  minigameTrigger: {fileID: 0}
+  minigameTrigger: {fileID: 2052888085}
 --- !u!65 &2052888082
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -55547,6 +55646,19 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2052888079}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &2052888085
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2052888079}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: da5f82627d3f54043ad65f6fd11afbac, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  minigameToStart: {fileID: 11400000, guid: f40cba39cacf78740ab45963ba523d0a, type: 2}
 --- !u!1 &2055803907
 GameObject:
   m_ObjectHideFlags: 0
