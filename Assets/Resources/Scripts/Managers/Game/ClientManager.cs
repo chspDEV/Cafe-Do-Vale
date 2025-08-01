@@ -166,7 +166,6 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
                 waitOrderTime = 0f
             };
 
-            OnClientSetup?.Invoke(clientComponent);
             RestartCounter();
         }
 
@@ -331,6 +330,13 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
             clientComponents[index].ShowWantedProduct(drinkSprite);
             clientComponents[index].UpdateOrderName(drinkName);
 
+            NotificationManager.Instance.Show(
+            "Pedido Feito!",
+            "Esperando por " + drinkName ,
+            drinkSprite
+             );
+
+
             clientComponents[index].ControlQueueBubble(false);
             clientComponents[index].ControlOrderBubble(true);
             
@@ -373,6 +379,11 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
 
             Debug.Log("Cliente Insatisfeito!");
 
+            NotificationManager.Instance.Show(
+            "Cliente insatisfeito!",
+            "Saiu após esperar demais na fila."
+            );
+
             if (data.queueSpotIndex != -1)
             {
                 isQueueSpotOccupied[data.queueSpotIndex] = false;
@@ -408,11 +419,23 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
             if (queueIndex != -1 && queueIndex < queueSpots.Count)
             {
                 Debug.Log($"Spot {queueIndex} atribuído ao cliente {index}");
+
                 isQueueSpotOccupied[queueIndex] = true;
                 data.queueSpotIndex = queueIndex;
                 data.canQueue = true;
                 data.moveTarget = queueSpots[queueIndex].position;
                 clientDataArray[index] = data;
+
+                if (isQueueSpotOccupied[queueIndex])
+                {
+                    var clientSprite = GameAssets.Instance.clientSprites[UnityEngine.Random.Range(0, GameAssets.Instance.clientSprites.Count)];
+
+                    NotificationManager.Instance.Show(
+                        "Novo cliente!",
+                        $"{CountQueueClients()} clientes na fila.",
+                        clientSprite
+                    );
+                }
 
                 if (data.queueSpotIndex != 0)
                 {
@@ -433,6 +456,17 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
                 clientDataArray[index] = data;
             }
         }
+
+        public int CountQueueClients()
+        {
+            int count = 0;
+            for (int i = 0; i < isQueueSpotOccupied.Length; i++)
+            {
+                if (isQueueSpotOccupied[i]) count++;
+            }
+            return count;
+        }
+
 
         private void DeactivateClient(int index)
         {

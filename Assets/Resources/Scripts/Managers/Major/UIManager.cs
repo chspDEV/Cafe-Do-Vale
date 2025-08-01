@@ -312,26 +312,26 @@ namespace Tcp4
         #endregion
         #region Notifications
 
-        public void NewClientNotification(Client clientSettings)
-        {
-            //Fazendo o request de sfx
-            /*SoundEventArgs sfxArgs = new()
-            {
-                Category = SoundEventArgs.SoundCategory.SFX,
-                AudioID = "interacao", // O ID do seu SFX (sem "sfx_" e em minúsculas)
-                Position = gameAssets.player.transform.position, // Posição para o som 3D
-                VolumeScale = .3f // Escala de volume (opcional, padrão é 1f)
-            };
-            SoundEvent.RequestSound(sfxArgs);*/
+        //public void NewClientNotification(Client clientSettings)
+        //{
+        //    //Fazendo o request de sfx
+        //    /*SoundEventArgs sfxArgs = new()
+        //    {
+        //        Category = SoundEventArgs.SoundCategory.SFX,
+        //        AudioID = "interacao", // O ID do seu SFX (sem "sfx_" e em minúsculas)
+        //        Position = gameAssets.player.transform.position, // Posição para o som 3D
+        //        VolumeScale = .3f // Escala de volume (opcional, padrão é 1f)
+        //    };
+        //    SoundEvent.RequestSound(sfxArgs);*/
 
-            //REFAZER O SISTEMA DE NOTIFICAO
-            //GameObject go = Instantiate(pfClientNotification, notificationHolder);
-            //ClientNotification c = go.GetComponent<ClientNotification>();
-            //c.Setup(clientSettings.wantedProduct, clientSettings.wantedProduct.sprite, clientSettings.);
-        }
+        //    //REFAZER O SISTEMA DE NOTIFICAO
+        //    //GameObject go = Instantiate(pfClientNotification, notificationHolder);
+        //    //ClientNotification c = go.GetComponent<ClientNotification>();
+        //    //c.Setup(clientSettings.wantedProduct, clientSettings.wantedProduct.sprite, clientSettings.);
+        //}
 
-        public void OpenShopNotification() => Debug.Log("Loja aberta!");
-        public void CloseShopNotification() => Debug.Log("Loja fechada!");
+        public void OpenShopNotification() => NotificationManager.Instance.Show("Loja Aberta!", "Atenda os clientes.");  //Debug.Log("Loja aberta!");
+        public void CloseShopNotification() => NotificationManager.Instance.Show("Loja Fechada!", ""); // Debug.Log("Loja fechada!");
 
         #endregion
 
