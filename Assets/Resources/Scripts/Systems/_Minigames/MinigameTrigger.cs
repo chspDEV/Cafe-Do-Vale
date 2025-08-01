@@ -7,9 +7,9 @@ public class MinigameTrigger : MonoBehaviour
 
     public void TriggerMinigame()
     {
-        if (minigameToStart != null)
+        if (this.minigameToStart != null)
         {
-            MinigameManager.Instance.StartMinigame(minigameToStart);
+            MinigameManager.Instance.StartMinigame(this.minigameToStart);
         }
     }
 }

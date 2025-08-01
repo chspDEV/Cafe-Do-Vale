@@ -46,9 +46,6 @@ namespace Tcp4
 
             timeImage = UIManager.Instance.PlaceFillImage(pointToSpawn);
             timeManager = TimeManager.Instance;
-
-            if(minigameTrigger != null)
-                minigameTrigger.minigameToStart.OnGetReward += this.ResetGrowthCycle;
         }
 
         private void OnDisable()
@@ -56,7 +53,8 @@ namespace Tcp4
             ProductionManager.Instance.OnChooseProduction -= SelectProduction;
             timeManager.OnTimeMultiplierChanged -= ReSetupMaxTime;
 
-            if (minigameTrigger != null)
+            // Garantir que se desinscreveu se estava inscrito
+            if (minigameTrigger != null && minigameTrigger.minigameToStart != null)
                 minigameTrigger.minigameToStart.OnGetReward -= this.ResetGrowthCycle;
         }
 
@@ -295,6 +293,9 @@ namespace Tcp4
                 }
 
                 //Minigame
+                // INSCREVER-SE APENAS QUANDO INICIAR O MINIGAME
+                minigameTrigger.minigameToStart.OnGetReward += this.ResetGrowthCycle;
+
                 minigameTrigger.minigameToStart.SetupReward(production.outputProduct);
                 minigameTrigger.TriggerMinigame();
                 InteractionManager.Instance.UpdateLastId(production.outputProduct.productName);
@@ -303,6 +304,11 @@ namespace Tcp4
 
         void ResetGrowthCycle()
         {
+            // DESINSCREVER-SE IMEDIATAMENTE APÓS RECEBER O CALLBACK
+            if (minigameTrigger != null && minigameTrigger.minigameToStart != null)
+                minigameTrigger.minigameToStart.OnGetReward -= this.ResetGrowthCycle;
+
+
             // Verificações de segurança antes de reiniciar o ciclo
             if (production == null)
             {

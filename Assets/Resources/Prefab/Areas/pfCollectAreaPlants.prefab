@@ -146,7 +146,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: d85380f429a027642824fcb909aece3e, type: 2}
   pointToSpawn: {fileID: 4662990052312389057}
   currentModel: {fileID: 0}
-  minigameTrigger: {fileID: 0}
+  minigameTrigger: {fileID: 6973512415342213310}
 --- !u!114 &6973512415342213310
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -159,7 +159,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: da5f82627d3f54043ad65f6fd11afbac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  minigameToStart: {fileID: 0}
+  minigameToStart: {fileID: 11400000, guid: 8ff8c3cb00a38eb43850a6e96506a8e9, type: 2}
 --- !u!1 &2785099760025017261
 GameObject:
   m_ObjectHideFlags: 0
