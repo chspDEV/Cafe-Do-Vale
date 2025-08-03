@@ -9,6 +9,7 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using ChristinaCreatesGames.UI;
 using GameResources.Project.Scripts.Utilities.Audio;
+using System.Collections;
 
 namespace Tcp4
 {
@@ -82,6 +83,11 @@ namespace Tcp4
         public Image starImage;
 
         GameAssets gameAssets;
+
+        // anim do dinheiro modificando aos poucos
+        private float moneyAnimMaxDuration = 2f;
+        private float ticksPerSecond = 10f;
+        private Coroutine updateMoneyCoroutine;
 
         #endregion
 
@@ -339,9 +345,53 @@ namespace Tcp4
 
         public void UpdateMoney()
         {
-            moneyText.text = ShopManager.Instance.GetMoney().ToString();
-            money.ExecuteAnimation("pop");
+            int.TryParse(moneyText.text, out int currentDisplayedMoney);
+
+            int targetMoney = ShopManager.Instance.GetMoney();
+
+            if (updateMoneyCoroutine != null)
+            {
+                StopCoroutine(updateMoneyCoroutine);
+            }
+
+            updateMoneyCoroutine = StartCoroutine(UpdateMoneyRoutine(currentDisplayedMoney, targetMoney));
         }
+
+        #region Money Anim
+
+        private IEnumerator UpdateMoneyRoutine(int startValue, int targetValue)
+        {
+            if (startValue == targetValue) yield break;
+
+            float timeBetweenTicks = 1f / ticksPerSecond;
+            float totalAmountToChange = targetValue - startValue;
+            float totalTicks = moneyAnimMaxDuration * ticksPerSecond;
+
+            int amountPerTick = Mathf.CeilToInt(Mathf.Abs(totalAmountToChange) / totalTicks);
+            if (amountPerTick == 0) amountPerTick = 1;
+
+            int direction = (totalAmountToChange > 0) ? 1 : -1;
+            int currentDisplayValue = startValue;
+
+            while (direction * (targetValue - currentDisplayValue) > 0)
+            {
+                currentDisplayValue += amountPerTick * direction;
+
+                if (direction * (targetValue - currentDisplayValue) <= 0)
+                {
+                    currentDisplayValue = targetValue;
+                }
+
+                moneyText.text = currentDisplayValue.ToString();
+
+                money.ExecuteAndRestartAnimation("pop_tick");
+
+                yield return new WaitForSeconds(timeBetweenTicks);
+            }
+            moneyText.text = targetValue.ToString();
+        }
+
+        #endregion
 
         public void UpdateStars()
         {
@@ -588,12 +638,44 @@ namespace Tcp4
         private void Start()
         {
             gameAssets = GameAssets.Instance;
+
+            if (ShopManager.Instance != null)
+            {
+                moneyText.text = ShopManager.Instance.GetMoney().ToString();
+                starImage.fillAmount = ShopManager.Instance.GetStars() / ShopManager.Instance.GetMaxStars();
+            }
         }
 
         private void Update()
         {
             if (gameAssets != null && gameAssets.playerMovement != null)
-            gameAssets.playerMovement.ToggleMovement(openedMenus.Count <= 0 || openedMenus == null);
+                gameAssets.playerMovement.ToggleMovement(openedMenus.Count <= 0 || openedMenus == null);
         }
+
+        // para salvar os itens dos storages
+        private void OnEnable()
+        {
+            StorageManager.Instance.OnChangeStorage += UpdateStorageView;
+            StorageManager.Instance.OnCleanStorage += CleanStorageSlots;
+
+            SaveManager.OnGameDataLoaded += OnGameLoadedUpdate;
+        }
+
+        private void OnDisable()
+        {
+            StorageManager.Instance.OnChangeStorage -= UpdateStorageView;
+            StorageManager.Instance.OnCleanStorage -= CleanStorageSlots;
+
+            SaveManager.OnGameDataLoaded -= OnGameLoadedUpdate;
+        }
+
+        private void OnGameLoadedUpdate()
+        {
+            if (storageMenu.activeInHierarchy)
+            {
+                UpdateStorageView();
+            }
+        }
+
     }
 }
