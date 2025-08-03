@@ -4065,6 +4065,7 @@ MonoBehaviour:
   interactionIndicator: {fileID: 0}
   inventory: {fileID: 179969813}
   item: {fileID: 11400000, guid: aa7655295d591634bb8d20973bfbc0f0, type: 2}
+  storageID: 
   interfaceDelay: 0
 --- !u!1 &182303087
 GameObject:
@@ -6546,13 +6547,13 @@ MonoBehaviour:
       inWeight: 0.33333334
       outWeight: 0.33333334
     - serializedVersion: 3
-      time: 21.294954
-      value: 0.010461062
-      inSlope: -0.006450223
-      outSlope: -0.006450223
+      time: 21.007845
+      value: -0.013953
+      inSlope: -0.2607882
+      outSlope: -0.2607882
       tangentMode: 0
       weightedMode: 0
-      inWeight: 0.33333334
+      inWeight: 0.097446814
       outWeight: 0.33333334
     m_PreInfinity: 2
     m_PostInfinity: 2
@@ -14320,6 +14321,53 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 565222691}
   m_Mesh: {fileID: -3270341421735178158, guid: c6902b32ba84605429491fa83b20df92, type: 3}
+--- !u!1 &571806940
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 571806941}
+  - component: {fileID: 571806942}
+  m_Layer: 0
+  m_Name: SaveManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &571806941
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 571806940}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1208914914}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &571806942
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 571806940}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d807c958435e6614db09648422e5bf1b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  shopManager: {fileID: 1932829699}
+  timeManager: {fileID: 325764624}
+  player: {fileID: 6609159987775915482}
 --- !u!1 &572230570
 GameObject:
   m_ObjectHideFlags: 0
@@ -15680,6 +15728,7 @@ MonoBehaviour:
   interactionIndicator: {fileID: 0}
   inventory: {fileID: 626067274}
   item: {fileID: 11400000, guid: 60650c2deda852545b18238811400605, type: 2}
+  storageID: 
   interfaceDelay: 0
 --- !u!1 &631908718
 GameObject:
@@ -18925,6 +18974,7 @@ MonoBehaviour:
   interactionIndicator: {fileID: 0}
   inventory: {fileID: 751885231}
   item: {fileID: 11400000, guid: f8c402991715c3147a4c108993b828b8, type: 2}
+  storageID: 
   interfaceDelay: 0
 --- !u!1 &753145112
 GameObject:
@@ -22434,6 +22484,7 @@ MonoBehaviour:
   interactionIndicator: {fileID: 0}
   inventory: {fileID: 863252622}
   item: {fileID: 11400000, guid: ad5d708b28f03f74386f9ed6df8eb4db, type: 2}
+  storageID: 
   interfaceDelay: 0
 --- !u!1 &863649140
 GameObject:
@@ -23398,7 +23449,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 900073550}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 96ac9dc4a73acbf479045f1c1c2053f1, type: 3}
   m_Name: 
@@ -25740,6 +25791,7 @@ MonoBehaviour:
   interactionIndicator: {fileID: 0}
   inventory: {fileID: 959251782}
   item: {fileID: 11400000, guid: 82468106468400241af0a271eae4e11b, type: 2}
+  storageID: 
   interfaceDelay: 0
 --- !u!1001 &962454821
 PrefabInstance:
@@ -31616,6 +31668,7 @@ Transform:
   - {fileID: 1250448551}
   - {fileID: 1301880399}
   - {fileID: 1557110650}
+  - {fileID: 571806941}
   m_Father: {fileID: 798196787}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1208914915
@@ -34002,6 +34055,7 @@ MonoBehaviour:
   interactionIndicator: {fileID: 0}
   inventory: {fileID: 1314371136}
   item: {fileID: 11400000, guid: 94a2e396290fdf34fb1b215604089d68, type: 2}
+  storageID: 
   interfaceDelay: 0
 --- !u!1 &1316522526
 GameObject:
@@ -36565,6 +36619,7 @@ MonoBehaviour:
   interactionIndicator: {fileID: 0}
   inventory: {fileID: 1382819308}
   item: {fileID: 11400000, guid: 31ce6c66ce14f2e40baf34d7a438a15c, type: 2}
+  storageID: 
   interfaceDelay: 0
 --- !u!1001 &1383809028
 PrefabInstance:
@@ -41370,6 +41425,7 @@ MonoBehaviour:
   playerMovement: {fileID: 0}
   currentInputType: 0
   inputComponent: {fileID: 1557110652}
+  inputDetectionCooldown: 0.1
   isDebugMode: 0
 --- !u!114 &1557110652
 MonoBehaviour:
@@ -51453,6 +51509,7 @@ MonoBehaviour:
   interactionIndicator: {fileID: 0}
   inventory: {fileID: 1907787265}
   item: {fileID: 11400000, guid: 44e63f349bede0d4b8eba72d60583c18, type: 2}
+  storageID: 
   interfaceDelay: 0
 --- !u!1 &1908765362
 GameObject:
@@ -52247,6 +52304,7 @@ MonoBehaviour:
   interactionIndicator: {fileID: 0}
   inventory: {fileID: 1930577520}
   item: {fileID: 11400000, guid: 9993b18cd8f91e641925f92575c6007f, type: 2}
+  storageID: 
   interfaceDelay: 0
 --- !u!1 &1931367506
 GameObject:
@@ -55917,6 +55975,7 @@ MonoBehaviour:
   interactionIndicator: {fileID: 0}
   inventory: {fileID: 2055803912}
   item: {fileID: 11400000, guid: df60ac8e23274b7439f757150af8ac6a, type: 2}
+  storageID: 
   interfaceDelay: 0
 --- !u!1 &2057428166
 GameObject:

@@ -29,15 +29,18 @@ public class PlaytestManager : Singleton<PlaytestManager>
 
 
     private List<GameObject> spawnedSpheres = new List<GameObject>();
+    [SerializeField] private bool canSavePlaytest;
 
     private void Start()
     {
+        if (!canSavePlaytest) return;
         startTime = Time.time;
         playerTransform = GameAssets.Instance.player.transform;
         InvokeRepeating(nameof(LogPlayerPosition), 0, logInterval);
     }
     private void OnApplicationQuit()
     {
+        if (!canSavePlaytest) return;
         GenerateReportAndScreenshot();
     }
 

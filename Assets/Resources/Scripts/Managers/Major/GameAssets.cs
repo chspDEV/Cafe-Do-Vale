@@ -1,5 +1,4 @@
-﻿
-using GameResources.Project.Scripts.Utilities.Audio;
+﻿using GameResources.Project.Scripts.Utilities.Audio;
 using Sirenix.OdinInspector;
 using System;
 using System.Collections.Generic;
@@ -11,7 +10,7 @@ using UnityEngine.InputSystem.XInput;
 using PlugInputPack;
 
 public enum CurrentInputType
-{ 
+{
     PC,
     XBOX,
     PLAYSTATION,
@@ -53,15 +52,20 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
 
         public PlugInputComponent inputComponent;
 
+        // NOVA FUNCIONALIDADE: Detecção automática de input
+        [Header("Input Detection")]
+        [SerializeField] private float inputDetectionCooldown = 0.1f; // Evita spam de detecção
+        private float lastInputDetectionTime = 0f;
+        private CurrentInputType lastDetectedInputType = CurrentInputType.NONE;
+
         #region DEBUG MODE
         public bool isDebugMode = false;
         private KeyCode[] debugSequence = { KeyCode.D, KeyCode.E, KeyCode.B, KeyCode.U, KeyCode.G };
         private int currentSequenceIndex = 0;
-        private float sequenceTimeout = 2f; 
+        private float sequenceTimeout = 2f;
         private float lastKeyPressTime = 0f;
-        
 
-        private void Update()
+        private void HandleDebugMode()
         {
             // Verifica se alguma tecla foi pressionada
             if (UnityEngine.Input.anyKeyDown)
@@ -99,10 +103,148 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
             if (isDebugMode)
             {
                 GUI.Label(new Rect(250, 10, 200, 30), "DEBUG MODE ATIVO");
+                GUI.Label(new Rect(250, 40, 200, 30), $"Input Type: {currentInputType}");
+            }
+        }
+        #endregion
+
+        private void Update()
+        {
+            HandleDebugMode();
+            DetectLastUsedInput();
+        }
+
+        // Nova função para detectar o último input usado
+        private void DetectLastUsedInput()
+        {
+            // Cooldown para evitar detecções muito frequentes
+            if (Time.time - lastInputDetectionTime < inputDetectionCooldown)
+                return;
+
+            CurrentInputType detectedType = GetCurrentActiveInputType();
+
+            // Se detectou um input diferente do atual, atualiza
+            if (detectedType != CurrentInputType.NONE && detectedType != currentInputType)
+            {
+                currentInputType = detectedType;
+                UpdateSpriteForInputType(detectedType);
+                lastInputDetectionTime = Time.time;
+                Debug.Log($"[INPUT CHANGED] Switched to: {detectedType}");
             }
         }
 
-        #endregion
+        private CurrentInputType GetCurrentActiveInputType()
+        {
+            // 1. Verifica input de teclado/mouse primeiro
+            if (IsKeyboardMouseActive())
+            {
+                return CurrentInputType.PC;
+            }
+
+            // 2. Verifica gamepads conectados e ativos
+            var gamepads = Gamepad.all;
+            foreach (Gamepad gamepad in gamepads)
+            {
+                if (IsGamepadActive(gamepad))
+                {
+                    // PlayStation (DualShock/DualSense)
+                    if (gamepad is DualShockGamepad)
+                    {
+                        return CurrentInputType.PLAYSTATION;
+                    }
+                    // Xbox
+                    else if (gamepad is XInputController)
+                    {
+                        return CurrentInputType.XBOX;
+                    }
+                    else
+                    {
+                        // Gamepad genérico - assume PlayStation como padrão
+                        return CurrentInputType.PLAYSTATION;
+                    }
+                }
+            }
+
+            return CurrentInputType.NONE;
+        }
+
+        private bool IsKeyboardMouseActive()
+        {
+            // Verifica teclas comuns
+            if (Keyboard.current != null && Keyboard.current.anyKey.isPressed)
+                return true;
+
+            // Verifica mouse
+            if (Mouse.current != null)
+            {
+                if (Mouse.current.leftButton.isPressed ||
+                    Mouse.current.rightButton.isPressed ||
+                    Mouse.current.middleButton.isPressed ||
+                    Mouse.current.delta.ReadValue().magnitude > 0.1f ||
+                    Mouse.current.scroll.ReadValue().magnitude > 0.1f)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        private bool IsGamepadActive(Gamepad gamepad)
+        {
+            if (gamepad == null) return false;
+
+            // Verifica botões principais
+            if (gamepad.aButton.isPressed || gamepad.bButton.isPressed ||
+                gamepad.xButton.isPressed || gamepad.yButton.isPressed ||
+                gamepad.startButton.isPressed || gamepad.selectButton.isPressed ||
+                gamepad.leftShoulder.isPressed || gamepad.rightShoulder.isPressed)
+            {
+                return true;
+            }
+
+            // Verifica triggers
+            if (gamepad.leftTrigger.ReadValue() > 0.1f || gamepad.rightTrigger.ReadValue() > 0.1f)
+            {
+                return true;
+            }
+
+            // Verifica sticks analógicos
+            if (gamepad.leftStick.ReadValue().magnitude > 0.2f ||
+                gamepad.rightStick.ReadValue().magnitude > 0.2f)
+            {
+                return true;
+            }
+
+            // Verifica D-pad
+            if (gamepad.dpad.up.isPressed || gamepad.dpad.down.isPressed ||
+                gamepad.dpad.left.isPressed || gamepad.dpad.right.isPressed)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        private void UpdateSpriteForInputType(CurrentInputType inputType)
+        {
+            switch (inputType)
+            {
+                case CurrentInputType.PC:
+                    sprInteraction = inputPC;
+                    break;
+                case CurrentInputType.XBOX:
+                    sprInteraction = inputXBOX;
+                    break;
+                case CurrentInputType.PLAYSTATION:
+                    sprInteraction = inputPLAYSTATION;
+                    break;
+                default:
+                    return; // Não atualiza se for NONE
+            }
+
+            OnChangeInteractionSprite?.Invoke();
+        }
 
         public override void Awake()
         {
@@ -110,100 +252,89 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
 
             player = GameObject.FindGameObjectWithTag("Player");
 
-            if(player != null)
+            if (player != null)
                 playerMovement = player.GetComponent<PlayerMovement>();
 
-            UpdateControlSprite();
-            
+            // Detecção inicial de input
+            InitialInputDetection();
         }
 
         private void Start()
         {
-            UpdateControlSprite();
-
-            //Fazendo o request de ost
+            // OST Request
             SoundEventArgs ostArgs = new()
             {
                 Category = SoundEventArgs.SoundCategory.Music,
-                AudioID = "fazenda", // O ID do seu SFX (sem "sfx_" e em minúsculas)
-                VolumeScale = .1f // Escala de volume (opcional, padrão é 1f)
+                AudioID = "fazenda",
+                VolumeScale = .1f
             };
 
             SoundEvent.RequestSound(ostArgs);
 
-            if(QuestManager.Instance != null)
+            if (QuestManager.Instance != null)
                 QuestManager.Instance.StartMission("tutorial00");
         }
 
-        public void UpdateControlSprite()
+        // Detecção inicial mais inteligente
+        private void InitialInputDetection()
         {
-            // String de debug
-            string debugText = "Dispositivos conectados: ";
-
-            // Verifica se há gamepads conectados
+            // Primeiro, verifica se há gamepads conectados
             var gamepads = Gamepad.all;
             bool hasGamepad = gamepads.Count > 0;
 
-            // Debug: Lista todos os dispositivos
-            foreach (InputDevice device in InputSystem.devices)
-            {
-                debugText += $"\n- {device.name} ({device.layout})";
-            }
-            //Debug.Log(debugText);
-
-            // Caso não tenha gamepads conectados
             if (!hasGamepad)
             {
-                sprInteraction = inputPC;
-                OnChangeInteractionSprite?.Invoke();
-                //Debug.Log("[SPRITE ATUALIZADO] MODELO COMPUTADOR (Teclado/Mouse)");
+                // Sem gamepads = assume PC
                 currentInputType = CurrentInputType.PC;
+                UpdateSpriteForInputType(CurrentInputType.PC);
+                Debug.Log("[INITIAL DETECTION] No gamepads found - defaulting to PC");
                 return;
             }
 
-            // Verifica cada gamepad conectado
+            // Se há gamepad, verifica o tipo do primeiro encontrado
             foreach (Gamepad gamepad in gamepads)
             {
-                // PlayStation (DualShock/DualSense)
-                if (gamepad is DualShockGamepad )
-                    
+                if (gamepad is DualShockGamepad)
                 {
-                    sprInteraction = inputPLAYSTATION;
-                    OnChangeInteractionSprite?.Invoke();
-                    Debug.Log("[SPRITE ATUALIZADO] MODELO PLAYSTATION");
                     currentInputType = CurrentInputType.PLAYSTATION;
+                    UpdateSpriteForInputType(CurrentInputType.PLAYSTATION);
+                    Debug.Log("[INITIAL DETECTION] DualShock detected - defaulting to PlayStation");
                     return;
                 }
-                // Xbox
                 else if (gamepad is XInputController)
                 {
-                    sprInteraction = inputXBOX;
-                    OnChangeInteractionSprite?.Invoke();
-                    Debug.Log("[SPRITE ATUALIZADO] MODELO XBOX");
                     currentInputType = CurrentInputType.XBOX;
+                    UpdateSpriteForInputType(CurrentInputType.XBOX);
+                    Debug.Log("[INITIAL DETECTION] XInput detected - defaulting to Xbox");
                     return;
                 }
             }
 
-            // Se chegou aqui, é um gamepad genérico
-            sprInteraction = inputPLAYSTATION; 
-            OnChangeInteractionSprite?.Invoke();
-            Debug.Log("[SPRITE ATUALIZADO] MODELO GENÉRICO");
+            // Gamepad genérico encontrado
+            currentInputType = CurrentInputType.PLAYSTATION;
+            UpdateSpriteForInputType(CurrentInputType.PLAYSTATION);
+            Debug.Log("[INITIAL DETECTION] Generic gamepad detected - defaulting to PlayStation");
+        }
+
+        // Mantém a funcionalidade original como método público para casos específicos
+        public void UpdateControlSprite()
+        {
+            InitialInputDetection();
         }
 
         private void OnDeviceChanged(InputDevice device, InputDeviceChange change)
         {
             if (change == InputDeviceChange.Added ||
                 change == InputDeviceChange.Removed ||
-                change == InputDeviceChange.Reconnected || 
+                change == InputDeviceChange.Reconnected ||
                 change == InputDeviceChange.Disconnected ||
                 change == InputDeviceChange.Enabled ||
                 change == InputDeviceChange.Disabled ||
                 change == InputDeviceChange.SoftReset ||
                 change == InputDeviceChange.HardReset)
             {
-                
-                UpdateControlSprite();
+                Debug.Log($"[DEVICE CHANGE] {device.name}: {change}");
+                InitialInputDetection();
             }
         }
 
@@ -226,6 +357,22 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
                         .Select(s => s[random.Next(s.Length)])
                         .ToArray());
             return result;
+        }
+
+        // Método público para forçar mudança de input (útil para testes)
+        [Button("Force PC Input")]
+        public void ForcePC() => SetInputType(CurrentInputType.PC);
+
+        [Button("Force Xbox Input")]
+        public void ForceXbox() => SetInputType(CurrentInputType.XBOX);
+
+        [Button("Force PlayStation Input")]
+        public void ForcePlayStation() => SetInputType(CurrentInputType.PLAYSTATION);
+
+        private void SetInputType(CurrentInputType type)
+        {
+            currentInputType = type;
+            UpdateSpriteForInputType(type);
         }
     }
 }

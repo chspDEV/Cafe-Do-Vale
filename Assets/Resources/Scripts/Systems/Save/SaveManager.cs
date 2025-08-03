@@ -9,7 +9,7 @@ namespace Tcp4
 {
     public class SaveManager : MonoBehaviour
     {
-        [Header("Referências")]
+        [Header("Referï¿½ncias")]
         [SerializeField] private ShopManager shopManager;
         [SerializeField] private TimeManager timeManager;
         [SerializeField] private PlayerMovement player;
@@ -29,6 +29,7 @@ namespace Tcp4
             SaveSeedInventory(data);
             SaveStorageData(data);
             SavePlayerInventory(data);
+            SaveQuestData(data); // NOVO: Salva dados das quests
 
             SaveSystem.SaveGame(data);
         }
@@ -38,6 +39,8 @@ namespace Tcp4
             // fiz uma corrotina pq tava atropelando outros scripts antes de carregar
             StartCoroutine(LoadGame_Coroutine());
         }
+
+
 
         private IEnumerator LoadGame_Coroutine()
         {
@@ -59,10 +62,98 @@ namespace Tcp4
             LoadSeedInventory(data);
             LoadStorageData(data);
             LoadPlayerInventory(data);
+            LoadQuestData(data); // NOVO: Carrega dados das quests
 
             Debug.Log("Todos os dados foram carregados.");
             OnGameDataLoaded?.Invoke();
         }
+
+        #region Quest Save
+        private void SaveQuestData(GameData data)
+        {
+            if (QuestManager.Instance == null)
+            {
+                Debug.LogWarning("QuestManager.Instance is null, skipping quest data save.");
+                return;
+            }
+
+            // Salva quests do tutorial
+            var tutorialMissions = QuestManager.Instance.GetTutorialMissions();
+            if (tutorialMissions != null)
+            {
+                foreach (var quest in tutorialMissions)
+                {
+                    var savedQuest = new SavedQuest
+                    {
+                        questID = quest.questID,
+                        isCompleted = quest.isCompleted,
+                        isStarted = quest.isStarted
+                    };
+
+                    // Salva o progresso dos steps
+                    if (quest.steps != null)
+                    {
+                        for (int i = 0; i < quest.steps.Count; i++)
+                        {
+                            savedQuest.steps.Add(new SavedQuestStep
+                            {
+                                stepIndex = i,
+                                isCompleted = quest.steps[i].isCompleted
+                            });
+                        }
+                    }
+
+                    data.questData.Add(savedQuest);
+                }
+            }
+
+            Debug.Log($"Saved {data.questData.Count} quests to save data.");
+        }
+
+        private void LoadQuestData(GameData data)
+        {
+            if (QuestManager.Instance == null)
+            {
+                Debug.LogWarning("QuestManager.Instance is null, skipping quest data load.");
+                return;
+            }
+
+            var tutorialMissions = QuestManager.Instance.GetTutorialMissions();
+            if (tutorialMissions == null || data.questData == null)
+            {
+                Debug.LogWarning("No quest data to load or tutorialMissions is null.");
+                return;
+            }
+
+            foreach (var savedQuest in data.questData)
+            {
+                var quest = tutorialMissions.FirstOrDefault(q => q.questID == savedQuest.questID);
+                if (quest != null)
+                {
+                    quest.isCompleted = savedQuest.isCompleted;
+                    quest.isStarted = savedQuest.isStarted;
+
+                    // Restaura o progresso dos steps
+                    if (quest.steps != null && savedQuest.steps != null)
+                    {
+                        foreach (var savedStep in savedQuest.steps)
+                        {
+                            if (savedStep.stepIndex >= 0 && savedStep.stepIndex < quest.steps.Count)
+                            {
+                                quest.steps[savedStep.stepIndex].isCompleted = savedStep.isCompleted;
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    Debug.LogWarning($"Quest Load: Quest '{savedQuest.questID}' not found in tutorialMissions.");
+                }
+            }
+
+            Debug.Log($"Loaded {data.questData.Count} quests from save data.");
+        }
+        #endregion
 
         #region Player Position Save
         private IEnumerator SetPlayerPosition_Coroutine(Vector3 position)
@@ -87,7 +178,7 @@ namespace Tcp4
             if (playerRb != null)
             {
                 playerRb.isKinematic = false;
-                playerRb.velocity = Vector3.zero;
+                playerRb.linearVelocity = Vector3.zero;
                 playerRb.angularVelocity = Vector3.zero;
             }
         }
@@ -192,7 +283,7 @@ namespace Tcp4
                 StorageArea targetStorage = FindStorageByID(savedStorage.storageID);
                 if (targetStorage == null)
                 {
-                    Debug.LogWarning($"Storage Load: Storage com ID '{savedStorage.storageID}' não encontrado.");
+                    Debug.LogWarning($"Storage Load: Storage com ID '{savedStorage.storageID}' nï¿½o encontrado.");
                     continue;
                 }
 
@@ -205,7 +296,7 @@ namespace Tcp4
                     }
                     else
                     {
-                        Debug.LogWarning($"Storage Load: Produto '{savedItem.productName}' não encontrado nos Resources.");
+                        Debug.LogWarning($"Storage Load: Produto '{savedItem.productName}' nï¿½o encontrado nos Resources.");
                     }
                 }
             }
@@ -231,7 +322,7 @@ namespace Tcp4
             product = UnityEngine.Resources.Load<BaseProduct>($"Database/IngredientsSO/{name}");
             if (product != null) return product;
 
-            Debug.LogWarning($"Produto '{name}' não encontrado nas pastas.");
+            Debug.LogWarning($"Produto '{name}' nï¿½o encontrado nas pastas.");
             return null;
         }
 
@@ -243,7 +334,7 @@ namespace Tcp4
             Inventory playerInventory = player.GetComponent<Inventory>();
             if (playerInventory == null)
             {
-                Debug.LogError("SaveManager não encontrou o componente Inventory no jogador!");
+                Debug.LogError("SaveManager nï¿½o encontrou o componente Inventory no jogador!");
                 return;
             }
 
@@ -267,7 +358,7 @@ namespace Tcp4
             Inventory playerInventory = player.GetComponent<Inventory>();
             if (playerInventory == null)
             {
-                Debug.LogError("SaveManager não encontrou o componente Inventory no jogador!");
+                Debug.LogError("SaveManager nï¿½o encontrou o componente Inventory no jogador!");
                 return;
             }
 
@@ -282,7 +373,7 @@ namespace Tcp4
                 }
                 else
                 {
-                    Debug.LogWarning($"Player Inventory Load: Produto '{savedItem.productName}' não encontrado.");
+                    Debug.LogWarning($"Player Inventory Load: Produto '{savedItem.productName}' nï¿½o encontrado.");
                 }
             }
         }

@@ -45,7 +45,8 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
         {
             money += value;
             OnChangeMoney?.Invoke();
-            PlaytestManager.Instance.AddMoney(value);
+            if (PlaytestManager.Instance != null)
+                PlaytestManager.Instance.AddMoney(value);
 
             //Fazendo o request de sfx
             SoundEventArgs sfxArgs = new()
@@ -65,7 +66,8 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
             if (money >= value)
             {
                 money -= value;
-                PlaytestManager.Instance.AddSpentMoney(value);
+                if (PlaytestManager.Instance != null)
+                    PlaytestManager.Instance.AddSpentMoney(value);
                 OnChangeMoney?.Invoke();
 
                 //Fazendo o request de sfx
@@ -104,11 +106,13 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
 
             if (value > 0)
             {
-                PlaytestManager.Instance.AddReputation(value / MaxStar);
+                if (PlaytestManager.Instance != null)
+                    PlaytestManager.Instance.AddReputation(value / MaxStar);
             }
             else
             {
-                PlaytestManager.Instance.LoseReputation(value / MaxStar);
+                if (PlaytestManager.Instance != null)
+                    PlaytestManager.Instance.LoseReputation(value / MaxStar);
             }
             
         }

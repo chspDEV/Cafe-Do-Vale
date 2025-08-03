@@ -401,6 +401,8 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
             clientDataArray[index] = data;
             clientActionArray[index] = ClientAction.ApplyPenalty;
             ShopManager.Instance.AddStars(-0.1f); //MELHORAR ISSO DEPOIS
+
+            if(PlaytestManager.Instance != null)
             PlaytestManager.Instance.RecordClientMissed();
 
             if (data.queueSpotIndex == 0)
@@ -520,8 +522,9 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
                 }
                 data.queueSpotIndex = -1;
             }
+            if (PlaytestManager.Instance != null)
+                PlaytestManager.Instance.RecordClientServed();
 
-            PlaytestManager.Instance.RecordClientServed();
             GiveClientReward(index);
 
             // Decisão: 70% chance de sentar, 30% de sair

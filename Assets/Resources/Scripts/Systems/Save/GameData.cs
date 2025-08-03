@@ -15,6 +15,9 @@ namespace Tcp4
         public List<SavedSeed> seedInventoryItems = new();
         public List<SavedStorageData> storageAreaItems = new();
         public List<SavedStorageItem> playerBagItems = new();
+
+        // NOVO: Dados das quests
+        public List<SavedQuest> questData = new();
     }
 
     [System.Serializable]
@@ -38,7 +41,7 @@ namespace Tcp4
     [System.Serializable]
     public class SavedSeed
     {
-        public string productionName; 
+        public string productionName;
         public int quantity;
     }
 
@@ -56,4 +59,19 @@ namespace Tcp4
         public List<SavedStorageItem> items = new();
     }
 
+    [System.Serializable]
+    public class SavedQuest
+    {
+        public string questID;
+        public bool isCompleted;
+        public bool isStarted;
+        public List<SavedQuestStep> steps = new();
+    }
+
+    [System.Serializable]
+    public class SavedQuestStep
+    {
+        public int stepIndex;
+        public bool isCompleted;
+    }
 }

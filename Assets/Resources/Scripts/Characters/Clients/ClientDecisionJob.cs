@@ -16,53 +16,34 @@ namespace Tcp4
         [ReadOnly] public float3 shopEntrancePosition;
         [ReadOnly] public float3 streetEndPosition;
         [ReadOnly] public float3 counterPosition;
-        [ReadOnly] public bool isShopOpen; 
-        [ReadOnly] public float maxQueueTime; 
-
-
+        [ReadOnly] public bool isShopOpen;
+        [ReadOnly] public float maxQueueTime;
         public void Execute(int index)
         {
             ClientData data = clientDataArray[index];
             ClientAction action = ClientAction.None;
-
             switch (data.currentState)
             {
                 case ClientState.WalkingOnStreet:
                     float distanceFromDoor = math.distance(data.currentPosition, shopEntrancePosition);
-
-                    // Continua se movendo para a entrada se ainda não chegou perto
                     if (distanceFromDoor > 3f)
                     {
                         data.moveTarget = shopEntrancePosition;
                         action = ClientAction.MoveToTarget;
                     }
-                    else // Quando chega perto da entrada
+                    else
                     {
                         if (isShopOpen)
                         {
-                            float reputationFactor = playerReputation * 0.5f; 
-                            float baseChance = 0.4f;
-
-                            //float timeFactor = Mathf.Clamp01(1 - Mathf.Abs(TimeManager.Instance.CurrentHour - 14f) / 6f);
-                            //float weatherFactor = WeatherSystem.IsRaining ? 0.85f : 1f;
-
-                            /*
-                            float chanceToEnter = Mathf.Min(
-                                baseChance + (reputationFactor * timeFactor * weatherFactor),
-                                0.9f // Limite máximo
-                            );
-                            */
-
-                            float chanceToEnter = Mathf.Min(
+                            float reputationFactor = playerReputation * 0.3f;
+                            float baseChance = 0.2f;
+                            float chanceToEnter = math.clamp(
                                 baseChance + reputationFactor,
-                                0.9f // Limite máximo
+                                0.1f,
+                                0.6f
                             );
-
-                            // Garante que a chance nunca ultrapasse 90%
-                            chanceToEnter = Mathf.Min(chanceToEnter, 0.9f);
-
-
-                            if (GetRandomValue(data.id) < chanceToEnter)
+                            float randomValue = GetRandomValue(data.id);
+                            if (randomValue < chanceToEnter)
                             {
                                 data.currentState = ClientState.GoingToQueue;
                                 action = ClientAction.MoveToTarget;
@@ -83,7 +64,6 @@ namespace Tcp4
                         }
                     }
                     break;
-
                 case ClientState.GoingToCounter:
                     if (!data.isShopOpen) { data.currentState = ClientState.LeavingShop; action = ClientAction.MoveToTarget; }
                     float distanceToCounter = math.distance(data.currentPosition, counterPosition);
@@ -97,10 +77,8 @@ namespace Tcp4
                         action = ClientAction.MoveToTarget;
                     }
                     break;
-
                 case ClientState.GoingToQueue:
                     float distanceToEntrance = math.distance(data.currentPosition, shopEntrancePosition);
-
                     if (!isShopOpen)
                     {
                         data.currentState = ClientState.LeavingShop;
@@ -108,13 +86,11 @@ namespace Tcp4
                     }
                     else if (distanceToEntrance <= 3f && !data.canQueue)
                     {
-                        // Sinaliza para o ClientManager que precisa de um spot
                         action = ClientAction.RequestQueueSpot;
                     }
                     else if (data.canQueue)
                     {
                         float distanceToQueueSpot = math.distance(data.currentPosition, data.moveTarget);
-
                         if (distanceToQueueSpot <= 0.5f)
                         {
                             data.currentState = ClientState.InQueue;
@@ -131,16 +107,12 @@ namespace Tcp4
                         action = ClientAction.MoveToTarget;
                     }
                     break;
-
                 case ClientState.InQueue:
                     data.waitQueueTime += deltaTime;
-
-                    // Verifique se chegou ao balcão
                     if (data.queueSpotIndex == 0)
                     {
                         data.currentState = ClientState.AtCounter;
                     }
-                    // Verifique insatisfação
                     else if (data.waitQueueTime > data.maxWaitQueueTime)
                     {
                         data.currentState = ClientState.LeavingShop;
@@ -152,7 +124,6 @@ namespace Tcp4
                         action = ClientAction.MoveToTarget;
                     }
                     break;
-
                 case ClientState.AtCounter:
                     if (!data.isShopOpen) { data.currentState = ClientState.LeavingShop; action = ClientAction.MoveToTarget; }
                     action = ClientAction.ShowOrderBubble;
@@ -160,12 +131,10 @@ namespace Tcp4
                     data.waitQueueTime = 0;
                     data.waitOrderTime = 0;
                     break;
-
                 case ClientState.WaitingForOrder:
                     data.waitOrderTime += deltaTime;
                     if (!data.isShopOpen) { data.currentState = ClientState.LeavingShop; action = ClientAction.MoveToTarget; }
                     break;
-
                 case ClientState.GoingToSeat:
                     if (!data.isShopOpen) { data.currentState = ClientState.LeavingShop; action = ClientAction.MoveToTarget; }
                     float distanceToSeat = math.distance(data.currentPosition, data.moveTarget);
@@ -179,7 +148,6 @@ namespace Tcp4
                         action = ClientAction.MoveToTarget;
                     }
                     break;
-
                 case ClientState.Seated:
                     if (!data.isShopOpen) { data.currentState = ClientState.LeavingShop; action = ClientAction.MoveToTarget; }
                     data.waitQueueTime += deltaTime;
@@ -197,7 +165,6 @@ namespace Tcp4
                         }
                     }
                     break;
-
                 case ClientState.LeavingShop:
                     if (!data.isShopOpen) { data.currentState = ClientState.LeavingShop; action = ClientAction.MoveToTarget; }
                     float distanceToStreetEnd = math.distance(data.currentPosition, data.moveTarget);
@@ -216,14 +183,8 @@ namespace Tcp4
         }
         private float GetRandomValue(int seed)
         {
-            // Implementação de um PRNG simples e eficiente
-            uint state = (uint)seed * 747796405 + 1;
-            state = (state ^ (state >> 16)) * 0x45d9f3b;
-            state = (state ^ (state >> 16)) * 0x45d9f3b;
-            state = state ^ (state >> 16);
-
-            // Convertendo para float no intervalo [0,1)
-            return (state & 0xFFFFFF) / 16777216.0f;
+            Unity.Mathematics.Random random = new Unity.Mathematics.Random((uint)(seed * 1000 + (int)(deltaTime * 1000)));
+            return random.NextFloat(0f, 1f);
         }
     }
 }
