@@ -5,10 +5,20 @@ ModelImporter:
   internalIDToNameTable: []
   externalObjects:
   - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: "Folha Ip\xEA"
+    second: {fileID: 2100000, guid: 82b676d9c260c9e409ac9d77f33dc76a, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: "Tronco Ip\xEA"
+    second: {fileID: 2100000, guid: 3c15214decc756d4089eefad78700dc6, type: 2}
+  - first:
       type: UnityEngine:Texture2D
       assembly: UnityEngine.CoreModule
       name: flor_ipe_v2
-    second: {fileID: 2800000, guid: e9fa5fa58a110064f982fe87500f37e3, type: 3}
+    second: {fileID: 2800000, guid: 11febfdec85184f4d88ef2b5ee1d498f, type: 3}
   materials:
     materialImportMode: 2
     materialName: 0

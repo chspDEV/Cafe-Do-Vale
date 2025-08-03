@@ -5,10 +5,20 @@ ModelImporter:
   internalIDToNameTable: []
   externalObjects:
   - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Folha Quaresmeira
+    second: {fileID: 2100000, guid: c923f82cfb93c1c499b5a5f6838faeeb, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Tronco Quaresmeira
+    second: {fileID: 2100000, guid: 040ed2b288558754f928d5c74c66f396, type: 2}
+  - first:
       type: UnityEngine:Texture2D
       assembly: UnityEngine.CoreModule
       name: flores 5
-    second: {fileID: 2800000, guid: 97081f750d2f44a4cbd06da6088f1dd2, type: 3}
+    second: {fileID: 2800000, guid: bab3bb2bd5adbf845a37abd704af381f, type: 3}
   materials:
     materialImportMode: 2
     materialName: 0
