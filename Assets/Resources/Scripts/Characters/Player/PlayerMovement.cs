@@ -114,5 +114,24 @@ namespace Tcp4
         {
             canMove = state;
         }
+
+        public void ResetState()
+        {
+            movement = Vector2.zero;
+
+            if (rb != null)
+            {
+                rb.velocity = Vector3.zero;
+                rb.angularVelocity = Vector3.zero;
+            }
+
+            if (animator != null)
+            {
+                animator.SetFloat("Speed", 0);
+                animator.SetBool("IsRunning", false);
+            }
+        }
     }
+
+    
 }

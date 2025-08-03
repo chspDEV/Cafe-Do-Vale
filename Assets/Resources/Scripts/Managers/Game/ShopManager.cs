@@ -25,6 +25,20 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
         public Transform cupHolder;
 
 
+        public void SetMoney(int value)
+        {
+            money = value;
+            OnChangeMoney?.Invoke();
+        }
+
+        public void SetStars(float value)
+        {
+            stars = Mathf.Clamp(value, 0, MaxStar);
+            OnChangeStar?.Invoke();
+        }
+
+
+
         #region Sistema de Moeda
 
         public void AddMoney(int value)

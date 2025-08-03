@@ -128,6 +128,15 @@ namespace Tcp4
                 instanceInventory[i].transform.position = bagPoint.position + new Vector3(0, offset, 0);   
             }
         }
-        
+        public void Clear()
+        {
+            foreach (var instance in instanceInventory)
+            {
+                Destroy(instance);
+            }
+
+            instanceInventory.Clear();
+            productInventory.Clear();
+        }
     }
 }

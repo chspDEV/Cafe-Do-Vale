@@ -22,5 +22,10 @@ namespace Tcp4
         {
             return anim.IsInTransition(0) || anim.GetCurrentAnimatorStateInfo(0).normalizedTime < 0.8f;
         }
+
+        public void ExecuteAndRestartAnimation(string stateName)
+        {
+            anim.Play(stateName, -1, 0f);
+        }
     }
 }

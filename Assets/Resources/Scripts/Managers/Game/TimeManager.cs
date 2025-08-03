@@ -228,5 +228,10 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
             TimeSpan time = TimeSpan.FromHours(hour);
             return time.ToString("hh':'mm");
         }
+        public void SetHour(float value)
+        {
+            CurrentHour = value;
+        }
+
     }
 }
