@@ -4,15 +4,17 @@ using Tcp4.Assets.Resources.Scripts.Systems.Collect_Cook;
 using UnityEngine;
 using System.Linq;
 using System.Collections;
+using System.Collections.Generic;
 
 namespace Tcp4
 {
     public class SaveManager : MonoBehaviour
     {
-        [Header("Refer�ncias")]
+        [Header("Referências")]
         [SerializeField] private ShopManager shopManager;
         [SerializeField] private TimeManager timeManager;
         [SerializeField] private PlayerMovement player;
+        [SerializeField] private WorkerManager workerManager;
 
         public static event System.Action OnGameDataLoaded;
 
@@ -29,18 +31,16 @@ namespace Tcp4
             SaveSeedInventory(data);
             SaveStorageData(data);
             SavePlayerInventory(data);
-            SaveQuestData(data); // NOVO: Salva dados das quests
+            SaveQuestData(data);
+            SaveWorkerData(data); // NOVO: Salva dados dos trabalhadores
 
             SaveSystem.SaveGame(data);
         }
 
         public void Load()
         {
-            // fiz uma corrotina pq tava atropelando outros scripts antes de carregar
             StartCoroutine(LoadGame_Coroutine());
         }
-
-
 
         private IEnumerator LoadGame_Coroutine()
         {
@@ -62,7 +62,8 @@ namespace Tcp4
             LoadSeedInventory(data);
             LoadStorageData(data);
             LoadPlayerInventory(data);
-            LoadQuestData(data); // NOVO: Carrega dados das quests
+            LoadQuestData(data);
+            LoadWorkerData(data); // NOVO: Carrega dados dos trabalhadores
 
             Debug.Log("Todos os dados foram carregados.");
             OnGameDataLoaded?.Invoke();
@@ -71,59 +72,32 @@ namespace Tcp4
         #region Quest Save
         private void SaveQuestData(GameData data)
         {
-            if (QuestManager.Instance == null)
-            {
-                Debug.LogWarning("QuestManager.Instance is null, skipping quest data save.");
-                return;
-            }
-
-            // Salva quests do tutorial
+            if (QuestManager.Instance == null) return;
             var tutorialMissions = QuestManager.Instance.GetTutorialMissions();
-            if (tutorialMissions != null)
+            if (tutorialMissions == null) return;
+
+            foreach (var quest in tutorialMissions)
             {
-                foreach (var quest in tutorialMissions)
+                var savedQuest = new SavedQuest
                 {
-                    var savedQuest = new SavedQuest
-                    {
-                        questID = quest.questID,
-                        isCompleted = quest.isCompleted,
-                        isStarted = quest.isStarted
-                    };
-
-                    // Salva o progresso dos steps
-                    if (quest.steps != null)
-                    {
-                        for (int i = 0; i < quest.steps.Count; i++)
-                        {
-                            savedQuest.steps.Add(new SavedQuestStep
-                            {
-                                stepIndex = i,
-                                isCompleted = quest.steps[i].isCompleted
-                            });
-                        }
-                    }
-
-                    data.questData.Add(savedQuest);
+                    questID = quest.questID,
+                    isCompleted = quest.isCompleted,
+                    isStarted = quest.isStarted,
+                    steps = new List<SavedQuestStep>()
+                };
+                for (int i = 0; i < quest.steps.Count; i++)
+                {
+                    savedQuest.steps.Add(new SavedQuestStep { stepIndex = i, isCompleted = quest.steps[i].isCompleted });
                 }
+                data.questData.Add(savedQuest);
             }
-
-            Debug.Log($"Saved {data.questData.Count} quests to save data.");
         }
 
         private void LoadQuestData(GameData data)
         {
-            if (QuestManager.Instance == null)
-            {
-                Debug.LogWarning("QuestManager.Instance is null, skipping quest data load.");
-                return;
-            }
-
+            if (QuestManager.Instance == null || data.questData == null) return;
             var tutorialMissions = QuestManager.Instance.GetTutorialMissions();
-            if (tutorialMissions == null || data.questData == null)
-            {
-                Debug.LogWarning("No quest data to load or tutorialMissions is null.");
-                return;
-            }
+            if (tutorialMissions == null) return;
 
             foreach (var savedQuest in data.questData)
             {
@@ -132,26 +106,15 @@ namespace Tcp4
                 {
                     quest.isCompleted = savedQuest.isCompleted;
                     quest.isStarted = savedQuest.isStarted;
-
-                    // Restaura o progresso dos steps
-                    if (quest.steps != null && savedQuest.steps != null)
+                    foreach (var savedStep in savedQuest.steps)
                     {
-                        foreach (var savedStep in savedQuest.steps)
+                        if (savedStep.stepIndex < quest.steps.Count)
                         {
-                            if (savedStep.stepIndex >= 0 && savedStep.stepIndex < quest.steps.Count)
-                            {
-                                quest.steps[savedStep.stepIndex].isCompleted = savedStep.isCompleted;
-                            }
+                            quest.steps[savedStep.stepIndex].isCompleted = savedStep.isCompleted;
                         }
                     }
                 }
-                else
-                {
-                    Debug.LogWarning($"Quest Load: Quest '{savedQuest.questID}' not found in tutorialMissions.");
-                }
             }
-
-            Debug.Log($"Loaded {data.questData.Count} quests from save data.");
         }
         #endregion
 
@@ -238,7 +201,7 @@ namespace Tcp4
         #region Storage Area Save
         private void SaveStorageData(GameData data)
         {
-            StorageArea[] storages = FindObjectsOfType<StorageArea>();
+            StorageArea[] storages = FindObjectsByType<StorageArea>(FindObjectsSortMode.None);
 
             foreach (var storage in storages)
             {
@@ -272,7 +235,7 @@ namespace Tcp4
 
         private void LoadStorageData(GameData data)
         {
-            StorageArea[] allStorages = FindObjectsOfType<StorageArea>();
+            StorageArea[] allStorages = FindObjectsByType<StorageArea>(FindObjectsSortMode.None);
             foreach (var storage in allStorages)
             {
                 storage.inventory.Clear();
@@ -304,7 +267,7 @@ namespace Tcp4
 
         private StorageArea FindStorageByID(string id)
         {
-            foreach (var storage in FindObjectsOfType<StorageArea>())
+            foreach (var storage in FindObjectsByType<StorageArea>(FindObjectsSortMode.None))
             {
                 if (storage.storageID == id)
                 {
@@ -375,6 +338,61 @@ namespace Tcp4
                 {
                     Debug.LogWarning($"Player Inventory Load: Produto '{savedItem.productName}' n�o encontrado.");
                 }
+            }
+        }
+        #endregion
+
+        #region Workers
+        private void SaveWorkerData(GameData data)
+        {
+            if (workerManager == null) return;
+
+            data.hiredWorkersData.Clear();
+            List<WorkerData> hiredWorkers = workerManager.GetHiredWorkers();
+
+            foreach (var worker in hiredWorkers)
+            {
+                SavedWorkerData savedWorker = new SavedWorkerData
+                {
+                    workerID = worker.id, // Importante salvar o ID!
+                    //workerName = worker.workerName,
+                    type = worker.type,
+                    efficiency = worker.efficiency,
+                    dailyCost = worker.dailyCost,
+                    pauseChance = worker.pauseChance,
+                    workDuration = worker.workDuration,
+                    restDuration = worker.restDuration,
+                    homePosition = new SerializableVector3(worker.homePosition)
+                };
+                data.hiredWorkersData.Add(savedWorker);
+            }
+        }
+
+        private void LoadWorkerData(GameData data)
+        {
+            if (workerManager == null || data.hiredWorkersData == null) return;
+
+            workerManager.FireAllWorkers();
+
+            foreach (var savedWorker in data.hiredWorkersData)
+            {
+                WorkerData workerData = new WorkerData
+                {
+                    id = savedWorker.workerID,
+                    //workerName = savedWorker.workerName,
+                    type = savedWorker.type,
+                    efficiency = savedWorker.efficiency,
+                    dailyCost = savedWorker.dailyCost,
+                    pauseChance = savedWorker.pauseChance,
+                    workDuration = savedWorker.workDuration,
+                    restDuration = savedWorker.restDuration,
+                    homePosition = savedWorker.homePosition.ToVector3(),
+                    isHired = true,
+                    isActive = true,
+                    currentState = WorkerState.Idle
+                };
+
+                workerManager.LoadWorker(workerData);
             }
         }
         #endregion

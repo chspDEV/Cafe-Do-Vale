@@ -35,6 +35,25 @@ namespace Tcp4
         [Header("Minigame")]
         [SerializeField] MinigameTrigger minigameTrigger;
 
+        [Header("System Integration")]
+        [SerializeField] public int areaID;
+
+
+        public void RegisterAreaID()
+        {
+            // Adicione esta linha para registrar a estação:
+            if (WorkerManager.Instance != null && GameAssets.Instance != null)
+            {
+                areaID = GameAssets.Instance.GenerateAreaID();
+                WorkerManager.Instance.RegisterProductionStation(areaID, this);
+            }
+        }
+
+        private void CreateWorkerTask()
+        {
+            WorkerManager.Instance.CreateHarvestTask(this.areaID, this.production.outputProduct);
+        }
+
         public override void Start()
         {
             base.Start();
@@ -46,6 +65,8 @@ namespace Tcp4
 
             timeImage = UIManager.Instance.PlaceFillImage(pointToSpawn);
             timeManager = TimeManager.Instance;
+
+            RegisterAreaID();
         }
 
         private void OnDisable()
@@ -60,7 +81,7 @@ namespace Tcp4
 
         public override void OnInteract()
         {
-            
+
             playerInventory = GameAssets.Instance.player.GetComponent<Inventory>();
             if (playerInventory == null) { Debug.Log("Inventario do Jogador nulo!"); return; }
 
@@ -114,16 +135,16 @@ namespace Tcp4
         }
 
         public void ReSetupMaxTime()
-        { 
-            if(timeImage != null && timeManager != null)
-                timeImage.SetupMaxTime(production.timeToGrow * timeManager.timeMultiplier);
+        {
+            if (timeImage != null && timeManager != null)
+                timeImage.SetupMaxTime(production.timeToGrow);
         }
 
         private void UpdateCurrentTime()
         {
             if (production != null && !isGrown)
             {
-                currentTime = Mathf.Clamp(currentTime, 0, production.timeToGrow * timeManager.timeMultiplier);
+                //currentTime = Mathf.Clamp(currentTime, 0, production.timeToGrow);
                 timeImage.UpdateFill(currentTime);
             }
         }
@@ -195,81 +216,64 @@ namespace Tcp4
             StartCoroutine(GrowthCycle());
         }
 
+
+
         private IEnumerator GrowthCycle()
         {
             // Verificações de segurança
-            if (production == null)
+            if (production == null || timeManager == null)
             {
-                Debug.LogError($"Production is null in {gameObject.name}. Stopping growth cycle.");
-                yield break;
-            }
-
-            if (timeManager == null)
-            {
-                Debug.LogError($"TimeManager is null in {gameObject.name}. Stopping growth cycle.");
+                Debug.LogError($"Production or TimeManager is null in {gameObject.name}");
                 yield break;
             }
 
             OnLostFocus();
             var models = production.models;
 
-            // Verificação adicional para models
-            if (models == null || models.Length == 0)
+            // Registrar tempo inicial
+            float startTime = timeManager.CurrentHour;
+            float targetTime = startTime + production.timeToGrow;
+
+            // Verificar se há modelos para mostrar
+            bool hasModels = models != null && models.Length > 0;
+
+            while (timeManager.CurrentHour < targetTime)
             {
-                Debug.LogWarning($"No models found for production in {gameObject.name}. Skipping model spawning.");
+                // Calcular progresso baseado no tempo global do jogo
+                float elapsedTime = timeManager.CurrentHour - startTime;
+                currentTime = Mathf.Clamp(elapsedTime, 0, production.timeToGrow);
+                UpdateCurrentTime();
 
-                // Ainda assim, execute o tempo de crescimento
-                float _timeToGrow = production.timeToGrow * timeManager.timeMultiplier;
-                float elapsedTime = 0;
-
-                while (elapsedTime < _timeToGrow)
+                // Atualizar modelos visuais (se houver)
+                if (hasModels)
                 {
-                    elapsedTime += Time.deltaTime;
-                    currentTime += Time.deltaTime;
-                    UpdateCurrentTime();
-                    yield return null;
+                    int modelIndex = Mathf.FloorToInt((currentTime / production.timeToGrow) * models.Length);
+                    modelIndex = Mathf.Clamp(modelIndex, 0, models.Length - 1);
+
+                    if (currentModel == null || !currentModel.name.StartsWith(models[modelIndex].name))
+                    {
+                        if (currentModel != null && objectPools != null)
+                        {
+                            objectPools.Return(currentModel);
+                        }
+
+                        if (objectPools != null)
+                        {
+                            currentModel = objectPools.Get(models[modelIndex]);
+                            currentModel.transform.SetPositionAndRotation(
+                                pointToSpawn.position,
+                                models[modelIndex].transform.rotation
+                            );
+                        }
+                    }
                 }
 
-                isGrown = true;
-                isAbleToGive = true;
-                yield break;
+                yield return null;
             }
 
-            var timeToGrow = production.timeToGrow * timeManager.timeMultiplier;
-            int modelIndex = 0;
-
-            while (modelIndex < models.Length)
-            {
-                if (currentModel != null && objectPools != null)
-                {
-                    objectPools.Return(currentModel);
-                }
-
-                if (objectPools != null)
-                {
-                    currentModel = objectPools.Get(models[modelIndex]);
-
-                    Vector3 normalizedPosition = new(pointToSpawn.position.x,
-                    pointToSpawn.position.y, pointToSpawn.position.z);
-
-                    currentModel.transform.SetPositionAndRotation(normalizedPosition, models[modelIndex].transform.rotation);
-                    Debug.Log($"Modelo atual: {currentModel.name} // Posicao: {normalizedPosition}");
-                }
-
-                float modelGrowTime = timeToGrow / models.Length;
-                float elapsedTime = 0;
-
-                while (elapsedTime < modelGrowTime)
-                {
-                    elapsedTime += Time.deltaTime;
-                    currentTime += Time.deltaTime;
-                    UpdateCurrentTime();
-                    yield return null;
-                }
-
-                modelIndex++;
-            }
-
+            // Finalização do crescimento
+            EnableInteraction();
+            CreateWorkerTask();
             isGrown = true;
             isAbleToGive = true;
         }
@@ -298,9 +302,30 @@ namespace Tcp4
 
                 minigameTrigger.minigameToStart.SetupReward(production.outputProduct);
                 minigameTrigger.TriggerMinigame();
+                DisableInteraction();
+
                 InteractionManager.Instance.UpdateLastId(production.outputProduct.productName);
             }
         }
+
+        public void HarvestProductFromWorker()
+        {
+            // Executa a mesma lógica que `HarvestProduct`, mas sem player
+            if (isAbleToGive && isGrown)
+            {
+                if (production.outputProduct == null)
+                {
+                    Debug.LogError("Produto de saída é nulo!");
+                    return;
+                }
+
+                // Simula entrega sem minigame
+                //InventoryManager.Instance.AddItem(production.outputProduct.productID, amount);
+                ResetGrowthCycle();
+                Debug.Log($"[Worker] Colheu: {production.outputProduct.productName}");
+            }
+        }
+
 
         void ResetGrowthCycle()
         {

@@ -28,11 +28,14 @@ public class ImageToFill : MonoBehaviour
         gameObject.SetActive(isActive);
     }
 
-    public void UpdateFill(float cTime)
+    public void UpdateFill(float currentTime)
     {
         if (image == null) return;
 
-        image.fillAmount = cTime / maxTime;
+        if (maxTime > 0)
+        {
+            image.fillAmount = Mathf.Clamp01(currentTime / maxTime);
+        }
     }
 
     public void ChangeSprite(Sprite newSprite)

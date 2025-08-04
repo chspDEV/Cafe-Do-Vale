@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using Tcp4.Assets.Resources.Scripts.Managers;
 using TMPro;
 using UnityEngine;
 
@@ -14,6 +15,20 @@ namespace Tcp4.Assets.Resources.Scripts.Systems.Collect_Cook
 
         private bool isInterfaceOpen;
 
+        [Header("System Integration")]
+        public int areaID;
+
+
+        public void RegisterAreaID()
+        {
+            // Adicione esta linha para registrar a estação:
+            if (WorkerManager.Instance != null && GameAssets.Instance != null)
+            {
+                areaID = GameAssets.Instance.GenerateAreaID();
+                WorkerManager.Instance.RegisterStorageStation(areaID, this);
+            }
+        }
+
         public override void Start()
         {
             base.Start();
@@ -21,6 +36,8 @@ namespace Tcp4.Assets.Resources.Scripts.Systems.Collect_Cook
             inventory.UpdateLimit(400);
             isInterfaceOpen = false;
             interactable_id = "storageArea";
+
+            RegisterAreaID();
         }
 
         public override void OnLostFocus()

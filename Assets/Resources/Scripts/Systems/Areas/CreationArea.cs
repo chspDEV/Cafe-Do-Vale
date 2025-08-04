@@ -12,6 +12,20 @@ public class CreationArea : BaseInteractable
 
     [SerializeField] private ImageToFill timeImage;
 
+    [Header("System Integration")]
+    public int areaID;
+
+
+    public void RegisterAreaID()
+    {
+        // Adicione esta linha para registrar a estação:
+        if (WorkerManager.Instance != null && GameAssets.Instance != null)
+        {
+            areaID = GameAssets.Instance.GenerateAreaID();
+            WorkerManager.Instance.RegisterCreationStation(areaID, this);
+        }
+    }
+
     public override void Start()
     {
         base.Start();
@@ -25,6 +39,8 @@ public class CreationArea : BaseInteractable
             timeImage.transform.position.y, timeImage.transform.position.z + 1f);
 
         OnReachMaxTime += CreationManager.Instance.FinishDrink;
+
+        RegisterAreaID();
     }
 
     public override void Update()

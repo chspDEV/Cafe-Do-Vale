@@ -69,8 +69,12 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
         [ShowInInspector, ReadOnly]
         public string CurrentDate => GetFormattedDate();
 
+        public Action OnWorkingHoursStart { get; internal set; }
+        public Action OnWorkingHoursEnd { get; internal set; }
+
         private DateTime gameDate;
         public bool isDay;
+        private bool hasPaymentOccurredToday;
 
         [Button("Validar Referência de Luz")]
         [Obsolete]
@@ -121,12 +125,14 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
 
         private void UpdateTime()
         {
-            CurrentHour += Time.deltaTime * (timeMultiplier * 10) / 3600;
+            // Cálculo corrigido: usa escala de tempo consistente
+            float scaledDelta = Time.deltaTime * (timeMultiplier * 0.1f);
+            CurrentHour += scaledDelta / 36f; // 1 hora real = 1 minuto de jogo
 
             if (CurrentHour >= 24)
             {
                 if (isFirstDay) isFirstDay = false;
-
+                hasPaymentOccurredToday = false;
                 CurrentHour -= 24;
                 OnResetDay?.Invoke();
                 gameDate = gameDate.AddDays(1);
@@ -134,21 +140,32 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
 
             OnTimeChanged?.Invoke(CurrentHour);
 
-            if (Mathf.FloorToInt(CurrentHour) == (int)startHour && !isDay)
+            // Eventos de horário comercial
+            bool wasDay = isDay;
+            isDay = CurrentHour >= startHour && CurrentHour < closeHour;
+
+            if (isDay != wasDay)
             {
-                if (!isFirstDay)
+                OnDayNightChanged?.Invoke(isDay);
+
+                if (isDay && !isFirstDay)
+                {
                     OnOpenCoffeeShop?.Invoke();
-
-                isDay = true;
-                OnDayNightChanged?.Invoke(isDay);
-            }
-            else if (Mathf.FloorToInt(CurrentHour) == (int)closeHour && isDay)
-            {
-                if (!isFirstDay)
+                    OnWorkingHoursStart?.Invoke(); // ADICIONE ISTO
+                }
+                else if (!isDay && !isFirstDay)
+                {
                     OnCloseCoffeeShop?.Invoke();
+                    OnWorkingHoursEnd?.Invoke(); // ADICIONE ISTO
+                }
+            }
 
-                isDay = false;
-                OnDayNightChanged?.Invoke(isDay);
+
+            // Pagamentos diários (agora às 18h)
+            if (Mathf.Floor(CurrentHour) == 18 && !hasPaymentOccurredToday)
+            {
+                WorkerEconomics.Instance?.ProcessDailyPayments();
+                hasPaymentOccurredToday = true;
             }
         }
 
@@ -231,6 +248,11 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
         public void SetHour(float value)
         {
             CurrentHour = value;
+        }
+
+        public bool IsWorkingTime()
+        {
+            return CurrentHour >= startHour && CurrentHour < closeHour;
         }
 
     }

@@ -63,6 +63,20 @@ namespace Tcp4.Assets.Resources.Scripts.Systems.Areas
         private bool isCountingDown = false;
         private float countdownTimer = 0f;
 
+        [Header("System Integration")]
+        public int areaID;
+
+
+        public void RegisterAreaID()
+        {
+            // Adicione esta linha para registrar a estação:
+            if (WorkerManager.Instance != null && GameAssets.Instance != null)
+            {
+                areaID = GameAssets.Instance.GenerateAreaID();
+                WorkerManager.Instance.RegisterRefinementStation(areaID, this);
+            }
+        }
+
         public override void Start()
         {
             base.Start();
@@ -79,6 +93,7 @@ namespace Tcp4.Assets.Resources.Scripts.Systems.Areas
                 activator.OnActive += StartRefinement;
 
             interactable_id = "refinementArea";
+            RegisterAreaID();
         }
 
         public override void Update()

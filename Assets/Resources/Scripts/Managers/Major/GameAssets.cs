@@ -39,6 +39,8 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
 
         public List<Sprite> clientSprites;
         public List<string> clientNames;
+        public List<int> areaIDs;
+        private int currentAreaId = 0;
 
         public List<GameObject> clientModels;
         public GameObject pfNovoDia;
@@ -46,6 +48,50 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
         public GameObject player;
         public Transform safePoint;
         public PlayerMovement playerMovement;
+
+        [Header("Worker System")]
+        [SerializeField] public List<Sprite> workerPortraits = new();
+
+        [Header("Worker Type Icons")]
+        [SerializeField] public Sprite baristaIcon;
+        [SerializeField] public Sprite fazendeiroIcon;
+        [SerializeField] public Sprite repositorIcon;
+
+        [Header("Worker UI")]
+        [SerializeField] public Sprite workerPauseIcon;
+        [SerializeField] public Sprite workerWorkingIcon;
+        [SerializeField] public Sprite workerIdleIcon;
+
+        // Método para obter ícone por tipo de trabalhador
+        public Sprite GetWorkerTypeIcon(WorkerType type)
+        {
+            return type switch
+            {
+                WorkerType.Barista => baristaIcon,
+                WorkerType.Fazendeiro => fazendeiroIcon,
+                WorkerType.Repositor => repositorIcon,
+                _ => null
+            };
+        }
+
+        // Método para obter retrato aleatório
+        public Sprite GetRandomWorkerPortrait()
+        {
+            if (workerPortraits.Count == 0) return null;
+            return workerPortraits[UnityEngine.Random.Range(0, workerPortraits.Count)];
+        }
+
+        // Método para obter ícone de estado
+        public Sprite GetWorkerStateIcon(WorkerState state)
+        {
+            return state switch
+            {
+                WorkerState.Resting => workerPauseIcon,
+                WorkerState.Working => workerWorkingIcon,
+                WorkerState.Idle => workerIdleIcon,
+                _ => workerIdleIcon
+            };
+        }
 
         public event Action OnChangeInteractionSprite;
         public CurrentInputType currentInputType = CurrentInputType.NONE;
@@ -357,6 +403,14 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
                         .Select(s => s[random.Next(s.Length)])
                         .ToArray());
             return result;
+        }
+
+        public int GenerateAreaID()
+        {
+            var newID = currentAreaId;
+            areaIDs.Add(currentAreaId);
+            currentAreaId++;
+            return newID;
         }
 
         // Método público para forçar mudança de input (útil para testes)

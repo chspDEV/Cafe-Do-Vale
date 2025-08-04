@@ -1,6 +1,5 @@
 using UnityEngine;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 
 namespace Tcp4
@@ -15,9 +14,10 @@ namespace Tcp4
         public List<SavedSeed> seedInventoryItems = new();
         public List<SavedStorageData> storageAreaItems = new();
         public List<SavedStorageItem> playerBagItems = new();
-
-        // NOVO: Dados das quests
         public List<SavedQuest> questData = new();
+
+        // NOVO: Dados dos trabalhadores
+        public List<SavedWorkerData> hiredWorkersData = new();
     }
 
     [System.Serializable]
@@ -36,6 +36,20 @@ namespace Tcp4
         {
             return new Vector3(x, y, z);
         }
+    }
+
+    [System.Serializable]
+    public class SavedWorkerData
+    {
+        public string workerName;
+        public WorkerType type;
+        public float efficiency;
+        public int dailyCost;
+        public float pauseChance;
+        public float workDuration;
+        public float restDuration;
+        public int workerID;
+        public SerializableVector3 homePosition;
     }
 
     [System.Serializable]

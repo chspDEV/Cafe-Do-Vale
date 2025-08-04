@@ -28,6 +28,9 @@ public class MinigameManager : Singleton<MinigameManager>
             return;
         }
 
+        if(TimeManager.Instance != null)
+            TimeManager.Instance.Freeze();
+
         _currentMinigameData = data;
 
         //cria a instancia do minigame a partir do prefab
@@ -70,5 +73,8 @@ public class MinigameManager : Singleton<MinigameManager>
 
         //dispara o evento global de fim
         OnMinigameFinished?.Invoke();
+
+        if (TimeManager.Instance != null)
+            TimeManager.Instance.Unfreeze();
     }
 }

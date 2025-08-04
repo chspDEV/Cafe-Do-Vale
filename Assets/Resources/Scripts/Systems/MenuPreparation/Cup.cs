@@ -7,8 +7,6 @@ public class Cup : MonoBehaviour
     public Drink myDrink;
     public Transform point; // Primeiro ponto de referência
     public float speed = 2f; // Velocidade do movimento
-    private bool moving = true; // Controle de direção
-
     void Update()
     {
         if (point == null)
@@ -23,7 +21,6 @@ public class Cup : MonoBehaviour
         // Se chegou no destino, inverte a direção
         if (Vector3.Distance(transform.position, point.position) < 0.01f)
         {
-            moving = false;
             ClientManager.Instance.ServeClient(myDrink);
             Destroy(this.gameObject);
         }
