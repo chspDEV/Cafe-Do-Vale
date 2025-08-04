@@ -46,7 +46,11 @@ public class ImageToFill : MonoBehaviour
         bgImage.sprite = newSprite;
         bgImage.color = new Color(0, 0, 0, 0.6f);
         SetupSettings();
+
+        // Reaplica fillAmount visualmente
+        UpdateFill(image.fillAmount * maxTime);
     }
+
 
     public void ChangeSize(Vector3 newSize)
     { 

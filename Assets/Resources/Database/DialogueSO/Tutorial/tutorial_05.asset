@@ -14,7 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dialogueLines:
   - characterName: Zeca
-    dialogueText: "Perfeito, agora meus \xFAltimos conselhos para voc\xEA: Trate
+    dialogueText: Opa!!
+  - characterName: Zeca
+    dialogueText: "Muito bem, agora meus \xFAltimos conselhos para voc\xEA: Trate
       bem os clientes."
   - characterName: Zeca
     dialogueText: "Como sua cafeteria \xE9 nova e pouco conhecida, os clientes n\xE3o
@@ -22,5 +24,8 @@ MonoBehaviour:
   - characterName: Zeca
     dialogueText: "Quanto maior a reputa\xE7\xE3o, maior ser\xE1 a variedade de pedidos
       para fazer."
+  - characterName: Zeca
+    dialogueText: "Al\xE9m disso, para te auxiliar voc\xEA pode contratar outras
+      pessoas para te ajudar com a fazenda. \xC9 claro, tem que pag\xE1-los direitinho!"
   - characterName: Zeca
     dialogueText: "Com o tempo voc\xEA pega o ritmo!"

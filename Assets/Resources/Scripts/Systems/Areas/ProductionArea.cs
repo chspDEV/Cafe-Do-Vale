@@ -202,7 +202,7 @@ namespace Tcp4
             if (production == null) return;
 
             currentTime = 0;
-            timeImage.SetupMaxTime(production.timeToGrow * timeManager.timeMultiplier);
+            timeImage.SetupMaxTime(production.timeToGrow);
             CloseProductionMenu();
             hasChoosedProduction = true;
             productionManager.OnChooseProduction -= SelectProduction;
@@ -310,7 +310,6 @@ namespace Tcp4
 
         public void HarvestProductFromWorker()
         {
-            // Executa a mesma lógica que `HarvestProduct`, mas sem player
             if (isAbleToGive && isGrown)
             {
                 if (production.outputProduct == null)
@@ -319,9 +318,8 @@ namespace Tcp4
                     return;
                 }
 
-                // Simula entrega sem minigame
-                //InventoryManager.Instance.AddItem(production.outputProduct.productID, amount);
                 ResetGrowthCycle();
+                CreateWorkerTask(); 
                 Debug.Log($"[Worker] Colheu: {production.outputProduct.productName}");
             }
         }

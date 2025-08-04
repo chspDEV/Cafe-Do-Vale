@@ -14,5 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dialogueLines:
   - characterName: Zeca
+    dialogueText: Opa!
+  - characterName: Zeca
     dialogueText: "Muito bem. Sem perder muito tempo, plante esse caf\xE9 e colete
       seus frutos."

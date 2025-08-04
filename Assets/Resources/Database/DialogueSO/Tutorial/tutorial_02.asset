@@ -14,5 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dialogueLines:
   - characterName: Zeca
+    dialogueText: Opa!
+  - characterName: Zeca
     dialogueText: "At\xE9 que voc\xEA \xE9 r\xE1pido em! Aproveitando o dinheiro
       que te dei, ache a loja para come\xE7ar suas produ\xE7\xF5es."

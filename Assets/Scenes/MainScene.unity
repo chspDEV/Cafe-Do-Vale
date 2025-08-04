@@ -32631,7 +32631,7 @@ Camera:
   m_GameObject: {fileID: 1162703760}
   m_Enabled: 1
   serializedVersion: 2
-  m_ClearFlags: 1
+  m_ClearFlags: 4
   m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
@@ -32655,13 +32655,13 @@ Camera:
     height: 1
   near clip plane: 0.3
   far clip plane: 100
-  field of view: 50
+  field of view: 40
   orthographic: 0
   orthographic size: 43
   m_Depth: -2.9
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 1353
+    m_Bits: 3401
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 8400000, guid: 9fc3f4f9a1673ff4d9964bcd87120787, type: 2}
   m_TargetDisplay: 0
@@ -48125,7 +48125,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1657543041}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 55f0b61ed9248ea46879765fcf437193, type: 3}
   m_Name: 
@@ -48144,7 +48144,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1657543041}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 44ed2952658479f4faf6da22bf06303a, type: 3}
   m_Name: 
@@ -73374,7 +73374,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 869227449351032635, guid: 7025c65720fc87b41a63d094a96cdba3, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1535803759006609183, guid: 7025c65720fc87b41a63d094a96cdba3, type: 3}
       propertyPath: m_LocalPosition.x
@@ -73436,8 +73436,14 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    - target: {fileID: 7239799684260900420, guid: 7025c65720fc87b41a63d094a96cdba3, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.284
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 1763041933530459541, guid: 7025c65720fc87b41a63d094a96cdba3, type: 3}
+    m_RemovedGameObjects:
+    - {fileID: 2401113296739329621, guid: 7025c65720fc87b41a63d094a96cdba3, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7025c65720fc87b41a63d094a96cdba3, type: 3}

@@ -509,7 +509,29 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
 
 
 
-        private int FindAppropriateStorage(BaseProduct product) => storageStations.Keys.FirstOrDefault();
+        private int FindAppropriateStorage(BaseProduct product)
+        {
+            foreach (var pair in storageStations)
+            {
+                var storage = pair.Value;
+                if (storage.item != null && storage.item.productID == product.productID && storage.inventory.CanStorage())
+                {
+                    return pair.Key;
+                }
+            }
+
+            // Fallback: qualquer com espaço
+            foreach (var pair in storageStations)
+            {
+                if (pair.Value.inventory.CanStorage())
+                {
+                    return pair.Key;
+                }
+            }
+
+            return -1;
+        }
+
         private int FindStorageWithProduct(int productID) => storageStations.Keys.FirstOrDefault();
         private int FindAvailableRefinementMachine() => refinementStations.Keys.FirstOrDefault();
         private int FindAvailableCoffeeStation() => creationStations.Keys.FirstOrDefault();

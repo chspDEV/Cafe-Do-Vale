@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using UnityEngine.AI;
+using System.Collections;
 
 namespace Tcp4
 {
@@ -160,9 +161,21 @@ namespace Tcp4
             {
                 Destroy(modelAnchor.GetChild(0).gameObject);
             }
+
             GameObject modelInstance = Instantiate(modelPrefab, modelAnchor);
             ModelAnimator = modelInstance.GetComponent<Animator>();
+
+            // Forçar esperar 1 frame para garantir animação
+            StartCoroutine(EnableAgentNextFrame());
         }
+
+        private IEnumerator EnableAgentNextFrame()
+        {
+            NavMeshAgent.enabled = false;
+            yield return null;
+            NavMeshAgent.enabled = true;
+        }
+
 
         public void SetWorkingAnimation(bool isWorking)
         {

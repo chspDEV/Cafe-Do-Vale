@@ -14,6 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dialogueLines:
   - characterName: Zeca
+    dialogueText: Opa!
+  - characterName: Zeca
     dialogueText: "\xD3timo, mas n\xE3o fique plantado esperando o caf\xE9 crescer!
       Use essa suas perninhas para cuidar de outras coisas enquanto o caf\xE9 produz
       frutos novos."
