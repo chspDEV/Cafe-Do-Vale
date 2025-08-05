@@ -4,10 +4,11 @@ using System.Collections.Generic;
 using Tcp4.Assets.Resources.Scripts.Managers;
 using Tcp4;
 using System;
+using PlugInputPack;
 
 public class QuestChecker : MonoBehaviour
 {
-    [SerializeField] private PlayerInputs playerInputs;
+    [SerializeField] private PlugInputComponent playerInputs;
     [SerializeField] private PlayerMovement playerMovement;
 
     private void Awake()
@@ -18,7 +19,7 @@ public class QuestChecker : MonoBehaviour
     private void InitializeInputActions()
     {
         if(playerInputs == null)
-        playerInputs = GameAssets.Instance.player.GetComponent<PlayerInputs>();
+        playerInputs = GameAssets.Instance.inputComponent;
 
         if(playerMovement == null)
         playerMovement = GameAssets.Instance.player.GetComponent<PlayerMovement>();
@@ -84,10 +85,10 @@ public class QuestChecker : MonoBehaviour
             InputsPossibilities.Backward => playerMovement.backwardPressed,
             InputsPossibilities.Left => playerMovement.leftPressed,
             InputsPossibilities.Right => playerMovement.rightPressed,
-            InputsPossibilities.Map => playerInputs.map,
-            InputsPossibilities.Recipe => playerInputs.recipe,
-            InputsPossibilities.Pause => playerInputs.pause,
-            InputsPossibilities.Inventory => playerInputs.seedInventory,
+            InputsPossibilities.Map => playerInputs["Map"].IsPressed,
+            InputsPossibilities.Recipe => playerInputs["Recipe"].IsPressed,
+            InputsPossibilities.Pause => playerInputs["Pause"].IsPressed,
+            InputsPossibilities.Inventory => playerInputs["SeedInventory"].IsPressed,
             _ => false,
         };
     }

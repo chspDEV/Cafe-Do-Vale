@@ -546,6 +546,9 @@ namespace Tcp4
             // Abrimos e registramos
             menu.SetActive(true);
             openedMenus.Add(menu);
+
+            TimeManager.Instance.Freeze();
+            DeactiveUi.ControlUi(HasMenuOpen());
         }
 
         /// <summary>
@@ -556,9 +559,13 @@ namespace Tcp4
             if (openedMenus.Count == 0) return;
 
             // Pega o último, fecha e remove da lista
+            
             var last = openedMenus[openedMenus.Count - 1];
             last.SetActive(false);
             openedMenus.RemoveAt(openedMenus.Count - 1);
+            Debug.Log($"Fechando Ultimo menu aberto! Menu: {last.name}");
+            DeactiveUi.ControlUi(HasMenuOpen());
+            TimeManager.Instance.Unfreeze();
         }
 
         /// <summary>
@@ -570,6 +577,8 @@ namespace Tcp4
 
             menu.SetActive(false);
             openedMenus.Remove(menu);
+            DeactiveUi.ControlUi(HasMenuOpen());
+            TimeManager.Instance.Unfreeze();
         }
 
         public bool HasMenuOpen()

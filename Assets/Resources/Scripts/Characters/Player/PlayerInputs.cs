@@ -1,104 +1,96 @@
 using System.Collections;
 using UnityEngine;
-using UnityEngine.InputSystem;
+using PlugInputPack;
+using Tcp4.Assets.Resources.Scripts.Managers;
 
 namespace Tcp4
 {
     public class PlayerInputs : MonoBehaviour
     {
-        public bool map, notificiation, seedInventory, pause, recipe;
+        [Header("Input Plug Asset")]
+        public PlugInputComponent input;
 
-        public void SetMap(InputAction.CallbackContext context)
+        [Header("Debug Flags")]
+        public bool map, notification, seedInventory, pause, recipe;
+
+        public bool CanCloseMenu = true;
+
+        private bool canCheckInputs = true;
+        private void Start()
         {
-            if (context.performed)
-            {
-                if (UIManager.Instance != null && !UIManager.Instance.HasMenuOpen())
-                {
-                    UIManager.Instance.ControlMap(true);
-                    map = true;
-                    StartCoroutine(ResetCheckInputs());
-                }
-                else { Debug.LogWarning("UIManager não inicializado ou outro menu aberto!"); }
-            }
+            input = GameAssets.Instance.inputComponent;
         }
 
-        public void SetNotification(InputAction.CallbackContext context)
+        IEnumerator WaitCloseMenu()
         {
-            if (context.performed)
-            {
-                if (UIManager.Instance != null && !UIManager.Instance.HasMenuOpen())
-                {
-                    //UIManager.Instance.ControlNotification(true);
-                    notificiation = true;
-                    StartCoroutine(ResetCheckInputs());
-                }
-                else { Debug.LogWarning("UIManager não inicializado ou outro menu aberto!"); }
-            }
+            CanCloseMenu = false;
+            yield return new WaitForSeconds(0.1f);
+            CanCloseMenu = true;
         }
-
-        public void SetSeedInventory(InputAction.CallbackContext context)
+        private void Update()
         {
-            if (context.performed)
+            if (input == null || UIManager.Instance == null) return;
+
+            if (input["Pause"].Pressed && !UIManager.Instance.HasMenuOpen())
             {
-                if (UIManager.Instance != null && !UIManager.Instance.HasMenuOpen())
-                {
-                    UIManager.Instance.ControlSeedInventory(true);
-                    seedInventory = true;
-                    StartCoroutine(ResetCheckInputs());
-                }
-                else { Debug.LogWarning("UIManager não inicializado ou outro menu aberto."); }
+                UIManager.Instance.ControlConfigMenu(true);
+                pause = true;
+                StartCoroutine(ResetCheckInputs());
+                StartCoroutine(WaitCloseMenu());
             }
-        }
 
-        public void SetPause(InputAction.CallbackContext context)
-        {
-            if (context.performed)
+            // Fecha menu sempre que possível
+            if (input["CloseMenu"].IsPressed && UIManager.Instance.HasMenuOpen() && CanCloseMenu)
             {
-                if (UIManager.Instance != null && !UIManager.Instance.HasMenuOpen())
-                {
-                    UIManager.Instance.ControlConfigMenu(true);
-                    pause = true;
-                    StartCoroutine(ResetCheckInputs());
-                }
-                else { Debug.LogWarning("UIManager não inicializado ou outro menu aberto!"); }
+                UIManager.Instance.CloseLastMenu();
+                return; // evita conflito com o resto dos inputs
             }
-        }
 
-        public void SetRecipe(InputAction.CallbackContext context)
-        {
-            if (context.performed)
+            // Impede inputs de abertura se estiver bloqueado
+            if (!canCheckInputs) return;
+
+            if (input["Map"].Pressed && !UIManager.Instance.HasMenuOpen())
             {
-                if (UIManager.Instance != null && !UIManager.Instance.HasMenuOpen())
-                {
-                    UIManager.Instance.ControlRecipeMenu(true);
-                    recipe = true;
-                    StartCoroutine(ResetCheckInputs());
-                }
-                else { Debug.LogWarning("UIManager não inicializado ou outro menu aberto!"); }
+                UIManager.Instance.ControlMap(true);
+                map = true;
+                StartCoroutine(ResetCheckInputs());
             }
-        }
 
-        public void SetCloseMenu(InputAction.CallbackContext context)
-        {
-            if (context.performed)
+            if (input["Notification"].Pressed && !UIManager.Instance.HasMenuOpen())
             {
-                if (UIManager.Instance != null && UIManager.Instance.HasMenuOpen())
-                {
-                    UIManager.Instance.CloseLastMenu();
-                }
-                else { Debug.LogWarning("UIManager não inicializado ou outro menu aberto!"); }
+                // UIManager.Instance.ControlNotification(true);
+                notification = true;
+                StartCoroutine(ResetCheckInputs());
             }
-        }
 
-        IEnumerator ResetCheckInputs()
-        {
-            yield return new WaitForSeconds(1.3f);
+            if (input["SeedInventory"].Pressed && !UIManager.Instance.HasMenuOpen())
+            {
+                UIManager.Instance.ControlSeedInventory(true);
+                seedInventory = true;
+                StartCoroutine(ResetCheckInputs());
+            }
+
             
+
+            if (input["Recipe"].Pressed && !UIManager.Instance.HasMenuOpen())
+            {
+                UIManager.Instance.ControlRecipeMenu(true);
+                recipe = true;
+                StartCoroutine(ResetCheckInputs());
+            }
+        }
+
+
+        private IEnumerator ResetCheckInputs()
+        {
+            canCheckInputs = false;
+            yield return new WaitForSeconds(1.3f);
             map = false;
-            notificiation = false;
+            notification = false;
             seedInventory = false;
-            pause = false; 
+            pause = false;
             recipe = false;
+            canCheckInputs = true;
         }
     }
 }
