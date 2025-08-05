@@ -40,7 +40,7 @@ namespace Tcp4
             }
 
             // Fecha menu sempre que possível
-            if (input["CloseMenu"].IsPressed && UIManager.Instance.HasMenuOpen() && CanCloseMenu)
+            if (input["CloseMenu"].Pressed && UIManager.Instance.HasMenuOpen() && CanCloseMenu)
             {
                 UIManager.Instance.CloseLastMenu();
                 return; // evita conflito com o resto dos inputs
@@ -84,7 +84,7 @@ namespace Tcp4
         private IEnumerator ResetCheckInputs()
         {
             canCheckInputs = false;
-            yield return new WaitForSeconds(1.3f);
+            yield return new WaitForSeconds(0.2f);
             map = false;
             notification = false;
             seedInventory = false;
