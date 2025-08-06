@@ -1,15 +1,71 @@
-using UnityEngine;
-using UnityEngine.InputSystem;
-using System.Collections.Generic;
+﻿using UnityEngine;
 using Tcp4.Assets.Resources.Scripts.Managers;
 using Tcp4;
 using System;
+using System.Collections.Generic;
 using PlugInputPack;
 
 public class QuestChecker : MonoBehaviour
 {
     [SerializeField] private PlugInputComponent playerInputs;
     [SerializeField] private PlayerMovement playerMovement;
+
+    // Dicionário para conversão dinâmica de nomes de botões
+    private readonly Dictionary<CurrentInputType, Dictionary<string, string>> inputMappings
+        = new Dictionary<CurrentInputType, Dictionary<string, string>>
+    {
+        {
+            CurrentInputType.PC, new Dictionary<string, string>
+            {
+                { "Space", "SPACE" },
+                { "LeftButton", "MOUSE ESQ" },
+                { "RightButton", "MOUSE DIR" },
+                { "W", "W" },
+                { "A", "A" },
+                { "S", "S" },
+                { "D", "D" },
+                { "MAP", "M" },
+                { "RECIPE", "R" },
+            }
+        },
+        {
+            CurrentInputType.XBOX, new Dictionary<string, string>
+            {
+                { "Button South", "A" },
+                { "Button East", "B" },
+                { "Button North", "Y" },
+                { "Button West", "X" },
+                { "Left Trigger", "LT" },
+                { "Right Trigger", "RT" },
+                { "Left Shoulder", "LB" },
+                { "W", "LS para frente" },
+                { "A", "LS para esquerda" },
+                { "S", "LS para trás" },
+                { "D", "LS para direita" },
+                { "MAP", "Y" },
+                { "RECIPE", "X" },
+            }
+        },
+        {
+            CurrentInputType.PLAYSTATION, new Dictionary<string, string>
+            {
+                { "Button South", "✕" },
+                { "Button East", "◯" },
+                { "Button North", "▲" },
+                { "Button West", "⬜" },
+                { "Left Trigger", "L2" },
+                { "Right Trigger", "R2" },
+                { "Left Shoulder", "L1" },
+                { "Right Shoulder", "R1" },
+                { "W", "LS para frente" },
+                { "A", "LS para esquerda" },
+                { "S", "LS para trás" },
+                { "D", "LS para direita" },
+                { "MAP", "⬜" },
+                { "RECIPE", "▲" },
+            }
+        },
+    };
 
     private void Awake()
     {
@@ -18,23 +74,19 @@ public class QuestChecker : MonoBehaviour
 
     private void InitializeInputActions()
     {
-        if(playerInputs == null)
-        playerInputs = GameAssets.Instance.inputComponent;
+        if (playerInputs == null)
+            playerInputs = GameAssets.Instance.inputComponent;
 
-        if(playerMovement == null)
-        playerMovement = GameAssets.Instance.player.GetComponent<PlayerMovement>();
-
+        if (playerMovement == null)
+            playerMovement = GameAssets.Instance.player.GetComponent<PlayerMovement>();
     }
-
 
     private void Update()
     {
         var currentStep = QuestManager.Instance.CurrentStep;
-
         if (currentStep == null) return;
 
         var objective = currentStep.objective;
-
         if (objective == null) return;
 
         switch (objective.objectiveType)
@@ -42,7 +94,6 @@ public class QuestChecker : MonoBehaviour
             case QuestObjectiveType.PressButton:
                 CheckButtonPressObjective(objective);
                 break;
-
             case QuestObjectiveType.ReachLocation:
                 CheckLocationObjective(objective);
                 break;
@@ -58,11 +109,8 @@ public class QuestChecker : MonoBehaviour
         {
             QuestManager.Instance.CompleteCurrentStep();
         }
-        else
-        {
-            //Debug.LogError($"Esperava id[{objective.targetID}] e o ultimo foi [{InteractionManager.Instance.GetLastIdInteracted()}]");
-        }
     }
+
     private void CheckButtonPressObjective(QuestObjective objective)
     {
         if (IsMenuBlockingTutorial()) return;
@@ -70,10 +118,6 @@ public class QuestChecker : MonoBehaviour
         if (IsInputPressed(objective.requiredInput))
         {
             QuestManager.Instance.CompleteCurrentStep();
-        }
-        else
-        {
-            Debug.Log($"Esperava [{objective.requiredInput.ToString()}] e est� como [{IsInputPressed(objective.requiredInput)}]");
         }
     }
 
@@ -95,7 +139,6 @@ public class QuestChecker : MonoBehaviour
 
     private bool IsMenuBlockingTutorial()
     {
-        // Usa sua refer�ncia de UIManager para verificar se menus est�o abertos
         return UIManager.Instance != null && UIManager.Instance.HasMenuOpen();
     }
 
@@ -113,70 +156,38 @@ public class QuestChecker : MonoBehaviour
             QuestManager.Instance.CompleteCurrentStep();
         }
     }
-    // M�todo auxiliar para obter o nome de exibi��o do bot�o
+
+    /// <summary>
+    /// Retorna o nome do botão adequado para a plataforma atual.
+    /// </summary>
     public string GetButtonDisplayName(string actionName)
     {
-
-        switch (GameAssets.Instance.currentInputType)
+        var currentType = GameAssets.Instance.currentInputType;
+        if (inputMappings.TryGetValue(currentType, out var mapping))
         {
-            case CurrentInputType.PC:
-                return ConvertPCDisplayName(actionName);
-
-            case CurrentInputType.XBOX:
-                return ConvertXboxDisplayName(actionName);
-
-            case CurrentInputType.PLAYSTATION:
-                return ConvertPlaystationDisplayName(actionName);
-
-            default:
-                return actionName.ToUpper();
+            if (mapping.TryGetValue(actionName, out var displayName))
+                return displayName;
         }
+        return actionName.ToUpper();
     }
 
-    private string ConvertPCDisplayName(string unityName)
+    /// <summary>
+    /// Substitui tags do tipo [BTN:Space] em um texto por nomes corretos para o input atual.
+    /// </summary>
+    public string ReplaceButtonTags(string text)
     {
-        switch (unityName)
-        {
-            case "Space": return "SPACE";
-            case "LeftButton": return "MOUSE ESQ";
-            case "RightButton": return "MOUSE DIR";
-            case "W": return "W";
-            case "A": return "A";
-            case "S": return "S";
-            case "D": return "D";
-            default: return unityName.ToUpper();
-        }
-    }
+        var currentType = GameAssets.Instance.currentInputType;
 
-    private string ConvertXboxDisplayName(string unityName)
-    {
-        switch (unityName)
-        {
-            case "Button South": return "A";
-            case "Button East": return "B";
-            case "Button North": return "Y";
-            case "Button West": return "X";
-            case "Left Trigger": return "LT";
-            case "Right Trigger": return "RT";
-            case "Left Shoulder": return "LB";
-            case "Right Shoulder": return "RB";
-            default: return unityName;
-        }
-    }
+        if (!inputMappings.ContainsKey(currentType))
+            return text;
 
-    private string ConvertPlaystationDisplayName(string unityName)
-    {
-        switch (unityName)
+        foreach (var mapping in inputMappings[currentType])
         {
-            case "Button South": return "CROSS";
-            case "Button East": return "CIRCLE";
-            case "Button North": return "TRIANGLE";
-            case "Button West": return "SQUARE";
-            case "Left Trigger": return "L2";
-            case "Right Trigger": return "R2";
-            case "Left Shoulder": return "L1";
-            case "Right Shoulder": return "R1";
-            default: return unityName;
+            string tag = $"[BTN:{mapping.Key}]";
+            if (text.Contains(tag))
+                text = text.Replace(tag, mapping.Value);
         }
+
+        return text;
     }
 }

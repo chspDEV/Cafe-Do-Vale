@@ -1,37 +1,36 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using System.Collections;
 using System.Linq;
-using System.Reflection;
 using Sirenix.OdinInspector;
+using PlugInputPack;
+using Tcp4.Assets.Resources.Scripts.Managers;
 
 public class QuestUI : Singleton<QuestUI>
 {
-    [Title("Configurações Principais")]
-    [BoxGroup("Configurações de Exibição")]
+    [Title("ConfiguraÃ§Ãµes Principais")]
+    [BoxGroup("ConfiguraÃ§Ãµes de ExibiÃ§Ã£o")]
     [SerializeField] private float displayDuration = 60 * 30f;
 
-    [Title("Referências de UI")]
-    [BoxGroup("Referências de UI")]
+    [Title("ReferÃªncias de UI")]
+    [BoxGroup("ReferÃªncias de UI")]
     [Required][SerializeField] private GameObject questPanel;
-    [BoxGroup("Referências de UI")]
+    [BoxGroup("ReferÃªncias de UI")]
     [Required][SerializeField] private TextMeshProUGUI instructionText;
-    [BoxGroup("Referências de UI")]
+    [BoxGroup("ReferÃªncias de UI")]
     [Required][SerializeField] private Image progressFill;
-    [BoxGroup("Referências de UI")]
+    [BoxGroup("ReferÃªncias de UI")]
     [Required][SerializeField] private GameObject completionMarkerPrefab;
-    [BoxGroup("Referências de UI")]
+    [BoxGroup("ReferÃªncias de UI")]
+    [Required][SerializeField] private GameObject nextIndicator;
+    [BoxGroup("ReferÃªncias de UI")]
     [Required][SerializeField] private Transform progressContainer;
-    [BoxGroup("Referências de UI")]
-    [Required][SerializeField] private Button skipButton;
-    [BoxGroup("Referências de UI")]
-    [Required][SerializeField] private Button nextButton;
 
-    [Title("Configurações de Animação")]
-    [BoxGroup("Configurações de Animação")]
+    [Title("ConfiguraÃ§Ãµes de AnimaÃ§Ã£o")]
+    [BoxGroup("ConfiguraÃ§Ãµes de AnimaÃ§Ã£o")]
     [Range(0.1f, 2f)][SerializeField] private float fadeDuration = 0.5f;
-    [BoxGroup("Configurações de Animação")]
+    [BoxGroup("ConfiguraÃ§Ãµes de AnimaÃ§Ã£o")]
     [Required][SerializeField] private CanvasGroup canvasGroup;
 
     [Title("Estado Interno")]
@@ -40,23 +39,79 @@ public class QuestUI : Singleton<QuestUI>
     [BoxGroup("Estado Interno")]
     [ShowInInspector][ReadOnly] private Coroutine currentDisplayRoutine;
 
+    [Title("ConfiguraÃ§Ãµes de Controle")]
+    [SerializeField] private PlugInputComponent playerInputs;
+    [SerializeField] private float holdDuration = 2f;
+    [SerializeField] private Image holdFillImage;
+
+    private float holdTimer = 0f;
+    private bool isHoldingNext = false;
+
+    private QuestChecker questChecker;
+
     public override void Awake()
     {
         base.Awake();
 
-        if(canvasGroup == null)
-        canvasGroup = GetComponent<CanvasGroup>() ?? questPanel.AddComponent<CanvasGroup>();
+        if (playerInputs == null)
+            playerInputs = GameAssets.Instance.inputComponent;
 
-        // Inicialmente escondido
+        if (canvasGroup == null)
+            canvasGroup = GetComponent<CanvasGroup>() ?? questPanel.AddComponent<CanvasGroup>();
+
         canvasGroup.alpha = 0;
         questPanel.SetActive(false);
+
+        if (nextIndicator != null)
+            nextIndicator.SetActive(false);
+
+
+        if (holdFillImage != null)
+            holdFillImage.fillAmount = 0f;
+
+        questChecker = FindFirstObjectByType<QuestChecker>();
     }
 
-    public void Start()
+    private void Update()
     {
-        skipButton.onClick.AddListener(SkipQuest);
-        nextButton.onClick.AddListener(CompleteCurrentStep);
+        // Se nÃ£o hÃ¡ missÃ£o ativa, desativa indicador e para tudo
+        if (QuestManager.Instance.CurrentMission == null)
+        {
+            if (nextIndicator != null) nextIndicator.SetActive(false);
+            return;
+        }
+
+        // Verifica se o jogador estÃ¡ pressionando o botÃ£o de "prÃ³ximo"
+        bool holdPressed = playerInputs["HoldMission"].IsPressed;
+
+        if (holdPressed)
+        {
+            holdTimer += Time.deltaTime;
+            isHoldingNext = true;
+
+            if (holdFillImage != null)
+                holdFillImage.fillAmount = Mathf.Clamp01(holdTimer / holdDuration);
+
+            if (holdTimer >= holdDuration)
+            {
+                NextQuest();
+                holdTimer = 0f;
+
+                if (holdFillImage != null)
+                    holdFillImage.fillAmount = 0f;
+            }
+        }
+        else if (isHoldingNext)
+        {
+            // Reset ao soltar
+            holdTimer = 0f;
+            isHoldingNext = false;
+
+            if (holdFillImage != null)
+                holdFillImage.fillAmount = 0f;
+        }
     }
+
 
     private void OnEnable()
     {
@@ -72,15 +127,20 @@ public class QuestUI : Singleton<QuestUI>
         QuestManager.OnQuestCompleted -= OnQuestCompleted;
     }
 
-    public void ShowInstruction(string instruction)
+    public void ShowInstruction(string instruction, bool isMissionTitle = false)
     {
+        if (questChecker != null)
+            instruction = questChecker.ReplaceButtonTags(instruction);
+
         if (currentDisplayRoutine != null)
-        {
             StopCoroutine(currentDisplayRoutine);
-        }
+
+        // âœ… Ativa o "Next" somente se for o tÃ­tulo da missÃ£o
+        nextIndicator?.SetActive(isMissionTitle);
 
         currentDisplayRoutine = StartCoroutine(DisplayInstructionRoutine(instruction));
     }
+
 
     private IEnumerator DisplayInstructionRoutine(string instruction)
     {
@@ -92,7 +152,7 @@ public class QuestUI : Singleton<QuestUI>
 
         yield return StartCoroutine(FadePanel(0, 1));
 
-        // Mostra por um tempo ou até interação
+        // Mostra por um tempo ou atÃ© interaÃ§Ã£o
         float elapsed = 0;
         while (elapsed < displayDuration && isShowingInstruction)
         {
@@ -117,28 +177,24 @@ public class QuestUI : Singleton<QuestUI>
 
     private void OnQuestStarted(Quest mission)
     {
-        // Atualiza a UI para mostrar o progresso
         UpdateProgressUI(mission);
-
-        // Mostra o nome da missão como primeira instrução
-        ShowInstruction($"Missão: {mission.questName}");
+        ShowInstruction($"MissÃ£o: {mission.questName}", isMissionTitle: true);
     }
+
 
     private void OnStepChanged(QuestStep step)
     {
-        if(QuestManager.Instance.CurrentMission != null)
+        if (QuestManager.Instance.CurrentMission != null)
             UpdateProgressUI(QuestManager.Instance.CurrentMission);
 
-        ShowInstruction(step.instructionText);
-
-        // Mostra ou esconde o botão "Next" dependendo do tipo de objetivo
-        nextButton.gameObject.SetActive(step.objective.objectiveType == QuestObjectiveType.InfoOnly);
+        ShowInstruction(step.instructionText, isMissionTitle: false);
     }
+
 
     private void OnQuestCompleted(string questId)
     {
         CompleteProgressUI();
-        ShowInstruction("Missão completa!");
+        ShowInstruction("MissÃ£o completa!");
         StartCoroutine(CompleteQuestRoutine());
     }
 
@@ -151,19 +207,14 @@ public class QuestUI : Singleton<QuestUI>
 
     private void UpdateProgressUI(Quest mission)
     {
-        // Limpa marcadores antigos
         foreach (Transform child in progressContainer)
-        {
             Destroy(child.gameObject);
-        }
 
-        // Atualiza barra de progresso
         if (mission.steps.Count > 0)
         {
             int completedSteps = mission.steps.Count(s => s.isCompleted);
             progressFill.fillAmount = (float)completedSteps / mission.steps.Count;
         }
-
     }
 
     private void CompleteProgressUI()
@@ -173,11 +224,8 @@ public class QuestUI : Singleton<QuestUI>
 
     public void CompleteCurrentStep()
     {
-        if (isShowingInstruction)
-        {
-            isShowingInstruction = false;
-            QuestManager.Instance.CompleteCurrentStep();
-        }
+        isShowingInstruction = false;
+        QuestManager.Instance.CompleteCurrentStep();
     }
 
     public void SkipQuest()
@@ -187,6 +235,20 @@ public class QuestUI : Singleton<QuestUI>
             QuestManager.Instance.CompleteCurrentMission();
             StartCoroutine(FadePanel(canvasGroup.alpha, 0));
             questPanel.SetActive(false);
+        }
+    }
+
+    public void NextQuest()
+    {
+        if (QuestManager.Instance.CurrentMission != null &&
+            QuestManager.Instance.CurrentStep != null)
+        {
+            QuestManager.Instance.CompleteCurrentStep();
+
+            holdTimer = 0f;
+            isHoldingNext = false;
+            if (holdFillImage != null)
+                holdFillImage.fillAmount = 0f;
         }
     }
 }

@@ -1,4 +1,4 @@
-using UnityEngine;
+Ôªøusing UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 using TMPro;
@@ -8,7 +8,7 @@ using Tcp4;
 using Tcp4.Assets.Resources.Scripts.Managers;
 using UnityEngine.InputSystem;
 
-// Classe para representar uma linha de di·logo
+// Classe para representar uma linha de di√°logo
 [System.Serializable]
 public class DialogueLine
 {
@@ -18,7 +18,7 @@ public class DialogueLine
 
 public class DialogueManager : Singleton<DialogueManager>
 {
-    [Header("ConfiguraÁıes")]
+    [Header("Configura√ß√µes")]
     [SerializeField] private float typingSpeed = 0.05f;
     [SerializeField] private float cameraTransitionDelay = 0.5f;
 
@@ -53,7 +53,7 @@ public class DialogueManager : Singleton<DialogueManager>
 
         if (playerInteraction != null && playerInteraction.interactionPressed)
         {
-            playerInteraction.interactionPressed = false; // Reseta a flag de interaÁ„o
+            playerInteraction.interactionPressed = false; // Reseta a flag de intera√ß√£o
 
             if (isTyping)
             {
@@ -67,7 +67,7 @@ public class DialogueManager : Singleton<DialogueManager>
     }
 
     /// <summary>
-    /// Inicia um novo di·logo
+    /// Inicia um novo di√°logo
     /// </summary>
     public void StartDialogue(DialogueData dialogueData)
     {
@@ -93,12 +93,13 @@ public class DialogueManager : Singleton<DialogueManager>
         yield return new WaitForSeconds(cameraTransitionDelay);
 
         dialoguePanel.SetActive(true);
+        DeactiveUi.ControlUi(true);
 
         DisplayNextLine();
     }
 
     /// <summary>
-    /// Mostra a prÛxima linha do di·logo
+    /// Mostra a pr√≥xima linha do di√°logo
     /// </summary>
     public void DisplayNextLine()
     {
@@ -152,14 +153,21 @@ public class DialogueManager : Singleton<DialogueManager>
         }
     }
 
+    public bool IsDialogueActive()
+    {
+        return isDialogueActive;
+    }
+
+
     /// <summary>
-    /// Finaliza o di·logo atual
+    /// Finaliza o di√°logo atual
     /// </summary>
     public void EndDialogue()
     {
         if (!isDialogueActive) return;
 
         dialoguePanel.SetActive(false);
+        DeactiveUi.ControlUi(false);
         CameraManager.Instance.SetDialogueCameraActive(false);
         TimeManager.Instance.Unfreeze();
 
@@ -170,5 +178,12 @@ public class DialogueManager : Singleton<DialogueManager>
         isTyping = false;
         typingCoroutine = null;
         currentLine = null;
+
+        // ‚úÖ Corrige sumi√ßo da miss√£o da UI
+        if (QuestManager.Instance.CurrentStep != null)
+        {
+            QuestUI.Instance.ShowInstruction(QuestManager.Instance.CurrentStep.instructionText);
+        }
     }
+
 }

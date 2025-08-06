@@ -27,7 +27,7 @@ MonoBehaviour:
     hasIndicator: 0
     visualIndicator: {fileID: 0}
   - stepID: 1
-    instructionText: Pressione [W] para se movimentar.
+    instructionText: Pressione [BTN:W] para se movimentar.
     objective:
       objectiveType: 1
       requiredInput: 0
@@ -38,7 +38,7 @@ MonoBehaviour:
     hasIndicator: 0
     visualIndicator: {fileID: 0}
   - stepID: 2
-    instructionText: Pressione [A] para se movimentar.
+    instructionText: Pressione [BTN:A] para se movimentar.
     objective:
       objectiveType: 1
       requiredInput: 2
@@ -49,7 +49,7 @@ MonoBehaviour:
     hasIndicator: 0
     visualIndicator: {fileID: 0}
   - stepID: 3
-    instructionText: Pressione [S] para se movimentar.
+    instructionText: Pressione [BTN:S] para se movimentar.
     objective:
       objectiveType: 1
       requiredInput: 1
@@ -60,7 +60,7 @@ MonoBehaviour:
     hasIndicator: 0
     visualIndicator: {fileID: 0}
   - stepID: 4
-    instructionText: Pressione [D] para se movimentar.
+    instructionText: Pressione [BTN:D] para se movimentar.
     objective:
       objectiveType: 1
       requiredInput: 3
@@ -82,3 +82,4 @@ MonoBehaviour:
     hasIndicator: 0
     visualIndicator: {fileID: 0}
   isCompleted: 1
+  isStarted: 1

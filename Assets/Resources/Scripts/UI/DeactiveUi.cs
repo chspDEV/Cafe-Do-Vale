@@ -10,8 +10,15 @@ public class DeactiveUi : MonoBehaviour
 
     public static event Action OnDeactiveSpecificUi;
     public static event Action OnActiveSpecificUi;
+
+    /// <summary>
+    /// Se <c>true</c>, desativa as UI chamando <c>OnDeactiveSpecificUi</c>;
+    /// caso contrário, ativa as UI chamando <c>OnActiveSpecificUi</c>.
+    /// </summary>
     public static void ControlUi(bool isActive) =>
         (isActive ? OnDeactiveSpecificUi : OnActiveSpecificUi)?.Invoke();
+
+
     private void Start()
     {
         OnDeactiveSpecificUi += OnDeactiveUi;

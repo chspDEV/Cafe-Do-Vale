@@ -134,6 +134,15 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""HoldMission"",
+                    ""type"": ""Button"",
+                    ""id"": ""a85e36c6-79d9-4d48-a3db-6dfd21f0a39b"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -653,6 +662,50 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""action"": ""Minigame_Circle"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""6ddeaf5e-a167-4806-a758-14efa61b40b6"",
+                    ""path"": ""<Keyboard>/q"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""HoldMission"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""18d8ba4a-9b0b-40ab-8fab-21ed0a6d5ddb"",
+                    ""path"": ""<Gamepad>/dpad/down"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""HoldMission"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""08f8c23f-17a8-4414-9cac-18b9fb77985d"",
+                    ""path"": ""<DualShockGamepad>/dpad/down"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""HoldMission"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""c020ac6b-6613-4177-802b-5f6e6d7726d7"",
+                    ""path"": ""<XInputController>/dpad/down"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""HoldMission"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -825,6 +878,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         m_Player_Minigame_Square = m_Player.FindAction("Minigame_Square", throwIfNotFound: true);
         m_Player_Minigame_Triangle = m_Player.FindAction("Minigame_Triangle", throwIfNotFound: true);
         m_Player_Minigame_Circle = m_Player.FindAction("Minigame_Circle", throwIfNotFound: true);
+        m_Player_HoldMission = m_Player.FindAction("HoldMission", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_Navigate = m_UI.FindAction("Navigate", throwIfNotFound: true);
@@ -911,6 +965,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Minigame_Square;
     private readonly InputAction m_Player_Minigame_Triangle;
     private readonly InputAction m_Player_Minigame_Circle;
+    private readonly InputAction m_Player_HoldMission;
     public struct PlayerActions
     {
         private @PlayerInputActions m_Wrapper;
@@ -927,6 +982,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         public InputAction @Minigame_Square => m_Wrapper.m_Player_Minigame_Square;
         public InputAction @Minigame_Triangle => m_Wrapper.m_Player_Minigame_Triangle;
         public InputAction @Minigame_Circle => m_Wrapper.m_Player_Minigame_Circle;
+        public InputAction @HoldMission => m_Wrapper.m_Player_HoldMission;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -972,6 +1028,9 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             @Minigame_Circle.started += instance.OnMinigame_Circle;
             @Minigame_Circle.performed += instance.OnMinigame_Circle;
             @Minigame_Circle.canceled += instance.OnMinigame_Circle;
+            @HoldMission.started += instance.OnHoldMission;
+            @HoldMission.performed += instance.OnHoldMission;
+            @HoldMission.canceled += instance.OnHoldMission;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -1012,6 +1071,9 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             @Minigame_Circle.started -= instance.OnMinigame_Circle;
             @Minigame_Circle.performed -= instance.OnMinigame_Circle;
             @Minigame_Circle.canceled -= instance.OnMinigame_Circle;
+            @HoldMission.started -= instance.OnHoldMission;
+            @HoldMission.performed -= instance.OnHoldMission;
+            @HoldMission.canceled -= instance.OnHoldMission;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -1121,6 +1183,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         void OnMinigame_Square(InputAction.CallbackContext context);
         void OnMinigame_Triangle(InputAction.CallbackContext context);
         void OnMinigame_Circle(InputAction.CallbackContext context);
+        void OnHoldMission(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {
