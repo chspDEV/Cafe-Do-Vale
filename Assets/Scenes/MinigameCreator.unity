@@ -244,14 +244,24 @@ MonoBehaviour:
   inputPC: {fileID: 0}
   clientSprites: []
   clientNames: []
+  areaIDs: 
   clientModels: []
   pfNovoDia: {fileID: 0}
   Money: {fileID: 0}
   player: {fileID: 0}
   safePoint: {fileID: 0}
   playerMovement: {fileID: 0}
+  lastProductionSprite: {fileID: 0}
+  workerPortraits: []
+  baristaIcon: {fileID: 0}
+  fazendeiroIcon: {fileID: 0}
+  repositorIcon: {fileID: 0}
+  workerPauseIcon: {fileID: 0}
+  workerWorkingIcon: {fileID: 0}
+  workerIdleIcon: {fileID: 0}
   currentInputType: 3
   inputComponent: {fileID: 805089088}
+  inputDetectionCooldown: 0.1
   isDebugMode: 0
 --- !u!1 &827653447
 GameObject:
@@ -657,7 +667,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: da5f82627d3f54043ad65f6fd11afbac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  minigameToStart: {fileID: 11400000, guid: 29409210cbc7ca74b9383ddf694628ad, type: 2}
+  minigameToStart: {fileID: 11400000, guid: 8ff8c3cb00a38eb43850a6e96506a8e9, type: 2}
 --- !u!224 &1454612742 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 3159007572612891039, guid: c994683ee76be3f4fa4a2db4102d69a0, type: 3}
@@ -1128,7 +1138,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8351364702127016923, guid: 481adddc1478d5f4fbdfe1105bf53051, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 8.407776
+      value: 8.407715
       objectReference: {fileID: 0}
     - target: {fileID: 8351364702127016923, guid: 481adddc1478d5f4fbdfe1105bf53051, type: 3}
       propertyPath: m_AnchoredPosition.y

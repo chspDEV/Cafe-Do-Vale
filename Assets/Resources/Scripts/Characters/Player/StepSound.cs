@@ -35,13 +35,10 @@ namespace Tcp4
                         AudioID = "passos", // O ID do seu SFX (sem "sfx_" e em minúsculas)
                         Position = gameAssets.player.transform.position, // Posição para o som 3D
                         VolumeScale = .1f, // Escala de volume (opcional, padrão é 1f)
-                        Pitch = Random.Range(0.7f, 1.4f)
+                        Pitch = Random.Range(0.7f, 1.1f)
 
                     };
                     SoundEvent.RequestSound(sfxArgs);
-
-                    //ANTIGO!
-                    //SoundManager.PlaySound(SoundType.passos, 0.2f);
                     stepTimer = stepInterval;
                 }
             }

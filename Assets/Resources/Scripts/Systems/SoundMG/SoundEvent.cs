@@ -12,7 +12,7 @@ namespace GameResources.Project.Scripts.Utilities.Audio
             OnSoundRequested?.Invoke(null, args);
         }
     }
-    
+
     public class SoundEventArgs : EventArgs
     {
         public enum SoundCategory
@@ -27,5 +27,6 @@ namespace GameResources.Project.Scripts.Utilities.Audio
         public float VolumeScale { get; set; } = 1f;
         public Transform TargetTransform { get; set; }
         public float Pitch { get; set; } = 1f;
+        public bool Loop { get; set; } = false;
     }
 }

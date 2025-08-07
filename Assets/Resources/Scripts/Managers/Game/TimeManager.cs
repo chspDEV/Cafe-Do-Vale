@@ -181,7 +181,7 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
 
         public void Freeze()
         {
-            savetimeMultiplier = timeMultiplier;
+            savetimeMultiplier = 21;
             timeMultiplier = 0;
         }
 

@@ -301,6 +301,7 @@ namespace Tcp4
                 minigameTrigger.minigameToStart.OnGetReward += this.ResetGrowthCycle;
 
                 minigameTrigger.minigameToStart.SetupReward(production.outputProduct);
+                GameAssets.Instance.SetupLastIconMinigamePlants(production.outputProduct.productImage);
                 minigameTrigger.TriggerMinigame();
                 DisableInteraction();
 

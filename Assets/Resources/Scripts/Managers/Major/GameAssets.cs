@@ -49,6 +49,8 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
         public Transform safePoint;
         public PlayerMovement playerMovement;
 
+        [HideInInspector] public Sprite lastProductionSprite;
+
         [Header("Worker System")]
         [SerializeField] public List<Sprite> workerPortraits = new();
 
@@ -307,16 +309,6 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
 
         private void Start()
         {
-            // OST Request
-            SoundEventArgs ostArgs = new()
-            {
-                Category = SoundEventArgs.SoundCategory.Music,
-                AudioID = "fazenda",
-                VolumeScale = .1f
-            };
-
-            SoundEvent.RequestSound(ostArgs);
-
             if (QuestManager.Instance != null)
                 QuestManager.Instance.StartMission("tutorial00");
         }
@@ -427,6 +419,11 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
         {
             currentInputType = type;
             UpdateSpriteForInputType(type);
+        }
+
+        public void SetupLastIconMinigamePlants(Sprite productImage)
+        {
+            lastProductionSprite = productImage;
         }
     }
 }

@@ -10,7 +10,9 @@ namespace GameResources.Project.Scripts.Utilities.Audio
     {
         private static SoundManagerSO _config;
         private static Queue<GameObject> _sfxPool = new();
-        private static AudioSource _musicSource;
+        private static List<AudioSource> _musicSources = new();
+        private static int _maxSimultaneousMusic = 3; // Ajustável
+
         private static GameObject _audioHost;
 
         private static readonly Dictionary<string, AudioClip> _musicClips = new();
@@ -35,7 +37,7 @@ namespace GameResources.Project.Scripts.Utilities.Audio
                 LoadAudioClips();
                 if (_audioHost == null || !_audioHost)
                 {
-                    _sfxPool.Clear(); 
+                    _sfxPool.Clear();
                     CreateAudioHost();
                 }
                 else
@@ -85,8 +87,14 @@ namespace GameResources.Project.Scripts.Utilities.Audio
                 return;
 
             _audioHost = new GameObject("AudioHost");
-            _musicSource = _audioHost.AddComponent<AudioSource>();
-            _musicSource.outputAudioMixerGroup = _config.audioMixer.FindMatchingGroups("Music")[0];
+
+            for (int i = 0; i < _maxSimultaneousMusic; i++)
+            {
+                var source = _audioHost.AddComponent<AudioSource>();
+                source.outputAudioMixerGroup = _config.audioMixer.FindMatchingGroups("Music")[0];
+                _musicSources.Add(source);
+            }
+
             Object.DontDestroyOnLoad(_audioHost);
         }
 
@@ -180,32 +188,36 @@ namespace GameResources.Project.Scripts.Utilities.Audio
 
             if (_musicClips.TryGetValue(id.ToLower(), out AudioClip clip))
             {
-                _musicSource.clip = clip;
-                _musicSource.Play();
+                _musicSources.RemoveAll(s => s == null || s.gameObject == null);
+
+                var source = _musicSources.Find(s => s != null && s.gameObject != null && !s.isPlaying);
+
+                if (source == null)
+                {
+                    Debug.LogWarning("Limite de músicas simultâneas atingido.");
+                    return;
+                }
+
+                source.clip = clip;
+                source.loop = true;
+                source.Play();
                 OnMusicPlay?.Invoke(id);
             }
         }
 
-        public static void PlaySFX(string id, Vector3 position, float volumeScale = 1f, float pitch = 1f)
-        {
-            if (_config == null)
-            {
-                Debug.LogError("SoundManagerSO Não Configurado!");
-                return;
-            }
 
+        public static void PlaySFX(string id, Vector3 position, float volumeScale = 1f, float pitch = 1f, bool loop = false)
+        {
             if (_sfxClips.TryGetValue(id.ToLower(), out AudioClip clip))
             {
                 if (_sfxPool.Count == 0)
                 {
-                    Debug.LogWarning("SFX pool esgotado! Aumentando em 1!");
                     IncreaseSFXPool();
                 }
 
                 var sourceObj = _sfxPool.Dequeue();
                 if (sourceObj == null || !sourceObj)
                 {
-                    Debug.LogWarning("Objeto do pool inválido, recriando pool.");
                     IncreaseSFXPool();
                     sourceObj = _sfxPool.Dequeue();
                 }
@@ -217,16 +229,12 @@ namespace GameResources.Project.Scripts.Utilities.Audio
                     pooledSource._audioSource.spatialBlend = 1;
                     sourceObj.transform.position = position;
                 }
-                
-                pooledSource.Play(clip, volumeScale);
-                pooledSource._audioSource.pitch = pitch;
+
+                pooledSource.Play(clip, volumeScale, pitch, loop);
                 OnSFXPlay?.Invoke(id);
             }
-            else
-            {
-                Debug.LogError($"Áudio Não Executado: {id}");
-            }
         }
+
 
         public static void PlaySFX(string id, Transform targetTransform, float volumeScale = 1f, float pitch = 1f)
         {
@@ -235,20 +243,22 @@ namespace GameResources.Project.Scripts.Utilities.Audio
 
         public static void StopMusic()
         {
-            if (_config == null) return;
-            _musicSource.Stop();
+            foreach (var source in _musicSources)
+                source.Stop();
         }
+
 
         public static void PauseMusic()
         {
-            if (_config == null) return;
-            _musicSource.Pause();
+            foreach (var source in _musicSources)
+                source.Pause();
         }
+
 
         public static void ResumeMusic()
         {
-            if (_config == null) return;
-            _musicSource.UnPause();
+            foreach (var source in _musicSources)
+                source.UnPause();
         }
     }
 }

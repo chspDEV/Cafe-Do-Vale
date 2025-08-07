@@ -16,7 +16,7 @@ MonoBehaviour:
   questName: "M\xE3os a obra V"
   steps:
   - stepID: 0
-    instructionText: Abra o menu de receitas.
+    instructionText: 'Abra o menu de receitas apertando [BTN:RECIPE]'
     objective:
       objectiveType: 1
       requiredInput: 5

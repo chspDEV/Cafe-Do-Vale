@@ -16,14 +16,14 @@ MonoBehaviour:
   questName: "M\xE3os a obra IV"
   steps:
   - stepID: 0
-    instructionText: 'Abra o Mapa de sua fazenda apertando [M]'
+    instructionText: 'Abra o Mapa de sua fazenda apertando [BTN:MAP]'
     objective:
       objectiveType: 1
       requiredInput: 4
       targetPosition: {x: 0, y: 0, z: 0}
       radius: 2
       targetID: 
-    isCompleted: 1
+    isCompleted: 0
     hasIndicator: 0
     visualIndicator: {fileID: 0}
   - stepID: 1
@@ -34,7 +34,7 @@ MonoBehaviour:
       targetPosition: {x: 6, y: 1, z: 15}
       radius: 2
       targetID: 
-    isCompleted: 1
+    isCompleted: 0
     hasIndicator: 0
     visualIndicator: {fileID: 0}
   - stepID: 2
@@ -45,7 +45,7 @@ MonoBehaviour:
       targetPosition: {x: 0, y: 0, z: 0}
       radius: 2
       targetID: refinementArea
-    isCompleted: 1
+    isCompleted: 0
     hasIndicator: 0
     visualIndicator: {fileID: 0}
   - stepID: 3
@@ -57,7 +57,7 @@ MonoBehaviour:
       targetPosition: {x: 0, y: 0, z: 0}
       radius: 2
       targetID: refinementButton
-    isCompleted: 1
+    isCompleted: 0
     hasIndicator: 0
     visualIndicator: {fileID: 0}
   - stepID: 3.5
@@ -105,4 +105,4 @@ MonoBehaviour:
     hasIndicator: 0
     visualIndicator: {fileID: 0}
   isCompleted: 0
-  isStarted: 0
+  isStarted: 1
