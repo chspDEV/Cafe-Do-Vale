@@ -15,10 +15,8 @@ public class CreationArea : BaseInteractable
     [Header("System Integration")]
     public int areaID;
 
-
     public void RegisterAreaID()
     {
-        // Adicione esta linha para registrar a estação:
         if (WorkerManager.Instance != null && GameAssets.Instance != null)
         {
             areaID = GameAssets.Instance.GenerateAreaID();
@@ -35,7 +33,7 @@ public class CreationArea : BaseInteractable
         timeImage.SetFillMethod(UnityEngine.UI.Image.FillMethod.Radial360);
 
         timeImage.ChangeSize(new(0.7f, .7f, .7f));
-        timeImage.transform.position = new(timeImage.transform.position.x, 
+        timeImage.transform.position = new(timeImage.transform.position.x,
             timeImage.transform.position.y, timeImage.transform.position.z + 1f);
 
         OnReachMaxTime += CreationManager.Instance.FinishDrink;
@@ -79,10 +77,19 @@ public class CreationArea : BaseInteractable
         EnableInteraction();
     }
 
-
     public override void OnInteract()
     {
+        // CORREÇÃO: Mesma verificação do SeedShop
+        if (UIManager.Instance.HasMenuOpen()) return;
+
         base.OnInteract();
+
+        // CORREÇÃO 1: Notifica que o menu de criação foi aberto (baseado no SeedShop)
+        SelectProduct.NotifyCreationMenuOpened();
+
+        // CORREÇÃO 2: Bloqueia input por 0.8s (mesmo tempo do SeedShop)
+        EventSystemBlocker.BlockForSeconds(0.8f);
+
         UIManager.Instance.UpdateCreationView();
         CreationManager.Instance.lastIdInteracted = index;
         ControlMenu(true);

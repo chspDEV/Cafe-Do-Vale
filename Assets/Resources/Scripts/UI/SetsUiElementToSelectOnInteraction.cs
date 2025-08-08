@@ -3,6 +3,8 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using System.Collections;
 using Sirenix.OdinInspector;
+using Tcp4.Assets.Resources.Scripts.Managers;
+using UnityEngine.SceneManagement;
 
 namespace ChristinaCreatesGames.UI
 {
@@ -48,6 +50,10 @@ namespace ChristinaCreatesGames.UI
         {
             if (eventSystem == null)
                 eventSystem = FindFirstObjectByType<EventSystem>();
+
+            if (GameAssets.Instance == null && 
+                GameAssets.Instance.currentInputType == CurrentInputType.PC && 
+                SceneManager.GetActiveScene().buildIndex > 0) yield break;
 
             if (searchByTag && !string.IsNullOrEmpty(tagToSearch))
             {

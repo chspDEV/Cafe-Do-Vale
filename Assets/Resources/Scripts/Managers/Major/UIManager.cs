@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Sirenix.OdinInspector;
 using Tcp4.Assets.Resources.Scripts.Managers;
 using Tcp4.Assets.Resources.Scripts.Systems.Clients;
@@ -10,6 +10,7 @@ using UnityEngine.SceneManagement;
 using ChristinaCreatesGames.UI;
 using GameResources.Project.Scripts.Utilities.Audio;
 using System.Collections;
+using UnityEngine.EventSystems;
 
 namespace Tcp4
 {
@@ -143,27 +144,314 @@ namespace Tcp4
 
         #endregion
 
-        #region Creation Management
+
+        #region Creation Management - VERSÃO CORRIGIDA COM SUBMIT
 
         private List<GameObject> CreationSlotInstances = new();
         private List<GameObject> IngredientsSlotInstances = new();
+
+        [TabGroup("UI Interactions")][SerializeField] private Button createButton;
 
         public void ControlCreationMenu(bool isActive)
         {
             if (isActive)
             {
+                UpdateCreationView();
+                UpdateIngredientsView();
+                
                 OpenMenu(creationMenu);
 
-                if (creationInteraction != null)
-                    creationInteraction.JumpToElement();
+                // CORREÇÃO: Mesmo padrão do SeedShop
+                StartCoroutine(SetupCreationNavigation());
             }
             else
             {
                 CloseMenu(creationMenu);
             }
-
         }
-        
+
+        private IEnumerator SetupCreationNavigation()
+        {
+            // CORREÇÃO: Mesmo delay do SeedShop (0.5s)
+            yield return new WaitForSecondsRealtime(0.5f);
+
+            ConfigureCreationSlotNavigation();
+
+            // CORREÇÃO: Seleciona primeiro elemento como no SeedShop
+            SelectFirstCreationSlot();
+        }
+
+        public void SelectFirstCreationSlot()
+        {
+            StartCoroutine(SelectCreationSlotNextFrame());
+        }
+
+        private IEnumerator SelectCreationSlotNextFrame()
+        {
+            yield return new WaitForSecondsRealtime(0.1f);
+
+            CreationSlotInstances.RemoveAll(go => go == null);
+
+            if (CreationSlotInstances.Count > 0)
+            {
+                var first = CreationSlotInstances[0].GetComponent<Selectable>();
+                if (first != null)
+                {
+                    first.Select();
+                }
+            }
+            else
+            {
+                // Fallback se não tiver slots
+                EventSystem.current.SetSelectedGameObject(null);
+            }
+        }
+
+        public void UpdateCreationView()
+        {
+            Inventory playerInventory = StorageManager.Instance.playerInventory;
+            if (playerInventory == null) return;
+
+            CleanCreationSlots();
+
+            foreach (BaseProduct product in playerInventory.GetInventory())
+            {
+                GameObject go = Instantiate(pfSlotCreation, creationSlotHolder);
+                CreationSlotInstances.Add(go);
+
+                SelectProduct selectProduct = go.GetComponent<SelectProduct>();
+                selectProduct.myProduct = product;
+                selectProduct.SetSlotType(SelectProduct.SlotType.InventorySlot);
+
+                go.GetComponent<DataSlot>().Setup(product.productImage, 1);
+
+                // CORREÇÃO: Não desabilita o botão aqui, deixa habilitado
+                var button = go.GetComponent<Button>();
+                if (button != null)
+                {
+                    button.interactable = true; // ← MUDANÇA: deixa habilitado
+                }
+            }
+
+            // CORREÇÃO: Não precisa mais do delay para habilitar
+            // if (creationMenu.activeInHierarchy)
+            // {
+            //     StartCoroutine(EnableCreationButtonsWithDelay(0.5f));
+            // }
+        }
+
+        public void UpdateIngredientsView()
+        {
+            List<BaseProduct> ingredients = CreationManager.Instance.Ingredients;
+            if (ingredients == null) return;
+
+            CleanIngredientsSlots();
+
+            foreach (var ingredient in ingredients)
+            {
+                GameObject go = Instantiate(pfSlotCreationIngredient, ingredientSlotHolder);
+                IngredientsSlotInstances.Add(go);
+
+                SelectProduct selectProduct = go.GetComponent<SelectProduct>();
+                selectProduct.myProduct = ingredient;
+                selectProduct.SetSlotType(SelectProduct.SlotType.IngredientSlot);
+
+                go.GetComponent<DataSlot>().Setup(ingredient.productImage, ingredient.productName);
+
+                // CORREÇÃO: Deixa habilitado desde o início
+                var button = go.GetComponent<Button>();
+                if (button != null)
+                {
+                    button.interactable = true; // ← MUDANÇA: deixa habilitado
+                }
+            }
+
+            // CORREÇÃO: Não precisa mais do delay
+            // if (creationMenu.activeInHierarchy)
+            // {
+            //     StartCoroutine(EnableIngredientButtonsWithDelay(0.5f));
+            // }
+        }
+
+        private IEnumerator EnableIngredientButtonsWithDelay(float delay)
+        {
+            yield return new WaitForSecondsRealtime(delay);
+
+            foreach (var go in IngredientsSlotInstances)
+            {
+                if (go != null)
+                {
+                    var button = go.GetComponent<Button>();
+                    if (button != null)
+                    {
+                        button.interactable = true;
+                    }
+                }
+            }
+        }
+
+        // NOVO: Método baseado no EnableButtonsWithDelay do SeedShop
+        private IEnumerator EnableCreationButtonsWithDelay(float delay)
+        {
+            yield return new WaitForSecondsRealtime(delay);
+
+            foreach (var go in CreationSlotInstances)
+            {
+                if (go != null)
+                {
+                    var button = go.GetComponent<Button>();
+                    if (button != null)
+                    {
+                        button.interactable = true;
+                    }
+                }
+            }
+        }
+
+        private IEnumerator DelayedNavigationSetup()
+        {
+            yield return new WaitForSecondsRealtime(0.2f);
+            ConfigureCreationSlotNavigation();
+        }
+
+        private void ConfigureCreationSlotNavigation()
+        {
+            if (CreationSlotInstances.Count == 0) return;
+
+            // Organiza os slots em uma grid 4x4
+            int slotsPerRow = 4;
+
+            for (int i = 0; i < CreationSlotInstances.Count; i++)
+            {
+                var currentSlot = CreationSlotInstances[i];
+                var selectable = currentSlot.GetComponent<Selectable>();
+
+                if (selectable == null) continue;
+
+                var navigation = new Navigation();
+                navigation.mode = Navigation.Mode.Explicit;
+
+                int row = i / slotsPerRow;
+                int col = i % slotsPerRow;
+
+                // Navegação horizontal (esquerda/direita)
+                if (col > 0) // Não é o primeiro da linha
+                {
+                    navigation.selectOnLeft = CreationSlotInstances[i - 1].GetComponent<Selectable>();
+                }
+                else if (IngredientsSlotInstances.Count > row && IngredientsSlotInstances[row] != null)
+                {
+                    // É o primeiro da linha - vai para ingredientes se disponíveis
+                    navigation.selectOnLeft = IngredientsSlotInstances[row].GetComponent<Selectable>();
+                }
+
+                if (col < slotsPerRow - 1 && i + 1 < CreationSlotInstances.Count)
+                {
+                    navigation.selectOnRight = CreationSlotInstances[i + 1].GetComponent<Selectable>();
+                }
+                else if (IngredientsSlotInstances.Count > row && IngredientsSlotInstances[row] != null)
+                {
+                    // É o último da linha - vai para ingredientes se disponíveis
+                    navigation.selectOnRight = IngredientsSlotInstances[row].GetComponent<Selectable>();
+                }
+
+                // Navegação vertical (cima/baixo)
+                if (row > 0) // Não é a primeira linha
+                {
+                    int upIndex = (row - 1) * slotsPerRow + col;
+                    if (upIndex >= 0 && upIndex < CreationSlotInstances.Count)
+                    {
+                        navigation.selectOnUp = CreationSlotInstances[upIndex].GetComponent<Selectable>();
+                    }
+                }
+
+                if (row < (CreationSlotInstances.Count - 1) / slotsPerRow) // Não é a última linha
+                {
+                    int downIndex = (row + 1) * slotsPerRow + col;
+                    if (downIndex < CreationSlotInstances.Count)
+                    {
+                        navigation.selectOnDown = CreationSlotInstances[downIndex].GetComponent<Selectable>();
+                    }
+                }
+                else if (col >= 1 && col <= 2 && createButton != null) // Última linha, colunas centrais
+                {
+                    navigation.selectOnDown = createButton;
+                }
+
+                selectable.navigation = navigation;
+            }
+
+            // Configura navegação dos ingredientes
+            ConfigureIngredientsNavigation();
+            ConfigureCreateButtonNavigation();
+        }
+
+        private void ConfigureIngredientsNavigation()
+        {
+            for (int i = 0; i < IngredientsSlotInstances.Count; i++)
+            {
+                var currentSlot = IngredientsSlotInstances[i];
+                var selectable = currentSlot?.GetComponent<Selectable>();
+
+                if (selectable == null) continue;
+
+                var navigation = new Navigation();
+                navigation.mode = Navigation.Mode.Explicit;
+
+                // Ingredientes navegam verticalmente entre si
+                if (i > 0 && IngredientsSlotInstances[i - 1] != null)
+                {
+                    navigation.selectOnUp = IngredientsSlotInstances[i - 1].GetComponent<Selectable>();
+                }
+
+                if (i < IngredientsSlotInstances.Count - 1 && IngredientsSlotInstances[i + 1] != null)
+                {
+                    navigation.selectOnDown = IngredientsSlotInstances[i + 1].GetComponent<Selectable>();
+                }
+                else if (i == IngredientsSlotInstances.Count - 1 && createButton != null)
+                {
+                    navigation.selectOnDown = createButton;
+                }
+
+                // Navegação horizontal - vai para os slots da linha correspondente
+                int slotsPerRow = 4;
+                if (i < CreationSlotInstances.Count / slotsPerRow)
+                {
+                    int leftmostSlotIndex = i * slotsPerRow;
+                    int rightmostSlotIndex = Mathf.Min((i * slotsPerRow) + 3, CreationSlotInstances.Count - 1);
+
+                    if (leftmostSlotIndex < CreationSlotInstances.Count)
+                    {
+                        navigation.selectOnLeft = CreationSlotInstances[leftmostSlotIndex].GetComponent<Selectable>();
+                        navigation.selectOnRight = CreationSlotInstances[rightmostSlotIndex].GetComponent<Selectable>();
+                    }
+                }
+
+                selectable.navigation = navigation;
+            }
+        }
+
+        private void ConfigureCreateButtonNavigation()
+        {
+            if (createButton == null) return;
+
+            var navigation = new Navigation();
+            navigation.mode = Navigation.Mode.Explicit;
+
+            // Botão Criar vai para cima nos ingredientes ou slots centrais da última linha
+            if (IngredientsSlotInstances.Count > 0)
+            {
+                navigation.selectOnUp = IngredientsSlotInstances[IngredientsSlotInstances.Count - 1].GetComponent<Selectable>();
+            }
+            else if (CreationSlotInstances.Count > 0)
+            {
+                int lastRowStart = (CreationSlotInstances.Count - 1) / 4 * 4;
+                int centralSlot = Mathf.Min(lastRowStart + 1, CreationSlotInstances.Count - 1);
+                navigation.selectOnUp = CreationSlotInstances[centralSlot].GetComponent<Selectable>();
+            }
+
+            createButton.navigation = navigation;
+        }
 
         public void CleanCreationSlots()
         {
@@ -171,7 +459,7 @@ namespace Tcp4
 
             foreach (var go in CreationSlotInstances)
             {
-                Destroy(go);
+                if (go != null) Destroy(go);
             }
             CreationSlotInstances.Clear();
         }
@@ -182,43 +470,9 @@ namespace Tcp4
 
             foreach (var go in IngredientsSlotInstances)
             {
-                Destroy(go);
+                if (go != null) Destroy(go);
             }
             IngredientsSlotInstances.Clear();
-        }
-
-        public void UpdateCreationView()
-        {
-            Inventory playerInventory = StorageManager.Instance.playerInventory;
-            if (playerInventory == null) return;
-
-            CleanCreationSlots();
-
-            foreach (BaseProduct _ in playerInventory.GetInventory())
-            {
-                GameObject go = Instantiate(pfSlotCreation, creationSlotHolder);
-                CreationSlotInstances.Add(go);
-                SelectProduct s = go.GetComponent<SelectProduct>();
-                s.myProduct = _;
-                go.GetComponent<DataSlot>().Setup(s.myProduct.productImage, 1);
-            }
-        }
-
-        public void UpdateIngredientsView()
-        {
-            List<BaseProduct> ingredients = CreationManager.Instance.Ingredients;
-            if (ingredients == null) return;
-
-            CleanIngredientsSlots();
-
-            foreach (var _ in ingredients)
-            {
-                GameObject go = Instantiate(pfSlotCreationIngredient, ingredientSlotHolder);
-                IngredientsSlotInstances.Add(go);
-                SelectProduct s = go.GetComponent<SelectProduct>();
-                s.myProduct = _;
-                go.GetComponent<DataSlot>().Setup(s.myProduct.productImage, s.myProduct.productName);
-            }
         }
 
         #endregion
@@ -265,8 +519,8 @@ namespace Tcp4
             {
                 OpenMenu(seedShopMenu);
 
-                // CORRE��O: Adiciona delay antes de selecionar o elemento
-                // para evitar sele��o muito r�pida
+                // CORREÇÃO: Adiciona delay antes de selecionar o elemento
+                // para evitar seleção muito rápida
                 StartCoroutine(DelayedSeedShopSelection());
             }
             else
@@ -275,7 +529,7 @@ namespace Tcp4
             }
         }
 
-        // M�TODO NOVO: Adiciona delay na sele��o do primeiro elemento
+        // MÉTODO NOVO: Adiciona delay na seleção do primeiro elemento
         private IEnumerator DelayedSeedShopSelection()
         {
             yield return new WaitForSecondsRealtime(0.3f);
@@ -285,6 +539,7 @@ namespace Tcp4
         }
 
         #endregion
+
         #region Seed Inventory
 
 
@@ -294,7 +549,7 @@ namespace Tcp4
         {
             if (isActive)
             {
-                OpenBookSection(3); // Invent�rio
+                OpenBookSection(3); // Inventário
                 UpdateSeedInventoryView();
             }
             else
@@ -326,6 +581,7 @@ namespace Tcp4
         }
 
         #endregion
+
         #region Notifications
 
         //public void NewClientNotification(Client clientSettings)
@@ -334,9 +590,9 @@ namespace Tcp4
         //    /*SoundEventArgs sfxArgs = new()
         //    {
         //        Category = SoundEventArgs.SoundCategory.SFX,
-        //        AudioID = "interacao", // O ID do seu SFX (sem "sfx_" e em min�sculas)
-        //        Position = gameAssets.player.transform.position, // Posi��o para o som 3D
-        //        VolumeScale = .3f // Escala de volume (opcional, padr�o � 1f)
+        //        AudioID = "interacao", // O ID do seu SFX (sem "sfx_" e em minúsculas)
+        //        Position = gameAssets.player.transform.position, // Posição para o som 3D
+        //        VolumeScale = .3f // Escala de volume (opcional, padrão é 1f)
         //    };
         //    SoundEvent.RequestSound(sfxArgs);*/
 
@@ -432,9 +688,9 @@ namespace Tcp4
                 SoundEventArgs sfxArgs = new()
                 {
                     Category = SoundEventArgs.SoundCategory.SFX,
-                    AudioID = "feedback", // O ID do seu SFX (sem "sfx_" e em min�sculas)
-                    Position = gameAssets.player.transform.position, // Posi��o para o som 3D
-                    VolumeScale = 1.0f // Escala de volume (opcional, padr�o � 1f)
+                    AudioID = "feedback", // O ID do seu SFX (sem "sfx_" e em minúsculas)
+                    Position = gameAssets.player.transform.position, // Posição para o som 3D
+                    VolumeScale = 1.0f // Escala de volume (opcional, padrão é 1f)
                 };
                 SoundEvent.RequestSound(sfxArgs);
             }
@@ -458,9 +714,9 @@ namespace Tcp4
                 SoundEventArgs sfxArgs = new()
                 {
                     Category = SoundEventArgs.SoundCategory.SFX,
-                    AudioID = "feedback", // O ID do seu SFX (sem "sfx_" e em min�sculas)
-                    Position = gameAssets.player.transform.position, // Posi��o para o som 3D
-                    VolumeScale = 1.0f // Escala de volume (opcional, padr�o � 1f)
+                    AudioID = "feedback", // O ID do seu SFX (sem "sfx_" e em minúsculas)
+                    Position = gameAssets.player.transform.position, // Posição para o som 3D
+                    VolumeScale = 1.0f // Escala de volume (opcional, padrão é 1f)
                 };
                 SoundEvent.RequestSound(sfxArgs);
             }
@@ -483,9 +739,9 @@ namespace Tcp4
                 SoundEventArgs sfxArgs = new()
                 {
                     Category = SoundEventArgs.SoundCategory.SFX,
-                    AudioID = "feedback", // O ID do seu SFX (sem "sfx_" e em min�sculas)
-                    Position = gameAssets.player.transform.position, // Posi��o para o som 3D
-                    VolumeScale = 1.0f // Escala de volume (opcional, padr�o � 1f)
+                    AudioID = "feedback", // O ID do seu SFX (sem "sfx_" e em minúsculas)
+                    Position = gameAssets.player.transform.position, // Posição para o som 3D
+                    VolumeScale = 1.0f // Escala de volume (opcional, padrão é 1f)
                 };
                 SoundEvent.RequestSound(sfxArgs);
             }
@@ -507,9 +763,9 @@ namespace Tcp4
                 SoundEventArgs sfxArgs = new()
                 {
                     Category = SoundEventArgs.SoundCategory.SFX,
-                    AudioID = "feedback", // O ID do seu SFX (sem "sfx_" e em min�sculas)
-                    Position = gameAssets.player.transform.position, // Posi��o para o som 3D
-                    VolumeScale = 1.0f // Escala de volume (opcional, padr�o � 1f)
+                    AudioID = "feedback", // O ID do seu SFX (sem "sfx_" e em minúsculas)
+                    Position = gameAssets.player.transform.position, // Posição para o som 3D
+                    VolumeScale = 1.0f // Escala de volume (opcional, padrão é 1f)
                 };
                 SoundEvent.RequestSound(sfxArgs);
             }
@@ -536,21 +792,21 @@ namespace Tcp4
             SoundEventArgs sfxArgs = new()
             {
                 Category = SoundEventArgs.SoundCategory.SFX,
-                AudioID = "feedback", // O ID do seu SFX (sem "sfx_" e em min�sculas)
-                Position = transform.position, // Posi��o para o som 3D
-                VolumeScale = 1.0f // Escala de volume (opcional, padr�o � 1f)
+                AudioID = "feedback", // O ID do seu SFX (sem "sfx_" e em minúsculas)
+                Position = transform.position, // Posição para o som 3D
+                VolumeScale = 1.0f // Escala de volume (opcional, padrão é 1f)
             };
             SoundEvent.RequestSound(sfxArgs);
         }
 
         /// <summary>
-        /// Abre um menu e registra na lista de hist�rico.
+        /// Abre um menu e registra na lista de histórico.
         /// </summary>
         public void OpenMenu(GameObject menu)
         {
             if (menu == null) return;
 
-            // Se j� estiver aberto, removemos a ocorr�ncia anterior
+            // Se já estiver aberto, removemos a ocorrência anterior
             openedMenus.Remove(menu);
 
             // Abrimos e registramos
@@ -568,7 +824,7 @@ namespace Tcp4
         {
             if (openedMenus.Count == 0) return;
 
-            // Pega o �ltimo, fecha e remove da lista
+            // Pega o último, fecha e remove da lista
             
             var last = openedMenus[openedMenus.Count - 1];
             last.SetActive(false);
@@ -579,7 +835,7 @@ namespace Tcp4
         }
 
         /// <summary>
-        /// Fecha um menu espec�fico (e remove do hist�rico).
+        /// Fecha um menu específico (e remove do histórico).
         /// </summary>
         public void CloseMenu(GameObject menu)
         {

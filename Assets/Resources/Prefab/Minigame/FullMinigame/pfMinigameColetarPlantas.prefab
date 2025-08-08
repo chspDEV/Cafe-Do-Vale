@@ -844,6 +844,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 2729613331723283802}
     m_Modifications:
+    - target: {fileID: 1030525814882731215, guid: 1ae895c5f6c21e94d804c3da38448eb0, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: b379df2aefcb90042a3de3fc9682a4cc, type: 3}
     - target: {fileID: 3920276426326480410, guid: 1ae895c5f6c21e94d804c3da38448eb0, type: 3}
       propertyPath: m_Name
       value: InputToPress

@@ -4,7 +4,6 @@ using GameResources.Project.Scripts.Utilities.Audio;
 using Tcp4.Assets.Resources.Scripts.Managers;
 using UnityEngine;
 
-
 namespace Tcp4
 {
     public class CreationManager : Singleton<CreationManager>
@@ -16,11 +15,12 @@ namespace Tcp4
         public List<CreationArea> creationAreas = new();
 
         private Drink newDrink;
-        
-        public bool CanAdd() {return Ingredients.Count < 3;}
+
+        public bool CanAdd() { return Ingredients.Count < 3; }
+
         public void SelectProduct(BaseProduct pd)
         {
-            if(CanAdd())
+            if (CanAdd())
             {
                 //Fazendo o request de sfx
                 SoundEventArgs sfxArgs = new()
@@ -33,20 +33,30 @@ namespace Tcp4
                 SoundEvent.RequestSound(sfxArgs);
                 StorageManager.Instance.playerInventory.RemoveProduct(pd, 1);
                 AddIngredient(pd);
+
+                // CORREÇÃO: Notifica mudanças na UI
                 OnChangeInventory?.Invoke();
+                UIManager.Instance.UpdateCreationView();
+                UIManager.Instance.UpdateIngredientsView();
             }
         }
+
+        public void NotifyInventoryUpdate() { OnChangeInventory?.Invoke(); UIManager.Instance.SelectFirstCreationSlot();}
 
         public void UnselectProduct(BaseProduct pd)
         {
             StorageManager.Instance.playerInventory.AddProduct(pd, 1);
             RemoveIngredient(pd);
+
+            // CORREÇÃO: Notifica mudanças na UI
             OnChangeInventory?.Invoke();
+            UIManager.Instance.UpdateCreationView();
+            UIManager.Instance.UpdateIngredientsView();
         }
 
         void AddIngredient(BaseProduct pd)
         {
-            if(CanAdd())
+            if (CanAdd())
             {
                 Ingredients.Add(pd);
                 return;
@@ -56,7 +66,7 @@ namespace Tcp4
         void RemoveIngredient(BaseProduct pd)
         {
             Ingredients.Remove(pd);
-            return;     
+            return;
         }
 
         private void Start()
@@ -88,11 +98,12 @@ namespace Tcp4
 
             Ingredients.Clear();
 
+            // CORREÇÃO: Atualiza UI após limpar ingredientes
             OnChangeInventory?.Invoke();
+            UIManager.Instance.UpdateIngredientsView();
 
             newDrink = null;
         }
-
 
         public void Create()
         {
@@ -107,6 +118,8 @@ namespace Tcp4
                 };
                 SoundEvent.RequestSound(sfxArgs1);
 
+                UIManager.Instance.SelectFirstCreationSlot();
+
                 return;
             }
 
@@ -114,27 +127,28 @@ namespace Tcp4
 
             Debug.Log($"{newDrink} criado!");
 
-            if(newDrink != null)
+            if (newDrink != null)
             {
                 creationAreas[lastIdInteracted].StartPrepare(newDrink.preparationTime);
                 UIManager.Instance.ControlCreationMenu(false);
             }
             else
             {
-                //Fazendo o request de sfx
+                // Som de erro
                 SoundEventArgs sfxArgs = new()
                 {
                     Category = SoundEventArgs.SoundCategory.SFX,
-                    AudioID = "erro", // O ID do seu SFX (sem "sfx_" e em minúsculas)
-                    VolumeScale = .8f // Escala de volume (opcional, padrão é 1f)
+                    AudioID = "erro",
+                    VolumeScale = .8f
                 };
                 SoundEvent.RequestSound(sfxArgs);
 
                 Debug.Log("Drink está nulo e nao pode ser servido!");
+
+                // 🔧 CORREÇÃO: Reposiciona o foco após erro
+                UIManager.Instance.SelectFirstCreationSlot();
             }
-            
+
         }
     }
-
-
 }
