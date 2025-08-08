@@ -81,7 +81,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4053755114659238715}
   m_Layer: 0
-  m_Name: Itens novos adicionados
+  m_Name: ItensNovosAdicionados
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
