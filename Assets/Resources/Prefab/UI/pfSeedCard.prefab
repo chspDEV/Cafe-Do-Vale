@@ -303,6 +303,7 @@ GameObject:
   - component: {fileID: 5207537687820766653}
   - component: {fileID: 8337280836141638779}
   - component: {fileID: 671081231662495137}
+  - component: {fileID: 4330823431854048093}
   m_Layer: 0
   m_Name: Comprar
   m_TagString: SeedCard
@@ -412,6 +413,28 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!95 &4330823431854048093
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6991498153638316688}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 2afc1194043d8494ba5f417d30960f85, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &7034991238845758537
 GameObject:
   m_ObjectHideFlags: 0

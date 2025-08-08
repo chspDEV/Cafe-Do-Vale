@@ -36,7 +36,7 @@ namespace Tcp4
         [TabGroup("UI Interactions")][SerializeField] private SetsUiElementToSelectOnInteraction recipeInteraction;
         [TabGroup("UI Interactions")][SerializeField] private SetsUiElementToSelectOnInteraction pauseInteraction;
         [TabGroup("UI Interactions")][SerializeField] private SetsUiElementToSelectOnInteraction seedInventoryInteraction;
-        [TabGroup("UI Interactions")][SerializeField] private SetsUiElementToSelectOnInteraction seedShopInteraction;
+        [TabGroup("UI Interactions")][SerializeField] public SetsUiElementToSelectOnInteraction seedShopInteraction;
         [TabGroup("UI Interactions")][SerializeField] private SetsUiElementToSelectOnInteraction notificationInteraction;
 
 
@@ -265,13 +265,23 @@ namespace Tcp4
             {
                 OpenMenu(seedShopMenu);
 
-                if (seedShopInteraction != null)
-                    seedShopInteraction.JumpToElement();
+                // CORREÇÃO: Adiciona delay antes de selecionar o elemento
+                // para evitar seleção muito rápida
+                StartCoroutine(DelayedSeedShopSelection());
             }
             else
             {
                 CloseMenu(seedShopMenu);
             }
+        }
+
+        // MÉTODO NOVO: Adiciona delay na seleção do primeiro elemento
+        private IEnumerator DelayedSeedShopSelection()
+        {
+            yield return new WaitForSecondsRealtime(0.3f);
+
+            if (seedShopInteraction != null && seedShopMenu.activeInHierarchy)
+                seedShopInteraction.JumpToElement();
         }
 
         #endregion
@@ -664,19 +674,27 @@ namespace Tcp4
         // para salvar os itens dos storages
         private void OnEnable()
         {
-            StorageManager.Instance.OnChangeStorage += UpdateStorageView;
-            StorageManager.Instance.OnCleanStorage += CleanStorageSlots;
+            if (StorageManager.Instance != null)
+            {
+                StorageManager.Instance.OnChangeStorage += UpdateStorageView;
+                StorageManager.Instance.OnCleanStorage += CleanStorageSlots;
+            }
 
             SaveManager.OnGameDataLoaded += OnGameLoadedUpdate;
         }
 
+
         private void OnDisable()
         {
-            StorageManager.Instance.OnChangeStorage -= UpdateStorageView;
-            StorageManager.Instance.OnCleanStorage -= CleanStorageSlots;
+            if (StorageManager.Instance != null)
+            {
+                StorageManager.Instance.OnChangeStorage -= UpdateStorageView;
+                StorageManager.Instance.OnCleanStorage -= CleanStorageSlots;
+            }
 
             SaveManager.OnGameDataLoaded -= OnGameLoadedUpdate;
         }
+
 
         private void OnGameLoadedUpdate()
         {
