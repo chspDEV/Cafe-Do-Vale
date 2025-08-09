@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using Tcp4.Assets.Resources.Scripts.Managers;
+using GameResources.Project.Scripts.Utilities.Audio;
 
 public class BeeMinigame : BaseMinigame
 {
@@ -27,6 +28,9 @@ public class BeeMinigame : BaseMinigame
     [Header("Player Movement")]
     [SerializeField] private float moveSpeed = 300f;
     [SerializeField] private Vector2 playAreaSize = new Vector2(500, 700); //limites da area em pixels
+    [SerializeField] private Image handsImage;
+    [SerializeField] private Sprite idleSprite,holdingSprite;
+    
 
     [Header("Game Rules")]
     [SerializeField] private int maxStings = 2;
@@ -60,7 +64,7 @@ public class BeeMinigame : BaseMinigame
     private PlugInputPack.InputAccessor interactInput;
     private Coroutine beeSpawnerCoroutine;
     private List<GameObject> lifeIcons = new List<GameObject>();
-
+    private float currentPitch = 1f;
 
     private void Start()
     {
@@ -99,6 +103,8 @@ public class BeeMinigame : BaseMinigame
 
         honeycombTarget.SetParent(transform, true);
         honeycombTarget.gameObject.SetActive(true);
+
+        handsImage.sprite = idleSprite;
 
         UpdateLifeUI();
         beeSpawnerCoroutine = StartCoroutine(BeeSpawnerCoroutine());
@@ -148,6 +154,7 @@ public class BeeMinigame : BaseMinigame
             if (distanceToTarget <= interactionDistance && currentHandState == PlayerHandState.Idle)
             {
                 currentHandState = PlayerHandState.CarryingHoney;
+                handsImage.sprite = holdingSprite;
                 inputToPress.SetActive(false);
                 honeycombTarget.SetParent(playerHands, true);
                 honeycombTarget.localPosition = Vector3.zero;
@@ -165,6 +172,20 @@ public class BeeMinigame : BaseMinigame
     private void ScorePoint()
     {
         honeycombsCollected++;
+        handsImage.sprite = idleSprite;
+
+        //Fazendo o request de sfx
+        SoundEventArgs sfxArgs = new()
+        {
+            Category = SoundEventArgs.SoundCategory.SFX,
+            AudioID = "interacao", // O ID do seu SFX (sem "sfx_" e em minúsculas)
+            VolumeScale = 1f, // Escala de volume (opcional, padrão é 1f)
+            Pitch = currentPitch
+
+        };
+        SoundEvent.RequestSound(sfxArgs);
+        currentPitch += 0.1f;
+
         currentHandState = PlayerHandState.Idle;
 
         honeycombTarget.SetParent(honeycombSpawnPoint, true);
@@ -188,6 +209,17 @@ public class BeeMinigame : BaseMinigame
         if (isInvincible || !isGameActive) return;
 
         stings++;
+
+        SoundEventArgs sfxArgs = new()
+        {
+            Category = SoundEventArgs.SoundCategory.SFX,
+            AudioID = "erro", // O ID do seu SFX (sem "sfx_" e em minúsculas)
+            VolumeScale = 1f, // Escala de volume (opcional, padrão é 1f)
+            Pitch = .8f
+
+        };
+        SoundEvent.RequestSound(sfxArgs);
+
         UpdateLifeUI();
         StartCoroutine(InvincibilityCoroutine());
 

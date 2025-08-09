@@ -108,12 +108,144 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
-    sprites: []
+    sprites:
+    - serializedVersion: 2
+      name: ui_Minigame-Abelha_v1_0
+      rect:
+        serializedVersion: 2
+        x: 12
+        y: 606
+        width: 510
+        height: 390
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0843034d3f0999a418fea27937b71767
+      internalID: -658005587
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ui_Minigame-Abelha_v1_1
+      rect:
+        serializedVersion: 2
+        x: 545
+        y: 608
+        width: 512
+        height: 386
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: dc065eeec04d2494ba494aa1bb19896e
+      internalID: 244802489
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ui_Minigame-Abelha_v1_2
+      rect:
+        serializedVersion: 2
+        x: 1097
+        y: 545
+        width: 475
+        height: 512
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: edbb3cb7cdd535449b9f8197f388275d
+      internalID: -1089695024
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ui_Minigame-Abelha_v1_3
+      rect:
+        serializedVersion: 2
+        x: 106
+        y: 11
+        width: 321
+        height: 512
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b11844d5fcd8c1f4488be5ff6d89b324
+      internalID: 1304460690
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ui_Minigame-Abelha_v1_4
+      rect:
+        serializedVersion: 2
+        x: 544
+        y: 126
+        width: 513
+        height: 341
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e6439e2e151c03c40a89cfa3a112f0a4
+      internalID: -1893507227
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: ui_Minigame-Abelha_v1_5
+      rect:
+        serializedVersion: 2
+        x: 1158
+        y: 11
+        width: 354
+        height: 512
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f736ebccdbd9bf14dad6f2ec06408156
+      internalID: -681047937
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: 55994bb5104e2174f9c0d9976e623da9
     internalID: 0
     vertices: []
     indices: 
@@ -122,7 +254,13 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      ui_Minigame-Abelha_v1_0: -658005587
+      ui_Minigame-Abelha_v1_1: 244802489
+      ui_Minigame-Abelha_v1_2: -1089695024
+      ui_Minigame-Abelha_v1_3: 1304460690
+      ui_Minigame-Abelha_v1_4: -1893507227
+      ui_Minigame-Abelha_v1_5: -681047937
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

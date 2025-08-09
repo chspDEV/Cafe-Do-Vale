@@ -440,7 +440,7 @@ namespace Tcp4
 
             if (npcCamera != null)
             {
-                CameraManager.Instance.SetupDialogueCamera(npcCamera);
+                CameraManager.Instance.dialogueCamera = npcCamera;
             }
 
             DialogueManager.Instance.StartDialogue(dialogues[index]);

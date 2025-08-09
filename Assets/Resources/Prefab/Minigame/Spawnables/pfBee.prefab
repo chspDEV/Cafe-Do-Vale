@@ -188,7 +188,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e8a8474c4e7eca849be3543bf1106d52, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  collisionDistance: 80
+  collisionDistance: 25
   path: {fileID: 1162464531441735967}
 --- !u!54 &6902642579460607442
 Rigidbody:

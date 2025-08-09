@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using Tcp4.Assets.Resources.Scripts.Managers;
+using GameResources.Project.Scripts.Utilities.Audio;
 
 //mantenha estas definicoes no mesmo arquivo ou em um separado
 public enum ButtonType
@@ -32,6 +33,8 @@ public class CowMinigame : BaseMinigame
     [SerializeField] private GameObject lifePrefab;
     [SerializeField] private Transform lifeContainer;
     [SerializeField] private Image timeBar;
+    [SerializeField] private Image cow;
+    [SerializeField] private Animator cowAnimator;
     private List<GameObject> spawnedLifes = new();
 
     [Header("Game Rules")]
@@ -59,6 +62,8 @@ public class CowMinigame : BaseMinigame
     private bool isGameActive = false;
     private bool isWaitingForInput = false;
     private bool isTimerPaused = false;
+
+    private float currentPitch = 1f;
 
     //input
     private Dictionary<ButtonType, PlugInputPack.InputAccessor> inputAccessors = new Dictionary<ButtonType, PlugInputPack.InputAccessor>();
@@ -200,11 +205,38 @@ public class CowMinigame : BaseMinigame
         StartCoroutine(PauseTimerOnHit());
         currentTime += timeBonusPerHit;
         currentBucketFill += fillAmountPerHit;
+
+        SoundEventArgs sfxArgs = new()
+        {
+            Category = SoundEventArgs.SoundCategory.SFX,
+            AudioID = "interacao", // O ID do seu SFX (sem "sfx_" e em minúsculas)
+            VolumeScale = 1f, // Escala de volume (opcional, padrão é 1f)
+            Pitch = currentPitch
+
+        };
+        SoundEvent.RequestSound(sfxArgs);
+
+        cow.transform.localScale = new(cow.transform.localScale.x * -1,
+            cow.transform.localScale.y, cow.transform.localScale.z);
+
+        cowAnimator.Play("Hit");
+
+        currentPitch += 0.05f;
+
         UpdateTimeBar();
 
         if (currentBucketFill >= 1f)
         {
             bucketsFilled++;
+            SoundEventArgs sfxArgs2 = new()
+            {
+                Category = SoundEventArgs.SoundCategory.SFX,
+                AudioID = "servindo", // O ID do seu SFX (sem "sfx_" e em minúsculas)
+                VolumeScale = 1f, // Escala de volume (opcional, padrão é 1f)
+                Pitch = currentPitch
+
+            };
+            SoundEvent.RequestSound(sfxArgs2);
             currentBucketFill = 0f;
         }
         if (bucketFillImage) bucketFillImage.fillAmount = currentBucketFill;
@@ -233,6 +265,16 @@ public class CowMinigame : BaseMinigame
         yield return new WaitForEndOfFrame();
 
         misses++;
+        SoundEventArgs sfxArgs = new()
+        {
+            Category = SoundEventArgs.SoundCategory.SFX,
+            AudioID = "erro", // O ID do seu SFX (sem "sfx_" e em minúsculas)
+            VolumeScale = 1f, // Escala de volume (opcional, padrão é 1f)
+            Pitch = .8f
+
+        };
+        SoundEvent.RequestSound(sfxArgs);
+
         UpdateLife();
 
         if (misses >= maxMisses)

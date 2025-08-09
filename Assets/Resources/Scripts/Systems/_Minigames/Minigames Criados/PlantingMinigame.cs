@@ -206,10 +206,10 @@ public class PlantingMinigame : BaseMinigame
 
                 };
                 SoundEvent.RequestSound(sfxArgs);
+                currentPitch += 0.1f;
 
                 UpdateCounterText();
 
-                currentPitch += 0.1f;
                 StartCoroutine(IncreaseSpeed(speedIncreasePerHit));
                 Debug.Log($"acerto! total de acertos: {totalHits}");
                 if (handsAnimator) handsAnimator.Play("hands_get");
@@ -219,6 +219,15 @@ public class PlantingMinigame : BaseMinigame
             {
                 //erro
                 misses++;
+                SoundEventArgs sfxArgs = new()
+                {
+                    Category = SoundEventArgs.SoundCategory.SFX,
+                    AudioID = "erro", // O ID do seu SFX (sem "sfx_" e em minúsculas)
+                    VolumeScale = 1f, // Escala de volume (opcional, padrão é 1f)
+                    Pitch = .8f
+
+                };
+                SoundEvent.RequestSound(sfxArgs);
                 UpdateLife();
                 Debug.LogWarning($"erro! total de erros: {misses}");
                 //verifica condicao de fim por erros

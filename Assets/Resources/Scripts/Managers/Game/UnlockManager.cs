@@ -22,6 +22,11 @@ public class UnlockManager : Singleton<UnlockManager>
 {
     [SerializeField] private UnlockConfig config;
     [SerializeField] private int currentReputationLevel;
+    public int CurrentReputationLevel
+    {
+        get => currentReputationLevel;
+        private set => currentReputationLevel = value;
+    }
 
     public event Action OnReputationChanged;
     public event Action OnProductionsUpdated;

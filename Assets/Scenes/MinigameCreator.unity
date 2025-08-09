@@ -857,6 +857,8 @@ MonoBehaviour:
   amountStorage: {fileID: 0}
   timeText: {fileID: 0}
   starImage: {fileID: 0}
+  CreationSlotInstances: []
+  IngredientsSlotInstances: []
   createButton: {fileID: 0}
 --- !u!1001 &1261906747
 PrefabInstance:
@@ -1128,7 +1130,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: da5f82627d3f54043ad65f6fd11afbac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  minigameToStart: {fileID: 11400000, guid: 8ff8c3cb00a38eb43850a6e96506a8e9, type: 2}
+  minigameToStart: {fileID: 11400000, guid: 29409210cbc7ca74b9383ddf694628ad, type: 2}
 --- !u!1001 &1430015024
 PrefabInstance:
   m_ObjectHideFlags: 0

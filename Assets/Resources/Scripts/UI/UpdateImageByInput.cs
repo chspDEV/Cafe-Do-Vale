@@ -57,6 +57,9 @@ namespace Tcp4
                 case CurrentInputType.NONE:
                     StartCoroutine(InitializeSettings(0.33f));
                     break;
+                default:
+                    StartCoroutine(InitializeSettings(0.33f));
+                    break;
             }
 
         }

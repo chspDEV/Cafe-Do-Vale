@@ -87,7 +87,7 @@ public class DialogueManager : Singleton<DialogueManager>
 
     private IEnumerator StartDialogueRoutine()
     {
-        CameraManager.Instance.SetDialogueCameraActive(true);
+        CameraManager.Instance.SetDialogueCamera(CameraManager.Instance.dialogueCamera, true);
         TimeManager.Instance.Freeze();
 
         yield return new WaitForSeconds(cameraTransitionDelay);
@@ -168,7 +168,7 @@ public class DialogueManager : Singleton<DialogueManager>
 
         dialoguePanel.SetActive(false);
         DeactiveUi.ControlUi(false);
-        CameraManager.Instance.SetDialogueCameraActive(false);
+        CameraManager.Instance.SetDialogueCamera(null,false);
         TimeManager.Instance.Unfreeze();
 
         playerMovement.Active();
