@@ -15,5 +15,5 @@ MonoBehaviour:
   productName: Chocolate
   quality: 5
   productID: 8
-  model: {fileID: 2028705123205719645, guid: 51a3ce0fa7d9c64449483a1c4e49dd4f, type: 3}
+  model: {fileID: 8991055530835429496, guid: 8ee4fe8f8a43a114ead4544308f04967, type: 3}
   productImage: {fileID: 21300000, guid: 85f3e77c87424d348bc41965ee8935df, type: 3}

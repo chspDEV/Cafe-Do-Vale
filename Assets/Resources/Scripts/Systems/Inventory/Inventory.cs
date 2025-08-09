@@ -124,7 +124,7 @@ namespace Tcp4
         {
             for (int i = 0; i < instanceInventory.Count; i++)
             {
-                var offset = i / 3.5f;
+                var offset = i / 5f;
                 instanceInventory[i].transform.position = bagPoint.position + new Vector3(0, offset, 0);   
             }
         }

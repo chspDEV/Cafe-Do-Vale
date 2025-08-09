@@ -747,11 +747,15 @@ namespace Tcp4
         {
             if (isActive)
             {
+                OpenMenu(bookMenu);
                 OpenBookSection(3); // Inventário
                 UpdateSeedInventoryView();
             }
             else
-                bookMenu.SetActive(false);
+            {
+                CloseMenu(bookMenu);
+            }
+                
         }
 
         public void UpdateSeedInventoryView()

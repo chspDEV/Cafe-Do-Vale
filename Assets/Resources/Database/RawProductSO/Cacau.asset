@@ -15,5 +15,5 @@ MonoBehaviour:
   productName: Cacau
   quality: 20
   productID: 12
-  model: {fileID: 5490366521513794674, guid: 438e8269963225242af0d2069c1d8489, type: 3}
+  model: {fileID: 3807862003695897597, guid: 642627bc4f871fd41aa4cf32fbb3e8c7, type: 3}
   productImage: {fileID: 21300000, guid: c47529d193118f646b58d829cabddb89, type: 3}

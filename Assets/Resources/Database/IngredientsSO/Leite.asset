@@ -15,5 +15,5 @@ MonoBehaviour:
   productName: Leite
   quality: 0
   productID: 10
-  model: {fileID: 2713349317917995826, guid: 1331b86bb0e6ade4c8a984f9214c6f4f, type: 3}
+  model: {fileID: 4423917419043284067, guid: 2c25f36ecbb0cdf4f98417cfe4d0ef5e, type: 3}
   productImage: {fileID: 21300000, guid: b9ab830d83b6fa94289637f1c08bdddf, type: 3}

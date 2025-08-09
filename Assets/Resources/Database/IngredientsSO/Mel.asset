@@ -15,5 +15,5 @@ MonoBehaviour:
   productName: Mel
   quality: 0
   productID: 11
-  model: {fileID: 5038757670234777281, guid: 5ef380063e967c545b11aad1db488868, type: 3}
+  model: {fileID: 6567066335462861447, guid: 1b56d63cfb0d3d74aadfef36e89d43b0, type: 3}
   productImage: {fileID: 21300000, guid: 041dce6930a2ca14cbab7cafd489ae61, type: 3}
