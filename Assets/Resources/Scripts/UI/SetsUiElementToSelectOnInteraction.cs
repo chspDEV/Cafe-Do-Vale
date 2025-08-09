@@ -51,10 +51,6 @@ namespace ChristinaCreatesGames.UI
             if (eventSystem == null)
                 eventSystem = FindFirstObjectByType<EventSystem>();
 
-            if (GameAssets.Instance == null && 
-                GameAssets.Instance.currentInputType == CurrentInputType.PC && 
-                SceneManager.GetActiveScene().buildIndex > 0) yield break;
-
             if (searchByTag && !string.IsNullOrEmpty(tagToSearch))
             {
                 GameObject found = null;

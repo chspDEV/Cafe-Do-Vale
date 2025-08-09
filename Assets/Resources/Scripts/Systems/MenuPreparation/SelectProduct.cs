@@ -21,7 +21,7 @@ public class SelectProduct : MonoBehaviour, ISelectHandler, IDeselectHandler, IS
     private Button button;
     private bool isInitialized = false;
     private static float lastInteractionTime;
-    private const float INTERACTION_DELAY = 0.3f;
+    private const float INTERACTION_DELAY = 0.1f;
 
     // CORREÇÃO: Variáveis de proteção baseadas no SeedShop
     private static float timeCreationMenuOpened;
@@ -142,7 +142,7 @@ public class SelectProduct : MonoBehaviour, ISelectHandler, IDeselectHandler, IS
         lastInteractionTime = Time.unscaledTime;
 
         CreationManager.Instance.SelectProduct(myProduct);
-        CreationManager.Instance.NotifyInventoryUpdate();
+        UIManager.Instance.RefreshCreationUIWithNavigation();
 
         if (button != null)
         {
@@ -190,7 +190,7 @@ public class SelectProduct : MonoBehaviour, ISelectHandler, IDeselectHandler, IS
         lastInteractionTime = Time.unscaledTime;
 
         CreationManager.Instance.UnselectProduct(myProduct);
-        CreationManager.Instance.NotifyInventoryUpdate();
+        UIManager.Instance.RefreshCreationUIWithNavigation();
 
         if (button != null)
         {

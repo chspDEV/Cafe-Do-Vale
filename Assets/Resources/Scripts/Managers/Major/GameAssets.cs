@@ -8,6 +8,7 @@ using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.DualShock;
 using UnityEngine.InputSystem.XInput;
 using PlugInputPack;
+using System.Collections;
 
 public enum CurrentInputType
 {
@@ -36,6 +37,12 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
         [SerializeField] private Sprite inputPLAYSTATION;
         [TabGroup("Interacao")]
         [SerializeField] private Sprite inputPC;
+
+        [TabGroup("Cursor")] public Texture2D idleCursor;
+        [TabGroup("Cursor")] public Texture2D clickCursor;
+        [TabGroup("Cursor")] private Vector2 cursorHotspot = Vector2.zero; // Ponto de "clique" do cursor
+
+        private bool isClickCursorActive = false;
 
         public List<Sprite> clientSprites;
         public List<string> clientNames;
@@ -112,42 +119,41 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
         private int currentSequenceIndex = 0;
         private float sequenceTimeout = 2f;
         private float lastKeyPressTime = 0f;
+        private bool debugJustToggled = false;
 
         private void HandleDebugMode()
         {
-            // Verifica se alguma tecla foi pressionada
             if (UnityEngine.Input.anyKeyDown)
             {
-                // Verifica se a tecla pressionada é a próxima na sequência
                 if (UnityEngine.Input.GetKeyDown(debugSequence[currentSequenceIndex]))
                 {
                     currentSequenceIndex++;
                     lastKeyPressTime = Time.time;
 
-                    // Se completou toda a sequência
                     if (currentSequenceIndex == debugSequence.Length)
                     {
-                        isDebugMode = !isDebugMode; // Alterna o modo debug
+                        isDebugMode = !isDebugMode;
                         Debug.Log("Debug Mode " + (isDebugMode ? "ON" : "OFF"));
-                        currentSequenceIndex = 0; // Reseta a sequência
+                        currentSequenceIndex = 0;
+                        debugJustToggled = true; // Marca que acabou de mudar
                     }
                 }
                 else
                 {
-                    // Tecla errada - reseta a sequência
                     currentSequenceIndex = 0;
                 }
             }
 
-            // Reseta a sequência se o tempo entre teclas for muito longo
             if (Time.time - lastKeyPressTime > sequenceTimeout && currentSequenceIndex > 0)
             {
                 currentSequenceIndex = 0;
             }
         }
 
+
         private void OnGUI()
         {
+
             if (isDebugMode)
             {
                 GUI.Label(new Rect(250, 10, 200, 30), "DEBUG MODE ATIVO");
@@ -156,13 +162,81 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
         }
         #endregion
 
+
         private void Update()
         {
             HandleDebugMode();
-            DetectLastUsedInput();
+
+            if (!debugJustToggled)
+                DetectLastUsedInput();
+            else
+                debugJustToggled = false;
+
+            if (currentInputType == CurrentInputType.PC)
+            {
+                Cursor.visible = true;
+                HandleCursorSprites();
+            }
+            else
+            {
+                Cursor.visible = false;
+            }
         }
 
-        // Nova função para detectar o último input usado
+
+
+        private void HandleCursorSprites()
+        {
+            // Detecta quando o botão esquerdo do mouse é pressionado
+            if (Input.GetMouseButtonDown(0))
+            {
+                SetClickCursor();
+            }
+
+            // Detecta quando o botão é solto
+            if (Input.GetMouseButtonUp(0))
+            {
+                StartCoroutine(WaitToIdleCursor());
+            }
+        }
+
+        private void SetClickCursor()
+        {
+            if (clickCursor != null && !isClickCursorActive)
+            {
+                isClickCursorActive = true;
+                Cursor.SetCursor(clickCursor, cursorHotspot, CursorMode.Auto);
+            }
+        }
+
+        private void SetIdleCursor()
+        {
+            if (idleCursor != null && isClickCursorActive)
+            {
+                isClickCursorActive = false;
+                Cursor.SetCursor(idleCursor, cursorHotspot, CursorMode.Auto);
+            }
+        }
+
+        IEnumerator WaitToIdleCursor()
+        {
+            yield return new WaitForSeconds(0.1f);
+            SetIdleCursor();
+        }
+
+        public void SetCustomCursor(Texture2D cursorSprite)
+        {
+            if (cursorSprite != null)
+            {
+                Cursor.SetCursor(cursorSprite, cursorHotspot, CursorMode.Auto);
+            }
+        }
+
+        public void ResetToIdleCursor()
+        {
+            SetIdleCursor();
+        }
+
         private void DetectLastUsedInput()
         {
             // Cooldown para evitar detecções muito frequentes
@@ -311,6 +385,11 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
         {
             if (QuestManager.Instance != null)
                 QuestManager.Instance.StartMission("tutorial00");
+
+            if (idleCursor != null)
+            {
+                Cursor.SetCursor(idleCursor, cursorHotspot, CursorMode.Auto);
+            }
         }
 
         // Detecção inicial mais inteligente

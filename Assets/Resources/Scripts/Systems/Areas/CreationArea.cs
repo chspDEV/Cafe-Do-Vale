@@ -87,7 +87,6 @@ public class CreationArea : BaseInteractable
         // CORREÇÃO 1: Notifica que o menu de criação foi aberto (baseado no SeedShop)
         SelectProduct.NotifyCreationMenuOpened();
 
-        // CORREÇÃO 2: Bloqueia input por 0.8s (mesmo tempo do SeedShop)
         EventSystemBlocker.BlockForSeconds(0.8f);
 
         UIManager.Instance.UpdateCreationView();
