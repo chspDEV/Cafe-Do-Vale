@@ -3,7 +3,22 @@ guid: 0f12a601d2baa9d4fbc349b8db4429e4
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Luz
+    second: {fileID: 2100000, guid: 2289ed84898c266489396de6d37ce3ca, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Metal Duplo
+    second: {fileID: 2100000, guid: 5683d08d5feb764458bee844c099e833, type: 2}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: txt_iluminacaodupla_01
+    second: {fileID: 2800000, guid: 364510e589c7f174da1b5bad6d1ca484, type: 3}
   materials:
     materialImportMode: 2
     materialName: 0

@@ -3,7 +3,22 @@ guid: 88d21756160066247b0cc6188a65bef1
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Luz
+    second: {fileID: 2100000, guid: 2289ed84898c266489396de6d37ce3ca, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Metal Teto
+    second: {fileID: 2100000, guid: 0f7d0e9abf57ee8438677ba93836d3da, type: 2}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: ' txt_iluminacaoteto_01'
+    second: {fileID: 2800000, guid: 37f1e82c11d7f2c4dbb11244a4550e09, type: 3}
   materials:
     materialImportMode: 2
     materialName: 0

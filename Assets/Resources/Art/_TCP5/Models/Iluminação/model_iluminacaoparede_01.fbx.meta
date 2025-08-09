@@ -3,7 +3,17 @@ guid: 718b4950b95327d4d9dd008f99ceb587
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Luz
+    second: {fileID: 2100000, guid: 2289ed84898c266489396de6d37ce3ca, type: 2}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: txt_iluminacaoparede_01
+    second: {fileID: 2800000, guid: 13f888fbb206f2d41aa25d4b3c9d1920, type: 3}
   materials:
     materialImportMode: 2
     materialName: 0
