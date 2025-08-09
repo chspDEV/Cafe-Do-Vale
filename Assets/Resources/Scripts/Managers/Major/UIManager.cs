@@ -146,532 +146,104 @@ namespace Tcp4
         #endregion
 
 
-        #region Creation Management - COM PROTEÇÃO ANTI-SPAM
+        #region Creation Management
 
-        private List<GameObject> CreationSlotInstances = new();
-        private List<GameObject> IngredientsSlotInstances = new();
+        public List<GameObject> CreationSlotInstances = new();
+        public List<GameObject> IngredientsSlotInstances = new();
 
-        [TabGroup("UI Interactions")][SerializeField] private Button createButton;
-
-        // SISTEMA ANTI-SPAM ROBUSTO
-        private static bool isProcessingInteraction = false;
-        private static float lastInteractionTime = 0f;
-        private const float INTERACTION_COOLDOWN = 0.3f; // Cooldown entre interações
-        private static int activeCoroutines = 0;
+        [TabGroup("UI Interactions")][SerializeField] public Button createButton;
 
         public void ControlCreationMenu(bool isActive)
         {
             if (isActive)
             {
-                // PROTEÇÃO: Evita abrir menu se já está processando algo
-                if (isProcessingInteraction)
-                {
-                    Debug.Log("Menu bloqueado - processando interação anterior");
-                    return;
-                }
-
+                // Atualiza e mostra os slots já existentes
                 UpdateCreationView();
                 UpdateIngredientsView();
 
                 OpenMenu(creationMenu);
-                StartCoroutine(SetupCreationNavigation());
+
+               
+                StartCoroutine(SelectWithDelay());
             }
             else
             {
+                // Apenas fecha o menu
                 CloseMenu(creationMenu);
-
-                // CORREÇÃO: Limpa estado ao fechar menu
-                ResetInteractionState();
             }
         }
 
-        private void ResetInteractionState()
+        IEnumerator SelectWithDelay()
         {
-            isProcessingInteraction = false;
-            activeCoroutines = 0;
-            Debug.Log("Estado de interação resetado");
-        }
+            yield return new WaitForSeconds(.3f);
 
-        private IEnumerator SetupCreationNavigation()
-        {
-            // PROTEÇÃO: Marca que está processando
-            isProcessingInteraction = true;
-            activeCoroutines++;
-
-            yield return new WaitForSecondsRealtime(0.5f);
-
-            // PROTEÇÃO: Verifica se ainda é válido continuar
-            if (!creationMenu.activeInHierarchy)
-            {
-                activeCoroutines--;
-                isProcessingInteraction = false;
-                yield break;
-            }
-
-            ConfigureAllNavigation();
-            SelectFirstCreationSlot();
-
-            // PROTEÇÃO: Marca que terminou de processar
-            activeCoroutines--;
-            if (activeCoroutines <= 0)
-            {
-                isProcessingInteraction = false;
-            }
-        }
-
-        public void SelectFirstCreationSlot()
-        {
-            // PROTEÇÃO: Evita múltiplas seleções simultâneas
-            if (isProcessingInteraction && activeCoroutines > 1) return;
-
-            StartCoroutine(SelectCreationSlotNextFrame());
-        }
-
-        public void RefreshCreationUIWithNavigation()
-        {
-            // PROTEÇÃO CRÍTICA: Evita refresh enquanto já está processando
-            if (isProcessingInteraction)
-            {
-                Debug.Log("Refresh bloqueado - ainda processando interação anterior");
-                return;
-            }
-
-            // PROTEÇÃO: Cooldown entre refreshes
-            if (Time.unscaledTime - lastInteractionTime < INTERACTION_COOLDOWN)
-            {
-                Debug.Log($"Refresh bloqueado - cooldown ativo ({Time.unscaledTime - lastInteractionTime:F2}s)");
-                return;
-            }
-
-            lastInteractionTime = Time.unscaledTime;
-
-            UpdateCreationView();
-            UpdateIngredientsView();
-
-            StartCoroutine(DelayedCreationNavigationSetup());
-        }
-
-        private IEnumerator DelayedCreationNavigationSetup()
-        {
-            // PROTEÇÃO: Marca que está processando
-            isProcessingInteraction = true;
-            activeCoroutines++;
-
-            yield return new WaitForEndOfFrame();
-            yield return new WaitForEndOfFrame();
-
-            // PROTEÇÃO: Verifica se ainda é válido continuar
-            if (!creationMenu.activeInHierarchy)
-            {
-                activeCoroutines--;
-                isProcessingInteraction = false;
-                yield break;
-            }
-
-            ConfigureAllNavigation();
-            SelectFirstCreationSlot();
-
-            // PROTEÇÃO: Marca que terminou
-            activeCoroutines--;
-            if (activeCoroutines <= 0)
-            {
-                isProcessingInteraction = false;
-            }
-        }
-
-        private IEnumerator SelectCreationSlotNextFrame()
-        {
-            activeCoroutines++;
-
-            yield return new WaitForSecondsRealtime(0.1f);
-
-            // PROTEÇÃO: Verifica se menu ainda está ativo
-            if (!creationMenu.activeInHierarchy)
-            {
-                activeCoroutines--;
-                yield break;
-            }
-
-            // PROTEÇÃO: Remove slots nulos de forma segura
-            try
-            {
-                CreationSlotInstances.RemoveAll(go => go == null);
-
-                if (CreationSlotInstances.Count > 0)
-                {
-                    var first = CreationSlotInstances[0].GetComponent<Selectable>();
-                    if (first != null && first.gameObject.activeInHierarchy)
-                    {
-                        first.Select();
-                        Debug.Log($"Selecionado primeiro slot: {first.name}");
-                    }
-                }
-                else
-                {
-                    EventSystem.current.SetSelectedGameObject(null);
-                }
-            }
-            catch (System.Exception e)
-            {
-                Debug.LogError($"Erro ao selecionar slot: {e.Message}");
-                EventSystem.current.SetSelectedGameObject(null);
-            }
-
-            activeCoroutines--;
+            if (creationInteraction != null)
+                creationInteraction.JumpToElement();
         }
 
         public void UpdateCreationView()
         {
-            // PROTEÇÃO: Evita update durante processamento crítico
-            if (isProcessingInteraction && activeCoroutines > 2)
-            {
-                Debug.Log("UpdateCreationView bloqueado - muitas operações simultâneas");
-                return;
-            }
-
             Inventory playerInventory = StorageManager.Instance.playerInventory;
             if (playerInventory == null) return;
+            List<BaseProduct> inventoryItems = playerInventory.GetInventory();
 
-            // PROTEÇÃO: Limpa de forma segura
-            CleanCreationSlots();
-
-            try
-            {
-                foreach (BaseProduct product in playerInventory.GetInventory())
-                {
-                    GameObject go = Instantiate(pfSlotCreation, creationSlotHolder);
-                    CreationSlotInstances.Add(go);
-
-                    SelectProduct selectProduct = go.GetComponent<SelectProduct>();
-                    selectProduct.myProduct = product;
-                    selectProduct.SetSlotType(SelectProduct.SlotType.InventorySlot);
-
-                    go.GetComponent<DataSlot>().Setup(product.productImage, 1);
-
-                    var button = go.GetComponent<Button>();
-                    if (button != null)
-                    {
-                        button.interactable = true;
-                    }
-                }
-
-                Debug.Log($"Criados {CreationSlotInstances.Count} slots de inventário");
-            }
-            catch (System.Exception e)
-            {
-                Debug.LogError($"Erro ao atualizar creation view: {e.Message}");
-                CleanCreationSlots();
-            }
-        }
-
-        public void UpdateIngredientsView()
-        {
-            // PROTEÇÃO: Evita update durante processamento crítico
-            if (isProcessingInteraction && activeCoroutines > 2)
-            {
-                Debug.Log("UpdateIngredientsView bloqueado - muitas operações simultâneas");
-                return;
-            }
-
-            List<BaseProduct> ingredients = CreationManager.Instance.Ingredients;
-            if (ingredients == null) return;
-
-            // PROTEÇÃO: Limpa de forma segura
-            CleanIngredientsSlots();
-
-            try
-            {
-                foreach (var ingredient in ingredients)
-                {
-                    GameObject go = Instantiate(pfSlotCreationIngredient, ingredientSlotHolder);
-                    IngredientsSlotInstances.Add(go);
-
-                    SelectProduct selectProduct = go.GetComponent<SelectProduct>();
-                    selectProduct.myProduct = ingredient;
-                    selectProduct.SetSlotType(SelectProduct.SlotType.IngredientSlot);
-
-                    go.GetComponent<DataSlot>().Setup(ingredient.productImage, ingredient.productName);
-
-                    var button = go.GetComponent<Button>();
-                    if (button != null)
-                    {
-                        button.interactable = true;
-                    }
-                }
-
-                Debug.Log($"Criados {IngredientsSlotInstances.Count} slots de ingredientes");
-            }
-            catch (System.Exception e)
-            {
-                Debug.LogError($"Erro ao atualizar ingredients view: {e.Message}");
-                CleanIngredientsSlots();
-            }
-        }
-
-        private void ConfigureAllNavigation()
-        {
-            // PROTEÇÃO: Só configura se não há muitas operações simultâneas
-            if (activeCoroutines > 3)
-            {
-                Debug.Log("Configuração de navegação adiada - muitas operações simultâneas");
-                return;
-            }
-
-            StartCoroutine(ConfigureNavigationAfterLayout());
-        }
-
-        private IEnumerator ConfigureNavigationAfterLayout()
-        {
-            activeCoroutines++;
-
-            yield return new WaitForEndOfFrame();
-
-            // PROTEÇÃO: Verifica se menu ainda está ativo
-            if (!creationMenu.activeInHierarchy)
-            {
-                activeCoroutines--;
-                yield break;
-            }
-
-            Debug.Log($"Configurando navegação APÓS layout - Slots: {CreationSlotInstances.Count}, Ingredientes: {IngredientsSlotInstances.Count}");
-
-            try
-            {
-                ConfigureCreationSlotNavigation();
-                ConfigureIngredientsNavigation();
-                ConfigureCreateButtonNavigation();
-            }
-            catch (System.Exception e)
-            {
-                Debug.LogError($"Erro ao configurar navegação: {e.Message}");
-            }
-
-            activeCoroutines--;
-        }
-
-        private void ConfigureCreationSlotNavigation()
-        {
-            const int slotsPerRow = 4;
-
+            // Atualiza cada slot da UI
             for (int i = 0; i < CreationSlotInstances.Count; i++)
             {
-                // PROTEÇÃO: Verifica se o objeto ainda existe
-                if (CreationSlotInstances[i] == null) continue;
+                GameObject go = CreationSlotInstances[i];
+                SelectProduct selectProduct = go.GetComponent<SelectProduct>();
+                DataSlot dataSlot = go.GetComponent<DataSlot>();
 
-                var selectable = CreationSlotInstances[i].GetComponent<Selectable>();
-                if (selectable == null) continue;
-
-                var navigation = new Navigation();
-                navigation.mode = Navigation.Mode.Explicit;
-
-                int row = i / slotsPerRow;
-                int col = i % slotsPerRow;
-
-                // Navegação para CIMA
-                if (row > 0)
+                // VERIFICAÇÃO PRINCIPAL: Checa se o inventário tem um item nesta posição
+                if (i < inventoryItems.Count)
                 {
-                    int upIndex = (row - 1) * slotsPerRow + col;
-                    if (upIndex >= 0 && upIndex < CreationSlotInstances.Count && CreationSlotInstances[upIndex] != null)
-                    {
-                        navigation.selectOnUp = CreationSlotInstances[upIndex].GetComponent<Selectable>();
-                    }
-                }
+                    // Se tem, configura o slot com o item
+                    BaseProduct product = inventoryItems[i];
 
-                // Navegação para BAIXO
-                int nextRowIndex = (row + 1) * slotsPerRow + col;
-                if (nextRowIndex < CreationSlotInstances.Count && CreationSlotInstances[nextRowIndex] != null)
-                {
-                    navigation.selectOnDown = CreationSlotInstances[nextRowIndex].GetComponent<Selectable>();
+                    selectProduct.myProduct = product;
+                    dataSlot.Setup(product.productImage, 1);
                 }
                 else
                 {
-                    if (IngredientsSlotInstances.Count > 0 && IngredientsSlotInstances[0] != null)
-                    {
-                        navigation.selectOnDown = IngredientsSlotInstances[0].GetComponent<Selectable>();
-                    }
-                    else if (createButton != null)
-                    {
-                        navigation.selectOnDown = createButton;
-                    }
+                    // Se NÃO tem, configura o slot como vazio
+                    selectProduct.myProduct = null;
+                    dataSlot.Setup(GameAssets.Instance.transparent, 0);
                 }
-
-                // Navegação para ESQUERDA
-                if (col > 0 && i - 1 >= 0 && CreationSlotInstances[i - 1] != null)
-                {
-                    navigation.selectOnLeft = CreationSlotInstances[i - 1].GetComponent<Selectable>();
-                }
-                else if (IngredientsSlotInstances.Count > 0 && IngredientsSlotInstances[0] != null)
-                {
-                    navigation.selectOnLeft = IngredientsSlotInstances[0].GetComponent<Selectable>();
-                }
-
-                // Navegação para DIREITA
-                if (col < slotsPerRow - 1 && i + 1 < CreationSlotInstances.Count && CreationSlotInstances[i + 1] != null)
-                {
-                    navigation.selectOnRight = CreationSlotInstances[i + 1].GetComponent<Selectable>();
-                }
-
-                selectable.navigation = navigation;
             }
         }
 
-        private void ConfigureIngredientsNavigation()
+        //
+
+        public void UpdateIngredientsView()
         {
+            List<BaseProduct> ingredients = CreationManager.Instance.Ingredients;
+            if (ingredients == null) return;
+
+            // Atualiza cada slot de ingrediente da UI
             for (int i = 0; i < IngredientsSlotInstances.Count; i++)
             {
-                // PROTEÇÃO: Verifica se o objeto ainda existe
-                if (IngredientsSlotInstances[i] == null) continue;
+                GameObject go = IngredientsSlotInstances[i];
+                SelectProduct selectProduct = go.GetComponent<SelectProduct>();
+                DataSlot dataSlot = go.GetComponent<DataSlot>();
 
-                var selectable = IngredientsSlotInstances[i].GetComponent<Selectable>();
-                if (selectable == null) continue;
-
-                var navigation = new Navigation();
-                navigation.mode = Navigation.Mode.Explicit;
-
-                // Navegação para CIMA
-                if (i > 0 && IngredientsSlotInstances[i - 1] != null)
+                // Verifica se existe um ingrediente correspondente para este slot
+                // e se esse ingrediente não é nulo.
+                if (i < ingredients.Count && ingredients[i] != null)
                 {
-                    navigation.selectOnUp = IngredientsSlotInstances[i - 1].GetComponent<Selectable>();
+                    // Se existir, configura o slot com o ingrediente
+                    BaseProduct product = ingredients[i];
+                    selectProduct.myProduct = product;
+                    dataSlot.Setup(product.productImage, 1);
                 }
-                else if (CreationSlotInstances.Count > 0 && CreationSlotInstances[CreationSlotInstances.Count - 1] != null)
+                else
                 {
-                    navigation.selectOnUp = CreationSlotInstances[CreationSlotInstances.Count - 1].GetComponent<Selectable>();
+                    // Se não existir (ou for nulo), configura o slot como vazio
+                    selectProduct.myProduct = null;
+                    dataSlot.Setup(GameAssets.Instance.transparent, 0);
                 }
-
-                // Navegação para BAIXO
-                if (i < IngredientsSlotInstances.Count - 1 && IngredientsSlotInstances[i + 1] != null)
-                {
-                    navigation.selectOnDown = IngredientsSlotInstances[i + 1].GetComponent<Selectable>();
-                }
-                else if (createButton != null)
-                {
-                    navigation.selectOnDown = createButton;
-                }
-
-                // Navegação para DIREITA
-                if (CreationSlotInstances.Count > 0 && CreationSlotInstances[0] != null)
-                {
-                    navigation.selectOnRight = CreationSlotInstances[0].GetComponent<Selectable>();
-                }
-
-                // Navegação para ESQUERDA
-                if (CreationSlotInstances.Count > 0 && CreationSlotInstances[CreationSlotInstances.Count - 1] != null)
-                {
-                    navigation.selectOnLeft = CreationSlotInstances[CreationSlotInstances.Count - 1].GetComponent<Selectable>();
-                }
-
-                selectable.navigation = navigation;
             }
         }
 
-        private void ConfigureCreateButtonNavigation()
-        {
-            if (createButton == null) return;
-
-            var navigation = new Navigation();
-            navigation.mode = Navigation.Mode.Explicit;
-
-            // Navegação para CIMA
-            if (IngredientsSlotInstances.Count > 0 && IngredientsSlotInstances[IngredientsSlotInstances.Count - 1] != null)
-            {
-                navigation.selectOnUp = IngredientsSlotInstances[IngredientsSlotInstances.Count - 1].GetComponent<Selectable>();
-            }
-            else if (CreationSlotInstances.Count > 0 && CreationSlotInstances[CreationSlotInstances.Count - 1] != null)
-            {
-                navigation.selectOnUp = CreationSlotInstances[CreationSlotInstances.Count - 1].GetComponent<Selectable>();
-            }
-
-            // Navegação lateral
-            if (CreationSlotInstances.Count > 0)
-            {
-                if (CreationSlotInstances[CreationSlotInstances.Count - 1] != null)
-                {
-                    navigation.selectOnLeft = CreationSlotInstances[CreationSlotInstances.Count - 1].GetComponent<Selectable>();
-                }
-                if (CreationSlotInstances[0] != null)
-                {
-                    navigation.selectOnRight = CreationSlotInstances[0].GetComponent<Selectable>();
-                }
-            }
-
-            createButton.navigation = navigation;
-        }
-
-        // MÉTODOS DE LIMPEZA COM PROTEÇÃO EXTRA
-        public void CleanCreationSlots()
-        {
-            if (CreationSlotInstances == null || CreationSlotInstances.Count == 0) return;
-
-            try
-            {
-                for (int i = CreationSlotInstances.Count - 1; i >= 0; i--)
-                {
-                    if (CreationSlotInstances[i] != null)
-                    {
-                        Destroy(CreationSlotInstances[i]);
-                    }
-                }
-                CreationSlotInstances.Clear();
-                Debug.Log("Slots de criação limpos com segurança");
-            }
-            catch (System.Exception e)
-            {
-                Debug.LogError($"Erro ao limpar slots de criação: {e.Message}");
-                CreationSlotInstances.Clear();
-            }
-        }
-
-        public void CleanIngredientsSlots()
-        {
-            if (IngredientsSlotInstances == null || IngredientsSlotInstances.Count == 0) return;
-
-            try
-            {
-                for (int i = IngredientsSlotInstances.Count - 1; i >= 0; i--)
-                {
-                    if (IngredientsSlotInstances[i] != null)
-                    {
-                        Destroy(IngredientsSlotInstances[i]);
-                    }
-                }
-                IngredientsSlotInstances.Clear();
-                Debug.Log("Slots de ingredientes limpos com segurança");
-            }
-            catch (System.Exception e)
-            {
-                Debug.LogError($"Erro ao limpar slots de ingredientes: {e.Message}");
-                IngredientsSlotInstances.Clear();
-            }
-        }
-
-        // MÉTODO DE EMERGÊNCIA PARA RESETAR TUDO
-        public void EmergencyResetCreationMenu()
-        {
-            Debug.LogWarning("RESET DE EMERGÊNCIA DO MENU DE CRIAÇÃO!");
-
-            // Para todas as corrotinas
-            StopAllCoroutines();
-
-            // Reseta estado
-            ResetInteractionState();
-
-            // Limpa tudo
-            CleanCreationSlots();
-            CleanIngredientsSlots();
-
-            // Fecha e reabre o menu
-            if (creationMenu.activeInHierarchy)
-            {
-                CloseMenu(creationMenu);
-                StartCoroutine(ReopenMenuAfterReset());
-            }
-        }
-
-        private IEnumerator ReopenMenuAfterReset()
-        {
-            yield return new WaitForSecondsRealtime(0.5f);
-            ControlCreationMenu(true);
-        }
 
         #endregion
 

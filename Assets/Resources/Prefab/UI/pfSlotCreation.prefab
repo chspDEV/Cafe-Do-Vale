@@ -371,8 +371,8 @@ GameObject:
   m_Component:
   - component: {fileID: 8019709639198578377}
   - component: {fileID: 8392300514929070844}
-  - component: {fileID: 20723675546154914}
   - component: {fileID: 2033238848132847135}
+  - component: {fileID: 7565498501757298632}
   m_Layer: 0
   m_Name: pfSlotCreation
   m_TagString: CreationIngredient
@@ -418,23 +418,6 @@ MonoBehaviour:
   image: {fileID: 1815197843725901093}
   amount: {fileID: 8751060770287219579}
   slotName: {fileID: 0}
---- !u!114 &20723675546154914
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8957933487080865127}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5ed0d483d3f99934e93cfbfd424b6eab, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  myProduct: {fileID: 0}
-  slotType: 0
-  backgroundImage: {fileID: 7967834097460777723}
-  normalColor: {r: 1, g: 1, b: 1, a: 1}
-  selectedColor: {r: 1, g: 0.7877358, b: 0.7877358, a: 1}
 --- !u!114 &2033238848132847135
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -457,9 +440,9 @@ MonoBehaviour:
   m_Transition: 1
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
-    m_HighlightedColor: {r: 1, g: 1, b: 1, a: 1}
+    m_HighlightedColor: {r: 0.7735849, g: 0.7735849, b: 0.7735849, a: 1}
     m_PressedColor: {r: 1, g: 1, b: 1, a: 1}
-    m_SelectedColor: {r: 1, g: 1, b: 1, a: 1}
+    m_SelectedColor: {r: 1, g: 0.60784316, b: 0.6156846, a: 1}
     m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
@@ -478,4 +461,29 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 7967834097460777723}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 7565498501757298632}
+        m_TargetAssemblyTypeName: SelectProduct, TCP4Global
+        m_MethodName: Select
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &7565498501757298632
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8957933487080865127}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5ed0d483d3f99934e93cfbfd424b6eab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  myProduct: {fileID: 0}

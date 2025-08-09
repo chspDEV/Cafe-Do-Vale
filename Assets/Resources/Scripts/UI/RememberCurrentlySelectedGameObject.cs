@@ -2,11 +2,12 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-
 public class RememberCurrentlySelectedGameObject : MonoBehaviour
 {
     [SerializeField] private EventSystem eventSystem;
     [SerializeField] private GameObject lastSelectedElement;
+    [Header("Nunca salvar como seleção")]
+    [SerializeField] private GameObject buttonToIgnore; // Referencie o botão Criar aqui
 
     private void Reset()
     {
@@ -26,14 +27,17 @@ public class RememberCurrentlySelectedGameObject : MonoBehaviour
         if (!eventSystem)
             return;
 
-        if (eventSystem.currentSelectedGameObject &&
-            lastSelectedElement != eventSystem.currentSelectedGameObject)
-            lastSelectedElement = eventSystem.currentSelectedGameObject;
+        var current = eventSystem.currentSelectedGameObject;
+
+        // Só salva se não for o botão a ser ignorado
+        if (current && lastSelectedElement != current && current != buttonToIgnore)
+            lastSelectedElement = current;
 
         if (!eventSystem.currentSelectedGameObject && lastSelectedElement)
             eventSystem.SetSelectedGameObject(lastSelectedElement);
     }
 }
+
 
 
 

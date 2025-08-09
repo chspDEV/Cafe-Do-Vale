@@ -41,8 +41,8 @@ Material:
     - _QueueControl: 0
     - _QueueOffset: 0
     m_Colors:
-    - _CorOculta: {r: 1, g: 0, b: 0, a: 0.39607844}
-    - _CorVisivel: {r: 0.13067123, g: 1, b: 0, a: 0.33333334}
+    - _CorOculta: {r: 0, g: 0, b: 0, a: 1}
+    - _CorVisivel: {r: 1, g: 1, b: 1, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
 --- !u!114 &2630360255012272512

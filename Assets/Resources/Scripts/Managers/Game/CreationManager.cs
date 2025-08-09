@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using GameResources.Project.Scripts.Utilities.Audio;
 using Tcp4.Assets.Resources.Scripts.Managers;
@@ -36,12 +37,10 @@ namespace Tcp4
 
                 // CORREÇÃO: Notifica mudanças na UI
                 OnChangeInventory?.Invoke();
-                UIManager.Instance.UpdateCreationView();
-                UIManager.Instance.UpdateIngredientsView();
             }
         }
 
-        public void NotifyInventoryUpdate() { OnChangeInventory?.Invoke(); UIManager.Instance.SelectFirstCreationSlot();}
+        public void NotifyInventoryUpdate() { OnChangeInventory?.Invoke();}
 
         public void UnselectProduct(BaseProduct pd)
         {
@@ -50,8 +49,7 @@ namespace Tcp4
 
             // CORREÇÃO: Notifica mudanças na UI
             OnChangeInventory?.Invoke();
-            UIManager.Instance.UpdateCreationView();
-            UIManager.Instance.UpdateIngredientsView();
+
         }
 
         void AddIngredient(BaseProduct pd)
@@ -107,6 +105,7 @@ namespace Tcp4
 
         public void Create()
         {
+
             if (Ingredients.Count < 3)
             {
                 SoundEventArgs sfxArgs1 = new()
@@ -117,9 +116,6 @@ namespace Tcp4
 
                 };
                 SoundEvent.RequestSound(sfxArgs1);
-
-                UIManager.Instance.SelectFirstCreationSlot();
-
                 return;
             }
 
@@ -145,8 +141,7 @@ namespace Tcp4
 
                 Debug.Log("Drink está nulo e nao pode ser servido!");
 
-                // 🔧 CORREÇÃO: Reposiciona o foco após erro
-                UIManager.Instance.SelectFirstCreationSlot();
+                OnChangeInventory?.Invoke();
             }
 
         }

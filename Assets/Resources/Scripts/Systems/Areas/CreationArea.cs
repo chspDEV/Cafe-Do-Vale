@@ -84,13 +84,10 @@ public class CreationArea : BaseInteractable
 
         base.OnInteract();
 
-        // CORREÇÃO 1: Notifica que o menu de criação foi aberto (baseado no SeedShop)
-        SelectProduct.NotifyCreationMenuOpened();
+        //EventSystemBlocker.BlockForSeconds(0.8f);
 
-        EventSystemBlocker.BlockForSeconds(0.8f);
-
-        UIManager.Instance.UpdateCreationView();
         CreationManager.Instance.lastIdInteracted = index;
+
         ControlMenu(true);
     }
 
