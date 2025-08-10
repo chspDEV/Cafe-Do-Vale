@@ -63,6 +63,8 @@ public class PlaytestManager : Singleton<PlaytestManager>
     }
     public void GenerateReportAndScreenshot()
     {
+        if (!canSavePlaytest) return;
+
         float totalPlayTime = (Time.time - startTime) / 60.0f;
         string timestamp = System.DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss");
         string reportFileName = $"{reportBaseName}_{timestamp}.txt";
@@ -101,6 +103,8 @@ public class PlaytestManager : Singleton<PlaytestManager>
         File.WriteAllText(reportPath, sb.ToString());
 
         Debug.Log($"<color=lime>Relatorio de playtest salvo em: {reportPath}</color>");
+
+
     }
     private void CaptureHeatmap(string path)
     {

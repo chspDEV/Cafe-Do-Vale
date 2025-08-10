@@ -20,6 +20,11 @@ namespace Tcp4
             StartCoroutine(InitializeSettings(0.25f));
         }
 
+        public void OnEnable()
+        {
+            StartCoroutine(InitializeSettings(0f));
+        }
+
         private IEnumerator InitializeSettings(float delay)
         {
             yield return new WaitForSeconds(delay);

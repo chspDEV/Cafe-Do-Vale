@@ -335,6 +335,17 @@
                 },
                 {
                     "name": "",
+                    "id": "912425c8-5d6b-4eec-9c4d-9e7933f97031",
+                    "path": "<XInputController>/buttonWest",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Map",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "9205ee89-0773-4d79-8fa0-3bba1ce94c3c",
                     "path": "<DualShockGamepad>/dpad/left",
                     "interactions": "",
@@ -425,6 +436,17 @@
                     "name": "",
                     "id": "2f34b67c-379f-4bd6-bc3d-93dfbf89ced1",
                     "path": "<Keyboard>/r",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Recipe",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "6751352f-c58c-460b-82c6-8503f3f91529",
+                    "path": "<XInputController>/buttonNorth",
                     "interactions": "",
                     "processors": "",
                     "groups": "",

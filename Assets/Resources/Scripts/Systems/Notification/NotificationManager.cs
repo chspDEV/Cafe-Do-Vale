@@ -36,6 +36,14 @@ public class NotificationManager : MonoBehaviour
         Instance = this;
     }
 
+    private void Start()
+    {
+        if (UnlockManager.Instance != null)
+        {
+            UnlockManager.Instance.OnItemUnlocked += HandleUnlockNotification;
+        }
+    }
+
     public void Show(string title, string message, Sprite icon = null)
     {
         Notification notif = new Notification
@@ -43,7 +51,7 @@ public class NotificationManager : MonoBehaviour
             title = title,
             message = message,
             icon = icon,
-            timestamp = $"{TimeManager.Instance.CurrentHour:00}:{System.DateTime.Now.Minute:00}",
+            timestamp = $"{TimeManager.Instance.GetFormattedTime()}",
             isRead = false
         };
 
@@ -99,6 +107,19 @@ public class NotificationManager : MonoBehaviour
         }
     }
 
+    private void OnDisable()
+    {
+        if (UnlockManager.Instance != null)
+        {
+            UnlockManager.Instance.OnItemUnlocked -= HandleUnlockNotification;
+        }
+    }
+
+    private void HandleUnlockNotification(string title, string message, Sprite icon)
+    {
+        Show(title, message, icon);
+    }
+
     private IEnumerator ShowPopup(string title, string message, Sprite icon)
     {
         while (isShowingPopup)
@@ -116,7 +137,7 @@ public class NotificationManager : MonoBehaviour
             title = title,
             message = message,
             icon = icon,
-            timestamp = $"{TimeManager.Instance.CurrentHour:00}:{System.DateTime.Now.Minute:00}",
+            timestamp = $"{TimeManager.Instance.GetFormattedTime()}",
             isRead = false
         };
 

@@ -18,6 +18,12 @@ namespace Tcp4
 
         // NOVO: Dados dos trabalhadores
         public List<SavedWorkerData> hiredWorkersData = new();
+
+        // NOVO: Dados de desbloqueio do sistema UnlockManager
+        public int currentReputationLevel;
+        public List<bool> productionsUnlocked = new();
+        public List<bool> drinksUnlocked = new();
+        public List<bool> cupsUnlocked = new();
     }
 
     [System.Serializable]
