@@ -3,7 +3,17 @@ guid: c4b695c19d5670d4da0ab7e5786a2b7c
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: txt_baseBanqueta
+    second: {fileID: 2800000, guid: d45ae71285aff3e4994858c0bc826d77, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: txt_caixota
+    second: {fileID: 2800000, guid: 29f7bebda15529d4a8e3c446efc2d874, type: 3}
   materials:
     materialImportMode: 2
     materialName: 0
