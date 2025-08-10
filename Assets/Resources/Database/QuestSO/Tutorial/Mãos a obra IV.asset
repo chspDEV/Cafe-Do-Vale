@@ -105,4 +105,4 @@ MonoBehaviour:
     hasIndicator: 0
     visualIndicator: {fileID: 0}
   isCompleted: 0
-  isStarted: 1
+  isStarted: 0

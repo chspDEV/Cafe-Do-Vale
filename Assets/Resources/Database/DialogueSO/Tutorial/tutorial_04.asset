@@ -20,7 +20,8 @@ MonoBehaviour:
       Use essa suas perninhas para cuidar de outras coisas enquanto o caf\xE9 produz
       frutos novos."
   - characterName: Zeca
-    dialogueText: "Aqui ao lado \xE9 onde voc\xEA pode beneficiar o caf\xE9."
+    dialogueText: "Aqui ao lado \xE9 a Casa das M\xE1quinas onde voc\xEA pode beneficiar
+      o caf\xE9."
   - characterName: Zeca
     dialogueText: "O qu\xEA? Seu tio n\xE3o te ensinou nem o que significa isso?!"
   - characterName: Zeca

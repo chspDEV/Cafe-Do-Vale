@@ -3,7 +3,12 @@ guid: b626a9b62dc8b5347b6af221cf5c6374
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Vendedor de sementes
+    second: {fileID: 2100000, guid: 6c249fe29e7a3324e8b3355e8592c8b5, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0

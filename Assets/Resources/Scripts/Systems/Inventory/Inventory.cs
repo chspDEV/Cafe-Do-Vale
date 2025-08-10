@@ -9,6 +9,7 @@ namespace Tcp4
     public class Inventory : MonoBehaviour
     {
         private int limit = 6;
+        public bool canSpawn = true;
         [SerializeField] private List<BaseProduct> productInventory = new();
         [SerializeField] private List<GameObject> instanceInventory = new();
         [SerializeField] private Transform bagPoint;
@@ -30,7 +31,9 @@ namespace Tcp4
             {
                 productInventory.Add(product);
                 QuestManager.Instance.CheckItemCollected(product.productName);
-                Spawn(product.model);
+
+                if(canSpawn)
+                    Spawn(product.model);
             }
         }
 
@@ -48,7 +51,9 @@ namespace Tcp4
                 if (itemToRemove != null)
                 {
                     productInventory.Remove(itemToRemove);
-                    Despawn(product.model);
+
+                    if (canSpawn)
+                        Despawn(product.model);
                 }
             }
         }

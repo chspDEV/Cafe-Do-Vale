@@ -42,6 +42,9 @@ namespace Tcp4
 
         public void Start()
         {
+#if UNITY_EDITOR
+            return;
+#endif
             Load();
         }
 

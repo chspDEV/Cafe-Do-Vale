@@ -10,7 +10,7 @@ namespace Tcp4.Assets.Resources.Scripts.Systems.Collect_Cook
         public Inventory inventory;
         public BaseProduct item;
         public string storageID;
-
+        
         [SerializeField] private float interfaceDelay;
 
         private bool isInterfaceOpen;

@@ -23,7 +23,7 @@ MonoBehaviour:
       targetPosition: {x: 43, y: 1, z: 21}
       radius: 5
       targetID: 
-    isCompleted: 1
+    isCompleted: 0
     hasIndicator: 0
     visualIndicator: {fileID: 0}
   - stepID: 1
@@ -34,7 +34,7 @@ MonoBehaviour:
       targetPosition: {x: 0, y: 0, z: 0}
       radius: 2
       targetID: seedShop
-    isCompleted: 1
+    isCompleted: 0
     hasIndicator: 0
     visualIndicator: {fileID: 0}
   - stepID: 2
@@ -45,7 +45,7 @@ MonoBehaviour:
       targetPosition: {x: 0, y: 0, z: 0}
       radius: 2
       targetID: "Semente de Caf\xE9"
-    isCompleted: 1
+    isCompleted: 0
     hasIndicator: 0
     visualIndicator: {fileID: 0}
   - stepID: 3
@@ -56,8 +56,8 @@ MonoBehaviour:
       targetPosition: {x: 14, y: 1, z: 14}
       radius: 3
       targetID: 
-    isCompleted: 1
+    isCompleted: 0
     hasIndicator: 0
     visualIndicator: {fileID: 0}
-  isCompleted: 1
+  isCompleted: 0
   isStarted: 0
