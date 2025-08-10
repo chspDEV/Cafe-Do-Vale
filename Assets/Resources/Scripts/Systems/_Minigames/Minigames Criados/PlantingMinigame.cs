@@ -29,12 +29,12 @@ public class PlantingMinigame : BaseMinigame
 {
     [Header("Game Objects")]
     [SerializeField] private RectTransform rotatingIndicator;
-    [SerializeField] private GameObject targetZonePrefab; 
-    [SerializeField] private GameObject lifePrefab; 
-    [SerializeField] private Image centerIcon; 
-    [SerializeField] private Transform zonesContainer; 
-    [SerializeField] private Transform lifeContainer; 
-    [SerializeField] private Animator handsAnimator; 
+    [SerializeField] private GameObject targetZonePrefab;
+    [SerializeField] private GameObject lifePrefab;
+    [SerializeField] private Image centerIcon;
+    [SerializeField] private Transform zonesContainer;
+    [SerializeField] private Transform lifeContainer;
+    [SerializeField] private Animator handsAnimator;
     [SerializeField] private Animator inputToPress;
 
     [Header("Game Rules")]
@@ -43,7 +43,8 @@ public class PlantingMinigame : BaseMinigame
     [SerializeField] private int maxMisses = 2;
     [SerializeField] private int zonesPerCycle = 3;
 
-
+    [Header("Zone Spacing")]
+    [SerializeField] private float minimumSpacingBetweenZones = 20f; // Espaçamento mínimo entre zonas em graus
 
     [Header("Gameplay")]
     [SerializeField] private float initialSpeed = 90f; //velocidade inicial em graus/segundo
@@ -177,17 +178,17 @@ public class PlantingMinigame : BaseMinigame
 
     private void HandleInputToPress()
     {
-        if (CheckForActiveInput())
+        // CORREÇÃO: Só mostra indicador de input quando pode rotacionar (indicador se movendo)
+        if (canRotate && CheckForActiveInput())
         {
             if (inputToPress) inputToPress.Play("canPress_inputToPress");
         }
     }
 
-
-
     private void HandleInput()
     {
-        if (inputKey.Pressed)
+        // CORREÇÃO: Só aceita input quando o indicador está se movendo
+        if (inputKey.Pressed && canRotate)
         {
             bool hitSuccess = CheckForHit();
 
@@ -243,8 +244,8 @@ public class PlantingMinigame : BaseMinigame
     {
         var newSpeed = currentSpeed + increase;
 
-        while (currentSpeed < newSpeed) 
-        { 
+        while (currentSpeed < newSpeed)
+        {
             currentSpeed += 0.5f;
         }
 
@@ -277,42 +278,41 @@ public class PlantingMinigame : BaseMinigame
 
     #region --- Lógica das Zonas de Acerto ---
 
-    private bool DoZonesOverlap(float startA, float endA, float startB, float endB)
+    // FUNÇÃO CORRIGIDA: Verifica se duas zonas se sobrepõem com espaçamento mínimo
+    private bool DoZonesOverlapWithSpacing(float startA, float endA, float startB, float endB, float minSpacing)
     {
-        float normalizedStartA = Mathf.Repeat(startA, 360f);
-        float normalizedEndA = Mathf.Repeat(endA, 360f);
-        float normalizedStartB = Mathf.Repeat(startB, 360f);
-        float normalizedEndB = Mathf.Repeat(endB, 360f);
+        // Normaliza todos os ângulos para 0-360
+        startA = Mathf.Repeat(startA, 360f);
+        endA = Mathf.Repeat(endA, 360f);
+        startB = Mathf.Repeat(startB, 360f);
+        endB = Mathf.Repeat(endB, 360f);
 
-        // Lida com casos onde zona passa de 360 -> 0
-        List<(float, float)> rangesA = SplitIfWraps(normalizedStartA, normalizedEndA);
-        List<(float, float)> rangesB = SplitIfWraps(normalizedStartB, normalizedEndB);
+        // Calcula o centro de cada zona usando DeltaAngle para lidar com wrap-around
+        float centerA = startA + Mathf.Repeat((endA - startA), 360f) / 2f;
+        float centerB = startB + Mathf.Repeat((endB - startB), 360f) / 2f;
 
-        foreach (var (sa1, ea1) in rangesA)
+        // Calcula o tamanho de cada zona
+        float sizeA = Mathf.Repeat((endA - startA), 360f);
+        float sizeB = Mathf.Repeat((endB - startB), 360f);
+
+        // Calcula a distância angular mínima entre os centros
+        float distanceBetweenCenters = Mathf.Abs(Mathf.DeltaAngle(centerA, centerB));
+
+        // Distância mínima necessária = metade de cada zona + espaçamento
+        float minimumDistance = (sizeA / 2f) + (sizeB / 2f) + minSpacing;
+
+        // Se a distância entre centros é menor que a mínima necessária, há sobreposição
+        bool overlaps = distanceBetweenCenters < minimumDistance;
+
+        if (overlaps)
         {
-            foreach (var (sa2, ea2) in rangesB)
-            {
-                if (sa1 < ea2 && ea1 > sa2)
-                    return true;
-            }
+            Debug.Log($"SOBREPOSIÇÃO DETECTADA: ZonaA({startA:F1}°-{endA:F1}°, centro:{centerA:F1}°) " +
+                     $"vs ZonaB({startB:F1}°-{endB:F1}°, centro:{centerB:F1}°) " +
+                     $"- Distância:{distanceBetweenCenters:F1}° < Mínima:{minimumDistance:F1}°");
         }
 
-        return false;
+        return overlaps;
     }
-
-    // Divide uma zona em dois ranges se ela passa por 0°
-    private List<(float, float)> SplitIfWraps(float start, float end)
-    {
-        if (end >= start)
-            return new List<(float, float)> { (start, end) };
-        else
-            return new List<(float, float)>
-        {
-            (start, 360f),
-            (0f, end)
-        };
-    }
-
 
     private void GenerateNewTargetZones()
     {
@@ -325,41 +325,42 @@ public class PlantingMinigame : BaseMinigame
 
         UpdateLife();
 
-        const int maxPlacementTries = 100;
-        const int maxSafeRetries = 3;
+        const int maxPlacementTries = 200; // Aumentado para mais tentativas
+        const int maxSafeRetries = 5; // Mais tentativas de restart
 
         int retries = 0;
 
         while (retries < maxSafeRetries)
         {
             activeZones.Clear();
-            int placedCount = 0;
+            bool allZonesPlaced = true;
 
+            // Tenta colocar cada zona
             for (int i = 0; i < zonesPerCycle; i++)
             {
-                bool placed = false;
+                bool zonePlaced = false;
 
+                // Tenta várias posições para esta zona
                 for (int tryCount = 0; tryCount < maxPlacementTries; tryCount++)
                 {
                     var difficulty = difficulties[Random.Range(0, difficulties.Count)];
                     float size = difficulty.angularSize;
-                    float start = Random.Range(0f, 360f);
+                    float start = Random.Range(0f, 360f - size); // Garante que não ultrapasse 360°
                     float end = start + size;
 
-                    float offset = Mathf.Min(10f, size / 2f); // menor offset se a zona for pequena
-
-                    bool overlaps = false;
-
-                    foreach (var other in activeZones)
+                    // Verifica se esta posição conflita com zonas já colocadas
+                    bool hasConflict = false;
+                    foreach (var existingZone in activeZones)
                     {
-                        if (ZonesOverlap360(start - offset, end + offset, other.startAngle - offset, other.endAngle + offset))
+                        if (DoZonesOverlapWithSpacing(start, end, existingZone.startAngle, existingZone.endAngle, minimumSpacingBetweenZones))
                         {
-                            overlaps = true;
+                            hasConflict = true;
                             break;
                         }
                     }
 
-                    if (!overlaps)
+                    // Se não há conflito, cria a zona
+                    if (!hasConflict)
                     {
                         var newZone = new ActiveZone
                         {
@@ -376,33 +377,95 @@ public class PlantingMinigame : BaseMinigame
                         newZone.zoneObject = zoneObj;
                         activeZones.Add(newZone);
 
-                        placed = true;
-                        placedCount++;
+                        zonePlaced = true;
+                        Debug.Log($"Zona {i + 1} colocada: {start:F1}° - {end:F1}°");
                         break;
                     }
                 }
+
+                // Se não conseguiu colocar esta zona, restart completo
+                if (!zonePlaced)
+                {
+                    Debug.LogWarning($"Não foi possível colocar zona {i + 1}. Reiniciando geração...");
+                    allZonesPlaced = false;
+                    break;
+                }
             }
 
-            if (placedCount == zonesPerCycle)
-                return; // sucesso total
+            // Se todas as zonas foram colocadas com sucesso
+            if (allZonesPlaced)
+            {
+                Debug.Log($"Todas as {zonesPerCycle} zonas foram colocadas com sucesso!");
+                return;
+            }
+
+            // Limpa as zonas para tentar novamente
+            foreach (var zone in activeZones)
+            {
+                Destroy(zone.zoneObject);
+            }
+            activeZones.Clear();
 
             retries++;
         }
 
-        Debug.LogWarning("Falha ao posicionar zonas. Reduza 'zonesPerCycle' ou aumente espaço.");
+        // Se chegou aqui, não conseguiu colocar todas as zonas
+        Debug.LogError($"Falha ao posicionar {zonesPerCycle} zonas após {maxSafeRetries} tentativas. " +
+                      $"Considere: 1) Reduzir 'zonesPerCycle', 2) Reduzir 'minimumSpacingBetweenZones', " +
+                      $"3) Reduzir tamanho das zonas nas dificuldades.");
+
+        // Como fallback, tenta colocar o máximo de zonas possível
+        TryPlaceFallbackZones();
     }
 
-    private bool ZonesOverlap360(float startA, float endA, float startB, float endB)
+    // Função de fallback que tenta colocar o máximo de zonas possível
+    private void TryPlaceFallbackZones()
     {
-        startA = Mathf.Repeat(startA, 360f);
-        endA = Mathf.Repeat(endA, 360f);
-        startB = Mathf.Repeat(startB, 360f);
-        endB = Mathf.Repeat(endB, 360f);
+        Debug.Log("Tentando colocação de fallback...");
 
-        if (endA < startA) endA += 360f;
-        if (endB < startB) endB += 360f;
+        const int maxTries = 100;
+        int zonesPlaced = 0;
 
-        return !(endA <= startB || endB <= startA);
+        for (int attempt = 0; attempt < maxTries && zonesPlaced < zonesPerCycle; attempt++)
+        {
+            var difficulty = difficulties[Random.Range(0, difficulties.Count)];
+            float size = difficulty.angularSize;
+            float start = Random.Range(0f, 360f - size);
+            float end = start + size;
+
+            bool hasConflict = false;
+            foreach (var existingZone in activeZones)
+            {
+                if (DoZonesOverlapWithSpacing(start, end, existingZone.startAngle, existingZone.endAngle, minimumSpacingBetweenZones))
+                {
+                    hasConflict = true;
+                    break;
+                }
+            }
+
+            if (!hasConflict)
+            {
+                var newZone = new ActiveZone
+                {
+                    startAngle = start,
+                    endAngle = end,
+                    angularSize = size,
+                    hit = false
+                };
+
+                GameObject zoneObj = Instantiate(targetZonePrefab, zonesContainer);
+                var img = zoneObj.GetComponent<Image>();
+                img.fillAmount = size / 360f;
+                zoneObj.transform.rotation = Quaternion.Euler(0, 0, -start);
+                newZone.zoneObject = zoneObj;
+                activeZones.Add(newZone);
+
+                zonesPlaced++;
+                Debug.Log($"Zona de fallback {zonesPlaced} colocada: {start:F1}° - {end:F1}°");
+            }
+        }
+
+        Debug.Log($"Fallback concluído: {zonesPlaced} zonas colocadas de {zonesPerCycle} desejadas.");
     }
 
     private bool CheckForHit()

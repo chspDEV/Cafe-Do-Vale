@@ -15,36 +15,69 @@ MonoBehaviour:
   unlockableProductions:
   - item: {fileID: 11400000, guid: c1fd9e34ede5bfb4b8abd7111c028530, type: 2}
     requiredReputationLevel: 0
-    isUnlocked: 0
+    isUnlocked: 1
+    notificationTitle: "Produ\xE7\xE3o de Caf\xE9!"
+    notificationMessage: "Produ\xE7\xE3o de caf\xE9 desbloqueada!"
+    notificationIcon: {fileID: 21300000, guid: 3b37dd3eae824ba41955b4a4d6edf548, type: 3}
   - item: {fileID: 11400000, guid: a700651e4a707c647a3e89be282bc69d, type: 2}
     requiredReputationLevel: 1
     isUnlocked: 0
+    notificationTitle: "Produ\xE7\xE3o de Leite!"
+    notificationMessage: "Produ\xE7\xE3o de Leite desbloqueada!"
+    notificationIcon: {fileID: 21300000, guid: 4361004106cc16a4191899ec3c8faeae, type: 3}
   - item: {fileID: 11400000, guid: 90f5aa24ebbd48b4db8ba61259d0b9d8, type: 2}
     requiredReputationLevel: 2
     isUnlocked: 0
+    notificationTitle: "Produ\xE7\xE3o de Cacau!"
+    notificationMessage: "Produ\xE7\xE3o de Cacau desbloqueada!"
+    notificationIcon: {fileID: 21300000, guid: c47529d193118f646b58d829cabddb89, type: 3}
   - item: {fileID: 11400000, guid: d85380f429a027642824fcb909aece3e, type: 2}
     requiredReputationLevel: 3
     isUnlocked: 0
+    notificationTitle: "Produ\xE7\xE3o de Gengibre!"
+    notificationMessage: "Produ\xE7\xE3o de Gengibre desbloqueada!"
+    notificationIcon: {fileID: 21300000, guid: 9def5c4802c202a49a304e98dde21bea, type: 3}
   - item: {fileID: 11400000, guid: 1b8920d533897b84e8931529f6a606fb, type: 2}
     requiredReputationLevel: 4
     isUnlocked: 0
+    notificationTitle: "Produ\xE7\xE3o de Mel!"
+    notificationMessage: "Produ\xE7\xE3o de Mel desbloqueada!"
+    notificationIcon: {fileID: 21300000, guid: 5cb6ada53fa76f94181828ad32e5057e, type: 3}
   unlockableDrinks:
   - item: {fileID: 11400000, guid: 27c8ecdb80ae6e24aa65e947be778fca, type: 2}
     requiredReputationLevel: 0
-    isUnlocked: 0
+    isUnlocked: 1
+    notificationTitle: 'Receita nova: Expresso'
+    notificationMessage: 
+    notificationIcon: {fileID: 21300000, guid: ca1c07daca5b23f40a273aec50cc65db, type: 3}
   - item: {fileID: 11400000, guid: 40c413e35dba2664492c2e11c4f0cce5, type: 2}
     requiredReputationLevel: 1
     isUnlocked: 0
+    notificationTitle: 'Receita nova: Latte'
+    notificationMessage: 
+    notificationIcon: {fileID: 21300000, guid: 32385195c8c33b343ac874077f6fbcc5, type: 3}
   - item: {fileID: 11400000, guid: 2b0d376919a0e10408348c4ad9dd9b5e, type: 2}
     requiredReputationLevel: 2
     isUnlocked: 0
+    notificationTitle: 'Receita nova: Chocolate Quente'
+    notificationMessage: 
+    notificationIcon: {fileID: 21300000, guid: 38c97a5581990b24cb4a0b65be19d1f9, type: 3}
   - item: {fileID: 11400000, guid: a575c9a0e507fba4988772fb78cbb01b, type: 2}
     requiredReputationLevel: 3
     isUnlocked: 0
+    notificationTitle: "Receita nova: Termog\xEAnico"
+    notificationMessage: 
+    notificationIcon: {fileID: 38153, guid: 6c2e1b14bae94884083408a78dab7135, type: 3}
   - item: {fileID: 11400000, guid: 8946233ee6c9a7c499750d8577ac7826, type: 2}
     requiredReputationLevel: 3
     isUnlocked: 0
+    notificationTitle: 'Receita nova: Capuccino'
+    notificationMessage: 
+    notificationIcon: {fileID: 941516556, guid: 5476c4718e9558642b309a5dfd4c66b5, type: 3}
   - item: {fileID: 11400000, guid: ec8f7eca9297a8b459e4138efc9e6802, type: 2}
     requiredReputationLevel: 4
     isUnlocked: 0
+    notificationTitle: 'Receita nova: Melado'
+    notificationMessage: 
+    notificationIcon: {fileID: 21300000, guid: 18129f54b6ff4004290d8c692d5d4ce9, type: 3}
   unlockableCups: []

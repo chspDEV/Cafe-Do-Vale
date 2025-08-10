@@ -2006,7 +2006,7 @@ SkinnedMeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 6174316876120303967, guid: e057dc0220300be469c72219a0f072a8, type: 3}
+  - {fileID: 6174316876120303967, guid: 2c037076fe6343543a18e003fa995467, type: 3}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -2465,7 +2465,7 @@ SkinnedMeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 6174316876120303967, guid: e057dc0220300be469c72219a0f072a8, type: 3}
+  - {fileID: -744404515371470858, guid: 0db42461d644bb24a93413c2b5f75445, type: 3}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -3278,7 +3278,7 @@ SkinnedMeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 6174316876120303967, guid: e057dc0220300be469c72219a0f072a8, type: 3}
+  - {fileID: -744404515371470858, guid: 0db42461d644bb24a93413c2b5f75445, type: 3}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -3639,7 +3639,7 @@ SkinnedMeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 6174316876120303967, guid: e057dc0220300be469c72219a0f072a8, type: 3}
+  - {fileID: -744404515371470858, guid: 0db42461d644bb24a93413c2b5f75445, type: 3}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -4159,7 +4159,7 @@ SkinnedMeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 6174316876120303967, guid: e057dc0220300be469c72219a0f072a8, type: 3}
+  - {fileID: -744404515371470858, guid: 0db42461d644bb24a93413c2b5f75445, type: 3}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -4682,7 +4682,7 @@ SkinnedMeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 6174316876120303967, guid: e057dc0220300be469c72219a0f072a8, type: 3}
+  - {fileID: -744404515371470858, guid: 0db42461d644bb24a93413c2b5f75445, type: 3}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

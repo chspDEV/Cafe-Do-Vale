@@ -42,8 +42,8 @@ public class QuestChecker : MonoBehaviour
                 { "A", "LS para esquerda" },
                 { "S", "LS para trás" },
                 { "D", "LS para direita" },
-                { "MAP", "Y" },
-                { "RECIPE", "X" },
+                { "MAP", "X" },
+                { "RECIPE", "Y" },
             }
         },
         {

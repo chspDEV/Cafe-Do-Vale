@@ -177,6 +177,11 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
         {
             return money >= remaining;
         }
+
+        internal void SetReputation(int currentReputationLevel)
+        {
+            throw new NotImplementedException();
+        }
         #endregion
     }
 }

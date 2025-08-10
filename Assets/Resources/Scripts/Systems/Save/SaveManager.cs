@@ -32,9 +32,17 @@ namespace Tcp4
             SaveStorageData(data);
             SavePlayerInventory(data);
             SaveQuestData(data);
-            SaveWorkerData(data); // NOVO: Salva dados dos trabalhadores
+            SaveWorkerData(data);
+
+            // NOVO: Salva sistema de desbloqueio
+            SaveUnlockData(data);
 
             SaveSystem.SaveGame(data);
+        }
+
+        public void Start()
+        {
+            Load();
         }
 
         public void Load()
@@ -63,11 +71,49 @@ namespace Tcp4
             LoadStorageData(data);
             LoadPlayerInventory(data);
             LoadQuestData(data);
-            LoadWorkerData(data); // NOVO: Carrega dados dos trabalhadores
+            LoadWorkerData(data);
+
+            // NOVO: Carrega sistema de desbloqueio
+            LoadUnlockData(data);
 
             Debug.Log("Todos os dados foram carregados.");
             OnGameDataLoaded?.Invoke();
         }
+
+        #region Unlock System Save
+        private void SaveUnlockData(GameData data)
+        {
+            if (UnlockManager.Instance == null) return;
+
+            data.currentReputationLevel = UnlockManager.Instance.CurrentReputationLevel;
+            data.productionsUnlocked = UnlockManager.Instance.config.unlockableProductions.Select(u => u.isUnlocked).ToList();
+            data.drinksUnlocked = UnlockManager.Instance.config.unlockableDrinks.Select(u => u.isUnlocked).ToList();
+            data.cupsUnlocked = UnlockManager.Instance.config.unlockableCups.Select(u => u.isUnlocked).ToList();
+        }
+
+        private void LoadUnlockData(GameData data)
+        {
+            if (UnlockManager.Instance == null) return;
+
+            // Só restaura se existir dado salvo
+            if (data.productionsUnlocked != null && data.productionsUnlocked.Count > 0)
+                RestoreUnlockList(UnlockManager.Instance.config.unlockableProductions, data.productionsUnlocked);
+
+            if (data.drinksUnlocked != null && data.drinksUnlocked.Count > 0)
+                RestoreUnlockList(UnlockManager.Instance.config.unlockableDrinks, data.drinksUnlocked);
+
+            if (data.cupsUnlocked != null && data.cupsUnlocked.Count > 0)
+                RestoreUnlockList(UnlockManager.Instance.config.unlockableCups, data.cupsUnlocked);
+
+            UnlockManager.Instance.SetReputation(data.currentReputationLevel);
+        }
+
+        private void RestoreUnlockList<T>(List<UnlockableItem<T>> target, List<bool> saved)
+        {
+            for (int i = 0; i < target.Count && i < saved.Count; i++)
+                target[i].isUnlocked = saved[i];
+        }
+        #endregion
 
         #region Quest Save
         private void SaveQuestData(GameData data)

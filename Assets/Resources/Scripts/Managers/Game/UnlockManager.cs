@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Tcp4.Assets.Resources.Scripts.Managers;
 using Tcp4;
 using UnityEngine;
-using System.Linq;
 
 [System.Serializable]
 public class UnlockableItem<T>
@@ -12,21 +12,25 @@ public class UnlockableItem<T>
     public int requiredReputationLevel;
     public bool isUnlocked = false;
 
-    private void OnValidate()
+    [Header("Notification Settings")]
+    public string notificationTitle;
+    public string notificationMessage;
+    public Sprite notificationIcon;
+
+    void OnValidate()
     {
-        isUnlocked = false;
+        isUnlocked = false; // Reset unlocked state on validation
     }
 }
 
 public class UnlockManager : Singleton<UnlockManager>
 {
-    [SerializeField] private UnlockConfig config;
+    [SerializeField] public UnlockConfig config;
     [SerializeField] private int currentReputationLevel;
-    public int CurrentReputationLevel
-    {
-        get => currentReputationLevel;
-        private set => currentReputationLevel = value;
-    }
+    public int CurrentReputationLevel => currentReputationLevel;
+
+    // EVENTO PÚBLICO PARA NOTIFICAR SOBRE DESBLOQUEIOS
+    public event Action<string, string, Sprite> OnItemUnlocked;
 
     public event Action OnReputationChanged;
     public event Action OnProductionsUpdated;
@@ -37,12 +41,12 @@ public class UnlockManager : Singleton<UnlockManager>
     private UIManager uiManager;
     public List<Drink> CurrentMenu { get; private set; } = new();
 
-    
     private void Start()
     {
         uiManager = UIManager.Instance;
         shopManager = ShopManager.Instance;
         shopManager.OnChangeStar += HandleReputationUpdate;
+
         InitializeUnlockables();
     }
 
@@ -72,26 +76,9 @@ public class UnlockManager : Singleton<UnlockManager>
 
     private void UpdateUnlockStates()
     {
-        //POR ENQUANTO SEM SAVE
-        LockAll(config.unlockableProductions);
-        LockAll(config.unlockableDrinks);
-        LockAll(config.unlockableCups);
-        //---//---
-
-
         CheckAndUnlock(config.unlockableProductions);
         CheckAndUnlock(config.unlockableDrinks);
         CheckAndUnlock(config.unlockableCups);
-    }
-
-    //por enquanto sem sistema de save
-    void LockAll<T>(List<UnlockableItem<T>> items)
-    {
-        //Por enquanto sem sistema de save
-        foreach (var item in items)
-        {
-            item.isUnlocked = false;
-        }
     }
 
     private void CheckAndUnlock<T>(List<UnlockableItem<T>> items)
@@ -101,6 +88,12 @@ public class UnlockManager : Singleton<UnlockManager>
             if (!item.isUnlocked && currentReputationLevel >= item.requiredReputationLevel)
             {
                 item.isUnlocked = true;
+
+                string title = string.IsNullOrEmpty(item.notificationTitle)
+                    ? $"{item.item.ToString()} desbloqueado!"
+                    : item.notificationTitle;
+
+                OnItemUnlocked?.Invoke(title, item.notificationMessage, item.notificationIcon);
             }
         }
     }
@@ -125,7 +118,6 @@ public class UnlockManager : Singleton<UnlockManager>
     }
 
     public List<Drink> GetCurrentMenu() => new List<Drink>(CurrentMenu);
-
 
     private void UpdateProductions()
     {
@@ -189,4 +181,12 @@ public class UnlockManager : Singleton<UnlockManager>
     }
 
     public int GetCurrentReputationLevel() => currentReputationLevel;
+
+    /// <summary>
+    /// Usado pelo SaveManager para restaurar reputação do save.
+    /// </summary>
+    public void SetReputation(int level)
+    {
+        currentReputationLevel = level;
+    }
 }
