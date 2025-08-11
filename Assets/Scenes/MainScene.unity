@@ -53317,7 +53317,14 @@ MonoBehaviour:
   areaIDs: 
   clientModels:
   - {fileID: 6209031952182412759, guid: 57f6f98bedff7cc44ab3e7cb7f79edf6, type: 3}
+  - {fileID: 4768172837068278536, guid: 2b9067414c8aebc4fa3d6fffb7488690, type: 3}
+  - {fileID: 326833607778072389, guid: e281fddbc48498240a96f99e4a59ab1e, type: 3}
+  - {fileID: 8964975893379994865, guid: 2e8866d6333f7984ea80500f09a21176, type: 3}
   - {fileID: 3039310237386930147, guid: ac37b99306dba1748b9567361cb3dbcf, type: 3}
+  - {fileID: 7726049777666005880, guid: 99cc0b77b4b26e446944497f0c679497, type: 3}
+  - {fileID: 4706195424645929052, guid: 17ce647d63c3d6f4c8c35c6d274270ef, type: 3}
+  - {fileID: 7396996441363663142, guid: 742ca415687c7de46bac42cd589a5d3d, type: 3}
+  - {fileID: 5411400748465673244, guid: c62fa408e1c65a84bbc5c3679a872154, type: 3}
   pfNovoDia: {fileID: 4667641227935505117, guid: 5465afdd7379cee4b8761661f5f1beb3, type: 3}
   Money: {fileID: 21300000, guid: 7cc10efbfeb722742a8ce7a6af9d5a15, type: 3}
   player: {fileID: 1156479958}
@@ -57315,7 +57322,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1657543041}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 55f0b61ed9248ea46879765fcf437193, type: 3}
   m_Name: 
@@ -57334,7 +57341,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1657543041}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 44ed2952658479f4faf6da22bf06303a, type: 3}
   m_Name: 
