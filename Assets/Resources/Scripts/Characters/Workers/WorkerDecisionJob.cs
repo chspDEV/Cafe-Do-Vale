@@ -2,6 +2,7 @@ using Unity.Burst;
 using Unity.Collections;
 using Unity.Jobs;
 using Unity.Mathematics;
+using UnityEngine;
 
 namespace Tcp4
 {
@@ -127,30 +128,52 @@ namespace Tcp4
 
         // Em WorkerDecisionJob.cs
 
+        // Correção no WorkerDecisionJob.cs - HandleTaskActionState
+
         private void HandleTaskActionState(ref WorkerData data, WorkerAction currentAction, int workerIndex, bool isFinalStep = false)
         {
+            // VERIFICAÇÃO CRÍTICA: Se está no estado CollectingItem e já coletou, avançar imediatamente
+            if (data.currentState == WorkerState.CollectingItem && data.isCarryingItem)
+            {
+                Debug.Log($"[WorkerDecisionJob] Worker {data.id} já coletou item, avançando para próximo estado");
+
+                // Forçar transição para o próximo estado
+                if (ActiveTasks.TryGetValue(data.currentTaskID, out var task))
+                {
+                    (WorkerState nextState, int nextTargetID) = GetNextStateAndTarget(data.currentState, task);
+
+                    if (nextTargetID != -1 && stationPositions.TryGetValue(nextTargetID, out float3 nextPos))
+                    {
+                        data.moveTarget = nextPos;
+                        data.currentState = nextState;
+                        data.workTimer = 0f;
+                        workerActions[workerIndex] = WorkerAction.MoveToTarget;
+                        return; // Sair imediatamente
+                    }
+                }
+            }
+
+            // VERIFICAÇÃO: Para DeliveringItem, se não está mais carregando, completar
+            if (data.currentState == WorkerState.DeliveringItem && !data.isCarryingItem)
+            {
+                Debug.Log($"[WorkerDecisionJob] Worker {data.id} entregou item, completando tarefa");
+                workerActions[workerIndex] = WorkerAction.TaskCompleted;
+                data.currentState = WorkerState.Idle;
+                data.currentTaskID = -1;
+                return;
+            }
+
             data.workTimer += deltaTime;
             workerActions[workerIndex] = currentAction;
 
-            // CONDIÇÃO DE TRANSIÇÃO ORIGINAL (PROBLEMA)
-            // if (data.workTimer >= data.actionDuration)
-
-            // CORREÇÃO:
-            // A transição só deve ocorrer se o tempo de ação acabou E a ação teve o efeito esperado.
-            // Para coleta (CollectingItem), o trabalhador deve estar carregando algo.
-            // Para entrega (DeliveringItem), ele não deve mais estar carregando nada.
-            bool actionConfirmed = (data.currentState == WorkerState.CollectingItem && data.isCarryingItem) ||
-                                   (data.currentState == WorkerState.Working && data.isCarryingItem) || // Para o caso de Refine
-                                   (data.currentState == WorkerState.DeliveringItem && !data.isCarryingItem);
-
-            if (data.workTimer >= data.actionDuration && (actionConfirmed || isFinalStep))
+            // Transição por tempo OU por confirmação de ação
+            if (data.workTimer >= data.actionDuration)
             {
                 if (isFinalStep)
                 {
                     workerActions[workerIndex] = WorkerAction.TaskCompleted;
                     data.currentState = WorkerState.Idle;
                     data.currentTaskID = -1;
-                    // Limpar dados do item carregado é feito pelo ExecuteDeliverAction agora.
                 }
                 else
                 {

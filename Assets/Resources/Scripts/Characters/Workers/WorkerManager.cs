@@ -196,13 +196,12 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
                 task.status = TaskStatus.Completed;
                 completedTasks.Add(task);
 
-                // --- ADICIONAR ESTA LINHA ---
-                // Se a tarefa era de colheita, avise a área de produção para liberar a trava.
+                // Liberar reserva da área de produção
                 if (task.type == TaskType.Harvest && productionStations.TryGetValue(task.originID, out var area))
                 {
                     area.ReleaseReservation();
+                    if (enableDebugLogs) Debug.Log($"[WorkerManager] Reserva da área {area.areaID} liberada após completar tarefa {taskID}");
                 }
-                // -------------------------
 
                 if (enableDebugLogs) Debug.Log($"[WorkerManager] ✓ TAREFA COMPLETA: {taskID} tipo {task.type}");
                 OnTaskCompleted?.Invoke(task);
@@ -267,13 +266,12 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
             {
                 task.status = TaskStatus.Failed;
 
-                // --- ADICIONAR ESTA LINHA ---
-                // Se a tarefa era de colheita, avise a área de produção para liberar a trava.
+                // Liberar reserva da área de produção
                 if (task.type == TaskType.Harvest && productionStations.TryGetValue(task.originID, out var area))
                 {
                     area.ReleaseReservation();
+                    if (enableDebugLogs) Debug.Log($"[WorkerManager] Reserva da área {area.areaID} liberada após falha da tarefa {taskID}");
                 }
-                // -------------------------
 
                 OnTaskFailed?.Invoke(task);
 
@@ -414,7 +412,6 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
                         int originId = task.originID;
                         if (task.type == TaskType.CreateDrink)
                         {
-                            // CORREÇÃO: Converte a FixedList para uma List<int> manualmente.
                             var ingredientsList = new List<int>();
                             foreach (var ingredient in task.requiredIngredients)
                             {
@@ -425,22 +422,27 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
 
                         if (originId != -1 && TryGetStationPosition(originId, out float3 targetPos))
                         {
+                            // VERIFICAÇÃO ADICIONAL: Para tarefas de colheita, verificar se a área ainda tem produto
+                            if (task.type == TaskType.Harvest && productionStations.TryGetValue(task.originID, out var productionArea))
+                            {
+                                if (!productionArea.HasHarvestableProduct())
+                                {
+                                    if (enableDebugLogs) Debug.Log($"[WorkerManager] Tarefa {task.taskID} cancelada - área {task.originID} não tem produto");
+                                    assignedTaskIndices.Add(j); // Marcar para remoção
+                                    continue;
+                                }
+
+                                // Reservar APENAS quando atribuir a tarefa ao worker
+                                productionArea.ReserveForWorker();
+                                if (enableDebugLogs) Debug.Log($"[WorkerManager] Área {productionArea.areaID} reservada para Worker {worker.id}");
+                            }
+
                             worker.currentTaskID = task.taskID;
                             worker.currentState = WorkerState.MovingToOrigin;
                             worker.moveTarget = targetPos;
                             workerDataList[i] = worker;
                             activeTasks.Add(task.taskID, task);
                             assignedTaskIndices.Add(j);
-
-                            // --- ADICIONAR ESTA LÓGICA AQUI ---
-                            // Reserva a área de produção AGORA, quando a tarefa é atribuída.
-                            if (task.type == TaskType.Harvest && productionStations.TryGetValue(task.originID, out var areaToReserve))
-                            {
-                                areaToReserve.ReserveForWorker();
-                                if (enableDebugLogs) Debug.Log($"[WorkerManager] Área {areaToReserve.areaID} reservada para Worker {worker.id}.");
-                            }
-                            // ------------------------------------
-
                             break;
                         }
                     }
@@ -558,29 +560,65 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
             }
         }
 
+        // Correção no WorkerManager.cs - ExecuteCollectAction
+
         private void ExecuteCollectAction(ref WorkerData data)
         {
+            // VERIFICAÇÃO CRÍTICA: Se o worker já está carregando item, não executar novamente
+            if (data.isCarryingItem)
+            {
+                if (enableDebugLogs) Debug.Log($"[WorkerManager] Worker {data.id} já está carregando item - pulando ExecuteCollectAction");
+                return;
+            }
+
             if (activeTasks.TryGetValue(data.currentTaskID, out var task))
             {
                 if (task.type == TaskType.Harvest)
                 {
                     if (productionStations.TryGetValue(task.originID, out var productionArea))
                     {
-                        BaseProduct productToHarvest = productionArea.GetCurrentProduct();
-                        if (productToHarvest != null && productionArea.HarvestProductFromWorker())
+                        // Verificação adicional de segurança
+                        if (!productionArea.HasHarvestableProduct())
                         {
-                            data.carriedItemID = productToHarvest.productID;
-                            data.isCarryingItem = true;
-                            data.inventoryCount = 1;
-                            if (enableDebugLogs) Debug.Log($"[WorkerManager] Worker {data.id} coletou {productToHarvest.productName}");
+                            if (enableDebugLogs) Debug.LogWarning($"[WorkerManager] Área {task.originID} não tem produto para colher - Worker {data.id}");
+                            return; // Não falha, apenas retorna
+                        }
+
+                        BaseProduct productToHarvest = productionArea.GetCurrentProduct();
+                        if (productToHarvest != null)
+                        {
+                            // Tentar colher o produto
+                            bool harvestSuccess = productionArea.HarvestProductFromWorker();
+
+                            if (harvestSuccess)
+                            {
+                                // Marcar o worker como carregando o item IMEDIATAMENTE
+                                data.carriedItemID = productToHarvest.productID;
+                                data.isCarryingItem = true;
+                                data.inventoryCount = 1;
+
+                                if (enableDebugLogs) Debug.Log($"[WorkerManager] ✓ Worker {data.id} coletou {productToHarvest.productName} da área {task.originID}");
+                            }
+                            else
+                            {
+                                if (enableDebugLogs) Debug.LogWarning($"[WorkerManager] Worker {data.id} falhou ao coletar da área {task.originID} - HarvestProductFromWorker retornou false");
+                            }
                         }
                         else
                         {
-                            if (enableDebugLogs) Debug.LogWarning($"[WorkerManager] Worker {data.id} falhou ao coletar da área {task.originID}");
-                            FailTask(data.currentTaskID);
+                            if (enableDebugLogs) Debug.LogWarning($"[WorkerManager] Produto nulo na área {task.originID} para Worker {data.id}");
                         }
                     }
+                    else
+                    {
+                        if (enableDebugLogs) Debug.LogError($"[WorkerManager] Área de produção {task.originID} não encontrada para Worker {data.id}!");
+                    }
                 }
+                // Adicionar outros tipos de tarefa conforme necessário
+            }
+            else
+            {
+                if (enableDebugLogs) Debug.LogError($"[WorkerManager] Tarefa {data.currentTaskID} não encontrada para Worker {data.id}!");
             }
         }
 

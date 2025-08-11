@@ -1,4 +1,4 @@
-using GameResources.Project.Scripts.Utilities.Audio;
+﻿using GameResources.Project.Scripts.Utilities.Audio;
 using System.Collections;
 using System.Collections.Generic;
 using Tcp4.Assets.Resources.Scripts.Managers;
@@ -37,18 +37,23 @@ namespace Tcp4
         public event System.Action<ProductionArea, BaseProduct> OnProductionComplete;
 
 
-        // NOVA VARI�VEL DE CONTROLE
+        // NOVA VARIÁVEL DE CONTROLE
         private bool isTaskedForHarvest = false;
 
         private void CreateWorkerTask()
         {
-            // S� cria a tarefa se uma n�o estiver j� ativa para esta colheita
-            if (isTaskedForHarvest) return;
+            // Só cria a tarefa se:
+            // - Não há tarefa ativa para esta colheita
+            // - Há produto pronto para colher
+            // - WorkerManager existe
+            if (isTaskedForHarvest || !HasHarvestableProduct()) return;
 
             if (WorkerManager.Instance != null && production != null && production.outputProduct != null)
             {
-                isTaskedForHarvest = true; // Reserva a colheita para o trabalhador
-                Debug.Log($"[ProductionArea] �rea {areaID}: Tarefa de colheita criada e reservada para {production.outputProduct.name}.");
+                isGrown = true;
+                isAbleToGive = true;
+                isTaskedForHarvest = true; // Reserva ANTES de criar a tarefa
+                Debug.Log($"[ProductionArea] Área {areaID}: Criando tarefa de colheita para {production.outputProduct.productName}");
                 WorkerManager.Instance.CreateHarvestTask(this.areaID, this.production.outputProduct);
             }
         }
@@ -63,7 +68,7 @@ namespace Tcp4
             timeImage = UIManager.Instance.PlaceFillImage(pointToSpawn);
             timeManager = TimeManager.Instance;
 
-            // O registro do ID deve ser feito aqui ou em um m�todo de inicializa��o centralizado
+            // O registro do ID deve ser feito aqui ou em um método de inicialização centralizado
             if (WorkerManager.Instance != null && GameAssets.Instance != null)
             {
                 areaID = GameAssets.Instance.GenerateAreaID();
@@ -85,10 +90,10 @@ namespace Tcp4
 
         public override void OnInteract()
         {
-            // BLOQUEIA A INTERA��O DO JOGADOR SE UM WORKER ESTIVER A CAMINHO
-            if (isTaskedForHarvest)
+            // BLOQUEIA A INTERAÇÃO DO JOGADOR SE UM WORKER ESTIVER A CAMINHO
+            /*if (isTaskedForHarvest)
             {
-                Debug.Log($"[ProductionArea] Intera��o bloqueada. A colheita na �rea {areaID} est� reservada para um trabalhador.");
+                Debug.Log($"[ProductionArea] Interação bloqueada. A colheita na área {areaID} está reservada para um trabalhador.");
                 SoundEventArgs sfxArgs = new()
                 {
                     Category = SoundEventArgs.SoundCategory.SFX,
@@ -99,6 +104,7 @@ namespace Tcp4
                 SoundEvent.RequestSound(sfxArgs);
                 return;
             }
+            */
 
             playerInventory = GameAssets.Instance.player.GetComponent<Inventory>();
             if (playerInventory == null) { Debug.Log("Inventario do Jogador nulo!"); return; }
@@ -119,7 +125,7 @@ namespace Tcp4
             // Impede o foco se a colheita estiver reservada
             if (isTaskedForHarvest)
             {
-                base.OnLostFocus(); // For�a a perda de foco
+                base.OnLostFocus(); // Força a perda de foco
                 return;
             }
             if (!isGrown && hasChoosedProduction) return;
@@ -176,10 +182,10 @@ namespace Tcp4
                 return;
             }
 
-            // NOVO: Adiciona um feedback visual se a tarefa est� reservada
+            // NOVO: Adiciona um feedback visual se a tarefa está reservada
             if (isTaskedForHarvest && isAbleToGive)
             {
-                timeImage.ChangeSprite(GameAssets.Instance.sprProductionWait); // Use um �cone de "reservado" aqui
+                timeImage.ChangeSprite(GameAssets.Instance.sprProductionWait); // Use um ícone de "reservado" aqui
             }
             else if (isAbleToGive)
             {
@@ -236,6 +242,9 @@ namespace Tcp4
             StartCoroutine(GrowthCycle());
         }
 
+        // Correções para ProductionArea.cs
+
+        // 1. CORRIGIR o método GrowthCycle - Não resete a reserva no final
         private IEnumerator GrowthCycle()
         {
             if (production == null || timeManager == null)
@@ -279,15 +288,17 @@ namespace Tcp4
             EnableInteraction();
             isGrown = true;
             isAbleToGive = true;
-            isTaskedForHarvest = false;
+            // REMOVIDO: isTaskedForHarvest = false; - Não resetar aqui!
 
-            // Dispara evento para integra��o
+            // Dispara evento para integração - e já cria a tarefa automaticamente
             if (production != null && production.outputProduct != null)
             {
-                Debug.Log($"[ProductionArea] �rea {areaID}: produ��o conclu�da ({production.outputProduct.name}). Disparando evento.");
+                Debug.Log($"[ProductionArea] Área {areaID}: produção concluída ({production.outputProduct.name}). Criando tarefa para worker.");
                 OnProductionComplete?.Invoke(this, production.outputProduct);
-            }
 
+                // Criar tarefa automaticamente quando a produção termina
+                CreateWorkerTask();
+            }
         }
 
         private void HarvestProduct()
@@ -313,35 +324,71 @@ namespace Tcp4
                     VolumeScale = 0.5f
                 };
                 SoundEvent.RequestSound(sfxArgs);
+
+                NotificationManager.Instance.Show("Inventario Cheio!", "Sem espaços livres.", production.outputProduct.productImage);
             }
         }
 
         public bool HarvestProductFromWorker()
         {
+            // VERIFICAÇÃO CRÍTICA: Proteger contra chamadas múltiplas
             if (!HasHarvestableProduct())
             {
-                Debug.LogWarning($"[ProductionArea] Tentativa de colheita por worker falhou. �rea {areaID} n�o tem produto pronto.");
-                isTaskedForHarvest = false; // Libera a tarefa mesmo se falhar
+                Debug.LogWarning($"[ProductionArea] ⚠ Tentativa de colheita por worker falhou. Área {areaID} não tem produto pronto ou já foi colhida.");
+                ReleaseReservation(); // Liberar reserva mesmo se falhar
                 return false;
             }
 
-            Debug.Log($"[ProductionArea] Worker colheu: {production.outputProduct.productName} da �rea {areaID}");
-            isTaskedForHarvest = false; // Libera a trava
+            // VERIFICAÇÃO ADICIONAL: Se não está reservada, algo está errado
+            if (!isTaskedForHarvest)
+            {
+                Debug.LogWarning($"[ProductionArea] ⚠ Área {areaID} não estava reservada para worker! Colheita não autorizada.");
+                return false;
+            }
+
+            string productName = production.outputProduct != null ? production.outputProduct.productName : "Produto Desconhecido";
+            Debug.Log($"[ProductionArea] ✓ Worker colheu: {productName} da área {areaID}");
+
+            // Reset IMEDIATO do estado para evitar dupla colheita
             isAbleToGive = false;
             isGrown = false;
+            ReleaseReservation(); // Liberar reserva imediatamente
+            currentTime = 0;
+
+            // Limpar modelo visual atual
+            if (currentModel != null && objectPools != null)
+            {
+                objectPools.Return(currentModel);
+                currentModel = null;
+            }
+
+            // Iniciar novo ciclo de crescimento
             StartCoroutine(GrowthCycle());
             return true;
         }
 
         public void ReserveForWorker()
         {
+            if (!HasHarvestableProduct())
+            {
+                Debug.LogWarning($"[ProductionArea] Tentativa de reservar área {areaID} sem produto pronto!");
+                return;
+            }
+
             isTaskedForHarvest = true;
+            Debug.Log($"[ProductionArea] Área {areaID} reservada para worker");
         }
 
         public void ReleaseReservation()
         {
             isTaskedForHarvest = false;
+            Debug.Log($"[ProductionArea] Área {areaID} liberada da reserva");
         }
+
+        public bool IsReservedForWorker()
+        {
+            return isTaskedForHarvest;
+        }   
 
 
         public bool HasHarvestableProduct()
@@ -361,11 +408,27 @@ namespace Tcp4
             if (minigameTrigger != null && minigameTrigger.minigameToStart != null)
                 minigameTrigger.minigameToStart.OnGetReward -= this.ResetGrowthCycle;
 
-            // Se o jogador colhe, a tarefa do worker � implicitamente cancelada
-            isTaskedForHarvest = false; // Libera a trava
+            // Se o jogador colheu, cancelar qualquer tarefa de worker pendente
+            if (isTaskedForHarvest)
+            {
+                Debug.Log($"[ProductionArea] Jogador colheu área {areaID} - cancelando tarefa de worker");
+                ReleaseReservation();
+
+                // Notificar o WorkerManager para cancelar a tarefa (se houver uma forma de fazer isso)
+                // Alternativa: o worker vai falhar naturalmente quando tentar coletar
+            }
+
             currentTime = 0;
             isAbleToGive = false;
             isGrown = false;
+
+            // Limpar modelo visual
+            if (currentModel != null && objectPools != null)
+            {
+                objectPools.Return(currentModel);
+                currentModel = null;
+            }
+
             StartCoroutine(GrowthCycle());
         }
     }

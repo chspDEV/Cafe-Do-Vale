@@ -63,7 +63,6 @@ namespace Tcp4
         {
             if (autoCreateHarvestTasks && WorkerManager.Instance != null)
             {
-                // Apenas cria a tarefa. A reserva será feita pelo WorkerManager.
                 WorkerManager.Instance.CreateHarvestTask(area.areaID, product);
 
                 // REMOVA ESTAS DUAS LINHAS:
