@@ -10,16 +10,20 @@ namespace Tcp4
     {
         [Header("Setup")]
         [SerializeField] private Production production;
-        //[SerializeField] private float timeToGive = 1.3f;
         [SerializeField] private int amount;
         [SerializeField] private float timeToOpenInterface;
         [SerializeField] private List<Production> canProduce;
 
         [Space(10)]
-
         [Header("View")]
         [SerializeField] private Transform pointToSpawn;
         [SerializeField] private GameObject currentModel;
+
+        [Header("Minigame")]
+        [SerializeField] MinigameTrigger minigameTrigger;
+
+        [Header("System Integration")]
+        [SerializeField] public int areaID;
 
         private ImageToFill timeImage;
         private Inventory playerInventory;
@@ -28,20 +32,38 @@ namespace Tcp4
         private bool isAbleToGive;
         private bool isGrown;
         private bool hasChoosedProduction;
+        private TimeManager timeManager;
 
-        TimeManager timeManager;
-        [Space(10)]
-
-        [Header("Minigame")]
-        [SerializeField] MinigameTrigger minigameTrigger;
-
-        [Header("System Integration")]
-        [SerializeField] public int areaID;
+        public event System.Action<ProductionArea, BaseProduct> OnProductionComplete;
 
 
-        public void RegisterAreaID()
+        // NOVA VARIÁVEL DE CONTROLE
+        private bool isTaskedForHarvest = false;
+
+        private void CreateWorkerTask()
         {
-            // Adicione esta linha para registrar a estação:
+            // Só cria a tarefa se uma não estiver já ativa para esta colheita
+            if (isTaskedForHarvest) return;
+
+            if (WorkerManager.Instance != null && production != null && production.outputProduct != null)
+            {
+                isTaskedForHarvest = true; // Reserva a colheita para o trabalhador
+                Debug.Log($"[ProductionArea] Área {areaID}: Tarefa de colheita criada e reservada para {production.outputProduct.name}.");
+                WorkerManager.Instance.CreateHarvestTask(this.areaID, this.production.outputProduct);
+            }
+        }
+
+        public override void Start()
+        {
+            base.Start();
+            interactable_id = "productionArea";
+            hasChoosedProduction = false;
+            ProductionManager.Instance.OnChooseProduction += SelectProduction;
+            TimeManager.Instance.OnTimeMultiplierChanged += ReSetupMaxTime;
+            timeImage = UIManager.Instance.PlaceFillImage(pointToSpawn);
+            timeManager = TimeManager.Instance;
+
+            // O registro do ID deve ser feito aqui ou em um método de inicialização centralizado
             if (WorkerManager.Instance != null && GameAssets.Instance != null)
             {
                 areaID = GameAssets.Instance.GenerateAreaID();
@@ -49,42 +71,37 @@ namespace Tcp4
             }
         }
 
-        private void CreateWorkerTask()
-        {
-            WorkerManager.Instance.CreateHarvestTask(this.areaID, this.production.outputProduct);
-        }
-
-        public override void Start()
-        {
-            base.Start();
-
-            interactable_id = "productionArea";
-            hasChoosedProduction = false;
-            ProductionManager.Instance.OnChooseProduction += SelectProduction;
-            TimeManager.Instance.OnTimeMultiplierChanged += ReSetupMaxTime;
-
-            timeImage = UIManager.Instance.PlaceFillImage(pointToSpawn);
-            timeManager = TimeManager.Instance;
-
-            RegisterAreaID();
-        }
-
         private void OnDisable()
         {
             ProductionManager.Instance.OnChooseProduction -= SelectProduction;
-            timeManager.OnTimeMultiplierChanged -= ReSetupMaxTime;
+            if (timeManager != null)
+            {
+                timeManager.OnTimeMultiplierChanged -= ReSetupMaxTime;
+            }
 
-            // Garantir que se desinscreveu se estava inscrito
             if (minigameTrigger != null && minigameTrigger.minigameToStart != null)
                 minigameTrigger.minigameToStart.OnGetReward -= this.ResetGrowthCycle;
         }
 
         public override void OnInteract()
         {
+            // BLOQUEIA A INTERAÇÃO DO JOGADOR SE UM WORKER ESTIVER A CAMINHO
+            if (isTaskedForHarvest)
+            {
+                Debug.Log($"[ProductionArea] Interação bloqueada. A colheita na área {areaID} está reservada para um trabalhador.");
+                SoundEventArgs sfxArgs = new()
+                {
+                    Category = SoundEventArgs.SoundCategory.SFX,
+                    AudioID = "erro",
+                    Position = transform.position,
+                    VolumeScale = 0.4f
+                };
+                SoundEvent.RequestSound(sfxArgs);
+                return;
+            }
 
             playerInventory = GameAssets.Instance.player.GetComponent<Inventory>();
             if (playerInventory == null) { Debug.Log("Inventario do Jogador nulo!"); return; }
-
 
             if (!hasChoosedProduction)
             {
@@ -95,11 +112,16 @@ namespace Tcp4
             {
                 HarvestProduct();
             }
-            
         }
 
         public override void OnFocus()
         {
+            // Impede o foco se a colheita estiver reservada
+            if (isTaskedForHarvest)
+            {
+                base.OnLostFocus(); // Força a perda de foco
+                return;
+            }
             if (!isGrown && hasChoosedProduction) return;
             base.OnFocus();
         }
@@ -107,7 +129,6 @@ namespace Tcp4
         public override void OnLostFocus()
         {
             base.OnLostFocus();
-
             CloseProductionMenu();
             playerInventory = null;
         }
@@ -117,13 +138,12 @@ namespace Tcp4
             objectPools = new ObjectPool(pointToSpawn);
             objectPools.AddPool(production.models);
 
-            //Fazendo o request de sfx
             SoundEventArgs sfxArgs = new()
             {
                 Category = SoundEventArgs.SoundCategory.SFX,
-                AudioID = "plantando", // O ID do seu SFX (sem "sfx_" e em minúsculas)
-                Position = transform.position, // Posição para o som 3D
-                VolumeScale = 0.9f // Escala de volume (opcional, padrão é 1f)
+                AudioID = "plantando",
+                Position = transform.position,
+                VolumeScale = 0.9f
             };
             SoundEvent.RequestSound(sfxArgs);
         }
@@ -144,7 +164,6 @@ namespace Tcp4
         {
             if (production != null && !isGrown)
             {
-                //currentTime = Mathf.Clamp(currentTime, 0, production.timeToGrow);
                 timeImage.UpdateFill(currentTime);
             }
         }
@@ -157,25 +176,27 @@ namespace Tcp4
                 return;
             }
 
-            if (!isAbleToGive && currentTime < production.timeToGrow * timeManager.timeMultiplier)
+            // NOVO: Adiciona um feedback visual se a tarefa está reservada
+            if (isTaskedForHarvest && isAbleToGive)
             {
-                timeImage.ChangeSprite(GameAssets.Instance.sprProductionWait);
+                timeImage.ChangeSprite(GameAssets.Instance.sprProductionWait); // Use um ícone de "reservado" aqui
             }
             else if (isAbleToGive)
             {
                 timeImage.ChangeSprite(GameAssets.Instance.ready);
             }
+            else if (currentTime < production.timeToGrow * timeManager.timeMultiplier)
+            {
+                timeImage.ChangeSprite(GameAssets.Instance.sprProductionWait);
+            }
         }
-
 
         IEnumerator OpenProductionCoroutine()
         {
             yield return new WaitForSeconds(timeToOpenInterface);
-
-            if(playerInventory != null)
-            OpenProductionMenu();
+            if (playerInventory != null)
+                OpenProductionMenu();
         }
-        
 
         private void OpenProductionMenu()
         {
@@ -198,7 +219,6 @@ namespace Tcp4
             if (productionManager.GetCurrentReference() != this) return;
 
             production = productionManager.GetNewProduction();
-
             if (production == null) return;
 
             currentTime = 0;
@@ -216,35 +236,25 @@ namespace Tcp4
             StartCoroutine(GrowthCycle());
         }
 
-
-
         private IEnumerator GrowthCycle()
         {
-            // Verificações de segurança
             if (production == null || timeManager == null)
             {
-                Debug.LogError($"Production or TimeManager is null in {gameObject.name}");
                 yield break;
             }
 
             OnLostFocus();
             var models = production.models;
-
-            // Registrar tempo inicial
             float startTime = timeManager.CurrentHour;
             float targetTime = startTime + production.timeToGrow;
-
-            // Verificar se há modelos para mostrar
             bool hasModels = models != null && models.Length > 0;
 
             while (timeManager.CurrentHour < targetTime)
             {
-                // Calcular progresso baseado no tempo global do jogo
                 float elapsedTime = timeManager.CurrentHour - startTime;
                 currentTime = Mathf.Clamp(elapsedTime, 0, production.timeToGrow);
                 UpdateCurrentTime();
 
-                // Atualizar modelos visuais (se houver)
                 if (hasModels)
                 {
                     int modelIndex = Mathf.FloorToInt((currentTime / production.timeToGrow) * models.Length);
@@ -256,102 +266,103 @@ namespace Tcp4
                         {
                             objectPools.Return(currentModel);
                         }
-
                         if (objectPools != null)
                         {
                             currentModel = objectPools.Get(models[modelIndex]);
-                            currentModel.transform.SetPositionAndRotation(
-                                pointToSpawn.position,
-                                models[modelIndex].transform.rotation
-                            );
+                            currentModel.transform.SetPositionAndRotation(pointToSpawn.position, models[modelIndex].transform.rotation);
                         }
                     }
                 }
-
                 yield return null;
             }
 
-            // Finalização do crescimento
             EnableInteraction();
-            CreateWorkerTask();
             isGrown = true;
             isAbleToGive = true;
-        }
+            isTaskedForHarvest = false;
 
+            // Dispara evento para integração
+            if (production != null && production.outputProduct != null)
+            {
+                Debug.Log($"[ProductionArea] Área {areaID}: produção concluída ({production.outputProduct.name}). Disparando evento.");
+                OnProductionComplete?.Invoke(this, production.outputProduct);
+            }
+
+        }
 
         private void HarvestProduct()
         {
             if (isAbleToGive && isGrown && playerInventory != null && playerInventory.CanStorage())
             {
-                // Verificação adicional antes de usar o minigame
-                if (minigameTrigger == null || minigameTrigger.minigameToStart == null)
-                {
-                    Debug.LogError($"MinigameTrigger or minigame is null in {gameObject.name}");
-                    return;
-                }
+                if (minigameTrigger == null || minigameTrigger.minigameToStart == null) return;
+                if (production == null || production.outputProduct == null) return;
 
-                if (production == null || production.outputProduct == null)
-                {
-                    Debug.LogError($"Production or outputProduct is null in {gameObject.name}");
-                    return;
-                }
-
-                //Minigame
-                // INSCREVER-SE APENAS QUANDO INICIAR O MINIGAME
                 minigameTrigger.minigameToStart.OnGetReward += this.ResetGrowthCycle;
-
                 minigameTrigger.minigameToStart.SetupReward(production.outputProduct);
                 GameAssets.Instance.SetupLastIconMinigamePlants(production.outputProduct.productImage);
                 minigameTrigger.TriggerMinigame();
                 DisableInteraction();
-
                 InteractionManager.Instance.UpdateLastId(production.outputProduct.productName);
             }
-        }
-
-        public void HarvestProductFromWorker()
-        {
-            if (isAbleToGive && isGrown)
+            else
             {
-                if (production.outputProduct == null)
+                SoundEventArgs sfxArgs = new()
                 {
-                    Debug.LogError("Produto de saída é nulo!");
-                    return;
-                }
-
-                ResetGrowthCycle();
-                CreateWorkerTask(); 
-                Debug.Log($"[Worker] Colheu: {production.outputProduct.productName}");
+                    Category = SoundEventArgs.SoundCategory.SFX,
+                    AudioID = "erro",
+                    VolumeScale = 0.5f
+                };
+                SoundEvent.RequestSound(sfxArgs);
             }
         }
 
+        public bool HarvestProductFromWorker()
+        {
+            if (!HasHarvestableProduct())
+            {
+                Debug.LogWarning($"[ProductionArea] Tentativa de colheita por worker falhou. Área {areaID} não tem produto pronto.");
+                isTaskedForHarvest = false; // Libera a tarefa mesmo se falhar
+                return false;
+            }
+
+            Debug.Log($"[ProductionArea] Worker colheu: {production.outputProduct.productName} da área {areaID}");
+            isTaskedForHarvest = false; // Libera a trava
+            isAbleToGive = false;
+            isGrown = false;
+            StartCoroutine(GrowthCycle());
+            return true;
+        }
+
+        public void ReserveForWorker()
+        {
+            isTaskedForHarvest = true;
+        }
+
+        public void ReleaseReservation()
+        {
+            isTaskedForHarvest = false;
+        }
+
+
+        public bool HasHarvestableProduct()
+        {
+            return isAbleToGive && isGrown;
+        }
+
+        public BaseProduct GetCurrentProduct()
+        {
+            if (HasHarvestableProduct())
+                return production.outputProduct;
+            return null;
+        }
 
         void ResetGrowthCycle()
         {
-            // DESINSCREVER-SE IMEDIATAMENTE APÓS RECEBER O CALLBACK
             if (minigameTrigger != null && minigameTrigger.minigameToStart != null)
                 minigameTrigger.minigameToStart.OnGetReward -= this.ResetGrowthCycle;
 
-
-            // Verificações de segurança antes de reiniciar o ciclo
-            if (production == null)
-            {
-                Debug.LogError($"Production is null in {gameObject.name}. Cannot reset growth cycle.");
-                return;
-            }
-
-            if (timeManager == null)
-            {
-                Debug.LogError($"TimeManager is null in {gameObject.name}. Cannot reset growth cycle.");
-                return;
-            }
-
-            if (objectPools == null && production.models.Length > 0)
-            {
-                Debug.LogWarning($"ObjectPools is null in {gameObject.name}. Reinitializing...");
-                InitializeObjectPools();
-            }
-
+            // Se o jogador colhe, a tarefa do worker é implicitamente cancelada
+            isTaskedForHarvest = false; // Libera a trava
             currentTime = 0;
             isAbleToGive = false;
             isGrown = false;

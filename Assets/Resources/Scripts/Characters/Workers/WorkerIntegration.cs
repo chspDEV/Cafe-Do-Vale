@@ -42,7 +42,7 @@ namespace Tcp4
             foreach (var area in productionAreas)
             {
                 // Assumindo que existe um evento quando a produção termina
-                // area.OnProductionComplete += OnProductionComplete;
+                area.OnProductionComplete += OnProductionComplete;
             }
         }
 
@@ -63,7 +63,12 @@ namespace Tcp4
         {
             if (autoCreateHarvestTasks && WorkerManager.Instance != null)
             {
+                // Apenas cria a tarefa. A reserva será feita pelo WorkerManager.
                 WorkerManager.Instance.CreateHarvestTask(area.areaID, product);
+
+                // REMOVA ESTAS DUAS LINHAS:
+                // area.ReserveForWorker();
+                // Debug.Log($"[WorkerIntegration] Área {area.areaID} reservada para trabalhador.");
             }
         }
 

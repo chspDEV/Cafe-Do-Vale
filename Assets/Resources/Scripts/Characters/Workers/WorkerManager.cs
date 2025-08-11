@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -32,7 +32,7 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
 
         // --- GERENCIAMENTO DE TAREFAS ---
         private readonly List<WorkerTask> pendingTasks = new();
-        private readonly List<WorkerTask> activeTasks = new();
+        private readonly Dictionary<int, WorkerTask> activeTasks = new();
         private readonly List<WorkerTask> completedTasks = new();
 
         // --- GERENCIAMENTO DE TRABALHADORES ---
@@ -40,7 +40,7 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
         private List<WorkerData> workerDataList = new();
         private int nextWorkerID = 1;
 
-        // --- ARMAZENAMENTO DE ESTA��ES ---
+        // --- ARMAZENAMENTO DE ESTAÇÕES ---
         private readonly Dictionary<int, ProductionArea> productionStations = new();
         private readonly Dictionary<int, CreationArea> creationStations = new();
         private readonly Dictionary<int, StorageArea> storageStations = new();
@@ -123,20 +123,34 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
         #region Task Management (com WorkerTaskFactory)
         public void CreateHarvestTask(int productionAreaID, BaseProduct product)
         {
+            if (enableDebugLogs) Debug.Log($"[WorkerManager] Tentando criar tarefa de colheita para área {productionAreaID}");
+
             if (!productionStations.ContainsKey(productionAreaID))
             {
-                Debug.LogWarning($"Tentativa de criar tarefa de colheita para esta��o n�o registrada: {productionAreaID}");
+                Debug.LogWarning($"[WorkerManager] Área de produção {productionAreaID} não registrada");
                 return;
             }
+
+            var productionArea = productionStations[productionAreaID];
+
+            // Verificar se há produto para colher
+            if (!productionArea.HasHarvestableProduct())
+            {
+                if (enableDebugLogs) Debug.Log($"[WorkerManager] Área {productionAreaID} não tem produto pronto para colheita");
+                return;
+            }
+
             int storageID = FindAppropriateStorage(product);
             if (storageID == -1)
             {
-                Debug.LogWarning($"N�o foi poss�vel encontrar armaz�m para o produto: {product.name}");
+                Debug.LogWarning($"[WorkerManager] Nenhum armazém disponível para {product.productName}");
                 return;
             }
+
             var task = WorkerTaskFactory.CreateHarvestTask(productionAreaID, storageID, product.productID);
             pendingTasks.Add(task);
-            if (enableDebugLogs) Debug.Log($"Tarefa de colheita criada: {task.taskID}");
+
+            if (enableDebugLogs) Debug.Log($"[WorkerManager] ✓ Tarefa de colheita criada: {task.taskID} para {product.productName}");
         }
 
         public void CreateRefineTask(BaseProduct rawProduct, BaseProduct refinedProduct)
@@ -147,7 +161,7 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
 
             if (rawStorageID == -1 || machineID == -1 || refinedStorageID == -1)
             {
-                Debug.LogWarning("Recursos indispon�veis para criar tarefa de refinamento.");
+                Debug.LogWarning("Recursos indisponíveis para criar tarefa de refinamento.");
                 return;
             }
             var task = WorkerTaskFactory.CreateRefineTask(rawStorageID, machineID, refinedStorageID, rawProduct.productID, refinedProduct.productID);
@@ -157,7 +171,7 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
 
         public void CreateDrinkTask(Drink drink, int orderID)
         {
-            // CORRE��O: Converte explicitamente o 'productID' de cada ingrediente para 'int'.
+            // CORREÇÃO: Converte explicitamente o 'productID' de cada ingrediente para 'int'.
             var ingredientIDs = drink.requiredIngredients.Select(i => (int)i.productID).ToList();
 
             int coffeeStationID = FindAvailableCoffeeStation();
@@ -165,7 +179,7 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
 
             if (coffeeStationID == -1 || deliveryPointID == -1 || !AreIngredientsAvailable(ingredientIDs))
             {
-                Debug.LogWarning($"Recursos indispon�veis para criar tarefa de bebida: {drink.name}");
+                Debug.LogWarning($"Recursos indisponíveis para criar tarefa de bebida: {drink.name}");
                 return;
             }
 
@@ -177,40 +191,100 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
 
         public void CompleteTask(int taskID)
         {
-            int taskIndex = activeTasks.FindIndex(t => t.taskID == taskID);
-            if (taskIndex != -1)
+            if (activeTasks.Remove(taskID, out var task))
             {
-                var task = activeTasks[taskIndex];
                 task.status = TaskStatus.Completed;
-                activeTasks.RemoveAt(taskIndex);
                 completedTasks.Add(task);
-                OnTaskCompleted?.Invoke(task);
 
-                if (task.type == TaskType.Harvest)
+                // --- ADICIONAR ESTA LINHA ---
+                // Se a tarefa era de colheita, avise a área de produção para liberar a trava.
+                if (task.type == TaskType.Harvest && productionStations.TryGetValue(task.originID, out var area))
                 {
-                    if (productionStations.TryGetValue(task.originID, out var area))
-                    {
-                        area.HarvestProductFromWorker(); // Novo m�todo que voc� criar� abaixo
-                        TryStoreHarvestedItem(task.outputItemID);
-
-                    }
-
-
+                    area.ReleaseReservation();
                 }
+                // -------------------------
 
+                if (enableDebugLogs) Debug.Log($"[WorkerManager] ✓ TAREFA COMPLETA: {taskID} tipo {task.type}");
+                OnTaskCompleted?.Invoke(task);
+            }
+            else
+            {
+                Debug.LogWarning($"[WorkerManager] Tarefa {taskID} não foi encontrada nas ativas ao tentar completar!");
             }
         }
 
+        private void ProcessHarvestTaskCompletion(WorkerTask task)
+        {
+            if (enableDebugLogs) Debug.Log($"[WorkerManager] Processando colheita - Tarefa {task.taskID}");
+
+            // Verificar se a área de produção existe
+            if (!productionStations.TryGetValue(task.originID, out var productionArea))
+            {
+                Debug.LogError($"[WorkerManager] Área de produção {task.originID} não encontrada!");
+                return;
+            }
+
+            // Obter o produto antes de colher
+            BaseProduct harvestedProduct = productionArea.GetCurrentProduct();
+            if (harvestedProduct == null)
+            {
+                Debug.LogError($"[WorkerManager] Produto nulo na área {task.originID}!");
+                return;
+            }
+
+            // Executar a colheita
+            bool harvestSuccess = productionArea.HarvestProductFromWorker();
+
+            if (!harvestSuccess)
+            {
+                Debug.LogError($"[WorkerManager] Falha na colheita da área {task.originID}!");
+                return;
+            }
+
+            if (enableDebugLogs) Debug.Log($"[WorkerManager] ✓ Colheita bem-sucedida: {harvestedProduct.productName}");
+
+            // Armazenar o produto colhido
+            TryStoreHarvestedItem(harvestedProduct, task.destinationID, 1);
+        }
+
+        // NOVO: Processar outras tarefas (placeholder)
+        private void ProcessRefineTaskCompletion(WorkerTask task)
+        {
+            if (enableDebugLogs) Debug.Log($"[WorkerManager] Processando refinamento - Tarefa {task.taskID}");
+            // Implementar lógica de refinamento
+        }
+
+        private void ProcessDrinkTaskCompletion(WorkerTask task)
+        {
+            if (enableDebugLogs) Debug.Log($"[WorkerManager] Processando bebida - Tarefa {task.taskID}");
+            // Implementar lógica de criação de bebida
+        }
+
+        // Em WorkerManager.cs
         public void FailTask(int taskID)
         {
-            int taskIndex = activeTasks.FindIndex(t => t.taskID == taskID);
-            if (taskIndex != -1)
+            if (activeTasks.Remove(taskID, out var task))
             {
-                var task = activeTasks[taskIndex];
                 task.status = TaskStatus.Failed;
-                activeTasks.RemoveAt(taskIndex);
+
+                // --- ADICIONAR ESTA LINHA ---
+                // Se a tarefa era de colheita, avise a área de produção para liberar a trava.
+                if (task.type == TaskType.Harvest && productionStations.TryGetValue(task.originID, out var area))
+                {
+                    area.ReleaseReservation();
+                }
+                // -------------------------
+
                 OnTaskFailed?.Invoke(task);
-                StartCoroutine(RescheduleTaskAfterDelay(task, 5f));
+
+                if (task.type != TaskType.Harvest)
+                {
+                    StartCoroutine(RescheduleTaskAfterDelay(task, 5f));
+                }
+                else
+                {
+                    if (enableDebugLogs) Debug.Log($"[WorkerManager] Tarefa de colheita {task.taskID} falhou e foi descartada.");
+                }
             }
         }
 
@@ -256,7 +330,7 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
             // Aqui adiciona:
             if (workerVisualModels != null && workerVisualModels.Count > 0)
             {
-                // Usa o �ndice com base no tipo, ou aleat�rio
+                // Usa o índice com base no tipo, ou aleatório
                 int modelIndex = Mathf.Clamp((int)type, 0, workerVisualModels.Count - 1);
                 workerComponent.SetVisualModel(workerVisualModels[modelIndex]);
             }
@@ -281,7 +355,7 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
             }
         }
 
-        // M�TODO RESTAURADO: Essencial para o SaveManager
+        // MÉTODO RESTAURADO: Essencial para o SaveManager
         public void LoadWorker(WorkerData data)
         {
             GameObject workerGO = Instantiate(workerBasePrefab, data.homePosition, Quaternion.identity, transform);
@@ -292,7 +366,7 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
 
             if (workerVisualModels != null && workerVisualModels.Count > 0)
             {
-                // Usa o �ndice com base no tipo, ou aleat�rio
+                // Usa o índice com base no tipo, ou aleatório
                 int modelIndex = Mathf.Clamp((int)data.type, 0, workerVisualModels.Count - 1);
                 workerComponent.SetVisualModel(workerVisualModels[modelIndex]);
             }
@@ -303,13 +377,13 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
             workerComponent.SetWorkingAnimation(data.currentState == WorkerState.Working);
         }
 
-        // M�TODO RESTAURADO: Essencial para o SaveManager
+        // MÉTODO RESTAURADO: Essencial para o SaveManager
         public List<WorkerData> GetHiredWorkers()
         {
             return workerDataList.Where(w => w.isHired).ToList();
         }
 
-        // M�TODO RESTAURADO: Essencial para o SaveManager
+        // MÉTODO RESTAURADO: Essencial para o SaveManager
         public void FireAllWorkers()
         {
             var workerIdsToFire = workerDataList.Select(w => w.id).ToList();
@@ -340,7 +414,7 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
                         int originId = task.originID;
                         if (task.type == TaskType.CreateDrink)
                         {
-                            // CORRE��O: Converte a FixedList para uma List<int> manualmente.
+                            // CORREÇÃO: Converte a FixedList para uma List<int> manualmente.
                             var ingredientsList = new List<int>();
                             foreach (var ingredient in task.requiredIngredients)
                             {
@@ -355,8 +429,18 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
                             worker.currentState = WorkerState.MovingToOrigin;
                             worker.moveTarget = targetPos;
                             workerDataList[i] = worker;
-                            activeTasks.Add(task);
+                            activeTasks.Add(task.taskID, task);
                             assignedTaskIndices.Add(j);
+
+                            // --- ADICIONAR ESTA LÓGICA AQUI ---
+                            // Reserva a área de produção AGORA, quando a tarefa é atribuída.
+                            if (task.type == TaskType.Harvest && productionStations.TryGetValue(task.originID, out var areaToReserve))
+                            {
+                                areaToReserve.ReserveForWorker();
+                                if (enableDebugLogs) Debug.Log($"[WorkerManager] Área {areaToReserve.areaID} reservada para Worker {worker.id}.");
+                            }
+                            // ------------------------------------
+
                             break;
                         }
                     }
@@ -385,7 +469,11 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
 
             lastFrameActions = new NativeArray<WorkerAction>(activeWorkers.Count, Allocator.TempJob);
             var activeTasksMap = new NativeHashMap<int, WorkerTask>(activeTasks.Count, Allocator.TempJob);
-            foreach (var task in activeTasks) activeTasksMap.TryAdd(task.taskID, task);
+
+            foreach (KeyValuePair<int, WorkerTask> taskPair in activeTasks)
+            {
+                activeTasksMap.TryAdd(taskPair.Key, taskPair.Value);
+            }
 
             var job = new WorkerDecisionJob
             {
@@ -402,16 +490,30 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
             JobHandle.ScheduleBatchedJobs();
         }
 
+        // Em WorkerManager.cs
+        // Em WorkerManager.cs
         private void ProcessJobResults()
         {
-            if (!jobWorkerDataArray.IsCreated) return; // VERIFICA SE OS DADOS DO JOB FORAM CRIADOS.
+            if (!jobWorkerDataArray.IsCreated) return;
 
             workerDataList = new List<WorkerData>(jobWorkerDataArray.ToArray());
+
             for (int i = 0; i < activeWorkers.Count; i++)
             {
-                activeWorkers[i].UpdateWorkerData(workerDataList[i]);
-                ProcessIndividualWorkerAction(activeWorkers[i], workerDataList[i], lastFrameActions[i]);
+                // Pega a struct de dados atual para este trabalhador.
+                var data = workerDataList[i];
+
+                // Atualiza a visualização do trabalhador (como o painel de debug na tela).
+                activeWorkers[i].UpdateWorkerData(data);
+
+                // Processa a ação, passando a struct 'data' POR REFERÊNCIA para que possa ser modificada.
+                ProcessIndividualWorkerAction(activeWorkers[i], ref data, lastFrameActions[i]);
+
+                // Salva a struct 'data' (agora potencialmente modificada) de volta na lista principal.
+                // Este passo é crucial para persistir a mudança para o próximo frame.
+                workerDataList[i] = data;
             }
+
             CleanupNativeArrays();
         }
 
@@ -421,7 +523,9 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
             return data;
         }
 
-        private void ProcessIndividualWorkerAction(Worker worker, WorkerData data, WorkerAction action)
+        // Em WorkerManager.cs
+        // Em WorkerManager.cs
+        private void ProcessIndividualWorkerAction(Worker worker, ref WorkerData data, WorkerAction action)
         {
             NavMeshAgent agent = worker.GetComponent<NavMeshAgent>();
             if (agent == null) return;
@@ -435,10 +539,15 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
                     worker.SetWorkingAnimation(false);
                     break;
                 case WorkerAction.CollectItem:
+                    agent.ResetPath();
+                    worker.SetWorkingAnimation(true);
+                    ExecuteCollectAction(ref data);
+                    break;
                 case WorkerAction.WorkAtStation:
                 case WorkerAction.DeliverItem:
                     agent.ResetPath();
                     worker.SetWorkingAnimation(true);
+                    ExecuteDeliverAction(ref data);
                     break;
                 case WorkerAction.TaskCompleted:
                     CompleteTask(data.currentTaskID);
@@ -446,6 +555,55 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
                 case WorkerAction.TaskFailed:
                     FailTask(data.currentTaskID);
                     break;
+            }
+        }
+
+        private void ExecuteCollectAction(ref WorkerData data)
+        {
+            if (activeTasks.TryGetValue(data.currentTaskID, out var task))
+            {
+                if (task.type == TaskType.Harvest)
+                {
+                    if (productionStations.TryGetValue(task.originID, out var productionArea))
+                    {
+                        BaseProduct productToHarvest = productionArea.GetCurrentProduct();
+                        if (productToHarvest != null && productionArea.HarvestProductFromWorker())
+                        {
+                            data.carriedItemID = productToHarvest.productID;
+                            data.isCarryingItem = true;
+                            data.inventoryCount = 1;
+                            if (enableDebugLogs) Debug.Log($"[WorkerManager] Worker {data.id} coletou {productToHarvest.productName}");
+                        }
+                        else
+                        {
+                            if (enableDebugLogs) Debug.LogWarning($"[WorkerManager] Worker {data.id} falhou ao coletar da área {task.originID}");
+                            FailTask(data.currentTaskID);
+                        }
+                    }
+                }
+            }
+        }
+
+        private void ExecuteDeliverAction(ref WorkerData data)
+        {
+            if (data.isCarryingItem && activeTasks.TryGetValue(data.currentTaskID, out var task))
+            {
+                if (storageStations.TryGetValue(task.destinationID, out var storage))
+                {
+                    var product = ProductDatabase.GetRawProductByID(data.carriedItemID);
+                    if (product != null && storage.ForceAddProduct(product, data.inventoryCount))
+                    {
+                        if (enableDebugLogs) Debug.Log($"[WorkerManager] Worker {data.id} entregou {product.productName} no armazém {task.destinationID}");
+                        data.carriedItemID = 0;
+                        data.isCarryingItem = false;
+                        data.inventoryCount = 0;
+                    }
+                    else
+                    {
+                        if (enableDebugLogs) Debug.LogWarning($"[WorkerManager] Worker {data.id} falhou ao entregar item no armazém {task.destinationID}");
+                        FailTask(data.currentTaskID);
+                    }
+                }
             }
         }
         #endregion
@@ -472,63 +630,73 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
             return false;
         }
 
-        private void TryStoreHarvestedItem(int productID, int quantity = 1)
+        private void TryStoreHarvestedItem(BaseProduct product, int preferredStorageID, int quantity = 1)
         {
-            StorageArea fallback = null;
+            if (enableDebugLogs) Debug.Log($"[WorkerManager] Tentando armazenar {quantity}x {product.productName} (ID: {product.productID})");
 
-            foreach (var storagePair in storageStations)
+            // Tentar primeiro o armazém preferido
+            if (preferredStorageID != -1 && storageStations.TryGetValue(preferredStorageID, out var preferredStorage))
             {
-                var storage = storagePair.Value;
-                if (storage.inventory != null && storage.inventory.CanStorage())
+                if (preferredStorage.ForceAddProduct(product, quantity))
                 {
-                    // Verifica compatibilidade
-                    if (storage.item != null && storage.item.productID == productID)
-                    {
-                        storage.inventory.AddProduct(ProductDatabase.GetRawProductByID(productID), quantity);
-                        if (enableDebugLogs) Debug.Log($"[Storage] Produto {productID} armazenado em armaz�m compat�vel {storage.areaID}");
-                        return;
-                    }
-
-                    // Salva um armaz�m qualquer com espa�o como fallback
-                    if (fallback == null)
-                        fallback = storage;
+                    if (enableDebugLogs) Debug.Log($"[WorkerManager] ✓ Armazenado no armazém preferido {preferredStorageID}");
+                    return;
                 }
             }
 
-            // Se n�o encontrar armaz�m compat�vel, usar qualquer um dispon�vel
-            if (fallback != null)
+            // Procurar armazém compatível
+            foreach (var storagePair in storageStations)
             {
-                fallback.inventory.AddProduct(ProductDatabase.GetRawProductByID(productID), quantity);
-                if (enableDebugLogs) Debug.LogWarning($"[Storage] Produto {productID} armazenado no fallback {fallback.areaID} (incompat�vel)");
+                var storage = storagePair.Value;
+                if (storage.CanStoreProduct(product) && storage.ForceAddProduct(product, quantity))
+                {
+                    if (enableDebugLogs) Debug.Log($"[WorkerManager] ✓ Armazenado no armazém compatível {storagePair.Key}");
+                    return;
+                }
             }
-            else
+
+            // Fallback: qualquer armazém com espaço
+            foreach (var storagePair in storageStations)
             {
-                Debug.LogWarning($"[Storage] Nenhum armaz�m com espa�o dispon�vel para o produto {productID}");
+                var storage = storagePair.Value;
+                if (storage.inventory.CanStorage() && storage.ForceAddProduct(product, quantity))
+                {
+                    if (enableDebugLogs) Debug.LogWarning($"[WorkerManager] ⚠ Armazenado no fallback {storagePair.Key}");
+                    return;
+                }
             }
+
+            Debug.LogError($"[WorkerManager] ❌ CRÍTICO: Nenhum armazém disponível para {product.productName}!");
         }
 
 
 
         private int FindAppropriateStorage(BaseProduct product)
         {
+            if (enableDebugLogs) Debug.Log($"[WorkerManager] Procurando armazém para {product.productName}");
+
+            // Primeiro: procurar armazém compatível
             foreach (var pair in storageStations)
             {
                 var storage = pair.Value;
-                if (storage.item != null && storage.item.productID == product.productID && storage.inventory.CanStorage())
+                if (storage.CanStoreProduct(product))
                 {
+                    if (enableDebugLogs) Debug.Log($"[WorkerManager] ✓ Encontrado armazém compatível {pair.Key}");
                     return pair.Key;
                 }
             }
 
-            // Fallback: qualquer com espa�o
+            // Fallback: qualquer armazém com espaço
             foreach (var pair in storageStations)
             {
                 if (pair.Value.inventory.CanStorage())
                 {
+                    if (enableDebugLogs) Debug.LogWarning($"[WorkerManager] ⚠ Usando fallback {pair.Key}");
                     return pair.Key;
                 }
             }
 
+            Debug.LogError($"[WorkerManager] ❌ Nenhum armazém disponível!");
             return -1;
         }
 
@@ -544,7 +712,7 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
         {
             if (jobWorkerDataArray.IsCreated) jobWorkerDataArray.Dispose();
             if (lastFrameActions.IsCreated) lastFrameActions.Dispose();
-            // A NativeArray criada para 'allCarriedItems' tamb�m � tempor�ria (TempJob) e n�o precisa ser limpa manualmente aqui.
+            // A NativeArray criada para 'allCarriedItems' também é temporária (TempJob) e não precisa ser limpa manualmente aqui.
         }
         #endregion
 
@@ -565,7 +733,7 @@ namespace Tcp4.Assets.Resources.Scripts.Managers
         #region Public API
         public List<WorkerData> GetActiveWorkers() => workerDataList;
         public List<WorkerTask> GetPendingTasks() => pendingTasks;
-        public List<WorkerTask> GetActiveTasks() => activeTasks;
+        public Dictionary<int, WorkerTask> GetActiveTasks() => activeTasks;
         public WorkerData? GetWorkerByID(int workerID)
         {
             int index = workerDataList.FindIndex(w => w.id == workerID);

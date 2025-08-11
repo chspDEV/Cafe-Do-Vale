@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using GameResources.Project.Scripts.Utilities.Audio;
+using NUnit.Framework;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -24,6 +25,14 @@ namespace Tcp4
             if (amount <= 0 || product == null || !CanStorage())
             {
                 Debug.LogError("Erro: quantidade inválida, produto nulo ou inventário cheio.");
+                SoundEventArgs sfxArgs = new()
+                {
+                    Category = SoundEventArgs.SoundCategory.SFX,
+                    AudioID = "erro",
+                    Position = transform.position,
+                    VolumeScale = 0.3f
+                };
+                SoundEvent.RequestSound(sfxArgs);
                 return;
             }
 
@@ -35,6 +44,28 @@ namespace Tcp4
                 if(canSpawn)
                     Spawn(product.model);
             }
+        }
+
+        public bool AddProductReturn(BaseProduct product, int amount)
+        {
+            if (amount <= 0 || product == null || !CanStorage())
+            {
+                Debug.LogError("Erro: quantidade inválida, produto nulo ou inventário cheio.");
+                return false;
+            }
+
+            for (int i = 0; i < amount; i++)
+            {
+                productInventory.Add(product);
+                QuestManager.Instance.CheckItemCollected(product.productName);
+
+                if (canSpawn)
+                    Spawn(product.model);
+
+                return true;
+            }
+
+            return false;
         }
 
         public void RemoveProduct(BaseProduct product, int amount)

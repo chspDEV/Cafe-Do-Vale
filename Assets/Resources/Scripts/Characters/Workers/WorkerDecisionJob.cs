@@ -51,19 +51,19 @@ namespace Tcp4
                     HandleMovementState(ref data, WorkerState.CollectingItem, WorkerAction.CollectItem, index);
                     break;
                 case WorkerState.CollectingItem:
-                    HandleTaskActionState(ref data, WorkerState.MovingToWorkstation, WorkerAction.CollectItem, index);
+                    HandleTaskActionState(ref data, WorkerAction.CollectItem, index);
                     break;
                 case WorkerState.MovingToWorkstation:
                     HandleMovementState(ref data, WorkerState.Working, WorkerAction.WorkAtStation, index);
                     break;
                 case WorkerState.Working:
-                    HandleTaskActionState(ref data, WorkerState.MovingToDestination, WorkerAction.WorkAtStation, index);
+                    HandleTaskActionState(ref data, WorkerAction.WorkAtStation, index);
                     break;
                 case WorkerState.MovingToDestination:
                     HandleMovementState(ref data, WorkerState.DeliveringItem, WorkerAction.DeliverItem, index);
                     break;
                 case WorkerState.DeliveringItem:
-                    HandleTaskActionState(ref data, WorkerState.Idle, WorkerAction.DeliverItem, index, true);
+                    HandleTaskActionState(ref data, WorkerAction.DeliverItem, index, true);
                     break;
                 case WorkerState.GoingHome:
                     HandleGoingHomeState(ref data, index);
@@ -78,6 +78,31 @@ namespace Tcp4
 
         private void HandleIdleState(ref WorkerData data, int workerIndex)
         {
+            if (data.currentTaskID != -1)
+            {
+                if (ActiveTasks.TryGetValue(data.currentTaskID, out var task))
+                {
+                    if (stationPositions.TryGetValue(task.originID, out float3 originPos))
+                    {
+                        data.moveTarget = originPos;
+                        data.currentState = WorkerState.MovingToOrigin;
+                        workerActions[workerIndex] = WorkerAction.MoveToTarget;
+                    }
+                    else
+                    {
+                        workerActions[workerIndex] = WorkerAction.TaskFailed;
+                        data.currentTaskID = -1;
+                    }
+                }
+                else
+                {
+                    workerActions[workerIndex] = WorkerAction.TaskFailed;
+                    data.currentTaskID = -1;
+                }
+                return;
+            }
+
+            data.workTimer += deltaTime;
             if (data.workTimer >= data.workDuration && data.restDuration > 0)
             {
                 data.currentState = WorkerState.Resting;
@@ -100,32 +125,45 @@ namespace Tcp4
             }
         }
 
-        private void HandleTaskActionState(ref WorkerData data, WorkerState nextState, WorkerAction currentAction, int workerIndex, bool isFinalStep = false)
+        // Em WorkerDecisionJob.cs
+
+        private void HandleTaskActionState(ref WorkerData data, WorkerAction currentAction, int workerIndex, bool isFinalStep = false)
         {
             data.workTimer += deltaTime;
             workerActions[workerIndex] = currentAction;
 
-            if (data.workTimer >= data.actionDuration)
+            // CONDIÇÃO DE TRANSIÇÃO ORIGINAL (PROBLEMA)
+            // if (data.workTimer >= data.actionDuration)
+
+            // CORREÇÃO:
+            // A transição só deve ocorrer se o tempo de ação acabou E a ação teve o efeito esperado.
+            // Para coleta (CollectingItem), o trabalhador deve estar carregando algo.
+            // Para entrega (DeliveringItem), ele não deve mais estar carregando nada.
+            bool actionConfirmed = (data.currentState == WorkerState.CollectingItem && data.isCarryingItem) ||
+                                   (data.currentState == WorkerState.Working && data.isCarryingItem) || // Para o caso de Refine
+                                   (data.currentState == WorkerState.DeliveringItem && !data.isCarryingItem);
+
+            if (data.workTimer >= data.actionDuration && (actionConfirmed || isFinalStep))
             {
                 if (isFinalStep)
                 {
                     workerActions[workerIndex] = WorkerAction.TaskCompleted;
                     data.currentState = WorkerState.Idle;
                     data.currentTaskID = -1;
-                    data.isCarryingItem = false;
-                    data.inventoryCount = 0;
-                    data.carriedItems.Clear();
+                    // Limpar dados do item carregado é feito pelo ExecuteDeliverAction agora.
                 }
                 else
                 {
                     if (ActiveTasks.TryGetValue(data.currentTaskID, out var task))
                     {
-                        int nextTargetID = GetNextTargetID(data.currentState, task);
+                        (WorkerState nextState, int nextTargetID) = GetNextStateAndTarget(data.currentState, task);
+
                         if (nextTargetID != -1 && stationPositions.TryGetValue(nextTargetID, out float3 nextPos))
                         {
                             data.moveTarget = nextPos;
                             data.currentState = nextState;
                             data.workTimer = 0f;
+                            workerActions[workerIndex] = WorkerAction.MoveToTarget;
                         }
                         else
                         {
@@ -169,16 +207,24 @@ namespace Tcp4
             workerActions[workerIndex] = WorkerAction.None;
         }
 
-        private int GetNextTargetID(WorkerState currentState, WorkerTask task)
+        private (WorkerState, int) GetNextStateAndTarget(WorkerState currentState, WorkerTask task)
         {
             switch (currentState)
             {
                 case WorkerState.CollectingItem:
-                    return (task.type == TaskType.Harvest) ? task.destinationID : task.workstationID;
+                    if (task.type == TaskType.Harvest)
+                    {
+                        return (WorkerState.MovingToDestination, task.destinationID);
+                    }
+                    else
+                    {
+                        return (WorkerState.MovingToWorkstation, task.workstationID);
+                    }
                 case WorkerState.Working:
-                    return task.destinationID;
+                    return (WorkerState.MovingToDestination, task.destinationID);
+
                 default:
-                    return -1;
+                    return (WorkerState.Idle, -1);
             }
         }
     }

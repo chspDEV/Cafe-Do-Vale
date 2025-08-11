@@ -27,10 +27,18 @@ namespace Tcp4
 
         private void Update()
         {
-            if (ModelAnimator != null)
+            if (ModelAnimator != null && NavMeshAgent != null)
             {
-                ModelAnimator.SetFloat("Speed", NavMeshAgent.velocity.magnitude);
+                // Usa desiredVelocity para pegar a velocidade "pretendida" e suaviza a transição
+                float targetSpeed = NavMeshAgent.desiredVelocity.magnitude;
+                float currentSpeed = ModelAnimator.GetFloat("Speed");
+
+                // Suaviza para evitar saltos bruscos (opcional)
+                float smoothedSpeed = Mathf.Lerp(currentSpeed, targetSpeed, Time.deltaTime * 10f);
+
+                ModelAnimator.SetFloat("Speed", smoothedSpeed);
             }
+
 
             // Atualizar debug periodicamente
             debugUpdateTimer += Time.deltaTime;
