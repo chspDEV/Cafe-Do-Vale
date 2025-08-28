@@ -48,9 +48,21 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: 2f6ce3949e64b294fa373ac063ece89d, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: c923f82cfb93c1c499b5a5f6838faeeb, type: 2}
+    - target: {fileID: -7511558181221131132, guid: 2f6ce3949e64b294fa373ac063ece89d, type: 3}
+      propertyPath: 'm_Materials.Array.data[1]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 040ed2b288558754f928d5c74c66f396, type: 2}
     - target: {fileID: 919132149155446097, guid: 2f6ce3949e64b294fa373ac063ece89d, type: 3}
       propertyPath: m_Name
       value: model_quaresmeira_01
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 2f6ce3949e64b294fa373ac063ece89d, type: 3}
+      propertyPath: m_Layer
+      value: 8
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
