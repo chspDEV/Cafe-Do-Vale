@@ -12,14 +12,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 30a77f9d18157c64f97bc1ffbbd812e8, type: 3}
   m_Name: tutorial_01
   m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects: []
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes: []
   dialogueLines:
-  - characterName: Zeca
-    dialogueText: Opa!
-  - characterName: Zeca
-    dialogueText: "Olha s\xF3 se n\xE3o \xE9 voc\xEA! Meus p\xEAsames pelo ocorrido
-      com seu tio\u2026"
-  - characterName: Zeca
-    dialogueText: "Antes de partir ele havia me pedido para limpar o terreno, mas
-      agora que voc\xEA herdou as terras dele, vou te auxiliar a cuidar do local!"
-  - characterName: Zeca
-    dialogueText: Tira um pouco de entulho da fazenda e vou te dar uns trocados.
+  - characterAvatar: {fileID: 0}
+    characterName: Zeca
+    text: sdfdsfsdfsdf
+    triggerEvents: 0
+  - characterAvatar: {fileID: 0}
+    characterName: Zeca
+    text: Desbloqueia o personagem ai meu fi...
+    triggerEvents: 1
+  - characterAvatar: {fileID: 0}
+    characterName: Zeca
+    text: asdasd
+    triggerEvents: 0
+  - characterAvatar: {fileID: 0}
+    characterName: Zeca
+    text: 
+    triggerEvents: 0

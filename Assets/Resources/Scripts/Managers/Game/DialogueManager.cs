@@ -8,13 +8,6 @@ using Tcp4;
 using Tcp4.Assets.Resources.Scripts.Managers;
 using UnityEngine.InputSystem;
 
-// Classe para representar uma linha de diálogo
-[System.Serializable]
-public class DialogueLine
-{
-    public string characterName;
-    [TextArea(3, 10)] public string dialogueText;
-}
 
 public class DialogueManager : Singleton<DialogueManager>
 {
@@ -118,7 +111,7 @@ public class DialogueManager : Singleton<DialogueManager>
         currentLine = currentLines.Dequeue();
         characterNameText.text = currentLine.characterName;
 
-        typingCoroutine = StartCoroutine(TypeLine(currentLine.dialogueText));
+        typingCoroutine = StartCoroutine(TypeLine(currentLine.text));
     }
 
     private IEnumerator TypeLine(string line)
@@ -147,7 +140,7 @@ public class DialogueManager : Singleton<DialogueManager>
                 StopCoroutine(typingCoroutine);
                 typingCoroutine = null;
             }
-            dialogueText.text = currentLine != null ? currentLine.dialogueText : "";
+            dialogueText.text = currentLine != null ? currentLine.text : "";
             isTyping = false;
             continueIndicator.SetActive(true);
         }
