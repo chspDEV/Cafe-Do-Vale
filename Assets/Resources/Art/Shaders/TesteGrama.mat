@@ -26,11 +26,11 @@ Material:
     m_TexEnvs: []
     m_Ints: []
     m_Floats:
-    - _Fresnel_Power: 0.6
-    - _Fresnel_Threshhold: 0.7
+    - _Fresnel_Power: 1.27
+    - _Fresnel_Threshhold: 0.57
     m_Colors:
-    - _Dark_Color: {r: 0.21542364, g: 0.4433962, b: 0.23442134, a: 1}
-    - _Lit_Color: {r: 0.35871178, g: 1, b: 0.33490568, a: 1}
+    - _Dark_Color: {r: 0.07355822, g: 0.5377358, b: 0.11357354, a: 1}
+    - _Lit_Color: {r: 0.035294294, g: 1, b: 0, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
 --- !u!114 &7534447421698285830
