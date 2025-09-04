@@ -968,22 +968,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3b06dea2ddd066b4e8ecdd5cdcb6e0cb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameEvent: {fileID: 11400000, guid: 1f343f8be8ff0184fbacb4f498b51541, type: 2}
-  unityEventResponse:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 25699351}
-        m_TargetAssemblyTypeName: AlmanaqueManager, TCP4Global
-        m_MethodName: UnlockCharacter
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
 --- !u!1 &28032788
 GameObject:
   m_ObjectHideFlags: 0
@@ -3757,8 +3741,8 @@ MonoBehaviour:
   playerTransform: {fileID: 1156479960}
   cellSize: 25
   drawDistanceInCells: 2
-  grassMesh: {fileID: 3032900665666063148, guid: e2fa286d9ece01e48b7f39c018a17232, type: 3}
-  grassMaterial: {fileID: 2100000, guid: 7886ba45d3b615a499395c76da590a33, type: 2}
+  grassMesh: {fileID: -462981019419857548, guid: 51011ea7cae935a408772f740eaeef55, type: 3}
+  grassMaterial: {fileID: 2100000, guid: ff3b4b4c8a97f1e418ea7e2b0bb3a709, type: 2}
   instancesPerCell: 10000
   groundLayer:
     serializedVersion: 2
@@ -3767,8 +3751,8 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 7927
   checkRadius: 0.1
-  heightScaleRange: {x: 0.8, y: 1.5}
-  widthScaleRange: {x: 0.8, y: 1.5}
+  heightScaleRange: {x: 0.3, y: 0.5}
+  widthScaleRange: {x: 0.3, y: 0.5}
   maxTiltAngle: 25
   alignToGroundNormal: 1
   lodDistances:
