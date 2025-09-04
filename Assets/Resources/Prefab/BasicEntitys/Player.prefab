@@ -1100,8 +1100,8 @@ MonoBehaviour:
       m_Calls: []
     m_ActionId: b66ff3e7-3041-43e0-80c6-6ea4e0a7d32d
     m_ActionName: 'UI/Submit[/Keyboard/enter]'
-  m_NeverAutoSwitchControlSchemes: 0
-  m_DefaultControlScheme: 
+  m_NeverAutoSwitchControlSchemes: 1
+  m_DefaultControlScheme: Controle
   m_DefaultActionMap: Player
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
@@ -1188,6 +1188,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7bbada6c4cb4ec34c9be239cfbcc8294, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  canSpawn: 1
   productInventory: []
   instanceInventory: []
   bagPoint: {fileID: 8372457221999753800}

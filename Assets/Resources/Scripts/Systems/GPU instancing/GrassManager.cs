@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 public class GrassManager : MonoBehaviour
 {
@@ -34,7 +35,6 @@ public class GrassManager : MonoBehaviour
     [Tooltip("Se ativado, a grama irá se alinhar com a inclinação do terreno.")]
     public bool alignToGroundNormal = true;
 
-
     [Header("LOD Settings")]
     [Tooltip("Distâncias para cada nível de LOD. Ex: 30 = LOD0 até 30m.")]
     public float[] lodDistances = { 30f, 60f, 100f };
@@ -55,6 +55,9 @@ public class GrassManager : MonoBehaviour
             this.enabled = false;
             return;
         }
+
+        grassMaterial = new Material(grassMaterial);
+
         mainCamera = Camera.main;
         lastPlayerCell = GetPlayerCell();
         UpdateCells();
@@ -62,6 +65,8 @@ public class GrassManager : MonoBehaviour
 
     void Update()
     {
+        grassMaterial.SetVector("_trackerPosition", playerTransform.position);
+
         Vector2Int currentPlayerCell = GetPlayerCell();
         if (currentPlayerCell != lastPlayerCell)
         {
@@ -97,12 +102,11 @@ public class GrassManager : MonoBehaviour
             }
         }
 
-        foreach (var cellCoord in cells.Keys)
+        List<Vector2Int> cellsToRemove = cells.Keys.Where(c => !requiredCells.Contains(c)).ToList();
+        foreach (var cellCoord in cellsToRemove)
         {
-            if (!requiredCells.Contains(cellCoord))
-            {
-                cells[cellCoord].Deactivate();
-            }
+            cells[cellCoord].Deactivate();
+            cells.Remove(cellCoord);
         }
 
         foreach (var cellCoord in requiredCells)

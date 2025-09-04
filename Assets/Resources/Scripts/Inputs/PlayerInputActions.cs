@@ -937,7 +937,46 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             ]
         }
     ],
-    ""controlSchemes"": []
+    ""controlSchemes"": [
+        {
+            ""name"": ""Teclado e Controle"",
+            ""bindingGroup"": ""Teclado e Controle"",
+            ""devices"": [
+                {
+                    ""devicePath"": ""<Gamepad>"",
+                    ""isOptional"": false,
+                    ""isOR"": false
+                },
+                {
+                    ""devicePath"": ""<Keyboard>"",
+                    ""isOptional"": false,
+                    ""isOR"": false
+                }
+            ]
+        },
+        {
+            ""name"": ""Teclado"",
+            ""bindingGroup"": ""Teclado"",
+            ""devices"": [
+                {
+                    ""devicePath"": ""<Keyboard>"",
+                    ""isOptional"": false,
+                    ""isOR"": false
+                }
+            ]
+        },
+        {
+            ""name"": ""Controle"",
+            ""bindingGroup"": ""Controle"",
+            ""devices"": [
+                {
+                    ""devicePath"": ""<Gamepad>"",
+                    ""isOptional"": false,
+                    ""isOR"": false
+                }
+            ]
+        }
+    ]
 }");
         // Player
         m_Player = asset.FindActionMap("Player", throwIfNotFound: true);
@@ -1253,6 +1292,33 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         }
     }
     public UIActions @UI => new UIActions(this);
+    private int m_TecladoeControleSchemeIndex = -1;
+    public InputControlScheme TecladoeControleScheme
+    {
+        get
+        {
+            if (m_TecladoeControleSchemeIndex == -1) m_TecladoeControleSchemeIndex = asset.FindControlSchemeIndex("Teclado e Controle");
+            return asset.controlSchemes[m_TecladoeControleSchemeIndex];
+        }
+    }
+    private int m_TecladoSchemeIndex = -1;
+    public InputControlScheme TecladoScheme
+    {
+        get
+        {
+            if (m_TecladoSchemeIndex == -1) m_TecladoSchemeIndex = asset.FindControlSchemeIndex("Teclado");
+            return asset.controlSchemes[m_TecladoSchemeIndex];
+        }
+    }
+    private int m_ControleSchemeIndex = -1;
+    public InputControlScheme ControleScheme
+    {
+        get
+        {
+            if (m_ControleSchemeIndex == -1) m_ControleSchemeIndex = asset.FindControlSchemeIndex("Controle");
+            return asset.controlSchemes[m_ControleSchemeIndex];
+        }
+    }
     public interface IPlayerActions
     {
         void OnMovement(InputAction.CallbackContext context);
