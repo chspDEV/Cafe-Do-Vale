@@ -3708,6 +3708,7 @@ GameObject:
   m_Component:
   - component: {fileID: 151359002}
   - component: {fileID: 151359003}
+  - component: {fileID: 151359004}
   m_Layer: 0
   m_Name: GrassSpawner_01
   m_TagString: Untagged
@@ -3746,7 +3747,7 @@ MonoBehaviour:
   cellSize: 10
   drawDistanceInCells: 1
   grassMesh: {fileID: -462981019419857548, guid: 2b01851684905a94cb0df48214ca48fc, type: 3}
-  grassMaterial: {fileID: 2100000, guid: 172bd4e4ff96a56419106c619ccea788, type: 2}
+  grassMaterial: {fileID: 2100000, guid: a80cd64967416fb48a50b786a4673edd, type: 2}
   instancesPerCell: 1000
   groundLayer:
     serializedVersion: 2
@@ -3768,6 +3769,36 @@ MonoBehaviour:
   - 0.5
   - 0.2
   lodMeshes: []
+--- !u!114 &151359004
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 151359001}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6dda74bf6405c1749bd3ca65f0f2b5ed, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  windSettings:
+    windSpeed: 1
+    windStrength: 0.5
+    windFrequency: 1
+    windNoiseScale: 1
+  playerInteraction:
+    influenceRadius: 5
+    influenceStrength: 1
+    recoverySpeed: 1
+    innerRadius: 2
+  visualSettings:
+    topColor: {r: 0.6, g: 0.8, b: 0.3, a: 1}
+    bottomColor: {r: 0.2, g: 0.4, b: 0.1, a: 1}
+    shadowIntensity: 0.3
+    grassHeight: 1
+    bendStiffness: 1
+  updateFrequency: 30
+  showInfluenceRadius: 0
 --- !u!1 &151524415
 GameObject:
   m_ObjectHideFlags: 0
@@ -18515,83 +18546,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1059035898}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1001 &607604766
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: -8679921383154817045, guid: 2b01851684905a94cb0df48214ca48fc, type: 3}
-      propertyPath: m_LocalScale.x
-      value: 2.46
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 2b01851684905a94cb0df48214ca48fc, type: 3}
-      propertyPath: m_LocalScale.y
-      value: 4.1310577
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 2b01851684905a94cb0df48214ca48fc, type: 3}
-      propertyPath: m_LocalScale.z
-      value: 2.46
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 2b01851684905a94cb0df48214ca48fc, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 10.427842
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 2b01851684905a94cb0df48214ca48fc, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0.37895542
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 2b01851684905a94cb0df48214ca48fc, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: -10.886638
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 2b01851684905a94cb0df48214ca48fc, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 2b01851684905a94cb0df48214ca48fc, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 2b01851684905a94cb0df48214ca48fc, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 2b01851684905a94cb0df48214ca48fc, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 2b01851684905a94cb0df48214ca48fc, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 2b01851684905a94cb0df48214ca48fc, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 2b01851684905a94cb0df48214ca48fc, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: -8679921383154817045, guid: 2b01851684905a94cb0df48214ca48fc, type: 3}
-      propertyPath: m_ConstrainProportionsScale
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: -7511558181221131132, guid: 2b01851684905a94cb0df48214ca48fc, type: 3}
-      propertyPath: 'm_Materials.Array.data[0]'
-      value: 
-      objectReference: {fileID: 2100000, guid: 172bd4e4ff96a56419106c619ccea788, type: 2}
-    - target: {fileID: 919132149155446097, guid: 2b01851684905a94cb0df48214ca48fc, type: 3}
-      propertyPath: m_Name
-      value: model_grama_04
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 2b01851684905a94cb0df48214ca48fc, type: 3}
 --- !u!1 &615783384
 GameObject:
   m_ObjectHideFlags: 0
@@ -38888,13 +38842,6 @@ MonoBehaviour:
   - {fileID: 692247322}
   - {fileID: 1775367542}
   - {fileID: 2116393102}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
   - {fileID: 883768705}
   - {fileID: 930917227}
   - {fileID: 830522981}
@@ -90190,4 +90137,3 @@ SceneRoots:
   - {fileID: 1827876305}
   - {fileID: 804020930}
   - {fileID: 1721339819}
-  - {fileID: 607604766}

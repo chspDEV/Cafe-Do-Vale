@@ -15,7 +15,7 @@ Material:
   m_InvalidKeywords: []
   m_LightmapFlags: 2
   m_EnableInstancingVariants: 1
-  m_DoubleSidedGI: 0
+  m_DoubleSidedGI: 1
   m_CustomRenderQueue: -1
   stringTagMap: {}
   disabledShaderPasses:
@@ -43,20 +43,20 @@ Material:
     m_Ints: []
     m_Floats:
     - _Alpha_Clip: 0.5
-    - _Ambient_Occlusion: 0.16
+    - _Ambient_Occlusion: 1
     - _Metalic: 0
     - _QueueControl: 0
     - _QueueOffset: 0
     - _Radius: 0.4
-    - _Smoothness: 0.2
+    - _Smoothness: 0
     - _distortionForce: 3
-    - _noiseScale: 3.4
+    - _noiseScale: 4.42
     m_Colors:
     - _BaseColor: {r: 1, g: 1, b: 1, a: 0}
-    - _Emission: {r: 0.03125, g: 0.03125, b: 0.03125, a: 0}
-    - _trackerPosition: {r: 13.967586, g: 0.27, b: 2.974164, a: 0}
+    - _Emission: {r: 0, g: 0, b: 0, a: 1}
+    - _trackerPosition: {r: 32.47853, g: 0.26999992, b: 3.9076343, a: 0}
     - _windSpeed: {r: 0.5, g: 0, b: 0, a: 0}
-    - _windTile: {r: 2, g: 2, b: 0, a: 0}
+    - _windTile: {r: 5.04, g: 2, b: 0, a: 0}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
 --- !u!114 &6310982404892296173
