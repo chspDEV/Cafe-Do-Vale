@@ -44,7 +44,7 @@ Material:
     - _MaxWidth: 0.1
     - _Radius: 1
     - _WaveAmp: 1.2
-    - _WaveSpeed: 2
+    - _WaveSpeed: 0.5
     - _YOffset: 0
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
