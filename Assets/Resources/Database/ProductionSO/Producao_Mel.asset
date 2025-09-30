@@ -16,5 +16,7 @@ MonoBehaviour:
   - {fileID: 9205239215452429907, guid: db44e73d26e45974d80e30dba3580a86, type: 3}
   - {fileID: 9087612889765614323, guid: 9bbb3223c08495043b8a9faecf3ed999, type: 3}
   - {fileID: 1741116698552937551, guid: c4a586a3076e9c045851ce1eee50bbaf, type: 3}
+  postHarvestModel: {fileID: 1741116698552937551, guid: c4a586a3076e9c045851ce1eee50bbaf, type: 3}
   outputProduct: {fileID: 11400000, guid: 94a2e396290fdf34fb1b215604089d68, type: 2}
   timeToGrow: 1.5
+  timeToRegrow: 0.75

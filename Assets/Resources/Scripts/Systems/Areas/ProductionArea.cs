@@ -32,28 +32,22 @@ namespace Tcp4
         private bool isAbleToGive;
         private bool isGrown;
         private bool hasChoosedProduction;
+        private bool hasReachedMaturity;
         private TimeManager timeManager;
 
         public event System.Action<ProductionArea, BaseProduct> OnProductionComplete;
 
-
-        // NOVA VARIÁVEL DE CONTROLE
         private bool isTaskedForHarvest = false;
 
         private void CreateWorkerTask()
         {
-            // Só cria a tarefa se:
-            // - Não há tarefa ativa para esta colheita
-            // - Há produto pronto para colher
-            // - WorkerManager existe
             if (isTaskedForHarvest || !HasHarvestableProduct()) return;
 
             if (WorkerManager.Instance != null && production != null && production.outputProduct != null)
             {
                 isGrown = true;
                 isAbleToGive = true;
-                isTaskedForHarvest = true; // Reserva ANTES de criar a tarefa
-                Debug.Log($"[ProductionArea] Área {areaID}: Criando tarefa de colheita para {production.outputProduct.productName}");
+                isTaskedForHarvest = true;
                 WorkerManager.Instance.CreateHarvestTask(this.areaID, this.production.outputProduct);
             }
         }
@@ -68,7 +62,6 @@ namespace Tcp4
             timeImage = UIManager.Instance.PlaceFillImage(pointToSpawn);
             timeManager = TimeManager.Instance;
 
-            // O registro do ID deve ser feito aqui ou em um método de inicialização centralizado
             if (WorkerManager.Instance != null && GameAssets.Instance != null)
             {
                 areaID = GameAssets.Instance.GenerateAreaID();
@@ -78,36 +71,23 @@ namespace Tcp4
 
         private void OnDisable()
         {
-            ProductionManager.Instance.OnChooseProduction -= SelectProduction;
+            if (ProductionManager.Instance != null)
+            {
+                ProductionManager.Instance.OnChooseProduction -= SelectProduction;
+            }
             if (timeManager != null)
             {
                 timeManager.OnTimeMultiplierChanged -= ReSetupMaxTime;
             }
 
             if (minigameTrigger != null && minigameTrigger.minigameToStart != null)
-                minigameTrigger.minigameToStart.OnGetReward -= this.ResetGrowthCycle;
+                minigameTrigger.minigameToStart.OnGetReward -= HandleSuccessfulHarvest;
         }
 
         public override void OnInteract()
         {
-            // BLOQUEIA A INTERAÇÃO DO JOGADOR SE UM WORKER ESTIVER A CAMINHO
-            /*if (isTaskedForHarvest)
-            {
-                Debug.Log($"[ProductionArea] Interação bloqueada. A colheita na área {areaID} está reservada para um trabalhador.");
-                SoundEventArgs sfxArgs = new()
-                {
-                    Category = SoundEventArgs.SoundCategory.SFX,
-                    AudioID = "erro",
-                    Position = transform.position,
-                    VolumeScale = 0.4f
-                };
-                SoundEvent.RequestSound(sfxArgs);
-                return;
-            }
-            */
-
             playerInventory = GameAssets.Instance.player.GetComponent<Inventory>();
-            if (playerInventory == null) { Debug.Log("Inventario do Jogador nulo!"); return; }
+            if (playerInventory == null) return;
 
             if (!hasChoosedProduction)
             {
@@ -120,29 +100,15 @@ namespace Tcp4
             }
         }
 
-        public override void OnFocus()
-        {
-            // Impede o foco se a colheita estiver reservada
-            if (isTaskedForHarvest)
-            {
-                base.OnLostFocus(); // Força a perda de foco
-                return;
-            }
-            if (!isGrown && hasChoosedProduction) return;
-            base.OnFocus();
-        }
-
-        public override void OnLostFocus()
-        {
-            base.OnLostFocus();
-            CloseProductionMenu();
-            playerInventory = null;
-        }
-
         private void InitializeObjectPools()
         {
             objectPools = new ObjectPool(pointToSpawn);
             objectPools.AddPool(production.models);
+
+            if (production.postHarvestModel != null)
+            {
+                objectPools.AddPool(new GameObject[] { production.postHarvestModel });
+            }
 
             SoundEventArgs sfxArgs = new()
             {
@@ -162,8 +128,11 @@ namespace Tcp4
 
         public void ReSetupMaxTime()
         {
-            if (timeImage != null && timeManager != null)
-                timeImage.SetupMaxTime(production.timeToGrow);
+            if (timeImage != null && timeManager != null && production != null)
+            {
+                float maxTime = hasReachedMaturity ? production.timeToRegrow : production.timeToGrow;
+                timeImage.SetupMaxTime(maxTime);
+            }
         }
 
         private void UpdateCurrentTime()
@@ -182,41 +151,25 @@ namespace Tcp4
                 return;
             }
 
-            // NOVO: Adiciona um feedback visual se a tarefa está reservada
             if (isTaskedForHarvest && isAbleToGive)
-            {
-                timeImage.ChangeSprite(GameAssets.Instance.sprProductionWait); // Use um ícone de "reservado" aqui
-            }
-            else if (isAbleToGive)
-            {
-                timeImage.ChangeSprite(GameAssets.Instance.ready);
-            }
-            else if (currentTime < production.timeToGrow * timeManager.timeMultiplier)
             {
                 timeImage.ChangeSprite(GameAssets.Instance.sprProductionWait);
             }
-        }
-
-        IEnumerator OpenProductionCoroutine()
-        {
-            yield return new WaitForSeconds(timeToOpenInterface);
-            if (playerInventory != null)
-                OpenProductionMenu();
-        }
-
-        private void OpenProductionMenu()
-        {
-            var productionManager = ProductionManager.Instance;
-            productionManager.Clean();
-            productionManager.SetupNewReference(this);
-            productionManager.ReloadCards(canProduce);
-            UIManager.Instance.ControlProductionMenu(true);
-        }
-
-        private void CloseProductionMenu()
-        {
-            ProductionManager.Instance.Clean();
-            UIManager.Instance.ControlProductionMenu(false);
+            else if (isAbleToGive)
+            {
+                if (production.readyIcon != null)
+                {
+                    timeImage.ChangeSprite(production.readyIcon);
+                }
+                else
+                {
+                    timeImage.ChangeSprite(GameAssets.Instance.ready);
+                }
+            }
+            else if (hasChoosedProduction)
+            {
+                timeImage.ChangeSprite(GameAssets.Instance.sprProductionWait);
+            }
         }
 
         private void SelectProduction()
@@ -228,75 +181,71 @@ namespace Tcp4
             if (production == null) return;
 
             currentTime = 0;
-            timeImage.SetupMaxTime(production.timeToGrow);
-            CloseProductionMenu();
             hasChoosedProduction = true;
+            hasReachedMaturity = false; // ÚNICO LUGAR QUE ISSO FICA FALSE
+
+            ReSetupMaxTime();
+            CloseProductionMenu();
+
             productionManager.OnChooseProduction -= SelectProduction;
             productionManager.Clean();
 
-            if (production.models.Length > 0)
-            {
-                InitializeObjectPools();
-            }
-
+            InitializeObjectPools();
             StartCoroutine(GrowthCycle());
         }
 
-        // Correções para ProductionArea.cs
-
-        // 1. CORRIGIR o método GrowthCycle - Não resete a reserva no final
         private IEnumerator GrowthCycle()
         {
-            if (production == null || timeManager == null)
-            {
-                yield break;
-            }
+            if (production == null || timeManager == null) yield break;
 
             OnLostFocus();
-            var models = production.models;
             float startTime = timeManager.CurrentHour;
-            float targetTime = startTime + production.timeToGrow;
-            bool hasModels = models != null && models.Length > 0;
 
-            while (timeManager.CurrentHour < targetTime)
+            // SE AINDA NÃO É MADURA, FAZ O PRIMEIRO CRESCIMENTO
+            if (!hasReachedMaturity)
             {
-                float elapsedTime = timeManager.CurrentHour - startTime;
-                currentTime = Mathf.Clamp(elapsedTime, 0, production.timeToGrow);
-                UpdateCurrentTime();
-
-                if (hasModels)
+                float targetTime = startTime + production.timeToGrow;
+                while (timeManager.CurrentHour < targetTime)
                 {
-                    int modelIndex = Mathf.FloorToInt((currentTime / production.timeToGrow) * models.Length);
-                    modelIndex = Mathf.Clamp(modelIndex, 0, models.Length - 1);
+                    float elapsedTime = timeManager.CurrentHour - startTime;
+                    currentTime = Mathf.Clamp(elapsedTime, 0, production.timeToGrow);
+                    UpdateCurrentTime();
 
-                    if (currentModel == null || !currentModel.name.StartsWith(models[modelIndex].name))
-                    {
-                        if (currentModel != null && objectPools != null)
-                        {
-                            objectPools.Return(currentModel);
-                        }
-                        if (objectPools != null)
-                        {
-                            currentModel = objectPools.Get(models[modelIndex]);
-                            currentModel.transform.SetPositionAndRotation(pointToSpawn.position, models[modelIndex].transform.rotation);
-                        }
-                    }
+                    float progress = currentTime / production.timeToGrow;
+                    UpdateModelForGrowth(progress);
+
+                    yield return null;
                 }
-                yield return null;
+                hasReachedMaturity = true;
+            }
+            // SE JÁ É MADURA, APENAS ESPERA O NOVO TEMPO
+            else
+            {
+                float targetTime = startTime + production.timeToRegrow;
+                ReSetupMaxTime();
+                while (timeManager.CurrentHour < targetTime)
+                {
+                    float elapsedTime = timeManager.CurrentHour - startTime;
+                    currentTime = Mathf.Clamp(elapsedTime, 0, production.timeToRegrow);
+                    UpdateCurrentTime();
+                    yield return null;
+                }
             }
 
+            // AO FINAL DE QUALQUER CICLO, GARANTE O MODELO FINAL E O ESTADO DE "PRONTO"
+            OnGrowthComplete();
+        }
+
+        private void OnGrowthComplete()
+        {
+            SetModelToHarvestable(); // Alterna para o modelo com frutos
             EnableInteraction();
             isGrown = true;
             isAbleToGive = true;
-            // REMOVIDO: isTaskedForHarvest = false; - Não resetar aqui!
 
-            // Dispara evento para integração - e já cria a tarefa automaticamente
-            if (production != null && production.outputProduct != null)
+            if (production.outputProduct != null)
             {
-                Debug.Log($"[ProductionArea] Área {areaID}: produção concluída ({production.outputProduct.name}). Criando tarefa para worker.");
                 OnProductionComplete?.Invoke(this, production.outputProduct);
-
-                // Criar tarefa automaticamente quando a produção termina
                 CreateWorkerTask();
             }
         }
@@ -305,10 +254,7 @@ namespace Tcp4
         {
             if (isAbleToGive && isGrown && playerInventory != null && playerInventory.CanStorage())
             {
-                if (minigameTrigger == null || minigameTrigger.minigameToStart == null) return;
-                if (production == null || production.outputProduct == null) return;
-
-                minigameTrigger.minigameToStart.OnGetReward += this.ResetGrowthCycle;
+                minigameTrigger.minigameToStart.OnGetReward += this.HandleSuccessfulHarvest;
                 minigameTrigger.minigameToStart.SetupReward(production.outputProduct);
                 GameAssets.Instance.SetupLastIconMinigamePlants(production.outputProduct.productImage);
                 minigameTrigger.TriggerMinigame();
@@ -317,119 +263,88 @@ namespace Tcp4
             }
             else
             {
-                SoundEventArgs sfxArgs = new()
-                {
-                    Category = SoundEventArgs.SoundCategory.SFX,
-                    AudioID = "erro",
-                    VolumeScale = 0.5f
-                };
+                SoundEventArgs sfxArgs = new() { Category = SoundEventArgs.SoundCategory.SFX, AudioID = "erro", VolumeScale = 0.5f };
                 SoundEvent.RequestSound(sfxArgs);
-
                 NotificationManager.Instance.Show("Inventario Cheio!", "Sem espaços livres.", production.outputProduct.productImage);
             }
         }
 
         public bool HarvestProductFromWorker()
         {
-            // VERIFICAÇÃO CRÍTICA: Proteger contra chamadas múltiplas
-            if (!HasHarvestableProduct())
-            {
-                Debug.LogWarning($"[ProductionArea] ⚠ Tentativa de colheita por worker falhou. Área {areaID} não tem produto pronto ou já foi colhida.");
-                ReleaseReservation(); // Liberar reserva mesmo se falhar
-                return false;
-            }
+            if (!HasHarvestableProduct() || !isTaskedForHarvest) return false;
 
-            // VERIFICAÇÃO ADICIONAL: Se não está reservada, algo está errado
-            if (!isTaskedForHarvest)
-            {
-                Debug.LogWarning($"[ProductionArea] ⚠ Área {areaID} não estava reservada para worker! Colheita não autorizada.");
-                return false;
-            }
-
-            string productName = production.outputProduct != null ? production.outputProduct.productName : "Produto Desconhecido";
-            Debug.Log($"[ProductionArea] ✓ Worker colheu: {productName} da área {areaID}");
-
-            // Reset IMEDIATO do estado para evitar dupla colheita
-            isAbleToGive = false;
-            isGrown = false;
-            ReleaseReservation(); // Liberar reserva imediatamente
-            currentTime = 0;
-
-            // Limpar modelo visual atual
-            if (currentModel != null && objectPools != null)
-            {
-                objectPools.Return(currentModel);
-                currentModel = null;
-            }
-
-            // Iniciar novo ciclo de crescimento
-            StartCoroutine(GrowthCycle());
+            HandleSuccessfulHarvest();
             return true;
         }
 
-        public void ReserveForWorker()
+        private void HandleSuccessfulHarvest()
         {
-            if (!HasHarvestableProduct())
+            if (minigameTrigger != null && minigameTrigger.minigameToStart != null)
+                minigameTrigger.minigameToStart.OnGetReward -= this.HandleSuccessfulHarvest;
+
+            if (isTaskedForHarvest) ReleaseReservation();
+
+            // Reseta o estado
+            isAbleToGive = false;
+            isGrown = false;
+            currentTime = 0;
+
+            // Alterna para o modelo sem frutos
+            SetModelToPostHarvest();
+
+            // Inicia o novo ciclo de crescimento
+            StartCoroutine(GrowthCycle());
+        }
+
+        private void UpdateModelForGrowth(float progress)
+        {
+            if (production?.models == null || production.models.Length == 0) return;
+
+            int modelIndex = Mathf.FloorToInt(progress * production.models.Length);
+            modelIndex = Mathf.Clamp(modelIndex, 0, production.models.Length - 1);
+
+            var targetModel = production.models[modelIndex];
+            if (currentModel == null || !currentModel.name.StartsWith(targetModel.name))
             {
-                Debug.LogWarning($"[ProductionArea] Tentativa de reservar área {areaID} sem produto pronto!");
+                if (currentModel != null) objectPools.Return(currentModel);
+                currentModel = objectPools.Get(targetModel);
+                currentModel.transform.SetPositionAndRotation(pointToSpawn.position, targetModel.transform.rotation);
+            }
+        }
+
+        private void SetModelToHarvestable()
+        {
+            if (production?.models == null || production.models.Length == 0) return;
+
+            var finalModel = production.models[production.models.Length - 1];
+            if (currentModel != null) objectPools.Return(currentModel);
+            currentModel = objectPools.Get(finalModel);
+            currentModel.transform.SetPositionAndRotation(pointToSpawn.position, finalModel.transform.rotation);
+        }
+
+        private void SetModelToPostHarvest()
+        {
+            if (production?.postHarvestModel == null)
+            {
+                if (currentModel != null) objectPools.Return(currentModel);
+                currentModel = null;
                 return;
             }
 
-            isTaskedForHarvest = true;
-            Debug.Log($"[ProductionArea] Área {areaID} reservada para worker");
+            if (currentModel != null) objectPools.Return(currentModel);
+            currentModel = objectPools.Get(production.postHarvestModel);
+            currentModel.transform.SetPositionAndRotation(pointToSpawn.position, production.postHarvestModel.transform.rotation);
         }
 
-        public void ReleaseReservation()
-        {
-            isTaskedForHarvest = false;
-            Debug.Log($"[ProductionArea] Área {areaID} liberada da reserva");
-        }
-
-        public bool IsReservedForWorker()
-        {
-            return isTaskedForHarvest;
-        }   
-
-
-        public bool HasHarvestableProduct()
-        {
-            return isAbleToGive && isGrown;
-        }
-
-        public BaseProduct GetCurrentProduct()
-        {
-            if (HasHarvestableProduct())
-                return production.outputProduct;
-            return null;
-        }
-
-        void ResetGrowthCycle()
-        {
-            if (minigameTrigger != null && minigameTrigger.minigameToStart != null)
-                minigameTrigger.minigameToStart.OnGetReward -= this.ResetGrowthCycle;
-
-            // Se o jogador colheu, cancelar qualquer tarefa de worker pendente
-            if (isTaskedForHarvest)
-            {
-                Debug.Log($"[ProductionArea] Jogador colheu área {areaID} - cancelando tarefa de worker");
-                ReleaseReservation();
-
-                // Notificar o WorkerManager para cancelar a tarefa (se houver uma forma de fazer isso)
-                // Alternativa: o worker vai falhar naturalmente quando tentar coletar
-            }
-
-            currentTime = 0;
-            isAbleToGive = false;
-            isGrown = false;
-
-            // Limpar modelo visual
-            if (currentModel != null && objectPools != null)
-            {
-                objectPools.Return(currentModel);
-                currentModel = null;
-            }
-
-            StartCoroutine(GrowthCycle());
-        }
+        public override void OnFocus() { if (isTaskedForHarvest) { base.OnLostFocus(); return; } if (!isGrown && hasChoosedProduction) return; base.OnFocus(); }
+        public override void OnLostFocus() { base.OnLostFocus(); CloseProductionMenu(); playerInventory = null; }
+        IEnumerator OpenProductionCoroutine() { yield return new WaitForSeconds(timeToOpenInterface); if (playerInventory != null) OpenProductionMenu(); }
+        private void OpenProductionMenu() { var pm = ProductionManager.Instance; pm.Clean(); pm.SetupNewReference(this); pm.ReloadCards(canProduce); UIManager.Instance.ControlProductionMenu(true); }
+        private void CloseProductionMenu() { if (ProductionManager.Instance != null) { ProductionManager.Instance.Clean(); UIManager.Instance.ControlProductionMenu(false); } }
+        public void ReserveForWorker() { if (!HasHarvestableProduct()) return; isTaskedForHarvest = true; }
+        public void ReleaseReservation() { isTaskedForHarvest = false; }
+        public bool IsReservedForWorker() { return isTaskedForHarvest; }
+        public bool HasHarvestableProduct() { return isAbleToGive && isGrown; }
+        public BaseProduct GetCurrentProduct() { if (HasHarvestableProduct()) return production.outputProduct; return null; }
     }
 }
