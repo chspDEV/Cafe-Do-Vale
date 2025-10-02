@@ -29154,7 +29154,7 @@ MonoBehaviour:
   playerTransform: {fileID: 0}
   logInterval: 0.5
   reportBaseName: PlaytestReport
-  canSavePlaytest: 1
+  canSavePlaytest: 0
 --- !u!1 &906683891
 GameObject:
   m_ObjectHideFlags: 0

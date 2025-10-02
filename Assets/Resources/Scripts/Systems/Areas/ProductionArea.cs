@@ -34,6 +34,7 @@ namespace Tcp4
         private bool hasChoosedProduction;
         private bool hasReachedMaturity;
         private TimeManager timeManager;
+        private Coroutine growthCoroutine; // <-- NOSSA REFERÊNCIA PARA A COROUTINE
 
         public event System.Action<ProductionArea, BaseProduct> OnProductionComplete;
 
@@ -45,8 +46,6 @@ namespace Tcp4
 
             if (WorkerManager.Instance != null && production != null && production.outputProduct != null)
             {
-                isGrown = true;
-                isAbleToGive = true;
                 isTaskedForHarvest = true;
                 WorkerManager.Instance.CreateHarvestTask(this.areaID, this.production.outputProduct);
             }
@@ -105,11 +104,6 @@ namespace Tcp4
             objectPools = new ObjectPool(pointToSpawn);
             objectPools.AddPool(production.models);
 
-            if (production.postHarvestModel != null)
-            {
-                objectPools.AddPool(new GameObject[] { production.postHarvestModel });
-            }
-
             SoundEventArgs sfxArgs = new()
             {
                 Category = SoundEventArgs.SoundCategory.SFX,
@@ -143,20 +137,27 @@ namespace Tcp4
             }
         }
 
+
         private void SpritesLogic()
         {
+            // Se não há produção selecionada, mostra transparente
             if (production == null)
             {
                 timeImage.ChangeSprite(GameAssets.Instance.transparent);
                 return;
             }
 
-            if (isTaskedForHarvest && isAbleToGive)
+            // Se está reservado para worker, mostra ícone de espera
+            //if (isTaskedForHarvest)
+            //{
+             //   timeImage.ChangeSprite(GameAssets.Instance.sprProductionWait);
+               // return;
+            //}
+
+            // Se está pronto para colheita (grown E able to give)
+            if (isAbleToGive && isGrown)
             {
-                timeImage.ChangeSprite(GameAssets.Instance.sprProductionWait);
-            }
-            else if (isAbleToGive)
-            {
+                // Usa ícone customizado se disponível, senão usa o padrão
                 if (production.readyIcon != null)
                 {
                     timeImage.ChangeSprite(production.readyIcon);
@@ -165,13 +166,19 @@ namespace Tcp4
                 {
                     timeImage.ChangeSprite(GameAssets.Instance.ready);
                 }
+                return;
             }
-            else if (hasChoosedProduction)
+
+            // Se tem produção escolhida mas ainda não está pronta
+            if (hasChoosedProduction)
             {
                 timeImage.ChangeSprite(GameAssets.Instance.sprProductionWait);
+                return;
             }
-        }
 
+            // Fallback: transparente
+            timeImage.ChangeSprite(GameAssets.Instance.transparent);
+        }
         private void SelectProduction()
         {
             var productionManager = ProductionManager.Instance;
@@ -182,7 +189,7 @@ namespace Tcp4
 
             currentTime = 0;
             hasChoosedProduction = true;
-            hasReachedMaturity = false; // ÚNICO LUGAR QUE ISSO FICA FALSE
+            hasReachedMaturity = false;
 
             ReSetupMaxTime();
             CloseProductionMenu();
@@ -191,7 +198,13 @@ namespace Tcp4
             productionManager.Clean();
 
             InitializeObjectPools();
-            StartCoroutine(GrowthCycle());
+
+            // GARANTE QUE QUALQUER COROUTINE ANTIGA SEJA INTERROMPIDA
+            if (growthCoroutine != null)
+            {
+                StopCoroutine(growthCoroutine);
+            }
+            growthCoroutine = StartCoroutine(GrowthCycle());
         }
 
         private IEnumerator GrowthCycle()
@@ -201,7 +214,6 @@ namespace Tcp4
             OnLostFocus();
             float startTime = timeManager.CurrentHour;
 
-            // SE AINDA NÃO É MADURA, FAZ O PRIMEIRO CRESCIMENTO
             if (!hasReachedMaturity)
             {
                 float targetTime = startTime + production.timeToGrow;
@@ -218,7 +230,6 @@ namespace Tcp4
                 }
                 hasReachedMaturity = true;
             }
-            // SE JÁ É MADURA, APENAS ESPERA O NOVO TEMPO
             else
             {
                 float targetTime = startTime + production.timeToRegrow;
@@ -232,13 +243,13 @@ namespace Tcp4
                 }
             }
 
-            // AO FINAL DE QUALQUER CICLO, GARANTE O MODELO FINAL E O ESTADO DE "PRONTO"
             OnGrowthComplete();
         }
 
         private void OnGrowthComplete()
         {
-            SetModelToHarvestable(); // Alterna para o modelo com frutos
+            SetModelToHarvestable();
+
             EnableInteraction();
             isGrown = true;
             isAbleToGive = true;
@@ -284,16 +295,18 @@ namespace Tcp4
 
             if (isTaskedForHarvest) ReleaseReservation();
 
-            // Reseta o estado
             isAbleToGive = false;
             isGrown = false;
             currentTime = 0;
 
-            // Alterna para o modelo sem frutos
             SetModelToPostHarvest();
 
-            // Inicia o novo ciclo de crescimento
-            StartCoroutine(GrowthCycle());
+            // GARANTE QUE QUALQUER COROUTINE ANTIGA SEJA INTERROMPIDA
+            if (growthCoroutine != null)
+            {
+                StopCoroutine(growthCoroutine);
+            }
+            growthCoroutine = StartCoroutine(GrowthCycle());
         }
 
         private void UpdateModelForGrowth(float progress)
@@ -324,16 +337,18 @@ namespace Tcp4
 
         private void SetModelToPostHarvest()
         {
-            if (production?.postHarvestModel == null)
+            if (production?.models == null || production.models.Length < 2)
             {
                 if (currentModel != null) objectPools.Return(currentModel);
                 currentModel = null;
                 return;
             }
 
+            var postHarvestModel = production.models[production.models.Length - 2];
+
             if (currentModel != null) objectPools.Return(currentModel);
-            currentModel = objectPools.Get(production.postHarvestModel);
-            currentModel.transform.SetPositionAndRotation(pointToSpawn.position, production.postHarvestModel.transform.rotation);
+            currentModel = objectPools.Get(postHarvestModel);
+            currentModel.transform.SetPositionAndRotation(pointToSpawn.position, postHarvestModel.transform.rotation);
         }
 
         public override void OnFocus() { if (isTaskedForHarvest) { base.OnLostFocus(); return; } if (!isGrown && hasChoosedProduction) return; base.OnFocus(); }

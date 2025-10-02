@@ -20,3 +20,4 @@ MonoBehaviour:
   outputProduct: {fileID: 11400000, guid: df60ac8e23274b7439f757150af8ac6a, type: 2}
   timeToGrow: 1.4
   timeToRegrow: 0.7
+  readyIcon: {fileID: 21300000, guid: 9def5c4802c202a49a304e98dde21bea, type: 3}
